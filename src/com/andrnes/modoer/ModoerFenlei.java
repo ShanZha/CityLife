@@ -1,9 +1,15 @@
 package com.andrnes.modoer;
 
+import android.content.Context;
+import android.view.ViewGroup;
+
+import com.fourkkm.citylife.R;
 import com.zj.app.annotation.Lazy;
+import com.zj.support.widget.item.ItemSingle;
+import com.zj.support.widget.itemview.ItemView;
 
 /** 分类信息表 */
-public class ModoerFenlei {
+public class ModoerFenlei extends ItemSingle {
 
 	private int id;
 
@@ -12,6 +18,7 @@ public class ModoerFenlei {
 	private ModoerFenlei catid;
 
 	/** 城市ID */
+	@Lazy(isLazy = true)
 	private ModoerArea cityId;
 
 	/** 地区id */
@@ -27,6 +34,7 @@ public class ModoerFenlei {
 	private String thumb;
 
 	/** 提交会员 */
+	@Lazy(isLazy = true)
 	private ModoerMembers uid;
 
 	/** 用户昵称 */
@@ -267,5 +275,12 @@ public class ModoerFenlei {
 
 	public void setTopEndtime(int topEndtime) {
 		this.topEndtime = topEndtime;
+	}
+
+	@Override
+	public ItemView newCell(Context context, ViewGroup root) {
+		// TODO Auto-generated method stub
+		return this.createCellFromXml(context, R.layout.china_lane_list_item,
+				root);
 	}
 }

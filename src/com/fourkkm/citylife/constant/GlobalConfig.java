@@ -43,5 +43,7 @@ public interface GlobalConfig {
 		public static final int OPERATION_FINDALL_SUBJECT = 5;
 		public static final int OPERATION_FINDALL_PARTY_CATEGORY = 6;
 		public static final int OPERATION_FINDALL_PARTY = 7;
+		public static final int OPERATION_FINDALL_CHINA_LANE_CATEGORY = 8;
+		public static final int OPERATION_FINDALL_CHINA_LANE = 9;
 	}
 }

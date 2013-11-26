@@ -1,0 +1,88 @@
+<com.fourkkm.citylife.itemview.ModoerChinaLaneItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <!-- 缩略图 -->
+
+    <ImageView
+        android:id="@+id/china_lane_list_item_iv_thunmb"
+        android:layout_width="@dimen/subject_list_thumbnail_width"
+        android:layout_height="@dimen/subject_list_thumbnail_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_toLeftOf="@+id/china_lane_list_item_iv_more"
+        android:layout_toRightOf="@+id/china_lane_list_item_iv_thunmb"
+        android:orientation="vertical" >
+
+        <!-- 主题 -->
+
+        <TextView
+            android:id="@+id/china_lane_list_item_tv_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+
+        <!-- 内容简介 -->
+
+        <TextView
+            android:id="@+id/china_lane_list_item_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:singleLine="true" />
+
+        <!-- 地区 -->
+
+        <TextView
+            android:id="@+id/china_lane_list_item_tv_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <!-- 作者 -->
+
+            <TextView
+                android:id="@+id/china_lane_list_item_tv_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
+
+            <!-- 发布时间 -->
+
+            <TextView
+                android:id="@+id/china_lane_list_item_tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:singleLine="true" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 更多图标 -->
+
+    <ImageView
+        android:id="@+id/china_lane_list_item_iv_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:src="@drawable/ic_launcher" />
+
+</com.fourkkm.citylife.itemview.ModoerChinaLaneItemView>
