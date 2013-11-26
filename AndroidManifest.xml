@@ -84,6 +84,11 @@
             android:name="com.fourkkm.citylife.control.activity.ReviewListActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 评论详情 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.ReviewDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
         <!-- 问答列表 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.AskListActivity"
@@ -97,16 +102,6 @@
         <!-- 聚会列表 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.PartyListActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <!-- 地图测试 -->
-        <activity
-            android:name="com.fourkkm.citylife.control.activity.MapActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <!-- 测试定位 -->
-        <activity
-            android:name="com.fourkkm.citylife.control.activity.LocationActivity"
             android:screenOrientation="portrait" >
         </activity>
     </application>

@@ -1,5 +1,7 @@
 package com.andrnes.modoer;
 
+import java.io.Serializable;
+
 import android.content.Context;
 import android.view.ViewGroup;
 
@@ -9,8 +11,9 @@ import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
 /** 点评表 */
-public class ModoerReview extends ItemSingle {
+public class ModoerReview extends ItemSingle implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private int id;
 	/** 点评对象表示 */
 	private String idtype;

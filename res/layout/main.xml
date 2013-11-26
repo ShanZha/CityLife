@@ -86,7 +86,7 @@
                 android:layout_marginLeft="@dimen/margin_10"
                 android:layout_marginTop="@dimen/margin_10"
                 android:text="@string/nearby"
-                android:textColor="@android:color/black"
+                android:textColor="#1b3556"
                 android:textSize="18sp" />
 
             <!-- 附近分类 -->
@@ -180,7 +180,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="按商区搜索，搜遍全城每个角落" />
+                        android:text="按商区搜索，搜遍全城每个角落"
+                        android:textColor="#666666"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -225,7 +227,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="随您所问，随您所想" />
+                        android:text="随您所问，随您所想"
+                        android:textColor="#666666"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -270,7 +274,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="平淡的日子虽甜美，但也需要些许调味品" />
+                        android:text="平淡的日子虽甜美，但也需要些许调味品"
+                        android:textColor="#666666"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -315,7 +321,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="异地他乡总能找到丝丝家乡气息" />
+                        android:text="异地他乡总能找到丝丝家乡气息"
+                        android:textColor="#666666"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -360,7 +368,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="您的快乐天堂" />
+                        android:text="您的快乐天堂"
+                        android:textColor="#666666"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -405,7 +415,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="这里有更多惊喜哦" />
+                        android:text="这里有更多惊喜哦"
+                        android:textColor="#666666"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <ImageView

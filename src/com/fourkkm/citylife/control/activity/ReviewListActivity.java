@@ -7,6 +7,7 @@ import java.util.Map;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -69,6 +70,18 @@ public class ReviewListActivity extends BaseListActivity {
 		this.getStoreOperation().findAll(selectCode, paramsMap, true,
 				new ModoerReview(),
 				new Param(this.hashCode(), GlobalConfig.URL_CONN));
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		super.onItemClick(parent, view, position, id);
+		ModoerReview review = (ModoerReview) parent.getAdapter().getItem(
+				position);
+		Intent intent = new Intent(this, ReviewDetailActivity.class);
+		intent.putExtra("review", review);
+		this.startActivity(intent);
 	}
 
 	@Override

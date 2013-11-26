@@ -1,0 +1,200 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/titlebar_back" />
+
+    <!-- 用户名 -->
+
+    <TextView
+        android:id="@+id/review_detail_tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10" >
+
+        <!-- 综合得分 -->
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/review_detail_tv_composite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/review_detail_composite" />
+
+            <RatingBar
+                android:id="@+id/review_detail_rating_bar_composite"
+                style="@style/rating_bar_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:isIndicator="false" />
+
+            <TextView
+                android:id="@+id/review_detail_tv_composite_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:text="@string/review_good" />
+        </TableRow>
+        <!-- 评价一 -->
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                android:id="@+id/review_detail_tv_sort1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/review_detail_composite" />
+
+            <RatingBar
+                android:id="@+id/review_detail_rating_bar_sort1"
+                style="@style/rating_bar_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:isIndicator="false" />
+
+            <TextView
+                android:id="@+id/review_detail_tv_sort1_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:text="@string/review_bad" />
+        </TableRow>
+        <!-- 评价二 -->
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                android:id="@+id/review_detail_tv_sort2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/review_detail_composite" />
+
+            <RatingBar
+                android:id="@+id/review_detail_rating_bar_sort2"
+                style="@style/rating_bar_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:isIndicator="false" />
+
+            <TextView
+                android:id="@+id/review_detail_tv_sort2_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:text="@string/review_bad" />
+        </TableRow>
+        <!-- 评价三 -->
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                android:id="@+id/review_detail_tv_sort3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/review_detail_composite" />
+
+            <RatingBar
+                android:id="@+id/review_detail_rating_bar_sort3"
+                style="@style/rating_bar_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:isIndicator="false" />
+
+            <TextView
+                android:id="@+id/review_detail_tv_sort3_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:text="@string/review_bad" />
+        </TableRow>
+        <!-- 评价四 -->
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                android:id="@+id/review_detail_tv_sort4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/review_detail_composite" />
+
+            <RatingBar
+                android:id="@+id/review_detail_rating_bar_sort4"
+                style="@style/rating_bar_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:isIndicator="false" />
+
+            <TextView
+                android:id="@+id/review_detail_tv_sort4_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:singleLine="true"
+                android:text="@string/review_bad" />
+        </TableRow>
+    </TableLayout>
+
+    <!-- 人均 -->
+
+    <TextView
+        android:id="@+id/review_detail_tv_avgsort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_20"
+        android:singleLine="true"
+        android:text="@string/average_per" />
+
+    <!-- 评价内容 -->
+
+    <TextView
+        android:id="@+id/review_detail_tv_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_20" />
+
+</LinearLayout>

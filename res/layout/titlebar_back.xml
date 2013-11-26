@@ -6,12 +6,13 @@
 
     <!-- 左边-返回 -->
 
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:onClick="onClickBack"
-        android:src="@drawable/ic_launcher" />
+        android:background="@drawable/back"
+        android:clickable="true"
+        android:drawableRight="@drawable/back_divider"
+        android:onClick="onClickBack" />
 
     <!-- 中间-标题 -->
 
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/hello_world" />
+        android:text="@string/hello_world"        android:textColor="@android:color/white"
+        android:textSize="22sp" />
 
 </RelativeLayout>

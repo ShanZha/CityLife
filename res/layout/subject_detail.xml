@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/main_bg"
     android:orientation="vertical" >
 
     <!-- 顶部标题（可下拉） -->
@@ -12,31 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="#0987ff" >
+        android:background="@drawable/titlebar_bg" >
 
         <!-- 左边-返回 -->
 
-        <ImageView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:onClick="onClickBack"
-            android:src="@drawable/ic_launcher" />
+            android:background="@drawable/back"
+            android:clickable="true"
+            android:drawableRight="@drawable/back_divider"
+            android:onClick="onClickBack" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_10" >
-
-            <!-- 地图 -->
-
-            <ImageView
-                android:id="@+id/subject_detail_iv_map"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClickMap"
-                android:src="@drawable/ic_launcher" />
 
             <!-- 收藏 -->
 
@@ -44,10 +37,19 @@
                 android:id="@+id/subject_detail_iv_collection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/subject_detail_collection_selector"
+                android:onClick="onClickCollection" />
+
+            <!-- 地图 -->
+
+            <ImageView
+                android:id="@+id/subject_detail_iv_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_10"
-                android:layout_toRightOf="@+id/subject_detail_iv_map"
-                android:onClick="onClickCollection"
-                android:src="@drawable/ic_launcher" />
+                android:layout_toRightOf="@+id/subject_detail_iv_collection"
+                android:background="@drawable/subject_detail_map_selector"
+                android:onClick="onClickMap" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -87,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
+                    android:background="@drawable/subject_detail_thumb_bg"
                     android:clickable="true"
                     android:onClick="onClickThumbnail" >
 
@@ -104,7 +107,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|right"
                         android:layout_margin="@dimen/margin_5"
-                        android:background="#33ffe4"
+                        android:background="@drawable/subject_detail_thumb_count_bg"
+                        android:gravity="center"
                         android:text="999" />
                 </FrameLayout>
 
@@ -117,11 +121,9 @@
 
                     <RatingBar
                         android:id="@+id/subject_detail_ratingBar"
-                        style="?android:attr/ratingBarStyleSmall"
+                        style="@style/rating_bar_style"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:max="10"
-                        android:numStars="5" />
+                        android:layout_height="wrap_content" />
 
                     <!-- 综合得分 -->
 
@@ -202,24 +204,47 @@
                 android:id="@+id/subject_detail_rl_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
                 android:onClick="onClickAddress" >
+
+                <!-- 分割线 -->
+
+                <ImageView
+                    android:id="@+id/subject_detail_iv_address_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/divider" />
+
+                <ImageView
+                    android:id="@+id/subject_detail_iv_address_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/subject_detail_iv_address_divider"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:src="@drawable/subject_detail_address" />
 
                 <TextView
                     android:id="@+id/subject_detail_tv_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    android:layout_below="@+id/subject_detail_iv_address_divider"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:layout_toLeftOf="@+id/subject_detail_iv_address_more"
+                    android:layout_toRightOf="@+id/subject_detail_iv_address_icon"
                     android:singleLine="true"
                     android:text="魏公村名族路126号" />
 
                 <ImageView
+                    android:id="@+id/subject_detail_iv_address_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_below="@+id/subject_detail_iv_address_divider"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:src="@drawable/ic_launcher" />
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:src="@drawable/main_more" />
             </RelativeLayout>
 
             <!-- 电话 -->
@@ -230,38 +255,87 @@
                 android:layout_height="wrap_content"
                 android:onClick="onClickTel" >
 
+                <!-- 分割线 -->
+
+                <ImageView
+                    android:id="@+id/subject_detail_iv_tel_divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:src="@drawable/divider" />
+
+                <ImageView
+                    android:id="@+id/subject_detail_iv_tel_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/subject_detail_iv_tel_divider"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:src="@drawable/subject_detail_tel" />
+
                 <TextView
                     android:id="@+id/subject_detail_tv_tel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
+                    android:layout_below="@+id/subject_detail_iv_tel_divider"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_marginTop="@dimen/margin_15"
+                    android:layout_toLeftOf="@+id/subject_detail_iv_tel_more"
+                    android:layout_toRightOf="@+id/subject_detail_iv_tel_icon"
                     android:singleLine="true"
                     android:text="010-88888888" />
 
                 <ImageView
+                    android:id="@+id/subject_detail_iv_tel_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_below="@+id/subject_detail_iv_tel_divider"
                     android:layout_marginRight="@dimen/margin_10"
-                    android:src="@drawable/ic_launcher" />
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:src="@drawable/main_more" />
             </RelativeLayout>
 
-            <!-- 商铺印象Tips -->
+            <!-- 分割线 -->
 
-            <TextView
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
-                android:text="@string/impression"
-                android:textSize="16sp" />
+                android:src="@drawable/divider" />
 
-            <TextView
-                android:id="@+id/subject_detail_tv_impression"
+            <!-- 商铺印象Tips -->
+
+            <RelativeLayout
+                android:id="@+id/subject_detail_rl_impression"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="还不错，环境、服务、气氛都非常好，尤其是交通方便" />
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <ImageView
+                    android:id="@+id/subject_detail_iv_impression_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/subject_detail_impression" />
+
+                <TextView
+                    android:id="@+id/subject_detail_tv_impression_tip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/subject_detail_iv_impression_icon"
+                    android:text="@string/impression"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/subject_detail_tv_impression"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/subject_detail_tv_impression_tip"
+                    android:layout_below="@+id/subject_detail_tv_impression_tip"
+                    android:layout_marginTop="@dimen/margin_5"
+                    android:text="还不错，环境、服务、气氛都非常好，尤其是交通方便" />
+            </RelativeLayout>
 
             <!-- 评价 -->
 
@@ -273,12 +347,26 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/margin_10" />
 
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:src="@drawable/divider" />
+
             <RelativeLayout
                 android:id="@+id/subject_detail_rl_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10"
-                android:visibility="gone" >
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <ImageView
+                    android:id="@+id/subject_detail_iv_review_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:src="@drawable/subject_detail_review" />
 
                 <!-- 评价数量 -->
 
@@ -286,6 +374,7 @@
                     android:id="@+id/subject_detail_tv_review_counts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/subject_detail_iv_review_icon"
                     android:singleLine="true"
                     android:text="@string/review"
                     android:textSize="16sp" />
@@ -296,7 +385,8 @@
                     android:id="@+id/subject_detail_tv_review_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/subject_detail_tv_review_counts"
+                    android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
+                    android:layout_below="@+id/subject_detail_iv_review_icon"
                     android:singleLine="true"
                     android:text="神偷无所畏惧" />
 
@@ -304,12 +394,11 @@
 
                 <RatingBar
                     android:id="@+id/subject_detail_review_ratingBar"
-                    style="?android:attr/ratingBarStyleSmall"
+                    style="@style/rating_bar_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/subject_detail_tv_review_username"
-                    android:max="10"
-                    android:numStars="5" />
+                    android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
+                    android:layout_below="@+id/subject_detail_tv_review_username" />
 
                 <!-- 用户评价中人均 -->
 
@@ -328,6 +417,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
                     android:layout_below="@+id/subject_detail_review_ratingBar"
                     android:onClick="onClickReviewContent" >
 
@@ -347,7 +437,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/ic_launcher" />
+                        android:src="@drawable/main_more" />
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
@@ -368,7 +458,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/ic_launcher"
+            android:background="@drawable/subject_detail_share_to_selector"
             android:onClick="onClickShareTo" />
 
         <!-- 点评 -->
@@ -378,7 +468,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/ic_launcher"
+            android:background="@drawable/subject_detail_review_selector"
             android:onClick="onClickReview" />
 
         <!-- 上传商铺图片 -->
@@ -388,7 +478,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/ic_launcher"
+            android:background="@drawable/subject_detail_upload_pic_selector"
             android:onClick="onClickUploadPic" />
 
         <!-- 报错 -->
@@ -398,7 +488,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/ic_launcher"
+            android:background="@drawable/subject_detail_error_selector"
             android:onClick="onClickError" />
     </LinearLayout>
 

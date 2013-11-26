@@ -230,9 +230,9 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 	}
 
 	public void onClickChineseLane(View view) {// 唐人巷
-		//测试定位
-//		Intent intent = new Intent(this, LocationActivity.class);
-//		this.startActivity(intent);
+		// 测试定位
+		// Intent intent = new Intent(this, LocationActivity.class);
+		// this.startActivity(intent);
 	}
 
 	public void onClickVipCenter(View view) {// 会员中心
@@ -280,7 +280,14 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 			}
 			// 根据ModoerBcastr条数，加上单选个数
 			for (int i = 0; i < mBcastrList.size(); i++) {
-				RadioButton btn = new RadioButton(this);
+				// RadioButton btn = new RadioButton(this);
+				// btn.setButtonDrawable(this.getResources().getDrawable(
+				// R.drawable.main_radio_btn_selector));
+				RadioButton btn = (RadioButton) this.getLayoutInflater()
+						.inflate(R.layout.main_radio_btn, null);
+				// btn.setBackground(this.getResources().getDrawable(
+				// R.drawable.main_recreation_selector));
+				// btn.setBackgroundDrawable();
 				mRadioGroup.addView(btn);
 			}
 
