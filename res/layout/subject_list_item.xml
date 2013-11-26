@@ -1,0 +1,105 @@
+<com.fourkkm.citylife.itemview.ModoerSubjectItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/margin_10" >
+
+    <!-- 左边-缩略图 -->
+
+    <ImageView
+        android:id="@+id/subject_list_item_iv_show"
+        android:layout_width="@dimen/subject_list_thumbnail_width"
+        android:layout_height="@dimen/subject_list_thumbnail_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_launcher" />
+
+    <!-- 中间-关键信息 -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_toRightOf="@+id/subject_list_item_iv_show"
+        android:orientation="vertical" >
+
+        <!-- 上边-商铺名称 -->
+
+        <TextView
+            android:id="@+id/subject_list_item_tv_shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="江边城外蓑笠翁" />
+
+        <!-- 中间 -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp" >
+
+            <!-- 消费星级 -->
+
+            <RatingBar
+                android:id="@+id/subject_list_item_rating_bar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:max="10"
+                android:numStars="5" />
+
+            <!-- 人均消费 -->
+
+            <TextView
+                android:id="@+id/subject_list_item_tv_average_per"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:text="@string/average_per" />
+        </LinearLayout>
+
+        <!-- 底部 -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <!-- 地点 -->
+
+            <TextView
+                android:id="@+id/subject_list_item_tv_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="魏公村" />
+
+            <!-- 商店类型 -->
+
+            <TextView
+                android:id="@+id/subject_list_item_tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:singleLine="true"
+                android:text="小吃" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 右边/底部-距离 -->
+
+    <TextView
+        android:id="@+id/subject_list_item_tv_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/distance_500" />
+
+</com.fourkkm.citylife.itemview.ModoerSubjectItemView>

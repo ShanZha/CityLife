@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/titlebar_bg" >
+
+    <!-- 标题部分 -->
+
+    <TextView
+        android:id="@+id/titlebar_drop_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/margin_10"
+        android:text="@string/hello_world"
+        android:textColor="@android:color/white"
+        android:textSize="22sp" />
+
+    <!-- 切换国家 -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/titlebar_drop_tv_title"
+        android:layout_toRightOf="@+id/titlebar_drop_tv_title"
+        android:clickable="true"
+        android:onClick="onClickSwitchCountry"
+        android:text="@string/switch_city"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

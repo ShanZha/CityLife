@@ -1,0 +1,93 @@
+<com.fourkkm.citylife.itemview.ModoerReviewItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/review_list_item_rl_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_toLeftOf="@+id/review_list_item_iv_more" >
+
+        <!-- 用户名 -->
+
+        <TextView
+            android:id="@+id/review_list_item_tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="无所畏惧" />
+
+        <!-- 评分 -->
+
+        <RatingBar
+            android:id="@+id/review_list_item_ratingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/review_list_item_tv_username"
+            android:layout_marginTop="@dimen/margin_5"
+            android:max="10"
+            android:numStars="5" />
+
+        <!-- 人均 -->
+
+        <TextView
+            android:id="@+id/review_list_item_tv_average_per"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/review_list_item_tv_username"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_toRightOf="@+id/review_list_item_ratingBar"
+            android:singleLine="true"
+            android:text="@string/average_per" />
+        
+        <!-- 评论内容 -->
+
+        <TextView
+            android:id="@+id/review_list_item_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/review_list_item_ratingBar"
+            android:layout_marginTop="@dimen/margin_5"
+            android:maxLines="3"
+            android:text="圣诞节分开始放假看是否控件上电话费控件上地方卡洛斯jkfjsdlkfjsalfkjsdkfljsdalfsdj" />
+
+        <!-- 总体评价 -->
+
+        <TextView
+            android:id="@+id/review_list_item_tv_overall_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/review_list_item_tv_content"
+            android:layout_marginTop="@dimen/margin_5"
+            android:singleLine="true"
+            android:text="@string/overall_rating" />
+
+        <!-- 时间 -->
+
+        <TextView
+            android:id="@+id/review_list_item_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/review_list_item_tv_content"
+            android:layout_marginTop="@dimen/margin_5"
+            android:singleLine="true"
+            android:text="2013-11-14 09:56" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/review_list_item_iv_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_10"
+        android:src="@drawable/ic_launcher" />
+
+</com.fourkkm.citylife.itemview.ModoerReviewItemView>

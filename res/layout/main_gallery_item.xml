@@ -1,0 +1,14 @@
+<com.fourkkm.citylife.itemview.ModoerBcastrItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.zj.support.widget.AsyncImageView
+        xmlns:asyncImageView="http://schemas.android.com/apk/res/com.fourkkm.citylife"
+        android:id="@+id/main_gallery_item_iv_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="fitXY"
+        asyncImageView:defaultSrc="@drawable/nopic" />
+
+</com.fourkkm.citylife.itemview.ModoerBcastrItemView>

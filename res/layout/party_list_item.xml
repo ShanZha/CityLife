@@ -1,0 +1,111 @@
+<com.fourkkm.citylife.itemview.ModoerPartyItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <!-- 缩略图 -->
+
+    <ImageView
+        android:id="@+id/party_list_item_iv_thunmb"
+        android:layout_width="@dimen/subject_list_thumbnail_width"
+        android:layout_height="@dimen/subject_list_thumbnail_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_launcher" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_toLeftOf="@+id/party_list_item_rl_right"
+        android:layout_toRightOf="@+id/party_list_item_iv_thunmb"
+        android:orientation="vertical" >
+
+        <!-- 主题 -->
+
+        <TextView
+            android:id="@+id/party_list_item_tv_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+
+        <!-- 聚会地址 -->
+
+        <TextView
+            android:id="@+id/party_list_item_tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:singleLine="true" />
+
+        <!-- 聚会时间 -->
+
+        <TextView
+            android:id="@+id/party_list_item_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+
+        <!-- 聚会简介 -->
+
+        <TextView
+            android:id="@+id/party_list_item_tv_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <!-- 右边 -->
+    <RelativeLayout
+        android:id="@+id/party_list_item_rl_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:layout_marginRight="@dimen/margin_10" >
+
+        <LinearLayout
+            android:id="@+id/party_list_item_ll_sign_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical" >
+
+            <!-- 已报名字样 -->
+
+            <TextView
+                android:id="@+id/party_list_item_tv_sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/party_sign_up" />
+
+            <!-- 已报名人数 -->
+
+            <TextView
+                android:id="@+id/party_list_item_tv_sign_up_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:singleLine="true"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <!-- 更多图标 -->
+
+        <ImageView
+            android:id="@+id/party_list_item_iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_toRightOf="@+id/party_list_item_ll_sign_up"
+            android:src="@drawable/ic_launcher" />
+    </RelativeLayout>
+
+</com.fourkkm.citylife.itemview.ModoerPartyItemView>

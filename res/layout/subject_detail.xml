@@ -1,0 +1,405 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <!-- 顶部标题（可下拉） -->
+
+    <RelativeLayout
+        android:id="@+id/subject_detail_rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="#0987ff" >
+
+        <!-- 左边-返回 -->
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:onClick="onClickBack"
+            android:src="@drawable/ic_launcher" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_10" >
+
+            <!-- 地图 -->
+
+            <ImageView
+                android:id="@+id/subject_detail_iv_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClickMap"
+                android:src="@drawable/ic_launcher" />
+
+            <!-- 收藏 -->
+
+            <ImageView
+                android:id="@+id/subject_detail_iv_collection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/subject_detail_iv_map"
+                android:onClick="onClickCollection"
+                android:src="@drawable/ic_launcher" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!-- 中间-内容 -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/subject_detail_rl_top"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <!-- 商店名称 -->
+
+            <TextView
+                android:id="@+id/subject_detail_tv_shop_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="没名儿生煎（回龙观店）"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#33ffe4" >
+
+                <!-- 缩略图 -->
+
+                <FrameLayout
+                    android:id="@+id/subject_detail_fr_thumbnail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:clickable="true"
+                    android:onClick="onClickThumbnail" >
+
+                    <ImageView
+                        android:id="@+id/subject_detail_iv_thumbnail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/nopic" />
+
+                    <!-- 缩略图数量 -->
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_thumbnail_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_margin="@dimen/margin_5"
+                        android:background="#33ffe4"
+                        android:text="999" />
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/subject_detail_fr_thumbnail" >
+
+                    <!-- 评分 -->
+
+                    <RatingBar
+                        android:id="@+id/subject_detail_ratingBar"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:max="10"
+                        android:numStars="5" />
+
+                    <!-- 综合得分 -->
+
+                    <TextView
+                        android:id="@+id/subject_detail_composite_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:layout_toRightOf="@+id/subject_detail_ratingBar"
+                        android:singleLine="true"
+                        android:text="@string/composite_score" />
+
+                    <!-- 人均 -->
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_average"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/subject_detail_ratingBar"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:singleLine="true"
+                        android:text="@string/average_per" />
+
+                    <!-- 各类评分父类 -->
+
+                    <ProgressBar
+                        android:id="@+id/subject_detail_proBar_review_opt"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/subject_detail_tv_average"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/margin_10" />
+
+                    <RelativeLayout
+                        android:id="@+id/subject_detail_ll_review_opt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/subject_detail_tv_average"
+                        android:layout_marginTop="@dimen/margin_10" >
+
+                        <TextView
+                            android:id="@+id/subject_detail_tv_sort1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="口味：5.9" />
+
+                        <TextView
+                            android:id="@+id/subject_detail_tv_sort2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_toRightOf="@+id/subject_detail_tv_sort1"
+                            android:text="服务：6.0" />
+
+                        <TextView
+                            android:id="@+id/subject_detail_tv_sort3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/subject_detail_tv_sort1"
+                            android:text="环境：8.5" />
+
+                        <TextView
+                            android:id="@+id/subject_detail_tv_sort4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/subject_detail_tv_sort1"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:layout_toRightOf="@+id/subject_detail_tv_sort3"
+                            android:text="交通便利：9.0" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <!-- 地址 -->
+
+            <RelativeLayout
+                android:id="@+id/subject_detail_rl_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickAddress" >
+
+                <TextView
+                    android:id="@+id/subject_detail_tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    android:text="魏公村名族路126号" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:src="@drawable/ic_launcher" />
+            </RelativeLayout>
+
+            <!-- 电话 -->
+
+            <RelativeLayout
+                android:id="@+id/subject_detail_rl_tel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickTel" >
+
+                <TextView
+                    android:id="@+id/subject_detail_tv_tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    android:text="010-88888888" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:src="@drawable/ic_launcher" />
+            </RelativeLayout>
+
+            <!-- 商铺印象Tips -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:text="@string/impression"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/subject_detail_tv_impression"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="还不错，环境、服务、气氛都非常好，尤其是交通方便" />
+
+            <!-- 评价 -->
+
+            <ProgressBar
+                android:id="@+id/subject_detail_proBar_review"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_10" />
+
+            <RelativeLayout
+                android:id="@+id/subject_detail_rl_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:visibility="gone" >
+
+                <!-- 评价数量 -->
+
+                <TextView
+                    android:id="@+id/subject_detail_tv_review_counts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/review"
+                    android:textSize="16sp" />
+
+                <!-- 评价用户名称 -->
+
+                <TextView
+                    android:id="@+id/subject_detail_tv_review_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/subject_detail_tv_review_counts"
+                    android:singleLine="true"
+                    android:text="神偷无所畏惧" />
+
+                <!-- 用户评价中评分 -->
+
+                <RatingBar
+                    android:id="@+id/subject_detail_review_ratingBar"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/subject_detail_tv_review_username"
+                    android:max="10"
+                    android:numStars="5" />
+
+                <!-- 用户评价中人均 -->
+
+                <TextView
+                    android:id="@+id/subject_detail_tv_review_average_per"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/subject_detail_tv_review_username"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_toRightOf="@+id/subject_detail_review_ratingBar"
+                    android:singleLine="true"
+                    android:text="@string/average_per" />
+
+                <!-- 评价内容 -->
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/subject_detail_review_ratingBar"
+                    android:onClick="onClickReviewContent" >
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_review_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:layout_toLeftOf="@+id/subject_detail_iv_review_more"
+                        android:text="世界无所畏惧，仅此一家让我感觉我存在，存在这个世界，确实不错，环境优雅，交通便利，服务周到，夫复何求" />
+
+                    <ImageView
+                        android:id="@+id/subject_detail_iv_review_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_launcher" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 底部 -->
+
+    <LinearLayout
+        android:id="@+id/subject_detail_ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <!-- 分享到 -->
+
+        <ImageButton
+            android:id="@+id/subject_detail_iBtn_share_to"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_launcher"
+            android:onClick="onClickShareTo" />
+
+        <!-- 点评 -->
+
+        <ImageButton
+            android:id="@+id/subject_detail_iBtn_review"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_launcher"
+            android:onClick="onClickReview" />
+
+        <!-- 上传商铺图片 -->
+
+        <ImageButton
+            android:id="@+id/subject_detail_iBtn_upload_pic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_launcher"
+            android:onClick="onClickUploadPic" />
+
+        <!-- 报错 -->
+
+        <ImageButton
+            android:id="@+id/subject_detail_iBtn_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/ic_launcher"
+            android:onClick="onClickError" />
+    </LinearLayout>
+
+</RelativeLayout>

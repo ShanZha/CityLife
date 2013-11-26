@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <!-- 顶部标题(可下拉) -->
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/titlebar_drop_back" />
+
+    <!-- 加载ProgressBar -->
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/progress_bar_small" />
+
+    <LinearLayout
+        android:id="@+id/party_list_ll_top_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#33ffe4"
+        android:padding="@dimen/margin_10" >
+
+        <!-- 类别 -->
+
+        <TextView
+            android:id="@+id/party_list_tv_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="onClickCategory" />
+
+        <!-- 状态 -->
+
+        <TextView
+            android:id="@+id/party_list_tv_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="onClickState" />
+
+        <!-- 最之系列 -->
+
+        <TextView
+            android:id="@+id/party_list_tv_most"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:onClick="onClickMost" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/party_list_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none" >
+    </ListView>
+
+</LinearLayout>

@@ -1,0 +1,25 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="@dimen/margin_10" >
+
+    <Button
+        android:id="@+id/sina_weibo_share_btn_req_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_20"
+        android:onClick="onClickReqApp"
+        android:text="注册微博" />
+
+    <Button
+        android:id="@+id/sina_weibo_share_btn_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sina_weibo_share_btn_req_app"
+        android:layout_marginTop="@dimen/margin_20"
+        android:onClick="onClickShare"
+        android:text="分享" />
+
+</RelativeLayout>

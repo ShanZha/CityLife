@@ -1,0 +1,44 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/margin_10"
+    android:layout_marginRight="@dimen/margin_10"
+    android:orientation="vertical" >
+
+    <!-- 答案内容 -->
+
+    <TextView
+        android:id="@+id/ask_detail_other_tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10" >
+    </TextView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10" >
+
+        <!-- 答案时间 -->
+
+        <TextView
+            android:id="@+id/ask_detail_other_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:singleLine="true" >
+        </TextView>
+
+        <!-- 等级和UserName -->
+
+        <TextView
+            android:id="@+id/ask_detail_other_tv_level_and_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:singleLine="true" >
+        </TextView>
+    </RelativeLayout>
+
+</LinearLayout>

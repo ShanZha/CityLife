@@ -1,0 +1,437 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <!-- 标题部分 -->
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/titlebar_drop" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <!-- 滚动部分 -->
+
+            <RelativeLayout
+                android:id="@+id/main_rl_scroll_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <RelativeLayout
+                    android:id="@+id/main_rl_pic_top"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/main_scroll_pic_bg" >
+
+                    <!-- 图片名称 -->
+
+                    <TextView
+                        android:id="@+id/main_tv_pic_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:layout_toLeftOf="@+id/main_radio_group"
+                        android:singleLine="true"
+                        android:text="美轮美奂的真实境况，让您无以言表"
+                        android:textColor="@android:color/white" />
+
+                    <!-- 当前选中小图标 -->
+
+                    <RadioGroup
+                        android:id="@+id/main_radio_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/margin_5"
+                        android:orientation="horizontal" >
+                    </RadioGroup>
+                </RelativeLayout>
+
+                <com.zj.support.widget.HackyViewPager
+                    android:id="@+id/main_view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/main_rl_pic_top" >
+                </com.zj.support.widget.HackyViewPager>
+            </RelativeLayout>
+
+            <!-- 图片滚动的进度条 -->
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/progress_bar_small" />
+
+            <!-- 附近 -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:text="@string/nearby"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <!-- 附近分类 -->
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_15"
+                android:layout_marginRight="@dimen/margin_15" >
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <!-- 餐饮美食 -->
+
+                    <TextView
+                        android:id="@+id/main_tv_food"
+                        style="@style/main_type_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/main_food_selector"
+                        android:onClick="onClickFood"
+                        android:text="@string/main_food" />
+
+                    <!-- 生活购物 -->
+
+                    <TextView
+                        android:id="@+id/main_tv_shopping"
+                        style="@style/main_type_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/main_shopping_selector"
+                        android:onClick="onClickShopping"
+                        android:text="@string/main_shopping" />
+
+                    <!-- 休闲娱乐 -->
+
+                    <TextView
+                        android:id="@+id/main_tv_recreation"
+                        style="@style/main_type_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/main_recreation_selector"
+                        android:onClick="onClickRecreation"
+                        android:text="@string/main_recreation" />
+
+                    <!-- 汽车出行 -->
+
+                    <TextView
+                        android:id="@+id/main_tv_travel"
+                        style="@style/main_type_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableTop="@drawable/main_travel_selector"
+                        android:onClick="onClickTravel"
+                        android:text="@string/main_travel" />
+                </TableRow>
+            </TableLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:src="@drawable/divider" />
+
+            <!-- 搜全城 -->
+
+            <RelativeLayout
+                android:id="@+id/main_rl_search_city"
+                style="@style/main_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickSearchCity" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/main_list_first_dir_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/search_city" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="按商区搜索，搜遍全城每个角落" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/main_iv_search_city_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/main_more" />
+            </RelativeLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:src="@drawable/divider" />
+
+            <!-- 问答 -->
+
+            <RelativeLayout
+                android:id="@+id/main_rl_answer"
+                style="@style/main_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickAnswer" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/main_list_first_dir_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ask" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="随您所问，随您所想" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/main_iv_answer_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/main_more" />
+            </RelativeLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:src="@drawable/divider" />
+
+            <!-- 聚会 -->
+
+            <RelativeLayout
+                android:id="@+id/main_rl_party"
+                style="@style/main_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickParty" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/main_list_first_dir_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/party" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="平淡的日子虽甜美，但也需要些许调味品" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/main_iv_party_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/main_more" />
+            </RelativeLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:src="@drawable/divider" />
+
+            <!-- 唐人巷 -->
+
+            <RelativeLayout
+                android:id="@+id/main_rl_chinese_lane"
+                style="@style/main_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickChineseLane" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/main_list_first_dir_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chinese_lane" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="异地他乡总能找到丝丝家乡气息" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/main_iv_chinese_lane_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/main_more" />
+            </RelativeLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:src="@drawable/divider" />
+
+            <!-- 会员中心 -->
+
+            <RelativeLayout
+                android:id="@+id/main_rl_vip_center"
+                style="@style/main_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickVipCenter" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/main_list_first_dir_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/member_center" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="您的快乐天堂" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/main_iv_vip_center_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/main_more" />
+            </RelativeLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:src="@drawable/divider" />
+
+            <!-- 更多 -->
+
+            <RelativeLayout
+                android:id="@+id/main_rl_more"
+                style="@style/main_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClickMore" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        style="@style/main_list_first_dir_tv_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/more" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="这里有更多惊喜哦" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/main_iv_more_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/main_more" />
+            </RelativeLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:src="@drawable/divider" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 底部背景 -->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/main_bottom_bg" />
+
+</LinearLayout>

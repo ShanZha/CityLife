@@ -1,0 +1,69 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <!-- 顶部标题（可下拉） -->
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/titlebar_drop_back" />
+
+    <!-- 加载ProgressBar -->
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/progress_bar_small" />
+
+    <RelativeLayout
+        android:id="@+id/subject_list_rl_top_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#33ffe4"
+        android:padding="@dimen/margin_10" >
+
+        <!-- 距离 -->
+
+        <TextView
+            android:id="@+id/subject_list_tv_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="onClickDistance"
+            android:text="@string/distance_1000" />
+
+        <!-- 类型 -->
+
+        <TextView
+            android:id="@+id/subject_list_tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:onClick="onClickType"
+            android:text="@string/food" />
+
+        <!-- 排序 -->
+
+        <TextView
+            android:id="@+id/subject_list_tv_sort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:onClick="onClickSort"
+            android:text="@string/sort_default" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/subject_list_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none" >
+    </ListView>
+
+</LinearLayout>
