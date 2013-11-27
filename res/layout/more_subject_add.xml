@@ -1,0 +1,149 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/titlebar_back" />
+
+    <!-- 添加店铺 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_20" >
+
+        <ImageView
+            android:id="@+id/more_subject_add_iv_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickUploadPic"
+            android:src="@drawable/list_thumb" />
+
+        <TableLayout
+            android:id="@+id/more_subject_add_tl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_toLeftOf="@+id/more_subject_add_btn_addr_map"
+            android:layout_toRightOf="@+id/more_subject_add_iv_upload" >
+
+            <!-- 商铺名称 -->
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/subject_name"
+                    android:textColor="@android:color/black" />
+
+                <EditText
+                    android:id="@+id/more_subject_add_et_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="请输入名称" />
+            </TableRow>
+
+            <!-- 商铺地址 -->
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/subject_addr"
+                    android:textColor="@android:color/black" />
+
+                <EditText
+                    android:id="@+id/more_subject_add_et_addr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="请输入地址" />
+            </TableRow>
+
+            <!-- 商铺电话 -->
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/subject_tel"
+                    android:textColor="@android:color/black" />
+
+                <EditText
+                    android:id="@+id/more_subject_add_et_tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="请输入名称" />
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:id="@+id/more_subject_add_btn_addr_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_launcher"
+            android:onClick="onClickAddrMap" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/divider" />
+
+    <!-- 商铺映像 -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_20"
+        android:text="@string/impression"
+        android:textColor="@android:color/black" />
+
+    <EditText
+        android:id="@+id/more_subject_add_et_impression"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:background="@null"
+        android:hint="@string/subject_impression_hint"
+        android:lines="4" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/divider" />
+
+    <!-- 添加 -->
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_15"
+        android:onClick="onClickAdd"
+        android:text="@string/subject_add" />
+
+</LinearLayout>

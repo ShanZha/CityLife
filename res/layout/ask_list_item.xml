@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical" >
 
     <!-- 类型 -->
@@ -52,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_5"
             android:layout_toRightOf="@+id/ask_list_item_tv_time"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/main_more" />
     </RelativeLayout>
 
 </com.fourkkm.citylife.itemview.ModoerAskItemView>

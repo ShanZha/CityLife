@@ -73,13 +73,11 @@
                 android:id="@+id/subject_detail_tv_shop_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="没名儿生煎（回龙观店）"
                 android:textSize="20sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#33ffe4" >
+                android:layout_height="wrap_content" >
 
                 <!-- 缩略图 -->
 
@@ -95,9 +93,10 @@
 
                     <ImageView
                         android:id="@+id/subject_detail_iv_thumbnail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/nopic" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="@dimen/margin_5"
+                        android:src="@drawable/list_thumb" />
 
                     <!-- 缩略图数量 -->
 
@@ -108,8 +107,7 @@
                         android:layout_gravity="bottom|right"
                         android:layout_margin="@dimen/margin_5"
                         android:background="@drawable/subject_detail_thumb_count_bg"
-                        android:gravity="center"
-                        android:text="999" />
+                        android:gravity="center" />
                 </FrameLayout>
 
                 <RelativeLayout
@@ -168,23 +166,20 @@
                         <TextView
                             android:id="@+id/subject_detail_tv_sort1"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="口味：5.9" />
+                            android:layout_height="wrap_content" />
 
                         <TextView
                             android:id="@+id/subject_detail_tv_sort2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_10"
-                            android:layout_toRightOf="@+id/subject_detail_tv_sort1"
-                            android:text="服务：6.0" />
+                            android:layout_toRightOf="@+id/subject_detail_tv_sort1" />
 
                         <TextView
                             android:id="@+id/subject_detail_tv_sort3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/subject_detail_tv_sort1"
-                            android:text="环境：8.5" />
+                            android:layout_below="@+id/subject_detail_tv_sort1" />
 
                         <TextView
                             android:id="@+id/subject_detail_tv_sort4"
@@ -192,8 +187,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/subject_detail_tv_sort1"
                             android:layout_marginLeft="@dimen/margin_10"
-                            android:layout_toRightOf="@+id/subject_detail_tv_sort3"
-                            android:text="交通便利：9.0" />
+                            android:layout_toRightOf="@+id/subject_detail_tv_sort3" />
                     </RelativeLayout>
                 </RelativeLayout>
             </RelativeLayout>
@@ -233,8 +227,7 @@
                     android:layout_marginTop="@dimen/margin_15"
                     android:layout_toLeftOf="@+id/subject_detail_iv_address_more"
                     android:layout_toRightOf="@+id/subject_detail_iv_address_icon"
-                    android:singleLine="true"
-                    android:text="魏公村名族路126号" />
+                    android:singleLine="true" />
 
                 <ImageView
                     android:id="@+id/subject_detail_iv_address_more"
@@ -333,8 +326,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/subject_detail_tv_impression_tip"
                     android:layout_below="@+id/subject_detail_tv_impression_tip"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:text="还不错，环境、服务、气氛都非常好，尤其是交通方便" />
+                    android:layout_marginTop="@dimen/margin_5" />
             </RelativeLayout>
 
             <!-- 评价 -->
@@ -387,8 +379,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
                     android:layout_below="@+id/subject_detail_iv_review_icon"
-                    android:singleLine="true"
-                    android:text="神偷无所畏惧" />
+                    android:singleLine="true" />
 
                 <!-- 用户评价中评分 -->
 
@@ -428,8 +419,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginTop="@dimen/margin_5"
-                        android:layout_toLeftOf="@+id/subject_detail_iv_review_more"
-                        android:text="世界无所畏惧，仅此一家让我感觉我存在，存在这个世界，确实不错，环境优雅，交通便利，服务周到，夫复何求" />
+                        android:layout_toLeftOf="@+id/subject_detail_iv_review_more" />
 
                     <ImageView
                         android:id="@+id/subject_detail_iv_review_more"

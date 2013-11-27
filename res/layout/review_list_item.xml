@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -19,20 +18,17 @@
             android:id="@+id/review_list_item_tv_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="无所畏惧" />
+            android:singleLine="true" />
 
         <!-- 评分 -->
 
         <RatingBar
             android:id="@+id/review_list_item_ratingBar"
-            style="?android:attr/ratingBarStyleSmall"
+            style="@style/rating_bar_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/review_list_item_tv_username"
-            android:layout_marginTop="@dimen/margin_5"
-            android:max="10"
-            android:numStars="5" />
+            android:layout_marginTop="@dimen/margin_5" />
 
         <!-- 人均 -->
 
@@ -45,7 +41,7 @@
             android:layout_toRightOf="@+id/review_list_item_ratingBar"
             android:singleLine="true"
             android:text="@string/average_per" />
-        
+
         <!-- 评论内容 -->
 
         <TextView
@@ -54,8 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/review_list_item_ratingBar"
             android:layout_marginTop="@dimen/margin_5"
-            android:maxLines="3"
-            android:text="圣诞节分开始放假看是否控件上电话费控件上地方卡洛斯jkfjsdlkfjsalfkjsdkfljsdalfsdj" />
+            android:maxLines="3" />
 
         <!-- 总体评价 -->
 
@@ -77,8 +72,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/review_list_item_tv_content"
             android:layout_marginTop="@dimen/margin_5"
-            android:singleLine="true"
-            android:text="2013-11-14 09:56" />
+            android:singleLine="true" />
     </RelativeLayout>
 
     <ImageView
@@ -88,6 +82,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/margin_10"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/main_more" />
 
 </com.fourkkm.citylife.itemview.ModoerReviewItemView>

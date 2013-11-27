@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black" >
+    android:background="@color/main_bg" >
 
     <com.zj.support.widget.HackyViewPager
         android:id="@+id/subject_album_view_pager"
@@ -29,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
         android:layout_margin="@dimen/margin_20"
-        android:text="1/30"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 

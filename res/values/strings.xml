@@ -52,8 +52,31 @@
     <string name="party_address">活动地址：</string>
     <string name="party_time">活动时间：</string>
     <string name="party_desc">活动简介：</string>
+    <string name="party_desc_2">活动简介</string>
+    <string name="party_sign_up_me">我要报名</string>
+    <string name="party_initiator">发起者：</string>
+    <string name="party_initiate_time">发起时间：</string>
+    <string name="party_sign_up_end_time">报名截止：</string>
+    <string name="party_sex_limit">性别限制：</string>
+    <string name="party_cost">活动费用：</string>
+    <string name="party_plan_person_num">计划人数：</string>
+    <string name="party_sign_up_num">已报名人数：</string>
+    <string name="party_web_info">查看网页信息</string>
+    <string name="party_sex_limit_no">男女不限</string>
+    <string name="party_sex_limit_man">男性</string>
+    <string name="party_sex_limit_woman">女性</string>
     <string name="china_lane_area">地区：</string>
     <string name="china_lane_author">作者：</string>
     <string name="china_lane_time">时间：</string>
+    <string name="more_add_subject">添加店铺</string>
+    <string name="more_version">版本说明</string>
+    <string name="more_help">新手帮助</string>
+    <string name="more_about">关于我们</string>
+    <string name="more_exit">退出应用</string>
+    <string name="subject_name">商铺名称</string>
+    <string name="subject_addr">商铺地址</string>
+    <string name="subject_tel">商铺电话</string>
+    <string name="subject_impression_hint">请填写您对商铺的印象</string>
+    <string name="subject_add">添加</string>
 
 </resources>

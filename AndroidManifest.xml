@@ -104,6 +104,21 @@
             android:name="com.fourkkm.citylife.control.activity.PartyListActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 聚会详情 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.PartyDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 更多 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.MoreActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 店铺添加 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.SubjectAddActivity"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

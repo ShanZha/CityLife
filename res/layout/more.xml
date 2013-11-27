@@ -1,0 +1,163 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/titlebar_back" />
+
+    <!-- 添加店铺 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_20"
+        android:background="@android:color/white"
+        android:onClick="onClickAddSubject" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_launcher"
+            android:drawablePadding="@dimen/margin_10"
+            android:gravity="center_vertical"
+            android:text="@string/more_add_subject"
+            android:textColor="@android:color/black" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/main_more" />
+    </RelativeLayout>
+
+    <!-- 版本说明 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_20"
+        android:background="@android:color/white"
+        android:onClick="onClickVersion" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/subject_detail_impression"
+            android:drawablePadding="@dimen/margin_10"
+            android:gravity="center_vertical"
+            android:text="@string/more_version"
+            android:textColor="@android:color/black" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/main_more" />
+    </RelativeLayout>
+
+    <!-- 新手帮助 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:background="@android:color/white"
+        android:onClick="onClickHelp" >
+
+        <ImageView
+            android:id="@+id/more_iv_help_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/more_iv_help_divider"
+            android:drawableLeft="@drawable/subject_detail_impression"
+            android:drawablePadding="@dimen/margin_10"
+            android:gravity="center_vertical"
+            android:text="@string/more_help"
+            android:textColor="@android:color/black" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/main_more" />
+    </RelativeLayout>
+
+    <!-- 关于我们 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:background="@android:color/white"
+        android:onClick="onClickAbout" >
+
+        <ImageView
+            android:id="@+id/more_iv_about_divider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/more_iv_about_divider"
+            android:drawableLeft="@drawable/subject_detail_impression"
+            android:drawablePadding="@dimen/margin_10"
+            android:gravity="center_vertical"
+            android:text="@string/more_about"
+            android:textColor="@android:color/black" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/main_more" />
+    </RelativeLayout>
+
+    <!-- 退出应用 -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
+        android:background="@android:color/white"
+        android:onClick="onClickExit" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/subject_detail_impression"
+            android:drawablePadding="@dimen/margin_10"
+            android:gravity="center_vertical"
+            android:text="@string/more_exit"
+            android:textColor="@android:color/black" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/main_more" />
+    </RelativeLayout>
+
+</LinearLayout>
