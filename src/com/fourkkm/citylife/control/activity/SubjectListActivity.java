@@ -8,6 +8,7 @@ import java.util.Map;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -34,7 +35,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		IFloatingItemClick {
 
 	private ProgressBar mProBarTopCheck;
-	private RelativeLayout mRlTopCheck;
+	private LinearLayout mLlTopCheck;
 	private TextView mTvDistance, mTvType, mTvSort;
 	private List<ModoerSubject> mSubjectList;
 	private List<String> mSortDatas;
@@ -52,8 +53,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		this.setContentView(R.layout.subject_list);
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
-		mRlTopCheck = (RelativeLayout) this
-				.findViewById(R.id.subject_list_rl_top_check);
+		mLlTopCheck = (LinearLayout) this
+				.findViewById(R.id.subject_list_ll_top_check);
 		mListView = (ListView) this.findViewById(R.id.subject_list_listview);
 		mTvDistance = (TextView) this
 				.findViewById(R.id.subject_list_tv_distance);
@@ -87,12 +88,12 @@ public class SubjectListActivity extends BaseListActivity implements
 
 	private void showLoadingCategory() {
 		mProBarTopCheck.setVisibility(View.VISIBLE);
-		mRlTopCheck.setVisibility(View.GONE);
+		mLlTopCheck.setVisibility(View.GONE);
 	}
 
 	private void hideLoadingCategory() {
 		mProBarTopCheck.setVisibility(View.GONE);
-		mRlTopCheck.setVisibility(View.VISIBLE);
+		mLlTopCheck.setVisibility(View.VISIBLE);
 	}
 
 	/**
@@ -140,6 +141,10 @@ public class SubjectListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		// this.showToast(mSortDatas.get(pos));
 		this.showToast(key);
+	}
+
+	public void onClickBack(View view) {
+		this.finish();
 	}
 
 	public void onClickDistance(View view) {// æ‡¿Î

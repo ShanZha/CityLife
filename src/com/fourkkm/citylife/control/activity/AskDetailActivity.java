@@ -125,6 +125,10 @@ public class AskDetailActivity extends BaseActivity {
 				param);
 	}
 
+	public void onClickBack(View view) {
+		this.finish();
+	}
+
 	@Override
 	public void onSuccessFindAll(Param out) {
 		// TODO Auto-generated method stub

@@ -236,13 +236,12 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 	}
 
 	public void onClickVipCenter(View view) {// 会员中心
-
 		Intent intent = new Intent(this, LoginActivity.class);
 		this.startActivity(intent);
 	}
 
 	public void onClickMore(View view) {// 更多
-		this.startActivity(new Intent(this, SubjectListActivity.class));
+		this.startActivity(new Intent(this, MoreActivity.class));
 	}
 
 	@Override

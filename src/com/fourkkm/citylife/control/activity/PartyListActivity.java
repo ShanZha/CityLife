@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Intent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -263,6 +265,17 @@ public class PartyListActivity extends BaseListActivity implements
 		if (null != mFloatingMost) {
 			mFloatingMost.showAsDropDown(view);
 		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		super.onItemClick(parent, view, position, id);
+		ModoerParty party = (ModoerParty) parent.getAdapter().getItem(position);
+		Intent intent = new Intent(this, PartyDetailActivity.class);
+		intent.putExtra("party", party);
+		this.startActivity(intent);
 	}
 
 	@Override
