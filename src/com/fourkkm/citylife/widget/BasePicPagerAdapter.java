@@ -47,7 +47,7 @@ public class BasePicPagerAdapter extends PagerAdapter implements
 		String url = mUrls.get(position);
 		// iv.setImageProcessor(new ScaleImageProcessor(mThumbnailWidth,
 		// mThumbnailHeight));
-		iv.setDefaultImageResource(R.drawable.nopic);
+		iv.setDefaultImageResource(R.drawable.main_gallery_default);
 		iv.setScaleType(ScaleType.FIT_XY);
 		iv.setUrl(url);
 		ViewGroup.LayoutParams params = container.getLayoutParams();
