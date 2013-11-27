@@ -20,9 +20,10 @@
 
     <!-- 中间-关键信息 -->
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/subject_list_item_iv_show"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/margin_10"
         android:layout_toRightOf="@+id/subject_list_item_iv_show"
@@ -34,14 +35,17 @@
             android:id="@+id/subject_list_item_tv_shop_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:text="世界上最好的餐厅之一，午饭不用钱" />
 
         <!-- 中间 -->
 
         <LinearLayout
+            android:id="@+id/subject_detail_item_ll_middle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_5"
+            android:layout_below="@+id/subject_list_item_tv_shop_name"
+            android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/margin_5" >
 
             <!-- 消费星级 -->
@@ -65,9 +69,11 @@
 
         <!-- 底部 -->
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/subject_detail_item_ll_middle"
+            android:layout_marginTop="@dimen/margin_10" >
 
             <!-- 地区 -->
 
@@ -75,7 +81,8 @@
                 android:id="@+id/subject_list_item_tv_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="纽约市区" />
 
             <!-- 商店类型 -->
 
@@ -84,18 +91,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_5"
-                android:singleLine="true" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_toLeftOf="@+id/subject_list_item_tv_distance"
+                android:layout_toRightOf="@+id/subject_list_item_tv_area"
+                android:singleLine="true"
+                android:text="美食" />
 
-    <!-- 右边/底部-距离 -->
-
-    <TextView
-        android:id="@+id/subject_list_item_tv_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="@string/distance_500" />
+            <TextView
+                android:id="@+id/subject_list_item_tv_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@drawable/subject_detail_address"
+                android:gravity="center_vertical"
+                android:text="@string/distance_500" />
+        </RelativeLayout>
+    </RelativeLayout>
 
     <ImageView
         android:layout_width="match_parent"
