@@ -8,6 +8,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
@@ -21,7 +22,7 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 	private Context mCtx;
 	private ImageView mIvShow;
 	private TextView mTvShopName;
-	private TextView mTvAddress;
+	private TextView mTvArea;
 	private TextView mTvAveragePer;
 	private RatingBar mRatingBar;
 	private TextView mTvDistance;
@@ -46,8 +47,7 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 		mIvShow = (ImageView) this.findViewById(R.id.subject_list_item_iv_show);
 		mTvShopName = (TextView) this
 				.findViewById(R.id.subject_list_item_tv_shop_name);
-		mTvAddress = (TextView) this
-				.findViewById(R.id.subject_list_item_tv_address);
+		mTvArea = (TextView) this.findViewById(R.id.subject_list_item_tv_area);
 		mTvAveragePer = (TextView) this
 				.findViewById(R.id.subject_list_item_tv_average_per);
 		mTvDistance = (TextView) this
@@ -67,7 +67,10 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 		// TODO Auto-generated method stub
 		ModoerSubject subject = (ModoerSubject) item;
 		mTvShopName.setText(subject.getName());
-		mTvAddress.setText(subject.getAddress());
+		ModoerArea area = subject.getAid();
+		if (null != area && !TextUtils.isEmpty(area.getName())) {
+			mTvArea.setText(area.getName());
+		}
 		mTvAveragePer.setText(mCtx.getString(R.string.average_per)
 				+ subject.getAvgprice());
 		mTvDistance.setText("400");// ?

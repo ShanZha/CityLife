@@ -1,10 +1,18 @@
 package com.fourkkm.citylife.util;
 
+import java.util.Date;
+
 import com.fourkkm.citylife.R;
+import com.zj.app.utils.DateFormatMethod;
 
 import android.content.Context;
 
 public class CommonUtil {
+
+	public static final String FORMAT_SECOND = "yyyy-MM-dd HH:mm:ss";
+	public static final String FORMAT_MINUTE = "yyyy-MM-dd HH:mm";
+	public static final String FORMAT_MONTH = "yyyy-MM";
+	public static final String FORMAT_DAY = "yyyy-MM-dd";
 
 	/**
 	 * 根据得分获取评价（10分满分）
@@ -26,5 +34,15 @@ public class CommonUtil {
 			return ctx.getString(R.string.review_very_very_good);
 		}
 		return "";
+	}
+
+	public static String getTimeByPHP(int time) {
+		long javaTime = time * 1000L;
+		return DateFormatMethod.formatDate(new Date(javaTime));
+	}
+
+	public static String getTimeByPHP(int time, String format) {
+		long javaTime = time * 1000L;
+		return DateFormatMethod.formatDate(new Date(javaTime), format);
 	}
 }
