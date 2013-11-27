@@ -1,5 +1,6 @@
 package com.andrnes.modoer;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import android.content.Context;
@@ -10,8 +11,9 @@ import com.zj.app.annotation.Lazy;
 import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
-public class ModoerParty extends ItemSingle {
+public class ModoerParty extends ItemSingle implements Serializable{
 
+	private static final long serialVersionUID = 1L;
 	private int id;
 	/** ∑÷¿‡ID */
 	@Lazy(isLazy = true)

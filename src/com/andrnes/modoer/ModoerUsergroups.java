@@ -1,8 +1,11 @@
 package com.andrnes.modoer;
 
-/** 点评项组表 */
-public class ModoerUsergroups {
+import java.io.Serializable;
 
+/** 点评项组表 */
+public class ModoerUsergroups implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int id;
 	/** 用户组类型('member','special','system') */
 	private String grouptype;

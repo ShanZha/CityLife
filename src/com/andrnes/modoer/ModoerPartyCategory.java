@@ -1,8 +1,11 @@
 package com.andrnes.modoer;
 
-/** 聚会分类表 */
-public class ModoerPartyCategory {
+import java.io.Serializable;
 
+/** 聚会分类表 */
+public class ModoerPartyCategory implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int id;
 	/** 名称 */
 	private String name;
