@@ -6,20 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerCategory;
-import com.andrnes.modoer.ModoerReviewOptGroup;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerSubjectItemView;
+import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
 import com.zj.support.observer.model.Param;
@@ -34,6 +33,7 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
 public class SubjectListActivity extends BaseListActivity implements
 		IFloatingItemClick {
 
+	private static final String TAG = "SubjectListActivity";
 	private ProgressBar mProBarTopCheck;
 	private LinearLayout mLlTopCheck;
 	private TextView mTvDistance, mTvType, mTvSort;
@@ -54,12 +54,13 @@ public class SubjectListActivity extends BaseListActivity implements
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 		mLlTopCheck = (LinearLayout) this
-				.findViewById(R.id.subject_list_ll_top_check);
-		mListView = (ListView) this.findViewById(R.id.subject_list_listview);
+				.findViewById(R.id.floating_layout_ll_all);
+		mListView = (PullUpDownListView) this
+				.findViewById(R.id.subject_list_listview);
 		mTvDistance = (TextView) this
-				.findViewById(R.id.subject_list_tv_distance);
-		mTvType = (TextView) this.findViewById(R.id.subject_list_tv_type);
-		mTvSort = (TextView) this.findViewById(R.id.subject_list_tv_sort);
+				.findViewById(R.id.floating_layout_tv_first);
+		mTvType = (TextView) this.findViewById(R.id.floating_layout_tv_second);
+		mTvSort = (TextView) this.findViewById(R.id.floating_layout_tv_third);
 		super.prepareViews();
 
 	}
@@ -110,6 +111,7 @@ public class SubjectListActivity extends BaseListActivity implements
 
 	private void fetchSuject() {
 		if (null == mCurrCategory) {
+			Log.e(TAG, "shan-->mCurrCategory is null");
 			return;
 		}
 		// ???暂时仅按照分类搜索
@@ -147,15 +149,15 @@ public class SubjectListActivity extends BaseListActivity implements
 		this.finish();
 	}
 
-	public void onClickDistance(View view) {// 距离
-
+	public void onClickFloatingFirst(View view) {// 距离
+		this.showToast("还没处理");
 	}
 
-	public void onClickType(View view) {// 类型
-
+	public void onClickFloatingSecond(View view) {// 类型
+		this.showToast("暂未实现");
 	}
 
-	public void onClickSort(View view) {// 排序
+	public void onClickFloatingThird(View view) {// 排序
 		if (null == mFloatingSortProxy) {
 			return;
 		}
@@ -176,15 +178,9 @@ public class SubjectListActivity extends BaseListActivity implements
 	}
 
 	@Override
-	public void notifyLoadStart() {
+	public void onLoadMore() {
 		// TODO Auto-generated method stub
-		super.notifyLoadStart();
-
-		// ModoerArea currArea =
-		// ((CoreApp)AppUtils.getBaseApp(this)).getCurrArea();
-		// if(null!=currArea){
-		//
-		// }
+		super.onLoadMore();
 		this.fetchSuject();
 	}
 
@@ -200,6 +196,8 @@ public class SubjectListActivity extends BaseListActivity implements
 			}
 			for (int i = 0; i < results.size(); i++) {
 				ModoerCategory category = (ModoerCategory) results.get(i);
+				System.out.println("name= " + category.getName() + " 目标Id = "
+						+ mCategoryId + " id = " + category.getId());
 				// 设置初始类别
 				if (mCategoryId == category.getId()) {
 					mCurrCategory = category;
@@ -207,7 +205,8 @@ public class SubjectListActivity extends BaseListActivity implements
 				mCategoryList.add(category);
 			}
 			this.hideLoadingCategory();
-			this.notifyLoadStart();
+			this.onFirstLoadSetting();
+			this.onLoadMore();
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT == operator) {
 			List<Object> results = (List<Object>) out.getResult();
 			if (null == results) {
@@ -215,18 +214,10 @@ public class SubjectListActivity extends BaseListActivity implements
 			}
 			for (int i = 0; i < results.size(); i++) {
 				ModoerSubject subject = (ModoerSubject) results.get(i);
-				ModoerCategory pid = subject.getPid();
-				if (null != pid) {
-					ModoerReviewOptGroup gid = pid.getReviewOptGid();
-					if (null != gid) {
-						int id = gid.getId();
-					}
-				}
-				// System.out.println(" reviewOptGid --id =  "+subject.getPid().getReviewOptGid().getId());
 				mSubjectList.add(subject);
 			}
+			this.pretreatmentResults(results);
 			this.notifyLoadOver();
-			mCurrSize = mSubjectList.size();
 
 		}
 	}
@@ -235,13 +226,13 @@ public class SubjectListActivity extends BaseListActivity implements
 	public void onFails(Param out) {
 		// TODO Auto-generated method stub
 		super.onFails(out);
-		// int operator = out.getOperator();
-		// switch (operator) {
-		// case GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT:
-		// this.notifyLoadOver();
-		// break;
-		// default:
-		// break;
-		// }
+		int operator = out.getOperator();
+		switch (operator) {
+		case GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT:
+			this.notifyLoadOver();
+			break;
+		default:
+			break;
+		}
 	}
 }

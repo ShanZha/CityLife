@@ -8,13 +8,13 @@ import java.util.Map;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerReview;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerReviewItemView;
+import com.fourkkm.citylife.view.PullUpDownListView;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.adapter.ItemSingleAdapter;
 
@@ -34,7 +34,8 @@ public class ReviewListActivity extends BaseListActivity {
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.review_list);
-		mListView = (ListView) this.findViewById(R.id.review_list_listview);
+		mListView = (PullUpDownListView) this
+				.findViewById(R.id.review_list_listview);
 		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
 		mTvTitle.setText(this.getString(R.string.review));
 		super.prepareViews();
@@ -50,7 +51,8 @@ public class ReviewListActivity extends BaseListActivity {
 		mAdapter = new ItemSingleAdapter<ModoerReviewItemView, ModoerReview>(
 				mReviewLists, this);
 		mListView.setAdapter(mAdapter);
-		this.notifyLoadStart();
+		this.onFirstLoadSetting();
+		this.onLoadMore();
 	}
 
 	public void onClickBack(View view) {
@@ -58,9 +60,9 @@ public class ReviewListActivity extends BaseListActivity {
 	}
 
 	@Override
-	public void notifyLoadStart() {
+	public void onLoadMore() {
 		// TODO Auto-generated method stub
-		super.notifyLoadStart();
+		super.onLoadMore();
 
 		String selectCode = "from com.andrnes.modoer.ModoerReview mr where mr.status = 1 and mr.sid.id = "
 				+ mSujectId;
@@ -95,8 +97,8 @@ public class ReviewListActivity extends BaseListActivity {
 				mReviewLists.add(review);
 			}
 		}
+		this.pretreatmentResults(results);
 		this.notifyLoadOver();
-		mCurrSize = mReviewLists.size();
 	}
 
 	@Override

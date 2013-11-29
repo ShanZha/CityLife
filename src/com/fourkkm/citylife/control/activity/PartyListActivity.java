@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,6 +18,7 @@ import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerPartyItemView;
+import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
 import com.zj.support.observer.model.Param;
@@ -67,11 +67,13 @@ public class PartyListActivity extends BaseListActivity implements
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 		mLlTopCheck = (LinearLayout) this
-				.findViewById(R.id.party_list_ll_top_check);
-		mTvCategory = (TextView) this.findViewById(R.id.party_list_tv_category);
-		mTvState = (TextView) this.findViewById(R.id.party_list_tv_state);
-		mTvMost = (TextView) this.findViewById(R.id.party_list_tv_most);
-		mListView = (ListView) this.findViewById(R.id.party_list_listview);
+				.findViewById(R.id.floating_layout_ll_all);
+		mTvCategory = (TextView) this
+				.findViewById(R.id.floating_layout_tv_first);
+		mTvState = (TextView) this.findViewById(R.id.floating_layout_tv_second);
+		mTvMost = (TextView) this.findViewById(R.id.floating_layout_tv_third);
+		mListView = (PullUpDownListView) this
+				.findViewById(R.id.party_list_listview);
 		super.prepareViews();
 	}
 
@@ -238,30 +240,30 @@ public class PartyListActivity extends BaseListActivity implements
 	 */
 	private void reset() {
 		mPage = 0;
-		mCurrSize = 0;
 		if (null != mPartyList) {
 			mPartyList.clear();
 		}
 		this.setHaveMore(true);
+		this.setEnbaleLoad(true);
 	}
 
 	public void onClickBack(View view) {
 		this.finish();
 	}
 
-	public void onClickCategory(View view) {// 类别
+	public void onClickFloatingFirst(View view) {// 类别
 		if (null != mFloatingCategory) {
 			mFloatingCategory.showAsDropDown(view);
 		}
 	}
 
-	public void onClickState(View view) {// 状态
+	public void onClickFloatingSecond(View view) {// 状态
 		if (null != mFloatingState) {
 			mFloatingState.showAsDropDown(view);
 		}
 	}
 
-	public void onClickMost(View view) {// 最之系列
+	public void onClickFloatingThird(View view) {// 最之系列
 		if (null != mFloatingMost) {
 			mFloatingMost.showAsDropDown(view);
 		}
@@ -279,9 +281,9 @@ public class PartyListActivity extends BaseListActivity implements
 	}
 
 	@Override
-	public void notifyLoadStart() {
+	public void onLoadMore() {
 		// TODO Auto-generated method stub
-		super.notifyLoadStart();
+		super.onLoadMore();
 
 		this.fetchPartys();
 	}
@@ -307,13 +309,14 @@ public class PartyListActivity extends BaseListActivity implements
 			this.setTextByCurrValue();
 			this.prepareFloadingCategoryDatas();
 			this.hideLoadingCategory();
-			this.notifyLoadStart();
+			this.onFirstLoadSetting();
+			this.onLoadMore();
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_PARTY == operator) {
 			for (int i = 0; i < results.size(); i++) {
 				ModoerParty party = (ModoerParty) results.get(i);
 				mPartyList.add(party);
 			}
-			mCurrSize = mPartyList.size();
+			this.pretreatmentResults(results);
 			this.notifyLoadOver();
 		}
 	}
@@ -322,6 +325,10 @@ public class PartyListActivity extends BaseListActivity implements
 	public void onFails(Param out) {
 		// TODO Auto-generated method stub
 		super.onFails(out);
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_FINDALL_PARTY == operator) {
+			this.notifyLoadOver();
+		}
 	}
 
 	@Override
@@ -357,7 +364,8 @@ public class PartyListActivity extends BaseListActivity implements
 			this.setTextByCurrValue();
 			this.reset();
 			this.notifyDataChanged();
-			this.notifyLoadStart();
+			this.onFirstLoadSetting();
+			this.onLoadMore();
 		}
 	}
 }

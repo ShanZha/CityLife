@@ -216,28 +216,23 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 	}
 
 	public void onClickSearchCity(View view) {// 搜全城
-
+		this.showToast("还不清楚怎么搜呢");
 	}
 
 	public void onClickAnswer(View view) {// 问答
-		Intent intent = new Intent(this, AskListActivity.class);
-		this.startActivity(intent);
+		this.startActivity(new Intent(this, AskListActivity.class));
 	}
 
 	public void onClickParty(View view) {// 聚会
-		Intent intent = new Intent(this, PartyListActivity.class);
-		this.startActivity(intent);
+		this.startActivity(new Intent(this, PartyListActivity.class));
 	}
 
 	public void onClickChineseLane(View view) {// 唐人巷
-		// 测试定位
-		// Intent intent = new Intent(this, LocationActivity.class);
-		// this.startActivity(intent);
+		this.startActivity(new Intent(this, ChineseLaneListActivity.class));
 	}
 
 	public void onClickVipCenter(View view) {// 会员中心
-		Intent intent = new Intent(this, LoginActivity.class);
-		this.startActivity(intent);
+		this.startActivity(new Intent(this, UserCenterActivity.class));
 	}
 
 	public void onClickMore(View view) {// 更多

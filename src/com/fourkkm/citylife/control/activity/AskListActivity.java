@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -18,6 +17,7 @@ import com.andrnes.modoer.ModoerAsks;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerAskItemView;
+import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.FloatingTwoMenuProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
@@ -36,7 +36,7 @@ public class AskListActivity extends BaseListActivity implements
 	// 常量定义见实体类
 	private static final int ASK_STATE_UNRESOLVED = 0;
 	private static final int ASK_STATE_RESOLVED = 1;
-	private static final int ASK_STATE_REWARD = 3;
+	private static final int ASK_STATE_REWARD = 2;
 
 	private static final int ASK_CATEGORY_LEVEL_PARENT = 0;
 	private static final int ASK_CATEGORY_LEVEL_CHILD = 1;
@@ -60,13 +60,17 @@ public class AskListActivity extends BaseListActivity implements
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.ask_list);
-		mListView = (ListView) this.findViewById(R.id.ask_list_listview);
+		mListView = (PullUpDownListView) this
+				.findViewById(R.id.ask_list_listview);
 		mLlTopCheck = (LinearLayout) this
-				.findViewById(R.id.ask_list_ll_top_check);
+				.findViewById(R.id.floating_layout_ll_all);
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
-		mTvCategory = (TextView) this.findViewById(R.id.ask_list_tv_category);
-		mTvState = (TextView) this.findViewById(R.id.ask_list_tv_state);
+		mTvCategory = (TextView) this
+				.findViewById(R.id.floating_layout_tv_first);
+		mTvState = (TextView) this.findViewById(R.id.floating_layout_tv_second);
+		this.findViewById(R.id.floating_layout_ll_third).setVisibility(
+				View.GONE);
 		super.prepareViews();
 	}
 
@@ -305,17 +309,17 @@ public class AskListActivity extends BaseListActivity implements
 	 */
 	private void reset() {
 		mPage = 0;
-		mCurrSize = 0;
 		if (null != mAskList) {
 			mAskList.clear();
 		}
 		this.setHaveMore(true);
+		this.setEnbaleLoad(true);
 	}
 
 	@Override
-	public void notifyLoadStart() {
+	public void onLoadMore() {
 		// TODO Auto-generated method stub
-		super.notifyLoadStart();
+		super.onLoadMore();
 		this.fecthAsks();
 	}
 
@@ -323,14 +327,14 @@ public class AskListActivity extends BaseListActivity implements
 		this.finish();
 	}
 
-	public void onClickCategory(View view) {// 类别选择
+	public void onClickFloatingFirst(View view) {// 类别选择
 		if (null == mFloatingCategory) {
 			return;
 		}
 		mFloatingCategory.showAsDropDown(view);
 	}
 
-	public void onClickState(View view) {// 状态选择
+	public void onClickFloatingSecond(View view) {// 状态选择
 		if (null == mFloatingState) {
 			return;
 		}
@@ -362,7 +366,9 @@ public class AskListActivity extends BaseListActivity implements
 				mFloatingCategory.setDatas(this.buildAskCategoryRelation());
 			}
 			this.hideLoadingCategory();
-			this.notifyLoadStart();
+			//类别查询成功之后，加载数据
+			this.onFirstLoadSetting();
+			this.onLoadMore();
 			break;
 		case GlobalConfig.Operator.OPERATION_FINDALL_ASK:
 			if (null != results) {
@@ -370,8 +376,8 @@ public class AskListActivity extends BaseListActivity implements
 					ModoerAsks ask = (ModoerAsks) results.get(i);
 					mAskList.add(ask);
 				}
-				mCurrSize = mAskList.size();
 			}
+			this.pretreatmentResults(results);
 			this.notifyLoadOver();
 			break;
 		}
@@ -382,6 +388,10 @@ public class AskListActivity extends BaseListActivity implements
 	public void onFails(Param out) {
 		// TODO Auto-generated method stub
 		super.onFails(out);
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_FINDALL_ASK == operator) {
+			this.notifyLoadOver();
+		}
 	}
 
 	@Override
@@ -418,7 +428,8 @@ public class AskListActivity extends BaseListActivity implements
 		}
 		this.reset();
 		this.notifyDataChanged();
+		this.onFirstLoadSetting();
 		// 重新加载数据
-		this.notifyLoadStart();
+		this.onLoadMore();
 	}
 }

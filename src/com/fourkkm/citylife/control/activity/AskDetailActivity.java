@@ -1,10 +1,10 @@
 package com.fourkkm.citylife.control.activity;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,8 +15,8 @@ import com.andrnes.modoer.ModoerAsks;
 import com.andrnes.modoer.ModoerMembers;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.BaseActivity;
-import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.observer.model.Param;
 
 /**
@@ -27,6 +27,8 @@ import com.zj.support.observer.model.Param;
  */
 public class AskDetailActivity extends BaseActivity {
 
+	private static final String TAG = "AskDetailActivity";
+	private static final int ANSWER_REQ_CODE = 1;
 	private TextView mTvSubject, mTvContent, mTvTime, mTvLevelAndUsername;
 	private TextView mTvBestContent, mTvBestTime, mTvBestLevelAndUsername,
 			mTvBestTips;
@@ -72,12 +74,14 @@ public class AskDetailActivity extends BaseActivity {
 		Intent intent = this.getIntent();
 		mCurrAsk = (ModoerAsks) intent.getSerializableExtra("modoerAsk");
 		if (null == mCurrAsk) {
+			Log.e(TAG, "mCurrAsk is null");
 			return;
 		}
 		mTvSubject.setText(mCurrAsk.getSubject());
 		mTvContent.setText(mCurrAsk.getContent());
-		mTvTime.setText(DateFormatMethod.formatDate(
-				new Date(mCurrAsk.getDateline() * 1000L), "yyyy-MM-dd HH:mm"));
+
+		mTvTime.setText(CommonUtil.getTimeByPHP(mCurrAsk.getDateline(),
+				"yyyy-MM-dd HH:mm"));
 		ModoerMembers member = mCurrAsk.getUid();
 		if (null != member && member.getId() != 0) {// 暂时仅设置Username
 			mTvLevelAndUsername.setText(member.getUsername());
@@ -85,9 +89,8 @@ public class AskDetailActivity extends BaseActivity {
 		ModoerAskAnswer bestAnswer = mCurrAsk.getBestanswer();
 		if (null != bestAnswer && bestAnswer.getId() != 0) {
 			mTvBestContent.setText(bestAnswer.getContent());
-			mTvBestTime.setText(DateFormatMethod.formatDate(
-					new Date(bestAnswer.getDateline() * 1000),
-					"yyyy-MM-dd HH:mm"));
+			mTvBestTime.setText(CommonUtil.getTimeByPHP(
+					bestAnswer.getDateline(), "yyyy-MM-dd HH:mm"));
 			mTvBestLevelAndUsername.setText(bestAnswer.getUsername());// 暂时仅设置Username
 			mTvBestComment.setText(bestAnswer.getFeel());
 		} else {
@@ -129,6 +132,21 @@ public class AskDetailActivity extends BaseActivity {
 		this.finish();
 	}
 
+	public void onClickAnswer(View view) {// 我要回答
+		Intent intent = new Intent(this, AskAnswerActivity.class);
+		intent.putExtra("modoerAsk", mCurrAsk);
+		this.startActivityForResult(intent, ANSWER_REQ_CODE);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (RESULT_OK == resultCode && ANSWER_REQ_CODE == requestCode) {
+			// 处理我回答问题
+		}
+	}
+
 	@Override
 	public void onSuccessFindAll(Param out) {
 		// TODO Auto-generated method stub
@@ -150,8 +168,8 @@ public class AskDetailActivity extends BaseActivity {
 			TextView tvLevelAndUsername = (TextView) view
 					.findViewById(R.id.ask_detail_other_tv_level_and_username);
 			tvContent.setText(answer.getContent());
-			tvTime.setText(DateFormatMethod.formatDate(
-					new Date(answer.getDateline() * 1000L), "yyyy-MM-dd HH:mm"));
+			tvTime.setText(CommonUtil.getTimeByPHP(answer.getDateline(),
+					"yyyy-MM-dd HH:mm"));
 			ModoerMembers member = answer.getUid();
 			if (null != member && member.getId() != 0) {// 暂时仅设置用户名
 				tvLevelAndUsername.setText(member.getUsername());
