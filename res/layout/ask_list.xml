@@ -19,46 +19,18 @@
         android:layout_height="wrap_content"
         layout="@layout/progress_bar_small" />
 
-    <LinearLayout
-        android:id="@+id/ask_list_ll_top_check"
+    <!-- 菜单栏 -->
+
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#33ffe4"
-        android:visibility="gone" >
+        layout="@layout/floating_layout" />
 
-        <!-- 类别 -->
-
-        <TextView
-            android:id="@+id/ask_list_tv_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:drawableRight="@drawable/floating_divider"
-            android:gravity="center"
-            android:onClick="onClickCategory" />
-
-        <!-- 问题状态 -->
-
-        <TextView
-            android:id="@+id/ask_list_tv_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:drawableRight="@drawable/floating_divider"
-            android:gravity="center"
-            android:onClick="onClickState"
-            android:text="@string/ask_state_resolved" />
-    </LinearLayout>
-
-    <ListView
+    <com.fourkkm.citylife.view.PullUpDownListView
         android:id="@+id/ask_list_listview"
+        style="@style/list_view_style"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@drawable/list_divider"
-        android:scrollbars="none" >
-    </ListView>
+        android:layout_height="match_parent" >
+    </com.fourkkm.citylife.view.PullUpDownListView>
 
 </LinearLayout>

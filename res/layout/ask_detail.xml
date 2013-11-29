@@ -20,19 +20,19 @@
 
         <TextView
             android:id="@+id/ask_detail_tv_subject"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
             android:drawableLeft="@drawable/main_more"
             android:maxLines="2"
-            android:text="一般商务舱旅行可以带多少公斤而不被罚款"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:text="一般商务舱旅行可以带多少公斤而不被罚款" />
 
         <!-- 内容 -->
 
         <TextView
             android:id="@+id/ask_detail_tv_content"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10"
@@ -48,6 +48,7 @@
 
             <TextView
                 android:id="@+id/ask_detail_tv_time"
+                style="@style/list_second_level_black_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -59,6 +60,7 @@
 
             <TextView
                 android:id="@+id/ask_detail_tv_level_and_username"
+                style="@style/list_second_level_black_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -75,12 +77,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/margin_10"
+            android:onClick="onClickAnswer"
             android:text="@string/ask_me_answer" />
 
         <!-- 最佳答案字样 -->
 
         <TextView
             android:id="@+id/ask_detail_tv_best_answer_tip"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/main_more"
@@ -94,6 +98,7 @@
 
         <TextView
             android:id="@+id/ask_detail_tv_best_answer"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10"
@@ -110,6 +115,7 @@
 
             <TextView
                 android:id="@+id/ask_detail_tv_best_time"
+                style="@style/list_second_level_black_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -121,6 +127,7 @@
 
             <TextView
                 android:id="@+id/ask_detail_tv_best_level_and_username"
+                style="@style/list_second_level_black_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -133,6 +140,7 @@
 
         <TextView
             android:id="@+id/ask_detail_tv_best_comment_tip"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
@@ -143,6 +151,7 @@
 
         <TextView
             android:id="@+id/ask_detail_tv_best_comment"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10"
@@ -159,6 +168,7 @@
 
         <LinearLayout
             android:id="@+id/ask_detail_ll_other_answer_container"
+            style="@style/list_first_level_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -167,6 +177,7 @@
             <!-- 其他回答字样 -->
 
             <TextView
+                style="@style/list_second_level_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/main_more"

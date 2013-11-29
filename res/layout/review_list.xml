@@ -12,13 +12,11 @@
         android:layout_height="wrap_content"
         layout="@layout/titlebar_back" />
 
-    <ListView
+    <com.fourkkm.citylife.view.PullUpDownListView
         android:id="@+id/review_list_listview"
+        style="@style/list_view_style"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@drawable/list_divider"
-        android:scrollbars="none" >
-    </ListView>
+        android:layout_height="match_parent" >
+    </com.fourkkm.citylife.view.PullUpDownListView>
 
 </LinearLayout>

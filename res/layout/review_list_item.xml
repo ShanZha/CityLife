@@ -16,6 +16,7 @@
 
         <TextView
             android:id="@+id/review_list_item_tv_username"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -34,6 +35,7 @@
 
         <TextView
             android:id="@+id/review_list_item_tv_average_per"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/review_list_item_tv_username"
@@ -46,6 +48,7 @@
 
         <TextView
             android:id="@+id/review_list_item_tv_content"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/review_list_item_ratingBar"
@@ -56,6 +59,7 @@
 
         <TextView
             android:id="@+id/review_list_item_tv_overall_rating"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/review_list_item_tv_content"
@@ -67,6 +71,7 @@
 
         <TextView
             android:id="@+id/review_list_item_tv_time"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

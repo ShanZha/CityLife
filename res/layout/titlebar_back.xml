@@ -18,10 +18,10 @@
 
     <TextView
         android:id="@+id/titlebar_back_tv_title"
+        style="@style/title_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="@string/hello_world"        android:textColor="@android:color/white"
-        android:textSize="22sp" />
+        android:text="@string/hello_world" />
 
 </RelativeLayout>

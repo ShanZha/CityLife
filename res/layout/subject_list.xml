@@ -19,59 +19,18 @@
         android:layout_height="wrap_content"
         layout="@layout/progress_bar_small" />
 
-    <LinearLayout
-        android:id="@+id/subject_list_ll_top_check"
+    <!-- 菜单栏 -->
+
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#33ffe4" >
+        layout="@layout/floating_layout" />
 
-        <!-- 距离 -->
-
-        <TextView
-            android:id="@+id/subject_list_tv_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:drawableRight="@drawable/floating_divider"
-            android:gravity="center"
-            android:onClick="onClickDistance"
-            android:text="@string/distance_1000" />
-
-        <!-- 类型 -->
-
-        <TextView
-            android:id="@+id/subject_list_tv_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:drawableRight="@drawable/floating_divider"
-            android:gravity="center"
-            android:onClick="onClickType"
-            android:text="@string/food" />
-
-        <!-- 排序 -->
-
-        <TextView
-            android:id="@+id/subject_list_tv_sort"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:gravity="center"
-            android:onClick="onClickSort"
-            android:text="@string/sort_default" />
-    </LinearLayout>
-
-    <ListView
+    <com.fourkkm.citylife.view.PullUpDownListView
         android:id="@+id/subject_list_listview"
+        style="@style/list_view_style"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@null"
-        android:scrollbars="none" >
-
-    </ListView>
+        android:layout_height="match_parent" >
+    </com.fourkkm.citylife.view.PullUpDownListView>
 
 </LinearLayout>

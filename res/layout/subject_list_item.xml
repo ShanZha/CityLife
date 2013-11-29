@@ -33,10 +33,10 @@
 
         <TextView
             android:id="@+id/subject_list_item_tv_shop_name"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="世界上最好的餐厅之一，午饭不用钱" />
+            android:singleLine="true" />
 
         <!-- 中间 -->
 
@@ -61,6 +61,7 @@
 
             <TextView
                 android:id="@+id/subject_list_item_tv_average_per"
+                style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_5"
@@ -79,25 +80,26 @@
 
             <TextView
                 android:id="@+id/subject_list_item_tv_area"
+                style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="纽约市区" />
+                android:singleLine="true" />
 
             <!-- 商店类型 -->
 
             <TextView
                 android:id="@+id/subject_list_item_tv_type"
+                style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:layout_toLeftOf="@+id/subject_list_item_tv_distance"
                 android:layout_toRightOf="@+id/subject_list_item_tv_area"
-                android:singleLine="true"
-                android:text="美食" />
+                android:singleLine="true" />
 
             <TextView
                 android:id="@+id/subject_list_item_tv_distance"
+                style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -112,6 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/margin_5"
-        android:src="@drawable/list_divider" />
+        android:src="@drawable/list_divider"
+        android:visibility="gone" />
 
 </com.fourkkm.citylife.itemview.ModoerSubjectItemView>

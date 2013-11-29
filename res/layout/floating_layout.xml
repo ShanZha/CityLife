@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/floating_layout_ll_all"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#33ffe4"
+    android:baselineAligned="false" >
+
+    <!-- 第一项 -->
+
+    <RelativeLayout
+        android:id="@+id/floating_layout_ll_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:onClick="onClickFloatingFirst" >
+
+        <TextView
+            android:id="@+id/floating_layout_tv_first"
+            style="@style/floating_tv_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableRight="@drawable/floating_drop_icon"
+            android:text="@string/distance_1000" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/floating_divider" />
+    </RelativeLayout>
+
+    <!-- 第二项 -->
+
+    <RelativeLayout
+        android:id="@+id/floating_layout_ll_second"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:onClick="onClickFloatingSecond" >
+
+        <TextView
+            android:id="@+id/floating_layout_tv_second"
+            style="@style/floating_tv_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableRight="@drawable/floating_drop_icon"
+            android:text="@string/food" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/floating_divider" />
+    </RelativeLayout>
+
+    <!-- 第三项 -->
+
+    <RelativeLayout
+        android:id="@+id/floating_layout_ll_third"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:onClick="onClickFloatingThird" >
+
+        <TextView
+            android:id="@+id/floating_layout_tv_third"
+            style="@style/floating_tv_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawableRight="@drawable/floating_drop_icon"
+            android:text="@string/sort_default" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/floating_divider" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -29,6 +29,7 @@
 
         <TextView
             android:id="@+id/china_lane_list_item_tv_subject"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -37,6 +38,7 @@
 
         <TextView
             android:id="@+id/china_lane_list_item_tv_content"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
@@ -46,6 +48,7 @@
 
         <TextView
             android:id="@+id/china_lane_list_item_tv_area"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -58,6 +61,7 @@
 
             <TextView
                 android:id="@+id/china_lane_list_item_tv_author"
+                style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true" />
@@ -66,6 +70,7 @@
 
             <TextView
                 android:id="@+id/china_lane_list_item_tv_time"
+                style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_5"

@@ -29,6 +29,7 @@
 
         <TextView
             android:id="@+id/party_list_item_tv_subject"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -37,6 +38,7 @@
 
         <TextView
             android:id="@+id/party_list_item_tv_address"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
@@ -46,6 +48,7 @@
 
         <TextView
             android:id="@+id/party_list_item_tv_time"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -54,6 +57,7 @@
 
         <TextView
             android:id="@+id/party_list_item_tv_desc"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true" />
@@ -81,6 +85,7 @@
 
             <TextView
                 android:id="@+id/party_list_item_tv_sign_up"
+                style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
@@ -90,11 +95,11 @@
 
             <TextView
                 android:id="@+id/party_list_item_tv_sign_up_count"
+                style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:singleLine="true"
-                android:textSize="18sp" />
+                android:singleLine="true" />
         </LinearLayout>
 
         <!-- 更多图标 -->

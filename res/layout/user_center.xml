@@ -1,0 +1,419 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <!-- 标题栏 -->
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/titlebar_back" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10" >
+
+            <!-- 头像 -->
+
+            <ImageView
+                android:id="@+id/user_center_iv_avator"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:onClick="onClickAvator"
+                android:scaleType="fitXY"
+                android:src="@drawable/nopic" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_toRightOf="@+id/user_center_iv_avator"
+                android:orientation="vertical" >
+
+                <!-- 用户名 -->
+
+                <TextView
+                    android:id="@+id/user_center_tv_username_tip"
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/user_name_tip" />
+
+                <TextView
+                    android:id="@+id/user_center_tv_username"
+                    style="@style/list_second_level_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/user_center_tv_username_tip"
+                    android:singleLine="true"
+                    android:text="香格里拉" />
+
+                <!-- 昵称 -->
+
+                <TextView
+                    android:id="@+id/user_center_tv_nickname_tip"
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_center_tv_username_tip"
+                    android:singleLine="true"
+                    android:text="@string/user_nick_tip" />
+
+                <TextView
+                    android:id="@+id/user_center_tv_nickname"
+                    style="@style/list_second_level_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_center_tv_username_tip"
+                    android:layout_toRightOf="@+id/user_center_tv_nickname_tip"
+                    android:singleLine="true"
+                    android:text="无所即" />
+
+                <!-- 简介 -->
+
+                <TextView
+                    android:id="@+id/user_center_tv_desc_tip"
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_center_tv_nickname_tip"
+                    android:singleLine="true"
+                    android:text="@string/user_desc_tip" />
+
+                <TextView
+                    android:id="@+id/user_center_tv_desc"
+                    style="@style/list_second_level_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/user_center_tv_desc_tip"
+                    android:text="和房间啊谁房间卡洛斯的房间卡罗斯福健康了减肥螺丝钉放假阿斯兰" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!-- 分割线 -->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/divider" />
+
+        <!-- 我的聚会活动 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickMyParty" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_my_party" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+
+        <!-- 缩进的分割线 -->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:src="@drawable/divider" />
+
+        <!-- 我的唐人巷 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickMyLane" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_my_china_lane" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+
+        <!-- 我的点评 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickMyReview" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_my_review" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+
+        <!-- 缩进的分割线 -->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:src="@drawable/divider" />
+
+        <!-- 我的店铺 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickMyShop" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_my_shop" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+
+        <!-- 缩进的分割线 -->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:src="@drawable/divider" />
+
+        <!-- 我的收藏 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickMyCollection" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_my_collection" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+
+        <!-- 我的问题 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickMyQuestion" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_my_question" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+
+        <!-- 缩进的分割线 -->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:src="@drawable/divider" />
+
+        <!-- 我的回答 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickMyAnswer" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_my_answer" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+
+        <!-- 缩进的分割线 -->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:src="@drawable/divider" />
+
+        <!-- 我的短信 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickMySms" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_my_sms" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+
+        <!-- 缩进的分割线 -->
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:src="@drawable/divider" />
+
+        <!-- 修改个人信息 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:background="@android:color/white"
+            android:onClick="onClickUpdateInfo" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:drawableLeft="@drawable/subject_detail_impression"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/user_update_info" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

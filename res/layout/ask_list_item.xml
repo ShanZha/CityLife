@@ -2,12 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="@dimen/margin_10" >
 
     <!-- 类型 -->
 
     <TextView
         android:id="@+id/ask_list_item_tv_category"
+        style="@style/list_first_level_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -18,6 +20,7 @@
 
     <TextView
         android:id="@+id/ask_list_item_tv_subject"
+        style="@style/list_first_level_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -38,6 +41,7 @@
 
         <TextView
             android:id="@+id/ask_list_item_tv_time"
+            style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

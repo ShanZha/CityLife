@@ -49,7 +49,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 分类列表显示界面 -->
+        <!-- 商铺列表界面 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.SubjectListActivity"
             android:screenOrientation="portrait" >
@@ -58,21 +58,6 @@
         <activity
             android:name="com.fourkkm.citylife.control.activity.SubjectDetailActivity"
             android:screenOrientation="portrait" >
-        </activity>
-        <!-- 登录界面 -->
-        <activity
-            android:name="com.fourkkm.citylife.control.activity.LoginActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-        <!-- 新浪微博分享界面 -->
-        <activity
-            android:name="com.fourkkm.citylife.control.activity.SinaWeiboShareActivity"
-            android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <!-- 相册页面 -->
         <activity
@@ -99,6 +84,11 @@
             android:name="com.fourkkm.citylife.control.activity.AskDetailActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 回答问题界面 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.AskAnswerActivity"
+            android:screenOrientation="portrait" >
+        </activity>
         <!-- 聚会列表 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.PartyListActivity"
@@ -107,6 +97,16 @@
         <!-- 聚会详情 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.PartyDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 唐人巷列表 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.ChineseLaneListActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 会员中心 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.UserCenterActivity"
             android:screenOrientation="portrait" >
         </activity>
         <!-- 更多 -->
@@ -118,6 +118,27 @@
         <activity
             android:name="com.fourkkm.citylife.control.activity.SubjectAddActivity"
             android:screenOrientation="portrait" >
+        </activity>
+
+        <!-- 登录界面 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.LoginActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 注册界面 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.RegisterActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 新浪微博分享界面 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.SinaWeiboShareActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 
