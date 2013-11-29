@@ -47,6 +47,27 @@ public class ModoerMembers implements Serializable {
 	/** 收到鲜花数量 */
 	private int flowers;
 
+	/** 等级积分 **/
+	private int point;
+
+	/** 积分字段1 **/
+	private int point1;
+
+	/** 积分字段2 **/
+	private int point2;
+
+	/** 积分字段3 **/
+	private int point3;
+
+	/** 积分字段4 **/
+	private int point4;
+
+	/** 积分字段5 **/
+	private int point5;
+
+	/** 积分字段6 **/
+	private int point6;
+
 	public int getId() {
 		return id;
 	}
@@ -149,5 +170,61 @@ public class ModoerMembers implements Serializable {
 
 	public void setFlowers(int flowers) {
 		this.flowers = flowers;
+	}
+
+	public int getPoint() {
+		return point;
+	}
+
+	public void setPoint(int point) {
+		this.point = point;
+	}
+
+	public int getPoint1() {
+		return point1;
+	}
+
+	public void setPoint1(int point1) {
+		this.point1 = point1;
+	}
+
+	public int getPoint2() {
+		return point2;
+	}
+
+	public void setPoint2(int point2) {
+		this.point2 = point2;
+	}
+
+	public int getPoint3() {
+		return point3;
+	}
+
+	public void setPoint3(int point3) {
+		this.point3 = point3;
+	}
+
+	public int getPoint4() {
+		return point4;
+	}
+
+	public void setPoint4(int point4) {
+		this.point4 = point4;
+	}
+
+	public int getPoint5() {
+		return point5;
+	}
+
+	public void setPoint5(int point5) {
+		this.point5 = point5;
+	}
+
+	public int getPoint6() {
+		return point6;
+	}
+
+	public void setPoint6(int point6) {
+		this.point6 = point6;
 	}
 }
