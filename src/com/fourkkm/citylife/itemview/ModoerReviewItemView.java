@@ -101,9 +101,6 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView {
 				+ review.getSort3() + review.getSort4()) / 4;
 		mRatingBar.setProgress(averScore);
 
-		if (((BaseListActivity) mCtx).isShouldLoadData(pos)) {
-			((BaseListActivity) mCtx).notifyLoadStart();
-		}
 	}
 
 }

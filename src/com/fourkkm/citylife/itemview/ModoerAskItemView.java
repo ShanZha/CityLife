@@ -11,6 +11,7 @@ import com.andrnes.modoer.ModoerAskCategory;
 import com.andrnes.modoer.ModoerAsks;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.control.activity.BaseListActivity;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.widget.item.BaseItem;
 import com.zj.support.widget.itemview.ItemView;
@@ -65,12 +66,9 @@ public class ModoerAskItemView extends RelativeLayout implements ItemView {
 			mTvCategory.setText("[" + category.getName() + "]");
 		}
 		mTvSubject.setText(ask.getSubject());
-		mTvTime.setText(DateFormatMethod.formatDate(new Date(
-				ask.getDateline() * 1000L), "yyyy-MM-dd"));
 
-		if (((BaseListActivity) mCtx).isShouldLoadData(pos)) {
-			((BaseListActivity) mCtx).notifyLoadStart();
-		}
+		mTvTime.setText(CommonUtil.getTimeByPHP(ask.getDateline(), "yyyy-MM-dd"));
+
 	}
 
 }

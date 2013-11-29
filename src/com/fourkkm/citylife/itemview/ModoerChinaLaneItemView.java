@@ -15,6 +15,7 @@ import com.andrnes.modoer.ModoerMembers;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.control.activity.BaseListActivity;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.widget.item.BaseItem;
@@ -91,18 +92,14 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 			mTvAuthor.setText(mCtx.getString(R.string.china_lane_author)
 					+ member.getUsername());
 		}
-		long dateLine = lane.getDateline() * 1000;
 		mTvTime.setText(mCtx.getString(R.string.china_lane_time)
-				+ DateFormatMethod.formatDate(new Date(dateLine),
-						"yy-MM-dd HH:mm"));
+				+ CommonUtil.getTimeByPHP(lane.getDateline(),
+						"yyyy-MM-dd HH:mm"));
 
 		String thumb = lane.getThumb();
 		if (!TextUtils.isEmpty(thumb)) {
 			String url = GlobalConfig.URL_PIC + lane.getThumb();
 			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvShow);
-		}
-		if (((BaseListActivity) mCtx).isShouldLoadData(pos)) {
-			((BaseListActivity) mCtx).notifyLoadStart();
 		}
 
 	}

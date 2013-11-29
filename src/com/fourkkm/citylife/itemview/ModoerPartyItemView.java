@@ -12,6 +12,7 @@ import com.andrnes.modoer.ModoerParty;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.control.activity.BaseListActivity;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.widget.item.BaseItem;
@@ -73,18 +74,13 @@ public class ModoerPartyItemView extends RelativeLayout implements ItemView {
 		mTvSubject.setText(party.getSubject());
 		mTvAddress.setText(mCtx.getString(R.string.party_address)
 				+ party.getAddress());
-		long beginTime = party.getBegintime() * 1000L;
-		long endTime = party.getEndtime() * 1000L;
 		mTvTime.setText(mCtx.getString(R.string.party_time)
-				+ DateFormatMethod.formatDate(new Date(beginTime),
-						"MM-dd hh:mm") + "~"
-				+ DateFormatMethod.formatDate(new Date(endTime), "MM-dd hh:mm"));
+				+ CommonUtil.getTimeByPHP(party.getBegintime(), "MM-dd hh:mm")
+				+ "~"
+				+ CommonUtil.getTimeByPHP(party.getEndtime(), "MM-dd hh:mm"));
 		mTvDesc.setText(mCtx.getString(R.string.party_desc) + party.getDes());
-		mTvSignUpCount.setText(party.getApplynum()+"");
+		mTvSignUpCount.setText(party.getApplynum() + "");
 
-		if (((BaseListActivity) mCtx).isShouldLoadData(pos)) {
-			((BaseListActivity) mCtx).notifyLoadStart();
-		}
 	}
 
 }

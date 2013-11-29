@@ -45,4 +45,15 @@ public class CommonUtil {
 		long javaTime = time * 1000L;
 		return DateFormatMethod.formatDate(new Date(javaTime), format);
 	}
+
+	public static boolean isEmail(String email) {
+		String format = "^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
+		if (email.matches(format)) {
+			// 邮箱名合法,返回true
+			return true;
+		} else {
+			// 邮箱名不合法,返回false
+			return false;
+		}
+	}
 }

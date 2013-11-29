@@ -81,9 +81,6 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 			String url = GlobalConfig.URL_PIC + subject.getThumb();
 			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvShow);
 		}
-		if (((BaseListActivity) mCtx).isShouldLoadData(pos)) {
-			((BaseListActivity) mCtx).notifyLoadStart();
-		}
 
 	}
 
