@@ -239,6 +239,9 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 	 */
 	private boolean isCurrCategory(String name) {
 		if (null == mCurrCategory) {
+			if(mStrAllCategory.equals(name)){
+				return true;
+			}
 			return false;
 		}
 		String currName = mCurrCategory.getName();

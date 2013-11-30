@@ -101,6 +101,8 @@
     <string name="user_update_info">修改用户信息</string>
     <string name="username">用户名</string>
     <string name="pswd">密码</string>
+    <string name="pswd_old">旧密码</string>
+    <string name="pswd_new">新密码</string>
     <string name="pswd_sure">密码确认</string>
     <string name="email">邮箱</string>
     <string name="login">登录</string>
@@ -118,6 +120,11 @@
     <string name="register_email_not_null">邮箱不能为空</string>
     <string name="register_email_invalide">邮箱地址无效</string>
     <string name="register_pswd_not_correct">两次输入密码不同</string>
+    <string name="floating_ask_all">全部问题</string>
     <string name="floating_category_all">全部类别</string>
+    <string name="user_update_desc_hint">简单说说自己吧</string>
+    <string name="user_update_commit">确认修改</string>
+    <string name="user_update_title">用户信息修改</string>
+    <string name="user_update_old_pswd_error">原始密码错误</string>
 
 </resources>

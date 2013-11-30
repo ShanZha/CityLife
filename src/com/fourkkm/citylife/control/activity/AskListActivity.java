@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -33,10 +34,12 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
 public class AskListActivity extends BaseListActivity implements
 		IFloatingItemClick {
 
+	private static final String TAG = "AskListActivity";
 	// 常量定义见实体类
 	private static final int ASK_STATE_UNRESOLVED = 0;
 	private static final int ASK_STATE_RESOLVED = 1;
 	private static final int ASK_STATE_REWARD = 2;
+	private static final int ASK_STATE_ALL = 3;
 
 	private static final int ASK_CATEGORY_LEVEL_PARENT = 0;
 	private static final int ASK_CATEGORY_LEVEL_CHILD = 1;
@@ -48,10 +51,13 @@ public class AskListActivity extends BaseListActivity implements
 	private List<ModoerAskCategory> mAskCategoryList;
 	/** 状态名字列表 **/
 	private List<String> mAskStateList;
-	/** 当前的显示问题类别，默认随机选择第一个父级类别 **/
+	/** 当前的显示问题类别，默认所有，即次对象为空 **/
 	private ModoerAskCategory mCurrAskCategory;
-	/** 默认未解决 **/
-	private int mCurrAskState = ASK_STATE_UNRESOLVED;
+	/** 默认所有问题 **/
+	private int mCurrAskState = ASK_STATE_ALL;
+
+	private String mStrAllCategory = "";
+	private String mStrAllAsk = "";
 
 	private FloatingTwoMenuProxy mFloatingCategory;
 	private FloatingOneMenuProxy mFloatingState;
@@ -78,6 +84,8 @@ public class AskListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mStrAllCategory = this.getString(R.string.floating_category_all);
+		mStrAllAsk = this.getString(R.string.floating_ask_all);
 		mAskList = new ArrayList<ModoerAsks>();
 		mAskCategoryList = new ArrayList<ModoerAskCategory>();
 		mAskStateList = new ArrayList<String>();
@@ -100,6 +108,7 @@ public class AskListActivity extends BaseListActivity implements
 	}
 
 	private void prepareAskStateNames() {
+		mAskStateList.add(mStrAllAsk);
 		mAskStateList.add(this.getString(R.string.ask_state_unresolved));
 		mAskStateList.add(this.getString(R.string.ask_state_resolved));
 		mAskStateList.add(this.getString(R.string.ask_state_reward));
@@ -115,9 +124,6 @@ public class AskListActivity extends BaseListActivity implements
 	}
 
 	private void fecthAsks() {
-		if (null == mCurrAskCategory) {
-			return;
-		}
 		String selectCode = this.buildSelectCode();
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("max", GlobalConfig.MAX);
@@ -144,40 +150,58 @@ public class AskListActivity extends BaseListActivity implements
 	 * @return
 	 */
 	private String buildSelectCode() {
-		if (null == mCurrAskCategory) {
-			return "";
-		}
 		StringBuilder sb = new StringBuilder();
-		sb.append("from com.andrnes.modoer.ModoerAsks ma where ");
-		if (ASK_CATEGORY_LEVEL_PARENT == mCurrAskCategory.getUse_area()) {
-			// 获取所有子类别id，因为数据不存在于父类别中
-			List<Integer> childIdList = this.getChildIdList();
-			if (null != childIdList) {
-				int size = childIdList.size();
-				for (int i = 0; i < size; i++) {
-					sb.append("(");
-					sb.append(" ma.catid.id = ");
-					sb.append(childIdList.get(i) + "");
-					// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
-					if (ASK_STATE_REWARD == mCurrAskState) {
-						sb.append(")");
-						if (i == (size - 1)) {
-							sb.append(" order by reward DESC");
-						} else {
-							sb.append(" or ");
-						}
-					} else {
-						sb.append(" and ma.success = ");
-						sb.append(mCurrAskState + ")");
-						if (i != (size - 1)) {
-							sb.append(" or ");
-						}
-					}
-				}
+		sb.append("from com.andrnes.modoer.ModoerAsks");
+		if (null == mCurrAskCategory) {// 选择“所有类别”时
+			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
+			if (ASK_STATE_REWARD == mCurrAskState) {
+				sb.append(" order by reward DESC");
+			} else if (ASK_STATE_ALL == mCurrAskState) {// “所有问题”
+				// do nothing
+			} else {
+				sb.append(" ma where ma.success = " + mCurrAskState);
 			}
-		} else {// 子类别，则直接获取对应数据
-			sb.append(" ma.catid.id = " + mCurrAskCategory.getId());
+		} else {
+			sb.append(" ma where ma.catid.id = " + mCurrAskCategory.getId());
+			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
+			if (ASK_STATE_REWARD == mCurrAskState) {
+				sb.append(" order by reward DESC");
+			} else if (ASK_STATE_ALL == mCurrAskState) {// “所有问题”
+				// do nothing
+			} else {
+				sb.append(" and ma.success = " + mCurrAskState);
+			}
 		}
+		// if (ASK_CATEGORY_LEVEL_PARENT == mCurrAskCategory.getUse_area()) {
+		// sb.append("where ");
+		// // 获取所有子类别id，因为数据不存在于父类别中
+		// List<Integer> childIdList = this.getChildIdList();
+		// if (null != childIdList) {
+		// int size = childIdList.size();
+		// for (int i = 0; i < size; i++) {
+		// sb.append("(");
+		// sb.append(" ma.catid.id = ");
+		// sb.append(childIdList.get(i) + "");
+		// // 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
+		// if (ASK_STATE_REWARD == mCurrAskState) {
+		// sb.append(")");
+		// if (i == (size - 1)) {
+		// sb.append(" order by reward DESC");
+		// } else {
+		// sb.append(" or ");
+		// }
+		// } else {
+		// sb.append(" and ma.success = ");
+		// sb.append(mCurrAskState + ")");
+		// if (i != (size - 1)) {
+		// sb.append(" or ");
+		// }
+		// }
+		// }
+		// }
+		// } else {// 子类别，则直接获取对应数据
+		// sb.append("where ma.catid.id = " + mCurrAskCategory.getId());
+		// }
 		return sb.toString();
 	}
 
@@ -214,12 +238,17 @@ public class AskListActivity extends BaseListActivity implements
 		if (null == mAskCategoryList) {
 			return null;
 		}
+		// 加上“所有类型”项
+		List<String> all = new ArrayList<String>();
+		all.add(mStrAllCategory);
+		map.put(mStrAllCategory, all);
 		for (int i = 0; i < mAskCategoryList.size(); i++) {
 			ModoerAskCategory ask = mAskCategoryList.get(i);
 			if (ASK_CATEGORY_LEVEL_PARENT == ask.getUse_area()) {
 				map.put(ask.getName(), this.getAskCategoryChild(ask.getId()));
 			}
 		}
+
 		return map;
 	}
 
@@ -267,7 +296,7 @@ public class AskListActivity extends BaseListActivity implements
 	 */
 	private int getStateByPos(int pos) {
 		if (null == mAskStateList || pos >= mAskStateList.size()) {
-			return ASK_STATE_UNRESOLVED;
+			return ASK_STATE_ALL;
 		}
 		switch (pos) {
 		case 0:
@@ -288,6 +317,9 @@ public class AskListActivity extends BaseListActivity implements
 	 */
 	private boolean isCurrCategory(String name) {
 		if (null == mCurrAskCategory) {
+			if (mStrAllCategory.equals(name)) {
+				return true;
+			}
 			return false;
 		}
 		String currName = mCurrAskCategory.getName();
@@ -346,36 +378,31 @@ public class AskListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		super.onSuccessFindAll(out);
 		List<Object> results = (List<Object>) out.getResult();
+		if (null == results) {
+			Log.e(TAG, "shan-->results is null");
+			return;
+		}
 		int operator = out.getOperator();
 		switch (operator) {
 		case GlobalConfig.Operator.OPERATION_FINDALL_ASK_CATEGORY:
-			if (null != results) {
-				for (int i = 0; i < results.size(); i++) {
-					ModoerAskCategory category = (ModoerAskCategory) results
-							.get(i);
-					// 默认设置一个父级当前类别
-					if (ASK_CATEGORY_LEVEL_PARENT == category.getUse_area()
-							&& null == mCurrAskCategory) {
-						mCurrAskCategory = category;
-						mTvCategory.setText(category.getName());
-						mTvState.setText(this
-								.getString(R.string.ask_state_unresolved));
-					}
-					mAskCategoryList.add(category);
-				}
-				mFloatingCategory.setDatas(this.buildAskCategoryRelation());
+			for (int i = 0; i < results.size(); i++) {
+				ModoerAskCategory category = (ModoerAskCategory) results.get(i);
+
+				mAskCategoryList.add(category);
 			}
+			mTvCategory.setText(mStrAllCategory);
+			mTvState.setText(mStrAllAsk);
+			mFloatingCategory.setDatas(this.buildAskCategoryRelation());
+
 			this.hideLoadingCategory();
-			//类别查询成功之后，加载数据
+			// 类别查询成功之后，加载数据
 			this.onFirstLoadSetting();
 			this.onLoadMore();
 			break;
 		case GlobalConfig.Operator.OPERATION_FINDALL_ASK:
-			if (null != results) {
-				for (int i = 0; i < results.size(); i++) {
-					ModoerAsks ask = (ModoerAsks) results.get(i);
-					mAskList.add(ask);
-				}
+			for (int i = 0; i < results.size(); i++) {
+				ModoerAsks ask = (ModoerAsks) results.get(i);
+				mAskList.add(ask);
 			}
 			this.pretreatmentResults(results);
 			this.notifyLoadOver();
@@ -413,8 +440,10 @@ public class AskListActivity extends BaseListActivity implements
 			if (this.isCurrCategory(key)) {
 				return;
 			}
-			ModoerAskCategory category = this.getAskCategoryByName(key);
-			if (null != category) {
+			if (mStrAllCategory.equals(key)) {
+				mCurrAskCategory = null;
+			} else {
+				ModoerAskCategory category = this.getAskCategoryByName(key);
 				mCurrAskCategory = category;
 			}
 			mTvCategory.setText(key);

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
@@ -33,6 +34,7 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
 public class PartyListActivity extends BaseListActivity implements
 		IFloatingItemClick {
 
+	private static final String TAG = "PartyListActivity";
 	/** 全部状态 **/
 	private static final int PARTY_STATE_ALL = 0;
 	/** 报名中 **/
@@ -55,6 +57,7 @@ public class PartyListActivity extends BaseListActivity implements
 	private ModoerPartyCategory mCurrCategory;
 	private int mCurrState = PARTY_STATE_ALL;
 	private int mCurrMost = PARTY_MOST_NEW;
+	private String mStrAllCategory = "";
 	/** 三个漂浮视图代理 **/
 	private FloatingOneMenuProxy mFloatingCategory, mFloatingState,
 			mFloatingMost;
@@ -81,6 +84,7 @@ public class PartyListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mStrAllCategory = this.getString(R.string.floating_category_all);
 		this.prepareFloatingDatas();
 		mPartyList = new ArrayList<ModoerParty>();
 		mAdapter = new ItemSingleAdapter<ModoerPartyItemView, ModoerParty>(
@@ -126,6 +130,8 @@ public class PartyListActivity extends BaseListActivity implements
 			return;
 		}
 		List<String> categoryNameList = new ArrayList<String>();
+		// 加上“所有类别”
+		categoryNameList.add(mStrAllCategory);
 		for (int i = 0; i < mPartyCategoryList.size(); i++) {
 			String name = mPartyCategoryList.get(i).getName();
 			categoryNameList.add(name);
@@ -236,6 +242,36 @@ public class PartyListActivity extends BaseListActivity implements
 	}
 
 	/**
+	 * 选择的类别跟当前类别是否一致
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private boolean isCurrCategory(String name) {
+		if (null == mCurrCategory) {
+			if (mStrAllCategory.equals(name)) {
+				return true;
+			}
+			return false;
+		}
+		String currName = mCurrCategory.getName();
+		return name.equals(currName);
+	}
+
+	private ModoerPartyCategory getPartyCategoryByName(String name) {
+		if (null == mPartyCategoryList) {
+			return null;
+		}
+		for (int i = 0; i < mPartyCategoryList.size(); i++) {
+			ModoerPartyCategory category = mPartyCategoryList.get(i);
+			if (name.equals(category.getName())) {
+				return category;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * 当条件改变时 ，重置
 	 */
 	private void reset() {
@@ -295,17 +331,16 @@ public class PartyListActivity extends BaseListActivity implements
 		int operator = out.getOperator();
 		List<Object> results = (List<Object>) out.getResult();
 		if (null == results) {
+			Log.e(TAG, "shan-->results is null");
 			return;
 		}
 		if (GlobalConfig.Operator.OPERATION_FINDALL_PARTY_CATEGORY == operator) {
 			for (int i = 0; i < results.size(); i++) {
 				ModoerPartyCategory category = (ModoerPartyCategory) results
 						.get(i);
-				if (i == 0) {// 设置第一个为默认类型
-					mCurrCategory = category;
-				}
 				mPartyCategoryList.add(category);
 			}
+			mTvCategory.setText(mStrAllCategory);
 			this.setTextByCurrValue();
 			this.prepareFloadingCategoryDatas();
 			this.hideLoadingCategory();
@@ -338,11 +373,11 @@ public class PartyListActivity extends BaseListActivity implements
 		boolean isReset = true;
 		switch (type) {
 		case GlobalConfig.FloatingType.TYPE_PARTY_CATEGORY:
-			ModoerPartyCategory category = mPartyCategoryList.get(pos);
-			if (category.getId() == mCurrCategory.getId()) {
+			if (this.isCurrCategory(key)) {
 				isReset = false;
 				return;
 			}
+			ModoerPartyCategory category = this.getPartyCategoryByName(key);
 			mCurrCategory = category;
 			break;
 		case GlobalConfig.FloatingType.TYPE_PARTY_STATE:
@@ -361,6 +396,7 @@ public class PartyListActivity extends BaseListActivity implements
 			break;
 		}
 		if (isReset) {
+			mTvCategory.setText(key);
 			this.setTextByCurrValue();
 			this.reset();
 			this.notifyDataChanged();

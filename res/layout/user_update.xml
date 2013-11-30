@@ -1,0 +1,148 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical" >
+
+    <!-- 标题栏 -->
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/titlebar_back" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10" >
+
+        <!-- 头像 -->
+
+        <ImageView
+            android:id="@+id/user_update_iv_avator"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:onClick="onClickAvator"
+            android:scaleType="fitXY"
+            android:src="@drawable/nopic" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_toRightOf="@+id/user_update_iv_avator"
+            android:orientation="vertical" >
+
+            <!-- 用户名 -->
+
+            <TextView
+                android:id="@+id/user_update_tv_username_tip"
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@string/username" />
+
+            <EditText
+                android:id="@+id/user_update_et_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/user_update_tv_username_tip"
+                android:background="@null"
+                android:hint="山楂无极"
+                android:singleLine="true" />
+
+            <!-- 原始密码 -->
+
+            <TextView
+                android:id="@+id/user_update_tv_old_pswd_tip"
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_update_tv_username_tip"
+                android:singleLine="true"
+                android:text="@string/pswd_old" />
+
+            <EditText
+                android:id="@+id/user_update_et_old_pswd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_update_tv_username_tip"
+                android:layout_toRightOf="@+id/user_update_tv_old_pswd_tip"
+                android:background="@null"
+                android:hint="123456"
+                android:singleLine="true" />
+
+            <!-- 新密码 -->
+
+            <TextView
+                android:id="@+id/user_update_tv_new_pswd_tip"
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_update_tv_old_pswd_tip"
+                android:singleLine="true"
+                android:text="@string/pswd_new" />
+
+            <EditText
+                android:id="@+id/user_update_et_new_pswd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_update_tv_old_pswd_tip"
+                android:layout_toRightOf="@+id/user_update_tv_new_pswd_tip"
+                android:background="@null"
+                android:hint="123456"
+                android:singleLine="true" />
+
+            <!-- 新密码 -->
+
+            <TextView
+                android:id="@+id/user_update_tv_new_pswd_sure_tip"
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_update_tv_new_pswd_tip"
+                android:singleLine="true"
+                android:text="@string/pswd_new" />
+
+            <EditText
+                android:id="@+id/user_update_et_new_pswd_sure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_update_tv_new_pswd_tip"
+                android:layout_toRightOf="@+id/user_update_tv_new_pswd_sure_tip"
+                android:background="@null"
+                android:hint="123456"
+                android:singleLine="true" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!-- 分割线 -->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/divider" />
+
+    <!-- 个人简介 -->
+
+    <EditText
+        android:id="@+id/user_update_et_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:hint="@string/user_update_desc_hint"
+        android:minLines="6" />
+
+    <!-- 提交 -->
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_10"
+        android:onClick="onClickCommit"
+        android:text="@string/user_update_commit" />
+
+</LinearLayout>

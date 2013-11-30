@@ -1,5 +1,6 @@
 package com.fourkkm.citylife.control.activity;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -76,7 +77,7 @@ public class UserCenterActivity extends BaseActivity {
 	}
 
 	public void onClickUpdateInfo(View view) {// 修改个人信息
-
+		this.startActivity(new Intent(this, UserUpdateActivity.class));
 	}
 
 }
