@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="9"
         android:targetSdkVersion="17" />
 
     <uses-feature
@@ -32,12 +32,10 @@
         android:theme="@android:style/Theme.NoTitleBar" >
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyARt8cwfmz1m781qH5vhxzdPEtBEeZd9j0" />
-        <!--
-             <meta-data
+            android:value="AIzaSyAdn3otPQoJ8915Hy7m2yROcix9aG9eRzs" />
+        <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        -->
 
         <activity
             android:name="com.fourkkm.citylife.control.activity.MainActivity"
@@ -57,6 +55,11 @@
         <!-- 商铺详情界面 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.SubjectDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 商铺地址地图展示 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.SubjectMapMarkerActivity"
             android:screenOrientation="portrait" >
         </activity>
         <!-- 相册页面 -->

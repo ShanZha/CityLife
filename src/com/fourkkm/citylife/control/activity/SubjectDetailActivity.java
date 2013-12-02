@@ -200,8 +200,8 @@ public class SubjectDetailActivity extends BaseActivity {
 	}
 
 	public void onClickMap(View view) {// 地图
-//		Intent intent = new Intent(this, MapActivity.class);
-//		this.startActivity(intent);
+		// Intent intent = new Intent(this, MapActivity.class);
+		// this.startActivity(intent);
 	}
 
 	public void onClickCollection(View view) {// 收藏
@@ -217,7 +217,9 @@ public class SubjectDetailActivity extends BaseActivity {
 	}
 
 	public void onClickAddress(View view) {// 地址
-
+		Intent intent = new Intent(this, SubjectMapMarkerActivity.class);
+		intent.putExtra("ModoerSubject", mSubject);
+		this.startActivity(intent);
 	}
 
 	public void onClickTel(View view) {// 电话

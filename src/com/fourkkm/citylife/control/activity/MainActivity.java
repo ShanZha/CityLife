@@ -24,8 +24,10 @@ import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.widget.BasePicPagerAdapter;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
+import com.fourkkm.citylife.widget.IAddressListener;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
-import com.zj.app.BaseActivity;
+import com.fourkkm.citylife.widget.LocationProxy;
+import com.zj.app.BaseFragmentActivity;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.HackyViewPager;
@@ -36,8 +38,8 @@ import com.zj.support.widget.HackyViewPager;
  * @author ShanZha
  * 
  */
-public class MainActivity extends BaseActivity implements IFloatingItemClick,
-		ViewPager.OnPageChangeListener {
+public class MainActivity extends BaseFragmentActivity implements
+		IFloatingItemClick, ViewPager.OnPageChangeListener, IAddressListener {
 
 	private TextView mTvTitle;
 	private List<ModoerArea> mAreaList;
@@ -61,6 +63,8 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 	/** 国家切换-漂浮菜单代理 **/
 	private FloatingOneMenuProxy mFloatingProxy;
 
+	private LocationProxy mLocationProxy;
+
 	@Override
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
@@ -81,6 +85,8 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mLocationProxy = new LocationProxy(this,
+				this.getSupportFragmentManager());
 		mEnableDoubleExit = true;
 		mFloatingProxy = new FloatingOneMenuProxy(this,
 				GlobalConfig.FloatingType.TYPE_AREA);
@@ -91,18 +97,24 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 		// mGallery.setOnItemSelectedListener(this);
 		// mGallery.setOnItemClickListener(this);
 		mViewPager.setOnPageChangeListener(this);
-		mViewPager.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				System.out.println(" onClick = " + mBcastrCurrPos);
-			}
-		});
 
 		this.fetchCountryArea();
 		this.showBcastrLoading();
 		this.fetchBcastr();
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		mLocationProxy.connect();
+	}
+
+	@Override
+	protected void prepareRelease() {
+		// TODO Auto-generated method stub
+		super.prepareRelease();
+		mLocationProxy.disconnect();
 	}
 
 	@Override
@@ -128,17 +140,6 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 				.findAll(selectCode, new HashMap<String, Object>(), false,
 						new ModoerBcastr(), param);
 	}
-
-	// private void notifyGalleryDataChanged() {
-	// if (null == mGalleryAdapter) {
-	// mGalleryAdapter = new ItemSingleAdapter<ModoerBcastrItemView,
-	// ModoerBcastr>(
-	// mBcastrList, this);
-	// mGallery.setAdapter(mGalleryAdapter);
-	// } else {
-	// mGalleryAdapter.notifyDataSetChanged();
-	// }
-	// }
 
 	private void notifyPagerAdapterChanged() {
 		if (null == mPagerAdapter) {
@@ -192,9 +193,10 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 	}
 
 	public void onClickFood(View view) {// 美食
-		Intent intent = new Intent(this, SubjectListActivity.class);
-		intent.putExtra("category", GlobalConfig.CATEGORY_FOOD);
-		this.startActivity(intent);
+		mLocationProxy.fetchAddress(this);
+		// Intent intent = new Intent(this, SubjectListActivity.class);
+		// intent.putExtra("category", GlobalConfig.CATEGORY_FOOD);
+		// this.startActivity(intent);
 	}
 
 	public void onClickTravel(View view) {// 出行
@@ -398,5 +400,17 @@ public class MainActivity extends BaseActivity implements IFloatingItemClick,
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onAddressSuccess(String addr) {
+		// TODO Auto-generated method stub
+		System.out.println(" onAddressSuccess addr: " + addr);
+	}
+
+	@Override
+	public void onAddressError(String error) {
+		// TODO Auto-generated method stub
+		System.out.println(" onAddressError: " + error);
 	}
 }
