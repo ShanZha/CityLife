@@ -21,7 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:drawableRight="@drawable/floating_drop_icon" />
+            android:drawableRight="@drawable/floating_drop_icon"
+            android:singleLine="true" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -45,7 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:drawableRight="@drawable/floating_drop_icon" />
+            android:drawableRight="@drawable/floating_drop_icon"
+            android:singleLine="true" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -69,7 +71,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:drawableRight="@drawable/floating_drop_icon" />
+            android:drawableRight="@drawable/floating_drop_icon"
+            android:singleLine="true" />
 
         <ImageView
             android:layout_width="wrap_content"
