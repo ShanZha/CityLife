@@ -240,7 +240,8 @@ public class MainActivity extends BaseFragmentActivity implements
 	}
 
 	public void onClickMore(View view) {// ¸ü¶à
-		this.startActivity(new Intent(this, MoreActivity.class));
+//		this.startActivity(new Intent(this, MoreActivity.class));
+		this.startActivity(new Intent(this, LoginActivity.class));
 	}
 
 	@Override
