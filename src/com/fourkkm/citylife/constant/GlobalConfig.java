@@ -7,6 +7,7 @@ public interface GlobalConfig {
 	public final static String URL_CONN = "http://115.28.167.199/modoer/androidInterFace/";
 	public static final String URL_PIC = "http://www.40000km.com.cn/";
 	public static final int MAX = 10;
+	public static final int MAX_ALL = 99999999;
 
 	public static final int CATEGORY_FOOD = 1;// 美食
 	public static final int CATEGORY_SHOPPING = 29;// 生活购物
@@ -34,6 +35,7 @@ public interface GlobalConfig {
 		public static final int TYPE_PARTY_MOST = 8;
 		public static final int TYPE_CHINA_LANE_CATEGORY = 9;
 		public static final int TYPE_CHINA_LANE_AREA = 10;
+		public static final int TYPE_SUBJECT_SEARCH_CITY = 11;
 	}
 
 	public static class Operator {
@@ -47,6 +49,7 @@ public interface GlobalConfig {
 		public static final int OPERATION_FINDALL_PARTY = 7;
 		public static final int OPERATION_FINDALL_CHINA_LANE_CATEGORY = 8;
 		public static final int OPERATION_FINDALL_CHINA_LANE = 9;
+		public static final int OPERATION_FINDALL_SUBJECT_AREA = 10;
 	}
 
 	public static class SharePre {

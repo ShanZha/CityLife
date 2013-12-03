@@ -20,7 +20,7 @@ public class ModoerArea implements Serializable {
 	private String name;
 	/** 坐标点 */
 	private String mappoint;
-	/** 等级（1：城市，2：区县，3：街道 */
+	/** 等级（1：国家，2：省/州，3：县/区 */
 	private int level;
 	/** 排序 */
 	private int listorder = 0;

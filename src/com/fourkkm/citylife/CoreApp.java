@@ -5,6 +5,7 @@ import com.zj.app.BaseApp;
 
 public class CoreApp extends BaseApp {
 
+	/** 当前所处国家 **/
 	private ModoerArea mCurrArea;
 
 	@Override

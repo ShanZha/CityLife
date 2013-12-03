@@ -104,8 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:drawableLeft="@drawable/subject_detail_address"
-                android:gravity="center_vertical"
-                android:text="@string/distance_500" />
+                android:gravity="center_vertical" />
         </RelativeLayout>
     </RelativeLayout>
 

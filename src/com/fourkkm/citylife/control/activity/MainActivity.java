@@ -193,10 +193,10 @@ public class MainActivity extends BaseFragmentActivity implements
 	}
 
 	public void onClickFood(View view) {// 美食
-		mLocationProxy.fetchAddress(this);
-		// Intent intent = new Intent(this, SubjectListActivity.class);
-		// intent.putExtra("category", GlobalConfig.CATEGORY_FOOD);
-		// this.startActivity(intent);
+		// mLocationProxy.fetchAddress(this);
+		Intent intent = new Intent(this, SubjectListActivity.class);
+		intent.putExtra("category", GlobalConfig.CATEGORY_FOOD);
+		this.startActivity(intent);
 	}
 
 	public void onClickTravel(View view) {// 出行
@@ -218,7 +218,9 @@ public class MainActivity extends BaseFragmentActivity implements
 	}
 
 	public void onClickSearchCity(View view) {// 搜全城
-		this.showToast("还不清楚怎么搜呢");
+		Intent intent = new Intent(this, SubjectListActivity.class);
+		intent.putExtra("isSearchCity", true);
+		this.startActivity(intent);
 	}
 
 	public void onClickAnswer(View view) {// 问答
@@ -253,7 +255,7 @@ public class MainActivity extends BaseFragmentActivity implements
 				List<String> countryNames = new ArrayList<String>();
 				for (int i = 0; i < results.size(); i++) {
 					ModoerArea area = (ModoerArea) results.get(i);
-					if (i == 0) {// 暂时显示第一个国家名称
+					if (i == 0) {// 默认第一个为所处国家
 						mTvTitle.setText(area.getName());
 						((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(area);
 					}
