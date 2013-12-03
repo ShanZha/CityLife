@@ -115,7 +115,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		mAreaList = new ArrayList<ModoerArea>();
 		mAdapter = new ItemSingleAdapter<ModoerSubjectItemView, ModoerSubject>(
 				mSubjectList, this);
-		mListView.setAdapter(mAdapter);
+		
 
 		this.prepareFloatingText();
 		this.showLoadingCategory();
@@ -319,11 +319,9 @@ public class SubjectListActivity extends BaseListActivity implements
 		if (null != mCurrCategory) {
 			sb.append(" where ms.status = 1 and ms.pid.enabled = 1 and ms.pid.id = "
 					+ mCurrCategory.getId());
+			sb.append(" and");
 		} else {
 			sb.append(" where");
-		}
-		if (!sb.toString().contains("and")) {
-			sb.append(" and");
 		}
 		if (null != mCurrArea) {
 			sb.append(" ms.aid.id = " + mCurrArea.getId());
@@ -468,6 +466,7 @@ public class SubjectListActivity extends BaseListActivity implements
 				}
 				mCategoryList.add(category);
 			}
+			mListView.setAdapter(mAdapter);
 			this.hideLoadingCategory();
 			this.onFirstLoadSetting();
 			this.onLoadMore();
