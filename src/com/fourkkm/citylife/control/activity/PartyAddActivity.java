@@ -20,6 +20,7 @@ import com.andrnes.modoer.ModoerPartyCategory;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.zj.app.BaseActivity;
 import com.zj.app.utils.AppUtils;
 import com.zj.app.utils.DateFormatMethod;
@@ -44,7 +45,7 @@ public class PartyAddActivity extends BaseActivity {
 	private ArrayAdapter<String> mCategoryAdapter, mSexAdapter;
 	private List<ModoerPartyCategory> mPartyCategoryList;
 
-	private ProgressDialog mDialog;
+	private ProgressDialogProxy mDialogProxy;
 
 	@Override
 	protected void prepareViews() {
@@ -78,13 +79,13 @@ public class PartyAddActivity extends BaseActivity {
 				.findViewById(R.id.party_add_spinner_category);
 		mSpinnerSex = (Spinner) this.findViewById(R.id.party_add_spinner_sex);
 
-		mDialog = new ProgressDialog(this);
 	}
 
 	@Override
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		// 如果没有登录，先登录
 		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
 			this.startActivityForResult(new Intent(this, LoginActivity.class),
 					REQ_LOGIN_CODE);
@@ -101,6 +102,8 @@ public class PartyAddActivity extends BaseActivity {
 				android.R.layout.simple_spinner_item, this.getResources()
 						.getStringArray(R.array.sex_array));
 		mSpinnerSex.setAdapter(mSexAdapter);
+
+		mDialogProxy = new ProgressDialogProxy(this);
 
 		this.prepareDataByMember();
 		this.fetchPartyCategory();
@@ -123,18 +126,6 @@ public class PartyAddActivity extends BaseActivity {
 
 	}
 
-	private void showDialog() {
-		if (null != mDialog) {
-			mDialog.show();
-		}
-	}
-
-	private void hideDialog() {
-		if (null != mDialog) {
-			mDialog.dismiss();
-		}
-	}
-
 	private boolean validate() {
 		String subject = mEtSubject.getText().toString().trim();
 		if (TextUtils.isEmpty(subject)) {
@@ -155,7 +146,7 @@ public class PartyAddActivity extends BaseActivity {
 		if (!this.validate()) {
 			return;
 		}
-		this.showDialog();
+		mDialogProxy.showDialog();
 		ModoerParty party = new ModoerParty();
 		party.setApplypriceType("rmb");
 		int categoryPos = mSpinnerCategoty.getSelectedItemPosition();
@@ -178,6 +169,7 @@ public class PartyAddActivity extends BaseActivity {
 	public void onSuccessFindAll(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessFindAll(out);
+		@SuppressWarnings("unchecked")
 		List<Object> results = (List<Object>) out.getResult();
 		if (null == results) {
 			Log.e(TAG, "shan-->results is null");

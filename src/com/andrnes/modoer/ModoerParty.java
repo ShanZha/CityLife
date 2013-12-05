@@ -2,6 +2,7 @@ package com.andrnes.modoer;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 import android.content.Context;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import com.zj.app.annotation.Validates;
 import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
-public class ModoerParty extends ItemSingle implements Serializable{
+public class ModoerParty extends ItemSingle implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int id;
@@ -96,6 +97,8 @@ public class ModoerParty extends ItemSingle implements Serializable{
 
 	/** ‰Ø¿¿¡ø */
 	private int pageview;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -311,6 +314,14 @@ public class ModoerParty extends ItemSingle implements Serializable{
 
 	public void setPageview(int pageview) {
 		this.pageview = pageview;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 
 	@Override

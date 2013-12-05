@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerAskCategory;
 import com.andrnes.modoer.ModoerAsks;
+import com.fourkkm.citylife.AskCategoryManager;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerAskItemView;
@@ -41,14 +42,10 @@ public class AskListActivity extends BaseListActivity implements
 	private static final int ASK_STATE_REWARD = 2;
 	private static final int ASK_STATE_ALL = 3;
 
-	private static final int ASK_CATEGORY_LEVEL_PARENT = 0;
-	private static final int ASK_CATEGORY_LEVEL_CHILD = 1;
-
 	private LinearLayout mLlTopCheck;
 	private ProgressBar mProBarTopCheck;
-	private TextView mTvTitle,mTvCategory, mTvState;
+	private TextView mTvTitle, mTvCategory, mTvState;
 	private List<ModoerAsks> mAskList;
-	private List<ModoerAskCategory> mAskCategoryList;
 	/** 状态名字列表 **/
 	private List<String> mAskStateList;
 	/** 当前的显示问题类别，默认所有，即次对象为空 **/
@@ -59,11 +56,14 @@ public class AskListActivity extends BaseListActivity implements
 	private FloatingTwoMenuProxy mFloatingCategory;
 	private FloatingOneMenuProxy mFloatingState;
 
+	private AskCategoryManager mAskCategoryMgr;
+
 	@Override
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.ask_list);
-		mTvTitle = (TextView)this.findViewById(R.id.titlebar_back_right_tv_title);
+		mTvTitle = (TextView) this
+				.findViewById(R.id.titlebar_back_right_tv_title);
 		mListView = (PullUpDownListView) this
 				.findViewById(R.id.ask_list_listview);
 		mLlTopCheck = (LinearLayout) this
@@ -75,7 +75,7 @@ public class AskListActivity extends BaseListActivity implements
 		mTvState = (TextView) this.findViewById(R.id.floating_layout_tv_second);
 		this.findViewById(R.id.floating_layout_ll_third).setVisibility(
 				View.GONE);
-		
+
 		mTvTitle.setText(this.getString(R.string.ask));
 		super.prepareViews();
 	}
@@ -84,8 +84,8 @@ public class AskListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mAskCategoryMgr = new AskCategoryManager();
 		mAskList = new ArrayList<ModoerAsks>();
-		mAskCategoryList = new ArrayList<ModoerAskCategory>();
 		mAskStateList = new ArrayList<String>();
 		mAdapter = new ItemSingleAdapter<ModoerAskItemView, ModoerAsks>(
 				mAskList, this);
@@ -170,120 +170,8 @@ public class AskListActivity extends BaseListActivity implements
 				sb.append(" and ma.success = " + mCurrAskState);
 			}
 		}
-		// if (ASK_CATEGORY_LEVEL_PARENT == mCurrAskCategory.getUse_area()) {
-		// sb.append("where ");
-		// // 获取所有子类别id，因为数据不存在于父类别中
-		// List<Integer> childIdList = this.getChildIdList();
-		// if (null != childIdList) {
-		// int size = childIdList.size();
-		// for (int i = 0; i < size; i++) {
-		// sb.append("(");
-		// sb.append(" ma.catid.id = ");
-		// sb.append(childIdList.get(i) + "");
-		// // 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
-		// if (ASK_STATE_REWARD == mCurrAskState) {
-		// sb.append(")");
-		// if (i == (size - 1)) {
-		// sb.append(" order by reward DESC");
-		// } else {
-		// sb.append(" or ");
-		// }
-		// } else {
-		// sb.append(" and ma.success = ");
-		// sb.append(mCurrAskState + ")");
-		// if (i != (size - 1)) {
-		// sb.append(" or ");
-		// }
-		// }
-		// }
-		// }
-		// } else {// 子类别，则直接获取对应数据
-		// sb.append("where ma.catid.id = " + mCurrAskCategory.getId());
-		// }
+
 		return sb.toString();
-	}
-
-	/**
-	 * 获取当前父类型所有子类型Id
-	 * 
-	 * @return
-	 */
-	private List<Integer> getChildIdList() {
-		List<Integer> idList = new ArrayList<Integer>();
-		int parentId = mCurrAskCategory.getId();
-		for (int i = 0; i < mAskCategoryList.size(); i++) {
-			ModoerAskCategory category = mAskCategoryList.get(i);
-			// 排除父级
-			if (ASK_CATEGORY_LEVEL_PARENT == category.getUse_area()) {
-				continue;
-			}
-			int id = category.getId();
-			ModoerAskCategory parent = category.getPid();
-			if (null != parent && parent.getId() == parentId) {// 有父级且是当前类别
-				idList.add(id);
-			}
-		}
-		return idList;
-	}
-
-	/**
-	 * 建立问答类别父子名称关系
-	 * 
-	 * @return
-	 */
-	private Map<String, List<String>> buildAskCategoryRelation() {
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		if (null == mAskCategoryList) {
-			return null;
-		}
-		// 加上“所有类型”项
-		List<String> all = new ArrayList<String>();
-		all.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
-		map.put(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY, all);
-		for (int i = 0; i < mAskCategoryList.size(); i++) {
-			ModoerAskCategory ask = mAskCategoryList.get(i);
-			if (ASK_CATEGORY_LEVEL_PARENT == ask.getUse_area()) {
-				map.put(ask.getName(), this.getAskCategoryChild(ask.getId()));
-			}
-		}
-
-		return map;
-	}
-
-	/**
-	 * 获取某类别的所有子Name列表
-	 * 
-	 * @param parentId
-	 * @return
-	 */
-	private List<String> getAskCategoryChild(int parentId) {
-		if (null == mAskCategoryList) {
-			return null;
-		}
-		List<String> childNames = new ArrayList<String>();
-		for (int i = 0; i < mAskCategoryList.size(); i++) {
-			ModoerAskCategory ask = mAskCategoryList.get(i);
-			if (ASK_CATEGORY_LEVEL_CHILD == ask.getUse_area()) {
-				ModoerAskCategory parent = ask.getPid();
-				if (null != parent && parentId == parent.getId()) {
-					childNames.add(ask.getName());
-				}
-			}
-		}
-		return childNames;
-	}
-
-	private ModoerAskCategory getAskCategoryByName(String name) {
-		if (null == mAskCategoryList) {
-			return null;
-		}
-		for (int i = 0; i < mAskCategoryList.size(); i++) {
-			ModoerAskCategory ask = mAskCategoryList.get(i);
-			if (name.equals(ask.getName())) {
-				return ask;
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -358,7 +246,7 @@ public class AskListActivity extends BaseListActivity implements
 	}
 
 	public void onClickRight(View view) {// 添加
-
+		this.startActivity(new Intent(this, AskAddActivity.class));
 	}
 
 	public void onClickFloatingFirst(View view) {// 类别选择
@@ -390,11 +278,12 @@ public class AskListActivity extends BaseListActivity implements
 			for (int i = 0; i < results.size(); i++) {
 				ModoerAskCategory category = (ModoerAskCategory) results.get(i);
 
-				mAskCategoryList.add(category);
+				mAskCategoryMgr.add(category);
 			}
 			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 			mTvState.setText(GlobalConfig.FloatingStr.STR_ALL_ASK);
-			mFloatingCategory.setDatas(this.buildAskCategoryRelation());
+			mFloatingCategory.setDatas(mAskCategoryMgr
+					.buildAskCategoryRelation());
 
 			this.hideLoadingCategory();
 			// 类别查询成功之后，加载数据
@@ -420,7 +309,7 @@ public class AskListActivity extends BaseListActivity implements
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_FINDALL_ASK == operator) {
 			this.notifyLoadOver();
-		}else{
+		} else {
 			this.hideLoadingCategory();
 		}
 	}
@@ -447,7 +336,8 @@ public class AskListActivity extends BaseListActivity implements
 			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(key)) {
 				mCurrAskCategory = null;
 			} else {
-				ModoerAskCategory category = this.getAskCategoryByName(key);
+				ModoerAskCategory category = mAskCategoryMgr
+						.getAskCategoryByName(key);
 				mCurrAskCategory = category;
 			}
 			mTvCategory.setText(key);

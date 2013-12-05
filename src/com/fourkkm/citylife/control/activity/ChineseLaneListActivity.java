@@ -215,7 +215,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		case GlobalConfig.Operator.OPERATION_FINDALL_CHINA_AREA:
 			for (int i = 0; i < results.size(); i++) {
 				ModoerArea area = (ModoerArea) results.get(i);
-				mAreaMgr.addArea(area);
+				mAreaMgr.add(area);
 			}
 			mFloatingArea.setDatas(mAreaMgr.buildAreaRelation());
 			mTvArea.setText(GlobalConfig.FloatingStr.STR_ALL_AREA);

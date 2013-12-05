@@ -9,12 +9,12 @@ import com.andrnes.modoer.ModoerArea;
 import com.fourkkm.citylife.constant.GlobalConfig;
 
 /**
- * 地区管理
+ * 地区管家
  * 
  * @author ShanZha
  * 
  */
-public class AreaManager {
+public class AreaManager implements IModoerManager<ModoerArea> {
 
 	/** 常量定义，见ModoerArea实体level **/
 	/** 国家级 **/
@@ -28,10 +28,6 @@ public class AreaManager {
 
 	public AreaManager() {
 		mAreaList = new ArrayList<ModoerArea>();
-	}
-
-	public void addArea(ModoerArea area) {
-		mAreaList.add(area);
 	}
 
 	/**
@@ -99,12 +95,29 @@ public class AreaManager {
 		return null;
 	}
 
+	@Override
+	public void add(ModoerArea e) {
+		// TODO Auto-generated method stub
+		mAreaList.add(e);
+	}
+
+	@Override
+	public void remove(ModoerArea e) {
+		// TODO Auto-generated method stub
+		try {
+			mAreaList.remove(mAreaList.indexOf(e));
+		} catch (Exception ex) {
+		}
+	}
+
+	@Override
 	public void clear() {
 		if (null != mAreaList) {
 			mAreaList.clear();
 		}
 	}
 
+	@Override
 	public void destroy() {
 		this.clear();
 		mAreaList = null;

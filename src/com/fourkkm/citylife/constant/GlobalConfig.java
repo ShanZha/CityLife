@@ -59,6 +59,7 @@ public interface GlobalConfig {
 		public static final int OPERATION_FINDALL_CHINA_LANE = 9;
 		public static final int OPERATION_FINDALL_CHINA_AREA = 10;
 		public static final int OPERATION_FINDALL_SUBJECT_AREA = 11;
+		public static final int OPERATION_SAVE_ASK = 12;
 	}
 
 	public static class SharePre {

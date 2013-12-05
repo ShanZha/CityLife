@@ -72,7 +72,8 @@ public class SubjectListActivity extends BaseListActivity implements
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.subject_list);
-		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_right_tv_title);
+		mTvTitle = (TextView) this
+				.findViewById(R.id.titlebar_back_right_tv_title);
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 		mLlTopCheck = (LinearLayout) this
@@ -450,7 +451,7 @@ public class SubjectListActivity extends BaseListActivity implements
 				if (mCategoryId == category.getId()) {
 					mCurrCategory = category;
 				}
-				mCategoryMgr.addCategory(category);
+				mCategoryMgr.add(category);
 			}
 			mFloatingCategoryProxy.prepareDatas();
 			mListView.setAdapter(mAdapter);
@@ -460,7 +461,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT_AREA == operator) {// SubjectµØÇø
 			for (int i = 0; i < results.size(); i++) {
 				ModoerArea area = (ModoerArea) results.get(i);
-				mAreaMgr.addArea(area);
+				mAreaMgr.add(area);
 			}
 			mFloatingSearchCityProxy.setDatas(mAreaMgr.buildAreaRelation());
 			this.fetchCategory();

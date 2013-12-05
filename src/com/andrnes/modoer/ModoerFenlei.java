@@ -1,10 +1,13 @@
 package com.andrnes.modoer;
 
+import java.util.Map;
+
 import android.content.Context;
 import android.view.ViewGroup;
 
 import com.fourkkm.citylife.R;
 import com.zj.app.annotation.Lazy;
+import com.zj.app.annotation.Validates;
 import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
@@ -28,9 +31,11 @@ public class ModoerFenlei extends ItemSingle {
 	private ModoerSubject sid;
 
 	/** 分类标题 */
+	@Validates(info = "标题不能为空,标题长度不能超过60个字符", type = "isNull,maxSize60")
 	private String subject;
 
 	/** 缩略图连接 */
+	@Validates(info = "缩略图不能为空,缩略图长度不能超过255个字符", type = "isNull,maxSize255")
 	private String thumb;
 
 	/** 提交会员 */
@@ -38,15 +43,18 @@ public class ModoerFenlei extends ItemSingle {
 	private ModoerMembers uid;
 
 	/** 用户昵称 */
+	@Validates(info = "用户昵称不能为空,用户昵称不能超过16个字符", type = "isNull,maxSize16")
 	private String username;
 
 	/** 状态（1-正常，0-待审核） */
 	private int status;
 
 	/** 联系人 */
+	@Validates(info = "联系人不能为空,联系人长度不能超过20个字符", type = "isNull,maxSize20")
 	private String linkman;
 
 	/** 联系人电话 */
+	@Validates(info = "联系方式不能为空,联系方式不能超过100个字符", type = "isNull,maxSize100")
 	private String contact;
 
 	/** 电子邮箱 */
@@ -59,6 +67,7 @@ public class ModoerFenlei extends ItemSingle {
 	private String address;
 
 	/** 内容 */
+	@Validates(info = "内容不能为空,内容不能超过255个字符", type = "isNull,maxSize255")
 	private String content;
 
 	/** 提交时间 */
@@ -70,7 +79,7 @@ public class ModoerFenlei extends ItemSingle {
 	/** 浏览量 */
 	private int pageview;
 
-	/***/
+	/** 备注 **/
 	private int comments;
 
 	/** 标题颜色 */
@@ -84,6 +93,8 @@ public class ModoerFenlei extends ItemSingle {
 
 	/** 置顶结束时间 */
 	private int topEndtime;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -275,6 +286,14 @@ public class ModoerFenlei extends ItemSingle {
 
 	public void setTopEndtime(int topEndtime) {
 		this.topEndtime = topEndtime;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 
 	@Override

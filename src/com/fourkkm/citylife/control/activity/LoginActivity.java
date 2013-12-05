@@ -15,6 +15,7 @@ import com.andrnes.modoer.ModoerMembers;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.zj.app.BaseActivity;
 import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.utils.AppUtils;
@@ -34,7 +35,7 @@ public class LoginActivity extends BaseActivity {
 	private EditText mEtUsername, mEtPswd;
 	private CheckBox mCbPswd, mCbAutoLogin;
 
-	private ProgressDialog mDialog;
+	private ProgressDialogProxy mDialogProxy;
 
 	@Override
 	protected void prepareViews() {
@@ -55,8 +56,8 @@ public class LoginActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
 		mTvTitle.setText(this.getString(R.string.login_user));
-		mDialog = new ProgressDialog(this);
-		mDialog.setMessage(this.getText(R.string.login_ing));
+		mDialogProxy = new ProgressDialogProxy(this);
+		mDialogProxy.setMessage(this.getText(R.string.login_ing));
 
 		boolean isRemeberPswd = SharedPreferenceUtil.getSharedPrefercence()
 				.getBoolean(this.getApplicationContext(),
@@ -75,18 +76,6 @@ public class LoginActivity extends BaseActivity {
 					.getString(this.getApplicationContext(),
 							GlobalConfig.SharePre.KEY_PSWD);
 			mEtPswd.setText(pswd);
-		}
-	}
-
-	private void showDialog() {
-		if (null != mDialog) {
-			mDialog.show();
-		}
-	}
-
-	private void hideDialog() {
-		if (null != mDialog) {
-			mDialog.dismiss();
 		}
 	}
 
@@ -123,7 +112,7 @@ public class LoginActivity extends BaseActivity {
 			this.showToast(this.getString(R.string.login_pswd_null));
 			return;
 		}
-		this.showDialog();
+		mDialogProxy.showDialog();
 		String selectCode = "from com.andrnes.modoer.ModoerMembers mm where mm.username = :username";
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("username", username);
@@ -164,7 +153,7 @@ public class LoginActivity extends BaseActivity {
 		super.onSuccessFind(out);
 		Object result = out.getResult();
 		if (null == result) {
-			this.hideDialog();
+			mDialogProxy.hideDialog();
 			this.showToast(this.getString(R.string.login_info_incorrect));
 			return;
 		}
@@ -192,7 +181,7 @@ public class LoginActivity extends BaseActivity {
 		} else {
 			this.showToast(this.getString(R.string.login_info_incorrect));
 		}
-		this.hideDialog();
+		mDialogProxy.hideDialog();
 
 	}
 
@@ -200,7 +189,7 @@ public class LoginActivity extends BaseActivity {
 	public void onFails(Param out) {
 		// TODO Auto-generated method stub
 		super.onFails(out);
-		this.hideDialog();
+		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.login_fail));
 	}
 }

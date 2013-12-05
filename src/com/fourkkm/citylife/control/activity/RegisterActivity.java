@@ -19,6 +19,7 @@ import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
+import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.zj.app.BaseActivity;
 import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.utils.AppUtils;
@@ -40,7 +41,7 @@ public class RegisterActivity extends BaseActivity {
 
 	private ModoerMembers mMember;
 	private ModoerUsergroups mUserGroup;
-	private ProgressDialog mDialog;
+	private ProgressDialogProxy mDialogProxy;
 
 	@Override
 	protected void prepareViews() {
@@ -63,8 +64,8 @@ public class RegisterActivity extends BaseActivity {
 		super.prepareDatas();
 		mTvTitle.setText(this.getString(R.string.register_user));
 
-		mDialog = new ProgressDialog(this);
-		mDialog.setMessage(this.getText(R.string.register_ing));
+		mDialogProxy = new ProgressDialogProxy(this);
+		mDialogProxy.setMessage(this.getText(R.string.register_ing));
 	}
 
 	public void onClickBack(View view) {
@@ -76,7 +77,7 @@ public class RegisterActivity extends BaseActivity {
 		if (!this.validate()) {
 			return;
 		}
-		this.showDialog();
+		mDialogProxy.showDialog();
 		this.fetchUserGroup();
 	}
 
@@ -116,40 +117,14 @@ public class RegisterActivity extends BaseActivity {
 		this.getStoreOperation().saveOrUpdate(mMember, param);
 	}
 
-	private void showDialog() {
-		if (null != mDialog) {
-			mDialog.show();
-		}
-	}
-
-	private void hideDialog() {
-		if (null != mDialog) {
-			mDialog.dismiss();
-		}
-	}
-
 	private boolean validate() {
 		if (!mCbProtocal.isChecked()) {
 			this.showToast(this
 					.getString(R.string.register_use_protocal_unchecked));
 			return false;
 		}
-		String username = mEtUsername.getText().toString().trim();
-		String email = mEtEmail.getText().toString().trim();
 		String pswd = mEtPswd.getText().toString().trim();
 		String pswdSure = mEtPswdSure.getText().toString().trim();
-		if (TextUtils.isEmpty(username)) {
-			this.showToast(this.getString(R.string.register_username_not_null));
-			return false;
-		}
-		if (TextUtils.isEmpty(email)) {
-			this.showToast(this.getString(R.string.register_email_not_null));
-			return false;
-		}
-		if (!CommonUtil.isEmail(email)) {
-			this.showToast(this.getString(R.string.register_email_invalide));
-			return false;
-		}
 		if (TextUtils.isEmpty(pswd) || TextUtils.isEmpty(pswdSure)
 				|| !pswd.equals(pswdSure)) {
 			this.showToast(this.getString(R.string.register_pswd_not_correct));
@@ -171,7 +146,7 @@ public class RegisterActivity extends BaseActivity {
 			mUserGroup = (ModoerUsergroups) results.get(0);
 		}
 		if (null == mUserGroup) {
-			this.hideDialog();
+			mDialogProxy.hideDialog();
 			this.showToast(this.getString(R.string.register_fail));
 		} else {
 			this.onRegister();
@@ -190,7 +165,7 @@ public class RegisterActivity extends BaseActivity {
 		SharedPreferenceUtil.getSharedPrefercence().put(
 				this.getApplicationContext(), GlobalConfig.SharePre.KEY_PSWD,
 				mEtPswd.getText().toString().trim());
-		this.hideDialog();
+		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.register_success));
 		this.setResult(RESULT_OK);
 		this.finish();
@@ -200,7 +175,7 @@ public class RegisterActivity extends BaseActivity {
 	public void onFails(Param out) {
 		// TODO Auto-generated method stub
 		super.onFails(out);
-		this.hideDialog();
+		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.register_fail));
 	}
 }

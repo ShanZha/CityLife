@@ -11,7 +11,7 @@ import com.andrnes.modoer.ModoerCategory;
  * @author ShanZha
  * 
  */
-public class SubjectCategoryManager {
+public class SubjectCategoryManager implements IModoerManager<ModoerCategory> {
 
 	/** 常量定义见实体ModoerCategory level字段 **/
 	private static final int LEVEL_FIRST = 1;
@@ -21,10 +21,6 @@ public class SubjectCategoryManager {
 
 	public SubjectCategoryManager() {
 		mCategoryList = new ArrayList<ModoerCategory>();
-	}
-
-	public void addCategory(ModoerCategory category) {
-		mCategoryList.add(category);
 	}
 
 	public List<String> getFirstLevelNames() {
@@ -63,12 +59,29 @@ public class SubjectCategoryManager {
 		return null;
 	}
 
+	@Override
+	public void add(ModoerCategory e) {
+		// TODO Auto-generated method stub
+		mCategoryList.add(e);
+	}
+
+	@Override
+	public void remove(ModoerCategory e) {
+		// TODO Auto-generated method stub
+		try {
+			mCategoryList.remove(mCategoryList.indexOf(e));
+		} catch (Exception ex) {
+		}
+	}
+
+	@Override
 	public void clear() {
 		if (null != mCategoryList) {
 			mCategoryList.clear();
 		}
 	}
 
+	@Override
 	public void destroy() {
 		this.clear();
 		mCategoryList = null;

@@ -1,12 +1,14 @@
 package com.andrnes.modoer;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import android.content.Context;
 import android.view.ViewGroup;
 
 import com.fourkkm.citylife.R;
 import com.zj.app.annotation.Lazy;
+import com.zj.app.annotation.Validates;
 import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
@@ -37,6 +39,7 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	private ModoerCategory catid;
 
 	/** 名称 */
+	@Validates(info = "用户名称不能为空,用户名称长度不能超过60个字符", type = "isNull,maxSize60")
 	private String name;
 
 	/** 子名称 */
@@ -101,12 +104,14 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	private ModoerMembers cuid;
 
 	/** 创建者昵称 */
+	@Validates(info = "创建者昵称不能为空,创建者昵称长度不能超过20个字符", type = "isNull,maxSize20")
 	private String creator;
 
 	/** 创建时间 */
 	private int addtime;
 
 	/** 缩略图 */
+	@Validates(info = "缩略图不能为空,缩略图长度不能超过255个字符", type = "isNull,maxSize255")
 	private String thumb;
 
 	/** 状态 */
@@ -126,6 +131,8 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 
 	/** 电话 */
 	private String tel;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -415,9 +422,18 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 		this.tel = tel;
 	}
 
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
+	}
+
 	@Override
 	public ItemView newCell(Context context, ViewGroup root) {
 		// TODO Auto-generated method stub
-		return this.createCellFromXml(context, R.layout.subject_list_item, root);
+		return this
+				.createCellFromXml(context, R.layout.subject_list_item, root);
 	}
 }

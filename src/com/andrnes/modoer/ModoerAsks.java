@@ -1,12 +1,14 @@
 package com.andrnes.modoer;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import android.content.Context;
 import android.view.ViewGroup;
 
 import com.fourkkm.citylife.R;
 import com.zj.app.annotation.Lazy;
+import com.zj.app.annotation.Validates;
 import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
@@ -28,11 +30,14 @@ public class ModoerAsks extends ItemSingle implements Serializable {
 	private ModoerMembers uid;
 
 	/** 用户昵称 */
+	@Validates(info = "用户昵称不能为空,用户昵称长度不能超过200个字符", type = "isNull,maxSize200")
 	private String author;
 
 	/** 标题 */
+	@Validates(info = "标题不能为空,标题长度不能超过80个字符", type = "isNull,maxSize80")
 	private String subject;
 	/** 关键字 */
+	@Validates(info = "关键字不能为空,关键字长度不能超过100个字符", type = "isNull,maxSize100")
 	private String keywords;
 	/** 悬赏积分 */
 	private int reward;
@@ -58,9 +63,12 @@ public class ModoerAsks extends ItemSingle implements Serializable {
 	/** 回复数 */
 	private int replies;
 	/** 问题内容 */
+	@Validates(info = "问题内容不能为空,问题内容长度不能超过255个字符", type = "isNull,maxSize255")
 	private String content;
 	/** 问题扩展 */
 	private String extra;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -212,6 +220,14 @@ public class ModoerAsks extends ItemSingle implements Serializable {
 
 	public void setExtra(String extra) {
 		this.extra = extra;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 
 	@Override

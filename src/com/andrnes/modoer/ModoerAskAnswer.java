@@ -1,8 +1,10 @@
 package com.andrnes.modoer;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import com.zj.app.annotation.Lazy;
+import com.zj.app.annotation.Validates;
 
 /** 问答 **/
 public class ModoerAskAnswer implements Serializable {
@@ -22,6 +24,7 @@ public class ModoerAskAnswer implements Serializable {
 	private ModoerMembers uid;
 
 	/** 用户昵称 */
+	@Validates(info = "用户昵称不能为空,用户昵称长度不能超过32个字符", type = "isNull,maxSize32")
 	private String username;
 
 	/** 号评述 */
@@ -34,9 +37,11 @@ public class ModoerAskAnswer implements Serializable {
 	private String feel;
 
 	/** 参考地址 */
+	@Validates(info = "参考地址不能为空,参考地址长度不能超过100个字符", type = "isNull,maxSize100")
 	private String brief;
 
 	/** ip */
+	@Validates(info = "IP不能为空,IP长度不能超过15个字符", type = "isNull,maxSize15")
 	private String ip;
 
 	/** 回答时间 */
@@ -46,7 +51,10 @@ public class ModoerAskAnswer implements Serializable {
 	private int status;
 
 	/** 问题内容 */
+	@Validates(info = "问题内容不能为空,问题内容长度不能超过255个字符", type = "isNull,maxSize255")
 	private String content;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -150,5 +158,13 @@ public class ModoerAskAnswer implements Serializable {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 }

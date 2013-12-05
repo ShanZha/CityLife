@@ -1,12 +1,14 @@
 package com.andrnes.modoer;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import android.content.Context;
 import android.view.ViewGroup;
 
 import com.fourkkm.citylife.R;
 import com.zj.app.annotation.Lazy;
+import com.zj.app.annotation.Validates;
 import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
@@ -15,7 +17,8 @@ public class ModoerReview extends ItemSingle implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int id;
-	/** 点评对象表示 */
+	/** 标识-默认：item_subject */
+	@Validates(info = "标识不能为空,标识不能超过30个字符", type = "isNull,maxSize30")
 	private String idtype;
 
 	/** 点评对象id */
@@ -31,6 +34,7 @@ public class ModoerReview extends ItemSingle implements Serializable {
 	private ModoerMembers uid;
 
 	/** 用户昵称 */
+	@Validates(info = "用户昵称长度不能超过16个字符", type = "maxSize16")
 	private String username;
 
 	/** 状态 1:正常 */
@@ -73,19 +77,26 @@ public class ModoerReview extends ItemSingle implements Serializable {
 	private int posttime;
 
 	/** 主题名称 */
+	@Validates(info = "主题不能为空,主题名称不能超过255个字符", type = "isNull,maxSize255")
 	private String subject;
 
 	/** 点评标题 */
+	@Validates(info = "点评标题超过60个字符", type = "maxSize60")
 	private String title;
 
 	/** 点评内容 */
+	@Validates(info = "点评内容不能为空,点评内容不能超过255个字符", type = "isNull,maxSize255")
 	private String content;
 
 	/** 标签组 */
+	@Validates(info = "标签组不能超过40000个字符", type = "maxSize40000")
 	private String taggroup;
 
 	/** 图片量 */
+	@Validates(info = "图片量不能超过40000个字符", type = "maxSize40000")
 	private String pictures;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -277,6 +288,14 @@ public class ModoerReview extends ItemSingle implements Serializable {
 
 	public void setPictures(String pictures) {
 		this.pictures = pictures;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 
 	@Override

@@ -1,5 +1,9 @@
 package com.andrnes.modoer;
 
+import java.util.Map;
+
+import com.zj.app.annotation.Validates;
+
 /** 聚会申请表 **/
 public class ModoerPartyApply {
 
@@ -10,12 +14,15 @@ public class ModoerPartyApply {
 	private ModoerMembers uid;
 
 	/** 用户名 */
+	@Validates(info = "用户名不能为空,用户名不能超过20个字符", type = "isNull,maxSize20")
 	private String username;
 
 	/** 联系人 */
+	@Validates(info = "联系人不能为空,联系人不能超过20个字符", type = "isNull,maxSize20")
 	private String linkman;
 
 	/** 联系方式 */
+	@Validates(info = "联系方式不能为空,联系方式不能超过255个字符", type = "isNull,maxSize255")
 	private String contact;
 
 	/** 性别 */
@@ -31,7 +38,10 @@ public class ModoerPartyApply {
 	private int isjoin;
 
 	/** 备注说明 */
+	@Validates(info = "备注不能超过255个字符", type = "maxSize255")
 	private String comment;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -119,5 +129,13 @@ public class ModoerPartyApply {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 }

@@ -2,8 +2,10 @@ package com.andrnes.modoer;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Map;
 
 import com.zj.app.annotation.Lazy;
+import com.zj.app.annotation.Validates;
 
 /** 用户表 **/
 public class ModoerMembers implements Serializable {
@@ -14,13 +16,16 @@ public class ModoerMembers implements Serializable {
 	@Lazy(isLazy = true)
 	private ModoerUsergroups groupid;
 
-	/** 用户名 */
+	/** 用户Email */
+	@Validates(info = "邮箱不能为空,邮箱长度不能超过20个字符,邮箱格式不正确", type = "isNull,maxSize20,isEmail")
 	private String email;
 
 	/** 用户密码 */
+	@Validates(info = "密码不能为空,密码长度不能超过32个字符", type = "isNull,maxSize32")
 	private String password;
 
 	/** 用户名称 */
+	@Validates(info = "用户名不能为空,用户名不能超过16个字符", type = "isNull,maxSize16")
 	private String username;
 
 	/** 现金 */
@@ -67,6 +72,8 @@ public class ModoerMembers implements Serializable {
 
 	/** 积分字段6 **/
 	private int point6;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -226,5 +233,13 @@ public class ModoerMembers implements Serializable {
 
 	public void setPoint6(int point6) {
 		this.point6 = point6;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 }
