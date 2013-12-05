@@ -92,6 +92,11 @@
             android:name="com.fourkkm.citylife.control.activity.AskAnswerActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 添加问题 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.AskAddActivity"
+            android:screenOrientation="portrait" >
+        </activity>
         <!-- 聚会列表 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.PartyListActivity"
