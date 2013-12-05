@@ -3,6 +3,7 @@ package com.fourkkm.citylife.control.activity;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.ProgressDialog;
 import android.text.TextUtils;
@@ -14,10 +15,14 @@ import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerUsergroups;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.BaseActivity;
+import com.zj.app.db.dao.SharedPreferenceUtil;
+import com.zj.app.utils.AppUtils;
+import com.zj.app.utils.EncryptionUtil;
 import com.zj.support.observer.model.Param;
 
 /**
@@ -33,6 +38,7 @@ public class RegisterActivity extends BaseActivity {
 	private EditText mEtUsername, mEtEmail, mEtPswd, mEtPswdSure;
 	private CheckBox mCbProtocal;
 
+	private ModoerMembers mMember;
 	private ModoerUsergroups mUserGroup;
 	private ProgressDialog mDialog;
 
@@ -58,10 +64,11 @@ public class RegisterActivity extends BaseActivity {
 		mTvTitle.setText(this.getString(R.string.register_user));
 
 		mDialog = new ProgressDialog(this);
-		mDialog.setMessage("ÕýÔÚ×¢²á...");
+		mDialog.setMessage(this.getText(R.string.register_ing));
 	}
 
 	public void onClickBack(View view) {
+		this.setResult(RESULT_CANCELED);
 		this.finish();
 	}
 
@@ -74,11 +81,13 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	private void fetchUserGroup() {
-		String selectCode = "from com.andrnes.modoer.ModoerUsergroups mug where mug.grouptype = 'member' order by point";
+		String selectCode = "from com.andrnes.modoer.ModoerUsergroups mug where mug.grouptype=:groupType order by point";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("groupType", "member");
+
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-		this.getStoreOperation().findAll(selectCode,
-				new HashMap<String, Object>(), false, new ModoerUsergroups(),
-				param);
+		this.getStoreOperation().findAll(selectCode, paramMap, false,
+				new ModoerUsergroups(), param);
 	}
 
 	private void onRegister() {
@@ -87,22 +96,24 @@ public class RegisterActivity extends BaseActivity {
 		String pswd = mEtPswd.getText().toString().trim();
 
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-		ModoerMembers member = new ModoerMembers();
-		member.setUsername(username);
-		member.setEmail(email);
-		member.setPassword(pswd);
-		member.setRegdate((int) (System.currentTimeMillis() / 1000));
-		member.setRmb(new BigDecimal(0));
-		member.setNewmsg("");
-		member.setPoint(0);
-		member.setPoint1(0);
-		member.setPoint2(0);
-		member.setPoint3(0);
-		member.setPoint4(0);
-		member.setPoint5(0);
-		member.setPoint6(0);
-		member.setGroupid(mUserGroup);
-		this.getStoreOperation().saveOrUpdate(member, param);
+		if (null == mMember) {
+			mMember = new ModoerMembers();
+		}
+		mMember.setUsername(username);
+		mMember.setEmail(email);
+		mMember.setPassword(EncryptionUtil.encryptionString(pswd));
+		mMember.setRegdate((int) (System.currentTimeMillis() / 1000));
+		mMember.setRmb(new BigDecimal(0));
+		mMember.setNewmsg("0");
+		mMember.setPoint(0);
+		mMember.setPoint1(0);
+		mMember.setPoint2(0);
+		mMember.setPoint3(0);
+		mMember.setPoint4(0);
+		mMember.setPoint5(0);
+		mMember.setPoint6(0);
+		mMember.setGroupid(mUserGroup);
+		this.getStoreOperation().saveOrUpdate(mMember, param);
 	}
 
 	private void showDialog() {
@@ -158,20 +169,31 @@ public class RegisterActivity extends BaseActivity {
 		}
 		if (results.size() > 0) {
 			mUserGroup = (ModoerUsergroups) results.get(0);
-			this.onRegister();
-		} else {
+		}
+		if (null == mUserGroup) {
 			this.hideDialog();
 			this.showToast(this.getString(R.string.register_fail));
+		} else {
+			this.onRegister();
 		}
+
 	}
 
 	@Override
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
-		System.out.println(" onSuccessSaveOrUpdate ="+out.getResult().toString());
+		((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
+		SharedPreferenceUtil.getSharedPrefercence().put(
+				this.getApplicationContext(),
+				GlobalConfig.SharePre.KEY_USERNAME, mMember.getUsername());
+		SharedPreferenceUtil.getSharedPrefercence().put(
+				this.getApplicationContext(), GlobalConfig.SharePre.KEY_PSWD,
+				mEtPswd.getText().toString().trim());
 		this.hideDialog();
 		this.showToast(this.getString(R.string.register_success));
+		this.setResult(RESULT_OK);
+		this.finish();
 	}
 
 	@Override

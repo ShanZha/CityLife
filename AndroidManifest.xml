@@ -102,6 +102,11 @@
             android:name="com.fourkkm.citylife.control.activity.PartyDetailActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 添加聚会 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.PartyAddActivity"
+            android:screenOrientation="portrait" >
+        </activity>
         <!-- 唐人巷列表 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.ChineseLaneListActivity"

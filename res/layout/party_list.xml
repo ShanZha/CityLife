@@ -10,7 +10,7 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/titlebar_drop_back" />
+        layout="@layout/titlebar_back_right" />
 
     <!-- 加载ProgressBar -->
 

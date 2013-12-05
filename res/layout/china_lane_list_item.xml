@@ -2,7 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/margin_5"
+    android:paddingLeft="@dimen/margin_10"
+    android:paddingRight="@dimen/margin_10"
+    android:paddingTop="@dimen/margin_5" >
 
     <!-- 缩略图 -->
 
@@ -12,15 +16,16 @@
         android:layout_height="@dimen/subject_list_thumbnail_height"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/margin_10"
         android:scaleType="fitCenter"
         android:src="@drawable/list_thumb" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/china_lane_list_item_iv_thunmb"
+        android:layout_alignTop="@+id/china_lane_list_item_iv_thunmb"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_5"
         android:layout_toLeftOf="@+id/china_lane_list_item_iv_more"
         android:layout_toRightOf="@+id/china_lane_list_item_iv_thunmb"
         android:orientation="vertical" >
@@ -41,7 +46,6 @@
             style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_10"
             android:singleLine="true" />
 
         <!-- 地区 -->

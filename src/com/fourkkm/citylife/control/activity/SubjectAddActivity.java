@@ -20,7 +20,7 @@ public class SubjectAddActivity extends BaseActivity {
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		super.prepareViews();
-		this.setContentView(R.layout.more_subject_add);
+		this.setContentView(R.layout.subject_add);
 
 		mEtName = (EditText) this.findViewById(R.id.more_subject_add_et_name);
 		mEtAddr = (EditText) this.findViewById(R.id.more_subject_add_et_addr);

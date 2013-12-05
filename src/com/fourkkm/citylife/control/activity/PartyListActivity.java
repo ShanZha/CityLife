@@ -49,7 +49,7 @@ public class PartyListActivity extends BaseListActivity implements
 	private static final int PARTY_MOST_POPULAR = 1;
 	private ProgressBar mProBarTopCheck;
 	private LinearLayout mLlTopCheck;
-	private TextView mTvCategory, mTvState, mTvMost;
+	private TextView mTvTitle, mTvCategory, mTvState, mTvMost;
 
 	private List<ModoerParty> mPartyList;
 	private List<ModoerPartyCategory> mPartyCategoryList;
@@ -57,7 +57,6 @@ public class PartyListActivity extends BaseListActivity implements
 	private ModoerPartyCategory mCurrCategory;
 	private int mCurrState = PARTY_STATE_ALL;
 	private int mCurrMost = PARTY_MOST_NEW;
-	private String mStrAllCategory = "";
 	/** 三个漂浮视图代理 **/
 	private FloatingOneMenuProxy mFloatingCategory, mFloatingState,
 			mFloatingMost;
@@ -67,6 +66,7 @@ public class PartyListActivity extends BaseListActivity implements
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.party_list);
+		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_right_tv_title);
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 		mLlTopCheck = (LinearLayout) this
@@ -77,6 +77,8 @@ public class PartyListActivity extends BaseListActivity implements
 		mTvMost = (TextView) this.findViewById(R.id.floating_layout_tv_third);
 		mListView = (PullUpDownListView) this
 				.findViewById(R.id.party_list_listview);
+
+		mTvTitle.setText(this.getString(R.string.party));
 		super.prepareViews();
 	}
 
@@ -84,7 +86,6 @@ public class PartyListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
-		mStrAllCategory = this.getString(R.string.floating_category_all);
 		this.prepareFloatingDatas();
 		mPartyList = new ArrayList<ModoerParty>();
 		mAdapter = new ItemSingleAdapter<ModoerPartyItemView, ModoerParty>(
@@ -131,7 +132,7 @@ public class PartyListActivity extends BaseListActivity implements
 		}
 		List<String> categoryNameList = new ArrayList<String>();
 		// 加上“所有类别”
-		categoryNameList.add(mStrAllCategory);
+		categoryNameList.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 		for (int i = 0; i < mPartyCategoryList.size(); i++) {
 			String name = mPartyCategoryList.get(i).getName();
 			categoryNameList.add(name);
@@ -249,7 +250,7 @@ public class PartyListActivity extends BaseListActivity implements
 	 */
 	private boolean isCurrCategory(String name) {
 		if (null == mCurrCategory) {
-			if (mStrAllCategory.equals(name)) {
+			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(name)) {
 				return true;
 			}
 			return false;
@@ -285,6 +286,11 @@ public class PartyListActivity extends BaseListActivity implements
 
 	public void onClickBack(View view) {
 		this.finish();
+	}
+
+	public void onClickRight(View view) {// 添加
+		Intent intent = new Intent(this, PartyAddActivity.class);
+		this.startActivity(intent);
 	}
 
 	public void onClickFloatingFirst(View view) {// 类别
@@ -340,7 +346,7 @@ public class PartyListActivity extends BaseListActivity implements
 						.get(i);
 				mPartyCategoryList.add(category);
 			}
-			mTvCategory.setText(mStrAllCategory);
+			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 			this.setTextByCurrValue();
 			this.prepareFloadingCategoryDatas();
 			this.hideLoadingCategory();
@@ -363,6 +369,8 @@ public class PartyListActivity extends BaseListActivity implements
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_FINDALL_PARTY == operator) {
 			this.notifyLoadOver();
+		} else {
+			this.hideLoadingCategory();
 		}
 	}
 

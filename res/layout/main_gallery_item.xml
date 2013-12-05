@@ -9,6 +9,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:scaleType="fitXY"
-        asyncImageView:defaultSrc="@drawable/nopic" />
+        asyncImageView:defaultSrc="@drawable/main_gallery_default" />
 
 </com.fourkkm.citylife.itemview.ModoerBcastrItemView>

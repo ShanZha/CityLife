@@ -11,15 +11,18 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerFenlei;
 import com.andrnes.modoer.ModoerFenleiCategory;
-import com.andrnes.modoer.ModoerSubject;
+import com.fourkkm.citylife.AreaManager;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerChinaLaneItemView;
 import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingTwoMenuProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
+import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.adapter.ItemSingleAdapter;
 
@@ -36,19 +39,22 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 	private LinearLayout mLlTopCheck;
 	private ProgressBar mProBarTopCheck;
 	private TextView mTvTitle;
-	/** 查询条件：分类/地区 **/
-	private TextView mTvCategory, mTvArea;
+	/** 查询条件：地区/分类 **/
+	private TextView mTvArea, mTvCategory;
 	private List<ModoerFenlei> mChinaLaneList;
 	private List<ModoerFenleiCategory> mChinaLaneCategoryList;
 
 	/** 当前类别，当其为空时，全部类别 **/
 	private ModoerFenleiCategory mCurrCategory;
-	/** 全部分类字符 **/
-	private String mStrAllCategory = "";
+	/** 当前地区（县/地区级）-“全部地区”时为空，默认为空 **/
+	private ModoerArea mCurrArea;
+	/** 当前国家 **/
+	private ModoerArea mCurrCountry;
+
+	private AreaManager mAreaMgr;
 
 	private FloatingTwoMenuProxy mFloatingCategory;
-
-	// private FloatingOneMenuProxy mFloatingArea;
+	private FloatingTwoMenuProxy mFloatingArea;
 
 	@Override
 	protected void prepareViews() {
@@ -62,14 +68,13 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 		mTvTitle = (TextView) this
-				.findViewById(R.id.titlebar_drop_back_tv_title);
+				.findViewById(R.id.titlebar_back_right_tv_title);
+		mTvArea = (TextView) this.findViewById(R.id.floating_layout_tv_first);
 		mTvCategory = (TextView) this
-				.findViewById(R.id.floating_layout_tv_first);
-		mTvCategory = (TextView) this
-				.findViewById(R.id.floating_layout_tv_first);
-		mTvArea = (TextView) this.findViewById(R.id.floating_layout_tv_second);
+				.findViewById(R.id.floating_layout_tv_second);
 		this.findViewById(R.id.floating_layout_ll_third).setVisibility(
 				View.GONE);
+		mTvTitle.setText(this.getString(R.string.chinese_lane));
 		super.prepareViews();
 	}
 
@@ -77,23 +82,26 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mAreaMgr = new AreaManager();
+		mCurrCountry = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
 		mTvTitle.setText(this.getString(R.string.chinese_lane));
-		mStrAllCategory = this.getString(R.string.floating_category_all);
+
 		mChinaLaneList = new ArrayList<ModoerFenlei>();
 		mChinaLaneCategoryList = new ArrayList<ModoerFenleiCategory>();
+
 		mAdapter = new ItemSingleAdapter<ModoerChinaLaneItemView, ModoerFenlei>(
 				mChinaLaneList, this);
 		mListView.setAdapter(mAdapter);
 
 		mFloatingCategory = new FloatingTwoMenuProxy(this,
 				GlobalConfig.FloatingType.TYPE_CHINA_LANE_CATEGORY);
-		// mFloatingArea = new FloatingOneMenuProxy(this,
-		// GlobalConfig.FloatingType.TYPE_CHINA_LANE_AREA);
+		mFloatingArea = new FloatingTwoMenuProxy(this,
+				GlobalConfig.FloatingType.TYPE_CHINA_LANE_AREA);
 		mFloatingCategory.setFloatingItemClickListener(this);
-		// mFloatingArea.setFloatingItemClickListener(this);
+		mFloatingArea.setFloatingItemClickListener(this);
 
 		this.showLoadingCategory();
-		this.fetchCategory();
+		this.fetchArea();
 	}
 
 	private void showLoadingCategory() {
@@ -104,6 +112,31 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 	private void hideLoadingCategory() {
 		mProBarTopCheck.setVisibility(View.GONE);
 		mLlTopCheck.setVisibility(View.VISIBLE);
+	}
+
+	/**
+	 * 获取某国家下的所有区域
+	 */
+	private void fetchArea() {
+		if (null == mCurrCountry) {
+			Log.e(TAG, "shan-->mCurrCountry is null");
+			return;
+		}
+		int countryId = mCurrCountry.getId();
+		StringBuilder sb = new StringBuilder();
+		sb.append("from com.andrnes.modoer.ModoerArea ma where (ma.pid.id = ");
+		sb.append(countryId);
+		sb.append(" and ma.enabled = 1) or");
+		sb.append(" (ma.pid.pid.id = ");
+		sb.append(countryId);
+		sb.append(" and ma.pid.enabled = 1)");
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_CHINA_AREA);
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("max", GlobalConfig.MAX_ALL);
+		paramsMap.put("offset", 0);
+		this.getStoreOperation().findAll(sb.toString(), paramsMap, true,
+				new ModoerArea(), param);
 	}
 
 	private void fetchCategory() {
@@ -132,7 +165,11 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		if (null != mCurrCategory) {
 			sb.append(" and mf.catid.id = " + mCurrCategory.getId());
 		}
-		// 地区的条件暂时未加上？？？
+		if (null != mCurrArea) {
+			sb.append(" and mf.aid.id = " + mCurrArea.getId());
+		} else {// 限制“国家级”
+			sb.append(" and mf.cityId.id = " + mCurrCountry.getId());
+		}
 		return sb.toString();
 	}
 
@@ -140,15 +177,21 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		this.finish();
 	}
 
-	public void onClickFloatingFirst(View view) {// 类别菜单栏
-		// this.showToast("第一个菜单栏还没实现");
+	public void onClickRight(View view) {// 添加
+
+	}
+
+	public void onClickFloatingFirst(View view) {// 地区菜单栏
+		if (null != mFloatingArea) {
+			mFloatingArea.showAsDropDown(view);
+		}
+
+	}
+
+	public void onClickFloatingSecond(View view) {// 类别菜单栏
 		if (null != mFloatingCategory) {
 			mFloatingCategory.showAsDropDown(view);
 		}
-	}
-
-	public void onClickFloatingSecond(View view) {// 地区菜单栏
-		this.showToast("地区菜单栏还没实现");
 	}
 
 	@Override
@@ -169,6 +212,15 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 			return;
 		}
 		switch (operator) {
+		case GlobalConfig.Operator.OPERATION_FINDALL_CHINA_AREA:
+			for (int i = 0; i < results.size(); i++) {
+				ModoerArea area = (ModoerArea) results.get(i);
+				mAreaMgr.addArea(area);
+			}
+			mFloatingArea.setDatas(mAreaMgr.buildAreaRelation());
+			mTvArea.setText(GlobalConfig.FloatingStr.STR_ALL_AREA);
+			this.fetchCategory();
+			break;
 		case GlobalConfig.Operator.OPERATION_FINDALL_CHINA_LANE_CATEGORY:
 			// 所有类别成功
 			for (int i = 0; i < results.size(); i++) {
@@ -177,7 +229,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 				mChinaLaneCategoryList.add(category);
 			}
 			mFloatingCategory.setDatas(this.buildLaneCategoryRelation());
-			mTvCategory.setText(mStrAllCategory);
+			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 			this.hideLoadingCategory();
 			// 类别查询成功之后，加载数据
 			this.onFirstLoadSetting();
@@ -203,6 +255,8 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		// 查询唐人巷失败，重置
 		if (GlobalConfig.Operator.OPERATION_FINDALL_CHINA_LANE == operator) {
 			this.notifyLoadOver();
+		}else{
+			this.hideLoadingCategory();
 		}
 	}
 
@@ -214,7 +268,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 				return;
 			}
 			// 选择“全部类别”
-			if (mStrAllCategory.equals(key)) {
+			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(key)) {
 				mCurrCategory = null;
 			} else {
 				ModoerFenleiCategory category = this.getLaneCategoryByName(key);
@@ -222,7 +276,22 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 			}
 			mTvCategory.setText(key);
 		} else if (GlobalConfig.FloatingType.TYPE_CHINA_LANE_AREA == type) {// 地区
-
+			// 特殊处理下，当前为全部地区，选中也为全部地区时
+			if (null == mCurrArea
+					&& GlobalConfig.FloatingStr.STR_ALL_AREA.equals(key)) {
+				return;
+			}
+			// 全部地区时
+			if (GlobalConfig.FloatingStr.STR_ALL_AREA.equals(key)) {
+				mCurrArea = null;
+			} else {
+				ModoerArea area = mAreaMgr.getSubjectAreaByName(key);
+				if (this.isCurrArea(area.getId())) {
+					return;
+				}
+				mCurrArea = area;
+				mTvArea.setText(key);
+			}
 		}
 		this.reset();
 		this.notifyDataChanged();
@@ -239,7 +308,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 	 */
 	private boolean isCurrCategory(String name) {
 		if (null == mCurrCategory) {
-			if(mStrAllCategory.equals(name)){
+			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(name)) {
 				return true;
 			}
 			return false;
@@ -259,6 +328,13 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 			return false;
 		}
 		return category.getPid() != null && category.getPid().getId() != 0;
+	}
+
+	private boolean isCurrArea(int areaId) {
+		if (null == mCurrArea) {
+			return false;
+		}
+		return areaId == mCurrArea.getId();
 	}
 
 	/**
@@ -281,8 +357,8 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		}
 		// 最后加入“全部类别”选项，默认也是此项
 		List<String> allCategoryList = new ArrayList<String>();
-		allCategoryList.add(mStrAllCategory);
-		map.put(mStrAllCategory, allCategoryList);
+		allCategoryList.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
+		map.put(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY, allCategoryList);
 		return map;
 	}
 
@@ -339,4 +415,5 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		this.setHaveMore(true);
 		this.setEnbaleLoad(true);
 	}
+
 }

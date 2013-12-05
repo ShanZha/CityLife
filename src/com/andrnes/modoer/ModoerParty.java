@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.fourkkm.citylife.R;
 import com.zj.app.annotation.Lazy;
+import com.zj.app.annotation.Validates;
 import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
@@ -30,12 +31,15 @@ public class ModoerParty extends ItemSingle implements Serializable{
 	private ModoerMembers uid;
 
 	/** 分类标题 */
+	@Validates(info = "主题不能为空,主题长度不能超过60个字符", type = "isNull,maxSize60")
 	private String subject;
 
 	/** 缩略图连接 */
+	@Validates(info = "缩略图不能为空", type = "isNull")
 	private String thumb;
 
 	/** 用户昵称 */
+	@Validates(info = "用户姓名不能为空,用户名长度不能超过16个字符", type = "isNull,maxSize16")
 	private String username;
 
 	/***/
@@ -46,7 +50,8 @@ public class ModoerParty extends ItemSingle implements Serializable{
 	private int joinendtime;
 	/** 开始时间 */
 	private int begintime;
-	/** 接话人数 */
+	/** 计划人数 */
+	@Validates(info = "计划人数不能为空", type = "isNull")
 	private int plannum;
 
 	/** 性别限制(0-性别不限，1限女性，2限男性) */
@@ -62,21 +67,25 @@ public class ModoerParty extends ItemSingle implements Serializable{
 	/** 报名费用 */
 	private BigDecimal applyprice;
 	/** 活动描述 */
+	@Validates(info = "描述不能为空,描述长度不能超过255个字符", type = "isNull,maxSize255")
 	private String des;
 
 	/** 状态（1-正常，0-待审核） */
 	private int status;
 
 	/** 联系人 */
+	@Validates(info = "联系人不能为空,联系人长度不能超过20个字符", type = "isNull,maxSize20")
 	private String linkman;
 
 	/** 联系人电话 */
+	@Validates(info = "联系方式不能为空,联系方式长度不能超过100个字符", type = "isNull,maxSize100")
 	private String contact;
 
 	/** 参加人数 */
 	private int applynum;
 
 	/** 地址 */
+	@Validates(info = "聚会地址不能为空,聚会地址长度不能超过255个字符", type = "isNull,maxSize255")
 	private String address;
 
 	/** 提交时间 */

@@ -144,8 +144,8 @@ public class FloatingTwoMenuProxy implements OnItemClickListener {
 		}
 		if (null == mChildAdapter) {
 			mChildAdapter = new ArrayAdapter<String>(mCtx,
-					R.layout.floating_one_menu_item,
-					R.id.floating_one_menu_item_tv_tips, mChildDatas);
+					R.layout.floating_two_menu_item,
+					R.id.floating_two_menu_item_tv_tips, mChildDatas);
 			mListViewChild.setAdapter(mChildAdapter);
 		} else {
 			mChildAdapter.notifyDataSetChanged();

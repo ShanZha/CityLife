@@ -16,12 +16,15 @@ import android.widget.TextView;
 import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerCategory;
 import com.andrnes.modoer.ModoerSubject;
+import com.fourkkm.citylife.AreaManager;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
+import com.fourkkm.citylife.SubjectCategoryManager;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerSubjectItemView;
 import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
+import com.fourkkm.citylife.widget.FloatingSubjectMenuProxy;
 import com.fourkkm.citylife.widget.FloatingTwoMenuProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
 import com.zj.app.utils.AppUtils;
@@ -40,11 +43,9 @@ public class SubjectListActivity extends BaseListActivity implements
 	private static final String TAG = "SubjectListActivity";
 	private ProgressBar mProBarTopCheck;
 	private LinearLayout mLlTopCheck;
-	private TextView mTvNearOrSearch, mTvType, mTvSort;
+	private TextView mTvTitle, mTvNearOrSearch, mTvCategory, mTvSort;
 	private List<ModoerSubject> mSubjectList;
 	private List<String> mSortDatas, mNearDatas;
-	private List<ModoerCategory> mCategoryList;
-	private List<ModoerArea> mAreaList;
 	/** 上级传递过来的类别Id **/
 	private int mCategoryId = 0;
 	/** 当前类别，其为空时，即所有类别 **/
@@ -60,15 +61,18 @@ public class SubjectListActivity extends BaseListActivity implements
 	private FloatingOneMenuProxy mFloatingSortProxy;
 	private FloatingOneMenuProxy mFloatingNearProxy;
 	private FloatingTwoMenuProxy mFloatingSearchCityProxy;
+	private FloatingSubjectMenuProxy mFloatingCategoryProxy;
 	/** 搜全城/附近 **/
 	private boolean mIsSearchCity = false;
-	private String mStrAllArea = "";
-	private String mStrAllCategory = "";
+
+	private AreaManager mAreaMgr;
+	private SubjectCategoryManager mCategoryMgr;
 
 	@Override
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.subject_list);
+		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_right_tv_title);
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 		mLlTopCheck = (LinearLayout) this
@@ -77,7 +81,8 @@ public class SubjectListActivity extends BaseListActivity implements
 				.findViewById(R.id.subject_list_listview);
 		mTvNearOrSearch = (TextView) this
 				.findViewById(R.id.floating_layout_tv_first);
-		mTvType = (TextView) this.findViewById(R.id.floating_layout_tv_second);
+		mTvCategory = (TextView) this
+				.findViewById(R.id.floating_layout_tv_second);
 		mTvSort = (TextView) this.findViewById(R.id.floating_layout_tv_third);
 		super.prepareViews();
 	}
@@ -86,9 +91,10 @@ public class SubjectListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+
+		mAreaMgr = new AreaManager();
+		mCategoryMgr = new SubjectCategoryManager();
 		mCurrCountry = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
-		mStrAllArea = this.getString(R.string.floating_area_all);
-		mStrAllCategory = this.getString(R.string.floating_category_all);
 
 		Intent intent = this.getIntent();
 		mIsSearchCity = intent.getBooleanExtra("isSearchCity", false);
@@ -99,23 +105,25 @@ public class SubjectListActivity extends BaseListActivity implements
 			mFloatingNearProxy.setFloatingItemClickListener(this);
 			this.addNearData();
 
+			mTvTitle.setText(this.getString(R.string.nearby));
 		} else {
 			mFloatingSearchCityProxy = new FloatingTwoMenuProxy(this,
 					GlobalConfig.FloatingType.TYPE_SUBJECT_SEARCH_CITY);
 			mFloatingSearchCityProxy.setFloatingItemClickListener(this);
+			mTvTitle.setText(this.getString(R.string.search_city));
 		}
 
 		mFloatingSortProxy = new FloatingOneMenuProxy(this,
 				GlobalConfig.FloatingType.TYPE_SUBJECT_SORT);
+		mFloatingCategoryProxy = new FloatingSubjectMenuProxy(this,
+				mCategoryMgr, GlobalConfig.FloatingType.TYPE_SUBJECT_CATEGORY);
+		mFloatingCategoryProxy.setFloatingtItemListener(this);
 		mFloatingSortProxy.setFloatingItemClickListener(this);
 		this.addSortData();
 
 		mSubjectList = new ArrayList<ModoerSubject>();
-		mCategoryList = new ArrayList<ModoerCategory>();
-		mAreaList = new ArrayList<ModoerArea>();
 		mAdapter = new ItemSingleAdapter<ModoerSubjectItemView, ModoerSubject>(
 				mSubjectList, this);
-		
 
 		this.prepareFloatingText();
 		this.showLoadingCategory();
@@ -127,24 +135,27 @@ public class SubjectListActivity extends BaseListActivity implements
 	}
 
 	private void prepareFloatingText() {
-		mTvNearOrSearch.setText(mStrAllArea);
-		mTvSort.setText(this.getString(R.string.sort_default));
+		mTvSort.setText(GlobalConfig.FloatingStr.STR_DEFAULT_SORT);
 		if (mIsSearchCity) {
-			mTvType.setText(mStrAllCategory);
+			mTvNearOrSearch.setText(GlobalConfig.FloatingStr.STR_ALL_AREA);
+			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 			return;
+		} else {
+			mTvNearOrSearch.setText(this
+					.getString(R.string.subject_distance_1000));
 		}
 		switch (mCategoryId) {
 		case GlobalConfig.CATEGORY_FOOD:
-			mTvType.setText(this.getString(R.string.main_food));
+			mTvCategory.setText(this.getString(R.string.main_food));
 			break;
 		case GlobalConfig.CATEGORY_RECREATION:
-			mTvType.setText(this.getString(R.string.main_recreation));
+			mTvCategory.setText(this.getString(R.string.main_recreation));
 			break;
 		case GlobalConfig.CATEGORY_SHOPPING:
-			mTvType.setText(this.getString(R.string.main_shopping));
+			mTvCategory.setText(this.getString(R.string.main_shopping));
 			break;
 		case GlobalConfig.CATEGORY_TRAVEL:
-			mTvType.setText(this.getString(R.string.main_travel));
+			mTvCategory.setText(this.getString(R.string.main_travel));
 			break;
 		}
 	}
@@ -223,23 +234,11 @@ public class SubjectListActivity extends BaseListActivity implements
 		return pos == mCurrSort;
 	}
 
-	/**
-	 * 根据地区名字获取ModoerArea
-	 * 
-	 * @param name
-	 * @return
-	 */
-	private ModoerArea getSubjectAreaByName(String name) {
-		if (null == mAreaList) {
-			return null;
+	private boolean isCurrCategory(int categoryId) {
+		if (null == mCurrCategory) {
+			return false;
 		}
-		for (int i = 0; i < mAreaList.size(); i++) {
-			ModoerArea area = mAreaList.get(i);
-			if (name.equals(area.getName())) {
-				return area;
-			}
-		}
-		return null;
+		return categoryId == mCurrCategory.getId();
 	}
 
 	@Override
@@ -259,8 +258,17 @@ public class SubjectListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		// 搜全城
 		if (GlobalConfig.FloatingType.TYPE_SUBJECT_SEARCH_CITY == type) {
-			ModoerArea area = this.getSubjectAreaByName(key);
-			if (null != area) {
+			// 特殊处理下，当前为全部地区，选中也为全部地区时
+			if (null == mCurrArea
+					&& GlobalConfig.FloatingStr.STR_ALL_AREA.equals(key)) {
+				return;
+			}
+			// 全部地区时
+			if (GlobalConfig.FloatingStr.STR_ALL_AREA.equals(key)) {
+				mCurrArea = null;
+				mTvNearOrSearch.setText(key);
+			} else {
+				ModoerArea area = mAreaMgr.getSubjectAreaByName(key);
 				if (this.isCurrArea(area.getId())) {
 					return;
 				}
@@ -269,15 +277,33 @@ public class SubjectListActivity extends BaseListActivity implements
 			}
 		} else if (GlobalConfig.FloatingType.TYPE_SUBJECT_DISTANCE == type) {
 			// 附近
-		} else if (GlobalConfig.FloatingType.TYPE_SUBJECT_SORT == type) {
-			// 排序
+			this.showToast("暂未实现");
+			return;
+		} else if (GlobalConfig.FloatingType.TYPE_SUBJECT_SORT == type) {// 排序
 			if (this.isCurrSort(pos)) {
 				return;
 			}
 			mCurrSort = pos;
 			mTvSort.setText(key);
-		} else if (GlobalConfig.FloatingType.TYPE_SUBJECT_CATEGORY == type) {
-			// 类别
+		} else if (GlobalConfig.FloatingType.TYPE_SUBJECT_CATEGORY == type) {// 类别
+			// 特殊处理下，当前为全部类别，选中也为全部类别时
+			if (null == mCurrCategory
+					&& GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(key)) {
+				return;
+			}
+			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(key)) {
+				mCurrCategory = null;
+				mTvCategory.setText(key);
+			} else {
+				ModoerCategory category = mCategoryMgr.getCategoryByName(key);
+				if (null != category) {
+					if (this.isCurrCategory(category.getId())) {
+						return;
+					}
+					mCurrCategory = category;
+					mTvCategory.setText(key);
+				}
+			}
 		}
 		this.reset();
 		this.notifyDataChanged();
@@ -288,6 +314,10 @@ public class SubjectListActivity extends BaseListActivity implements
 
 	public void onClickBack(View view) {
 		this.finish();
+	}
+
+	public void onClickRight(View view) {// 添加
+
 	}
 
 	public void onClickFloatingFirst(View view) {// 距离
@@ -303,7 +333,9 @@ public class SubjectListActivity extends BaseListActivity implements
 	}
 
 	public void onClickFloatingSecond(View view) {// 类型
-		this.showToast("暂未实现");
+		if (null != mFloatingCategoryProxy) {
+			mFloatingCategoryProxy.showAsDropDown(view);
+		}
 	}
 
 	public void onClickFloatingThird(View view) {// 排序
@@ -362,7 +394,7 @@ public class SubjectListActivity extends BaseListActivity implements
 
 	private void addSortData() {
 		mSortDatas = new ArrayList<String>();
-		mSortDatas.add(this.getString(R.string.sort_default));
+		mSortDatas.add(GlobalConfig.FloatingStr.STR_DEFAULT_SORT);
 		mSortDatas.add(this.getString(R.string.subject_sort_recommend));
 		mSortDatas.add(this.getString(R.string.subject_sort_signup_time));
 		mSortDatas.add(this.getString(R.string.subject_sort_review_count));
@@ -380,52 +412,6 @@ public class SubjectListActivity extends BaseListActivity implements
 		mNearDatas.add(this.getString(R.string.subject_distance_1000));
 		mNearDatas.add(this.getString(R.string.subject_distance_2000));
 		mFloatingNearProxy.setDatas(mNearDatas);
-	}
-
-	/**
-	 * 建立ModoerArea关系集
-	 * 
-	 * @return
-	 */
-	private Map<String, List<String>> buildAreaRelation() {
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
-		if (null == mAreaList) {
-			return map;
-		}
-		// 加上“所有地区”项
-		List<String> all = new ArrayList<String>();
-		all.add(mStrAllArea);
-		map.put(mStrAllArea, all);
-		for (int i = 0; i < mAreaList.size(); i++) {
-			ModoerArea area = mAreaList.get(i);
-			if (SUBJECT_AREA_LEVEL_CITY == area.getLevel()) {
-				map.put(area.getName(), this.getAreaChild(area.getId()));
-			}
-		}
-		return map;
-	}
-
-	/**
-	 * 获取某省/州的所有子Name列表
-	 * 
-	 * @param parentId
-	 * @return
-	 */
-	private List<String> getAreaChild(int parentId) {
-		List<String> childNames = new ArrayList<String>();
-		if (null == mAreaList) {
-			return childNames;
-		}
-		for (int i = 0; i < mAreaList.size(); i++) {
-			ModoerArea area = mAreaList.get(i);
-			if (SUBJECT_AREA_LEVEL_COUNTY == area.getLevel()) {
-				ModoerArea parent = area.getPid();
-				if (null != parent && parentId == parent.getId()) {
-					childNames.add(area.getName());
-				}
-			}
-		}
-		return childNames;
 	}
 
 	/**
@@ -464,18 +450,19 @@ public class SubjectListActivity extends BaseListActivity implements
 				if (mCategoryId == category.getId()) {
 					mCurrCategory = category;
 				}
-				mCategoryList.add(category);
+				mCategoryMgr.addCategory(category);
 			}
+			mFloatingCategoryProxy.prepareDatas();
 			mListView.setAdapter(mAdapter);
 			this.hideLoadingCategory();
 			this.onFirstLoadSetting();
 			this.onLoadMore();
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT_AREA == operator) {// Subject地区
 			for (int i = 0; i < results.size(); i++) {
-				ModoerArea arae = (ModoerArea) results.get(i);
-				mAreaList.add(arae);
+				ModoerArea area = (ModoerArea) results.get(i);
+				mAreaMgr.addArea(area);
 			}
-			mFloatingSearchCityProxy.setDatas(this.buildAreaRelation());
+			mFloatingSearchCityProxy.setDatas(mAreaMgr.buildAreaRelation());
 			this.fetchCategory();
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT == operator) {// Subject
 			for (int i = 0; i < results.size(); i++) {
@@ -497,18 +484,14 @@ public class SubjectListActivity extends BaseListActivity implements
 		case GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT:
 			this.notifyLoadOver();
 			break;
+		case GlobalConfig.Operator.OPERATION_FINDALL_SUJECT_CATEGORY:
+		case GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT_AREA:
+			this.hideLoadingCategory();
+			break;
 		default:
 			break;
 		}
 	}
-
-	/** 常量定义，见ModoerArea实体level **/
-	/** 国家级 **/
-	private static final int SUBJECT_AREA_LEVEL_COUNTRY = 1;
-	/** 省/州 **/
-	private static final int SUBJECT_AREA_LEVEL_CITY = 2;
-	/** 地区/县 **/
-	private static final int SUBJECT_AREA_LEVEL_COUNTY = 3;
 
 	/** 排序-推荐度 **/
 	private static final int SUBJECT_SORT_DEFAULT = 0;

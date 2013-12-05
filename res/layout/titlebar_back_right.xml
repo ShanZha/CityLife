@@ -17,11 +17,23 @@
     <!-- 标题部分 -->
 
     <TextView
-        android:id="@+id/titlebar_drop_back_tv_title"
+        android:id="@+id/titlebar_back_right_tv_title"
         style="@style/title_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/hello_world" />
+
+    <!-- 右边-操作按钮 -->
+
+    <Button
+        android:id="@+id/titlebar_back_right_btn_operator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_5"
+        android:onClick="onClickRight"
+        android:text="添加" />
 
 </RelativeLayout>

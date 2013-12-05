@@ -46,7 +46,7 @@ public class AskListActivity extends BaseListActivity implements
 
 	private LinearLayout mLlTopCheck;
 	private ProgressBar mProBarTopCheck;
-	private TextView mTvCategory, mTvState;
+	private TextView mTvTitle,mTvCategory, mTvState;
 	private List<ModoerAsks> mAskList;
 	private List<ModoerAskCategory> mAskCategoryList;
 	/** 状态名字列表 **/
@@ -56,9 +56,6 @@ public class AskListActivity extends BaseListActivity implements
 	/** 默认所有问题 **/
 	private int mCurrAskState = ASK_STATE_ALL;
 
-	private String mStrAllCategory = "";
-	private String mStrAllAsk = "";
-
 	private FloatingTwoMenuProxy mFloatingCategory;
 	private FloatingOneMenuProxy mFloatingState;
 
@@ -66,6 +63,7 @@ public class AskListActivity extends BaseListActivity implements
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.ask_list);
+		mTvTitle = (TextView)this.findViewById(R.id.titlebar_back_right_tv_title);
 		mListView = (PullUpDownListView) this
 				.findViewById(R.id.ask_list_listview);
 		mLlTopCheck = (LinearLayout) this
@@ -77,6 +75,8 @@ public class AskListActivity extends BaseListActivity implements
 		mTvState = (TextView) this.findViewById(R.id.floating_layout_tv_second);
 		this.findViewById(R.id.floating_layout_ll_third).setVisibility(
 				View.GONE);
+		
+		mTvTitle.setText(this.getString(R.string.ask));
 		super.prepareViews();
 	}
 
@@ -84,8 +84,6 @@ public class AskListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
-		mStrAllCategory = this.getString(R.string.floating_category_all);
-		mStrAllAsk = this.getString(R.string.floating_ask_all);
 		mAskList = new ArrayList<ModoerAsks>();
 		mAskCategoryList = new ArrayList<ModoerAskCategory>();
 		mAskStateList = new ArrayList<String>();
@@ -108,7 +106,7 @@ public class AskListActivity extends BaseListActivity implements
 	}
 
 	private void prepareAskStateNames() {
-		mAskStateList.add(mStrAllAsk);
+		mAskStateList.add(GlobalConfig.FloatingStr.STR_ALL_ASK);
 		mAskStateList.add(this.getString(R.string.ask_state_unresolved));
 		mAskStateList.add(this.getString(R.string.ask_state_resolved));
 		mAskStateList.add(this.getString(R.string.ask_state_reward));
@@ -240,8 +238,8 @@ public class AskListActivity extends BaseListActivity implements
 		}
 		// 加上“所有类型”项
 		List<String> all = new ArrayList<String>();
-		all.add(mStrAllCategory);
-		map.put(mStrAllCategory, all);
+		all.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
+		map.put(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY, all);
 		for (int i = 0; i < mAskCategoryList.size(); i++) {
 			ModoerAskCategory ask = mAskCategoryList.get(i);
 			if (ASK_CATEGORY_LEVEL_PARENT == ask.getUse_area()) {
@@ -317,7 +315,7 @@ public class AskListActivity extends BaseListActivity implements
 	 */
 	private boolean isCurrCategory(String name) {
 		if (null == mCurrAskCategory) {
-			if (mStrAllCategory.equals(name)) {
+			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(name)) {
 				return true;
 			}
 			return false;
@@ -359,6 +357,10 @@ public class AskListActivity extends BaseListActivity implements
 		this.finish();
 	}
 
+	public void onClickRight(View view) {// 添加
+
+	}
+
 	public void onClickFloatingFirst(View view) {// 类别选择
 		if (null == mFloatingCategory) {
 			return;
@@ -390,8 +392,8 @@ public class AskListActivity extends BaseListActivity implements
 
 				mAskCategoryList.add(category);
 			}
-			mTvCategory.setText(mStrAllCategory);
-			mTvState.setText(mStrAllAsk);
+			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
+			mTvState.setText(GlobalConfig.FloatingStr.STR_ALL_ASK);
 			mFloatingCategory.setDatas(this.buildAskCategoryRelation());
 
 			this.hideLoadingCategory();
@@ -418,6 +420,8 @@ public class AskListActivity extends BaseListActivity implements
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_FINDALL_ASK == operator) {
 			this.notifyLoadOver();
+		}else{
+			this.hideLoadingCategory();
 		}
 	}
 
@@ -440,7 +444,7 @@ public class AskListActivity extends BaseListActivity implements
 			if (this.isCurrCategory(key)) {
 				return;
 			}
-			if (mStrAllCategory.equals(key)) {
+			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(key)) {
 				mCurrAskCategory = null;
 			} else {
 				ModoerAskCategory category = this.getAskCategoryByName(key);

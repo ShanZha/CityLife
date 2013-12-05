@@ -38,6 +38,14 @@ public interface GlobalConfig {
 		public static final int TYPE_SUBJECT_SEARCH_CITY = 11;
 	}
 
+	public static class FloatingStr {
+		public static final String STR_ALL_AREA = "全部地区";
+		public static final String STR_ALL_ASK = "全部问题";
+		public static final String STR_ALL_CATEGOTY = "全部类别";
+		public static final String STR_DEFAULT_SORT = "默认排序";
+
+	}
+
 	public static class Operator {
 		public static final int OPERATION_FINDALL_BCASTR = 0;
 		public static final int OPERATION_FINDALL_AREA = 1;
@@ -49,7 +57,8 @@ public interface GlobalConfig {
 		public static final int OPERATION_FINDALL_PARTY = 7;
 		public static final int OPERATION_FINDALL_CHINA_LANE_CATEGORY = 8;
 		public static final int OPERATION_FINDALL_CHINA_LANE = 9;
-		public static final int OPERATION_FINDALL_SUBJECT_AREA = 10;
+		public static final int OPERATION_FINDALL_CHINA_AREA = 10;
+		public static final int OPERATION_FINDALL_SUBJECT_AREA = 11;
 	}
 
 	public static class SharePre {
