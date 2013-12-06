@@ -117,6 +117,16 @@
             android:name="com.fourkkm.citylife.control.activity.ChineseLaneListActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 唐人巷详情 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.ChineseLaneDetailActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 添加唐人巷 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.ChinaLaneAddActivity"
+            android:screenOrientation="portrait" >
+        </activity>
         <!-- 会员中心 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.UserCenterActivity"

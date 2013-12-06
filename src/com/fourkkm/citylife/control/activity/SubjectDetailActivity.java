@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -36,8 +37,8 @@ public class SubjectDetailActivity extends BaseActivity {
 	private static final String SORT_4 = "sort4";
 	private ModoerSubject mSubject;
 	private RelativeLayout mRlAddress, mRlTel;
-	private TextView mTvShopName, mTvThumbnailCount, mTvAveragePer, mTvTaste,
-			mTvAddress, mTvTel, mTvImpression, mTvReviewCount,
+	private TextView mTvTitle, mTvShopName, mTvThumbnailCount, mTvAveragePer,
+			mTvTaste, mTvAddress, mTvTel, mTvImpression, mTvReviewCount,
 			mTvReviewUserName, mTvReviewAveragePer, mTvReviewContent,
 			mTvCompositeScore;
 	/** 4项评分 **/
@@ -52,16 +53,22 @@ public class SubjectDetailActivity extends BaseActivity {
 	private RelativeLayout mRlReviewOpt;
 	private ProgressBar mProBarReviewOpt;
 
+	private ImageButton mBtn;
+
 	@Override
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		super.prepareViews();
 		this.setContentView(R.layout.subject_detail);
 
+		mTvTitle = (TextView) this
+				.findViewById(R.id.titlebar_back_right_tv_title);
+		mBtn = (ImageButton) this
+				.findViewById(R.id.titlebar_back_right_btn_operator);
 		mTvShopName = (TextView) this
 				.findViewById(R.id.subject_detail_tv_shop_name);
 		mTvThumbnailCount = (TextView) this
-				.findViewById(R.id.subject_detail_tv_thumbnail_count);
+				.findViewById(R.id.thumb_detail_tv_thumbnail_count);
 		mTvCompositeScore = (TextView) this
 				.findViewById(R.id.subject_detail_composite_score);
 		mTvAveragePer = (TextView) this
@@ -86,7 +93,7 @@ public class SubjectDetailActivity extends BaseActivity {
 		mTvSort4 = (TextView) this.findViewById(R.id.subject_detail_tv_sort4);
 
 		mIvThumbnail = (ImageView) this
-				.findViewById(R.id.subject_detail_iv_thumbnail);
+				.findViewById(R.id.thumb_detail_iv_thumb);
 
 		mRlAddress = (RelativeLayout) this
 				.findViewById(R.id.subject_detail_rl_address);
@@ -106,12 +113,16 @@ public class SubjectDetailActivity extends BaseActivity {
 				.findViewById(R.id.subject_detail_ll_review_opt);
 		mProBarReviewOpt = (ProgressBar) this
 				.findViewById(R.id.subject_detail_proBar_review_opt);
+
+		mTvThumbnailCount.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mTvTitle.setText(this.getString(R.string.subject_detail));
+		mBtn.setBackgroundResource(R.drawable.subject_detail_collection_selector);
 
 		mSubject = (ModoerSubject) this.getIntent().getSerializableExtra(
 				"ModoerSubject");
@@ -199,12 +210,7 @@ public class SubjectDetailActivity extends BaseActivity {
 		this.finish();
 	}
 
-	public void onClickMap(View view) {// 地图
-		// Intent intent = new Intent(this, MapActivity.class);
-		// this.startActivity(intent);
-	}
-
-	public void onClickCollection(View view) {// 收藏
+	public void onClickRight(View view) {// 收藏
 
 	}
 

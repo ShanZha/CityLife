@@ -1,22 +1,18 @@
 package com.fourkkm.citylife.itemview;
 
-import java.util.Date;
-
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerFenlei;
-import com.andrnes.modoer.ModoerMembers;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
-import com.fourkkm.citylife.control.activity.BaseListActivity;
 import com.fourkkm.citylife.util.CommonUtil;
-import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.widget.item.BaseItem;
 import com.zj.support.widget.itemview.ItemView;
@@ -85,13 +81,11 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 			mTvArea.setText(mCtx.getString(R.string.china_lane_area)
 					+ cityId.getName());
 		} else {
-			// mTvArea.setVisibility(View.GONE);
+			mTvArea.setVisibility(View.GONE);
 		}
-		ModoerMembers member = lane.getUid();
-		if (null != member && member.getId() != 0) {
-			mTvAuthor.setText(mCtx.getString(R.string.china_lane_author)
-					+ member.getUsername());
-		}
+
+		mTvAuthor.setText(mCtx.getString(R.string.china_lane_author)
+				+ lane.getUsername());
 		mTvTime.setText(mCtx.getString(R.string.china_lane_time)
 				+ CommonUtil.getTimeByPHP(lane.getDateline(),
 						"yyyy-MM-dd HH:mm"));

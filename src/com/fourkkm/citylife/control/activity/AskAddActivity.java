@@ -100,21 +100,27 @@ public class AskAddActivity extends BaseActivity implements
 				param);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void notifyCategoryParentDataChanged() {
 		if (null == mAdapterCategotyParent) {
 			mAdapterCategotyParent = new ArrayAdapter<String>(this,
 					android.R.layout.simple_spinner_item, mCategoryParentList);
 			mSpCategoryParent.setAdapter(mAdapterCategotyParent);
+			((ArrayAdapter<String>) mAdapterCategotyParent)
+					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		} else {
 			mAdapterCategotyParent.notifyDataSetChanged();
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void notifyCategoryChildDataChanged() {
 		if (null == mAdapterCategoryChild) {
 			mAdapterCategoryChild = new ArrayAdapter<String>(this,
 					android.R.layout.simple_spinner_item, mCategoryChildList);
 			mSpCategoryChild.setAdapter(mAdapterCategoryChild);
+			((ArrayAdapter<String>) mAdapterCategoryChild)
+					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		} else {
 			mAdapterCategoryChild.notifyDataSetChanged();
 		}
@@ -239,6 +245,8 @@ public class AskAddActivity extends BaseActivity implements
 					.getAskCategoryChild(parentCategory.getId());
 			mCategoryChildList.clear();
 			mCategoryChildList.addAll(childNames);
+//			mSpCategoryChild.setSelection(0);
+			this.notifyCategoryChildDataChanged();
 		} catch (Exception e) {
 		}
 	}

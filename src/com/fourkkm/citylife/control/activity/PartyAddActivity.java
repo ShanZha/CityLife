@@ -101,6 +101,8 @@ public class PartyAddActivity extends BaseActivity {
 		mSexAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, this.getResources()
 						.getStringArray(R.array.sex_array));
+		mSexAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSpinnerSex.setAdapter(mSexAdapter);
 
 		mDialogProxy = new ProgressDialogProxy(this);
@@ -184,6 +186,8 @@ public class PartyAddActivity extends BaseActivity {
 		mCategoryAdapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_item, categoryNames);
 		mSpinnerCategoty.setAdapter(mCategoryAdapter);
+		mCategoryAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 	}
 }

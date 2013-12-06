@@ -66,7 +66,8 @@ public class PartyListActivity extends BaseListActivity implements
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.party_list);
-		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_right_tv_title);
+		mTvTitle = (TextView) this
+				.findViewById(R.id.titlebar_back_right_tv_title);
 		mProBarTopCheck = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 		mLlTopCheck = (LinearLayout) this
@@ -90,7 +91,6 @@ public class PartyListActivity extends BaseListActivity implements
 		mPartyList = new ArrayList<ModoerParty>();
 		mAdapter = new ItemSingleAdapter<ModoerPartyItemView, ModoerParty>(
 				mPartyList, this);
-		mListView.setAdapter(mAdapter);
 
 		this.showLoadingCategory();
 		this.fetchPartyCategory();
@@ -346,6 +346,7 @@ public class PartyListActivity extends BaseListActivity implements
 						.get(i);
 				mPartyCategoryList.add(category);
 			}
+			mListView.setAdapter(mAdapter);
 			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 			this.setTextByCurrValue();
 			this.prepareFloadingCategoryDatas();

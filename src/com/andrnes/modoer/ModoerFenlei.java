@@ -1,5 +1,6 @@
 package com.andrnes.modoer;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import android.content.Context;
@@ -12,7 +13,9 @@ import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
 /** 分类信息表 */
-public class ModoerFenlei extends ItemSingle {
+public class ModoerFenlei extends ItemSingle implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private int id;
 

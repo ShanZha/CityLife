@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,10 +36,10 @@ public class PartyDetailActivity extends BaseActivity {
 	private static final int SEX_LIMIT_WOMAN = 1;
 	private static final int SEX_LIMIT_MAN = 2;
 	private ImageView mIvThumb;
-	private TextView mTvSubject, mTvInitiator, mTvInitiateTime,
+	private TextView mTvTitle, mTvSubject, mTvInitiator, mTvInitiateTime,
 			mTvSignUpEndTime, mTvTime, mTvAddr, mTvSexLimit, mTvCost,
 			mTvPlanNum, mTvSignUpNum, mTvDesc, mTvSignUpMemberNames;
-
+	private Button mBtnRight;
 	private ProgressBar mProBarSignUpMembers;
 
 	private ModoerParty mParty;
@@ -48,7 +49,11 @@ public class PartyDetailActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.prepareViews();
 		this.setContentView(R.layout.party_detail);
-		mIvThumb = (ImageView) this.findViewById(R.id.party_detail_iv_thumb);
+		mTvTitle = (TextView) this
+				.findViewById(R.id.titlebar_back_right_tv_title);
+		mBtnRight = (Button) this
+				.findViewById(R.id.titlebar_back_right_btn_operator);
+		mIvThumb = (ImageView) this.findViewById(R.id.thumb_detail_iv_thumb);
 		mTvSubject = (TextView) this.findViewById(R.id.party_detail_tv_subject);
 		mTvInitiator = (TextView) this
 				.findViewById(R.id.party_detail_tv_initiator);
@@ -71,6 +76,9 @@ public class PartyDetailActivity extends BaseActivity {
 
 		mProBarSignUpMembers = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
+
+		mTvTitle.setText(this.getString(R.string.party_detail));
+		mBtnRight.setText(this.getStrBySex(R.string.party_sign_up_me));
 	}
 
 	@Override
@@ -99,8 +107,8 @@ public class PartyDetailActivity extends BaseActivity {
 		mTvAddr.setText(mParty.getAddress());
 		mTvSexLimit.setText(this.getStrBySex(mParty.getSex()));
 		mTvCost.setText(mParty.getPrice() + "/人");
-		mTvPlanNum.setText(mParty.getPlannum()+"");
-		mTvSignUpNum.setText(mParty.getApplynum()+"");
+		mTvPlanNum.setText(mParty.getPlannum() + "");
+		mTvSignUpNum.setText(mParty.getApplynum() + "");
 		mTvDesc.setText(mParty.getDes());
 
 		this.showLoadingSignUpMember();
@@ -143,7 +151,7 @@ public class PartyDetailActivity extends BaseActivity {
 		this.finish();
 	}
 
-	public void onClickSignUp(View view) {// 我要报名
+	public void onClickRight(View view) {// 我要报名
 
 	}
 

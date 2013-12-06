@@ -40,8 +40,8 @@ public class UserCenterActivity extends BaseActivity {
 		this.finish();
 	}
 
-	public void onClickAvator(View view) {// 头像
-
+	public void onClickThumb(View view) {// 头像
+		this.showToast("头像");
 	}
 
 	public void onClickMyParty(View view) {// 我的聚会活动

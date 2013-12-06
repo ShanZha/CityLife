@@ -89,7 +89,6 @@ public class AskListActivity extends BaseListActivity implements
 		mAskStateList = new ArrayList<String>();
 		mAdapter = new ItemSingleAdapter<ModoerAskItemView, ModoerAsks>(
 				mAskList, this);
-		mListView.setAdapter(mAdapter);
 
 		mFloatingCategory = new FloatingTwoMenuProxy(this,
 				GlobalConfig.FloatingType.TYPE_ASK_CATEGORY);
@@ -285,6 +284,7 @@ public class AskListActivity extends BaseListActivity implements
 			mFloatingCategory.setDatas(mAskCategoryMgr
 					.buildAskCategoryRelation());
 
+			mListView.setAdapter(mAdapter);
 			this.hideLoadingCategory();
 			// 类别查询成功之后，加载数据
 			this.onFirstLoadSetting();

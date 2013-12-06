@@ -47,7 +47,8 @@ public class UserUpdateActivity extends BaseActivity {
 		this.finish();
 	}
 
-	public void onClickAvator(View view) {// 头像
+	public void onClickThumb(View view) {// 头像
+		this.showToast("暂未实现");
 
 	}
 

@@ -29,7 +29,8 @@ public class AskDetailActivity extends BaseActivity {
 
 	private static final String TAG = "AskDetailActivity";
 	private static final int ANSWER_REQ_CODE = 1;
-	private TextView mTvSubject, mTvContent, mTvTime, mTvLevelAndUsername;
+	private TextView mTvTitle, mTvSubject, mTvContent, mTvTime,
+			mTvLevelAndUsername;
 	private TextView mTvBestContent, mTvBestTime, mTvBestLevelAndUsername,
 			mTvBestTips;
 	private TextView mTvBestComment, mTvBestCommentTips;
@@ -43,6 +44,7 @@ public class AskDetailActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.prepareViews();
 		this.setContentView(R.layout.ask_detail);
+		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
 		mTvSubject = (TextView) this.findViewById(R.id.ask_detail_tv_subject);
 		mTvContent = (TextView) this.findViewById(R.id.ask_detail_tv_content);
 		mTvTime = (TextView) this.findViewById(R.id.ask_detail_tv_time);
@@ -71,6 +73,7 @@ public class AskDetailActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
 
+		mTvTitle.setText(this.getString(R.string.ask_detail));
 		Intent intent = this.getIntent();
 		mCurrAsk = (ModoerAsks) intent.getSerializableExtra("modoerAsk");
 		if (null == mCurrAsk) {
@@ -128,6 +131,24 @@ public class AskDetailActivity extends BaseActivity {
 				param);
 	}
 
+	private void addOtherAnswer(ModoerAskAnswer answer) {
+		View view = this.getLayoutInflater().inflate(R.layout.ask_detail_other,
+				mLlOtherAnswerContainer);
+		TextView tvContent = (TextView) view
+				.findViewById(R.id.ask_detail_other_tv_content);
+		TextView tvTime = (TextView) view
+				.findViewById(R.id.ask_detail_other_tv_time);
+		TextView tvLevelAndUsername = (TextView) view
+				.findViewById(R.id.ask_detail_other_tv_level_and_username);
+		tvContent.setText(answer.getContent());
+		tvTime.setText(CommonUtil.getTimeByPHP(answer.getDateline(),
+				"yyyy-MM-dd HH:mm"));
+		ModoerMembers member = answer.getUid();
+		if (null != member && member.getId() != 0) {// 暂时仅设置用户名
+			tvLevelAndUsername.setText(member.getUsername());
+		}
+	}
+
 	public void onClickBack(View view) {
 		this.finish();
 	}
@@ -144,6 +165,14 @@ public class AskDetailActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (RESULT_OK == resultCode && ANSWER_REQ_CODE == requestCode) {
 			// 处理我回答问题
+			if (null == data) {
+				return;
+			}
+			ModoerAskAnswer answer = (ModoerAskAnswer) data
+					.getSerializableExtra("ModoerAskAnswer");
+			if (null != answer) {
+				this.addOtherAnswer(answer);
+			}
 		}
 	}
 
@@ -159,21 +188,7 @@ public class AskDetailActivity extends BaseActivity {
 		}
 		for (int i = 0; i < results.size(); i++) {
 			ModoerAskAnswer answer = (ModoerAskAnswer) results.get(i);
-			View view = this.getLayoutInflater().inflate(
-					R.layout.ask_detail_other, mLlOtherAnswerContainer);
-			TextView tvContent = (TextView) view
-					.findViewById(R.id.ask_detail_other_tv_content);
-			TextView tvTime = (TextView) view
-					.findViewById(R.id.ask_detail_other_tv_time);
-			TextView tvLevelAndUsername = (TextView) view
-					.findViewById(R.id.ask_detail_other_tv_level_and_username);
-			tvContent.setText(answer.getContent());
-			tvTime.setText(CommonUtil.getTimeByPHP(answer.getDateline(),
-					"yyyy-MM-dd HH:mm"));
-			ModoerMembers member = answer.getUid();
-			if (null != member && member.getId() != 0) {// 暂时仅设置用户名
-				tvLevelAndUsername.setText(member.getUsername());
-			}
+			this.addOtherAnswer(answer);
 		}
 		this.hideLoadingOtherAnswers();
 	}

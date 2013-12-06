@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -91,7 +93,6 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 
 		mAdapter = new ItemSingleAdapter<ModoerChinaLaneItemView, ModoerFenlei>(
 				mChinaLaneList, this);
-		mListView.setAdapter(mAdapter);
 
 		mFloatingCategory = new FloatingTwoMenuProxy(this,
 				GlobalConfig.FloatingType.TYPE_CHINA_LANE_CATEGORY);
@@ -178,7 +179,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 	}
 
 	public void onClickRight(View view) {// 添加
-
+		this.startActivity(new Intent(this, ChinaLaneAddActivity.class));
 	}
 
 	public void onClickFloatingFirst(View view) {// 地区菜单栏
@@ -192,6 +193,17 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		if (null != mFloatingCategory) {
 			mFloatingCategory.showAsDropDown(view);
 		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// TODO Auto-generated method stub
+		super.onItemClick(parent, view, position, id);
+		ModoerFenlei lane = mChinaLaneList.get(position);
+		Intent intent = new Intent(this, ChineseLaneDetailActivity.class);
+		intent.putExtra("ModoerFeilei", lane);
+		this.startActivity(intent);
 	}
 
 	@Override
@@ -230,6 +242,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 			}
 			mFloatingCategory.setDatas(this.buildLaneCategoryRelation());
 			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
+			mListView.setAdapter(mAdapter);
 			this.hideLoadingCategory();
 			// 类别查询成功之后，加载数据
 			this.onFirstLoadSetting();
@@ -255,7 +268,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		// 查询唐人巷失败，重置
 		if (GlobalConfig.Operator.OPERATION_FINDALL_CHINA_LANE == operator) {
 			this.notifyLoadOver();
-		}else{
+		} else {
 			this.hideLoadingCategory();
 		}
 	}

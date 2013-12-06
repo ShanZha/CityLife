@@ -27,10 +27,10 @@ public class ModoerAskAnswer implements Serializable {
 	@Validates(info = "用户昵称不能为空,用户昵称长度不能超过32个字符", type = "isNull,maxSize32")
 	private String username;
 
-	/** 号评述 */
+	/** 好评 */
 	private int goodrate;
 
-	/** 差评述 */
+	/** 差评 */
 	private int badrate;
 
 	/** 最佳回答的评论 */
