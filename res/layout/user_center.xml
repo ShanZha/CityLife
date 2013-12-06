@@ -25,11 +25,7 @@
 
             <ImageView
                 android:id="@+id/user_center_iv_avator"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:onClick="onClickAvator"
-                android:scaleType="fitXY"
-                android:src="@drawable/list_thumb" />
+                style="@style/iv_thumb_add_style" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -54,8 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/user_center_tv_username_tip"
-                    android:singleLine="true"
-                    android:text="香格里拉" />
+                    android:singleLine="true" />
 
                 <!-- 昵称 -->
 
@@ -75,8 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/user_center_tv_username_tip"
                     android:layout_toRightOf="@+id/user_center_tv_nickname_tip"
-                    android:singleLine="true"
-                    android:text="无所即" />
+                    android:singleLine="true" />
 
                 <!-- 简介 -->
 
@@ -94,8 +88,7 @@
                     style="@style/list_second_level_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/user_center_tv_desc_tip"
-                    android:text="和房间啊谁房间卡洛斯的房间卡罗斯福健康了减肥螺丝钉放假阿斯兰" />
+                    android:layout_below="@+id/user_center_tv_desc_tip" />
             </RelativeLayout>
         </RelativeLayout>
 

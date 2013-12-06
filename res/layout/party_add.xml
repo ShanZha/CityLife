@@ -37,6 +37,7 @@
 
             <Spinner
                 android:id="@+id/party_add_spinner_category"
+                style="@style/spinner_add_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true" >
@@ -54,10 +55,7 @@
 
             <ImageView
                 android:id="@+id/party_add_iv_thumb_upload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onClickThumb"
-                android:src="@drawable/list_thumb" />
+                style="@style/iv_thumb_add_style" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -305,6 +303,7 @@
 
                 <Spinner
                     android:id="@+id/party_add_spinner_sex"
+                    style="@style/spinner_add_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" >
                 </Spinner>
@@ -374,11 +373,11 @@
 
         <EditText
             android:id="@+id/party_add_et_desc"
+            style="@style/et_multi_lint_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_10"
-            android:hint="@string/party_desc_hint"
-            android:minHeight="120dp" />
+            android:hint="@string/party_desc_hint" />
 
         <!-- 添加 -->
 

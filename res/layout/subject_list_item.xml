@@ -11,12 +11,9 @@
 
     <ImageView
         android:id="@+id/subject_list_item_iv_show"
-        android:layout_width="@dimen/subject_list_thumbnail_width"
-        android:layout_height="@dimen/subject_list_thumbnail_height"
+        style="@style/iv_thumb_list_style"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/list_thumb" />
+        android:layout_centerVertical="true" />
 
     <!-- 中间-关键信息 -->
 

@@ -5,53 +5,13 @@
     android:background="@color/main_bg"
     android:orientation="vertical" >
 
-    <!-- 顶部标题（可下拉） -->
+    <!-- 顶部标题 -->
 
-    <RelativeLayout
+    <include
         android:id="@+id/subject_detail_rl_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/titlebar_bg" >
-
-        <!-- 左边-返回 -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/back"
-            android:clickable="true"
-            android:drawableRight="@drawable/back_divider"
-            android:onClick="onClickBack" />
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/margin_10" >
-
-            <!-- 收藏 -->
-
-            <ImageView
-                android:id="@+id/subject_detail_iv_collection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/subject_detail_collection_selector"
-                android:onClick="onClickCollection" />
-
-            <!-- 地图 -->
-
-            <ImageView
-                android:id="@+id/subject_detail_iv_map"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_10"
-                android:layout_toRightOf="@+id/subject_detail_iv_collection"
-                android:background="@drawable/subject_detail_map_selector"
-                android:onClick="onClickMap" />
-        </RelativeLayout>
-    </RelativeLayout>
+        layout="@layout/titlebar_back_right" />
 
     <!-- 中间-内容 -->
 
@@ -71,9 +31,9 @@
 
             <TextView
                 android:id="@+id/subject_detail_tv_shop_name"
+                style="@style/list_first_level_style"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp" />
+                android:layout_height="wrap_content" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -81,34 +41,11 @@
 
                 <!-- 缩略图 -->
 
-                <FrameLayout
+                <include
                     android:id="@+id/subject_detail_fr_thumbnail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/subject_detail_thumb_bg"
-                    android:clickable="true"
-                    android:onClick="onClickThumbnail" >
-
-                    <ImageView
-                        android:id="@+id/subject_detail_iv_thumbnail"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/margin_5"
-                        android:src="@drawable/list_thumb" />
-
-                    <!-- 缩略图数量 -->
-
-                    <TextView
-                        android:id="@+id/subject_detail_tv_thumbnail_count"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|right"
-                        android:layout_margin="@dimen/margin_5"
-                        android:background="@drawable/subject_detail_thumb_count_bg"
-                        android:gravity="center" />
-                </FrameLayout>
+                    layout="@layout/thumb_detail" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"

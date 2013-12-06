@@ -24,9 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
-            android:drawableLeft="@drawable/main_more"
-            android:maxLines="2"
-            android:text="一般商务舱旅行可以带多少公斤而不被罚款" />
+            android:drawableLeft="@drawable/main_more" />
 
         <!-- 内容 -->
 
@@ -35,8 +33,7 @@
             style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10"
-            android:text="本人第一次旅行，不知道商务舱可以带多少公斤的东西，劳驾各位回答下，不甚感激，由于本人是菜鸟，分比较少，望大家原谅哈" />
+            android:layout_margin="@dimen/margin_10" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -52,8 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:singleLine="true"
-                android:text="2012-10-10 12:09" >
+                android:singleLine="true" >
             </TextView>
 
             <!-- 等级和UserName -->
@@ -64,8 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:singleLine="true"
-                android:text="徒步旅行|来无影去有踪" >
+                android:singleLine="true" >
             </TextView>
         </RelativeLayout>
 
@@ -89,9 +84,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/main_more"
             android:singleLine="true"
-            android:text="@string/ask_best_answer"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" >
+            android:text="@string/ask_best_answer" >
         </TextView>
 
         <!-- 最佳答案内容 -->
@@ -101,8 +94,7 @@
             style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10"
-            android:text="无所谓吧，一般的貌似是20公斤，贺卡和交换机的考核罚款发了哈萨克的flash福克斯多了几分" >
+            android:layout_margin="@dimen/margin_10" >
         </TextView>
 
         <RelativeLayout
@@ -119,8 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:singleLine="true"
-                android:text="2012-10-10 12:09" >
+                android:singleLine="true" >
             </TextView>
 
             <!-- 最佳答案等级和UserName -->
@@ -131,8 +122,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:singleLine="true"
-                android:text="徒步旅行|来无影去有踪" >
+                android:singleLine="true" >
             </TextView>
         </RelativeLayout>
 
@@ -145,17 +135,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_10"
             android:drawableLeft="@drawable/main_more"
-            android:text="@string/ask_comment_best_answer"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:text="@string/ask_comment_best_answer" />
 
         <TextView
             android:id="@+id/ask_detail_tv_best_comment"
             style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10"
-            android:text="恩，您说的对，灰常感谢" />
+            android:layout_margin="@dimen/margin_10" />
 
         <!-- 加载ProgressBar -->
 
@@ -181,9 +168,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/main_more"
-                android:text="@string/ask_other_answer"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
+                android:text="@string/ask_other_answer" />
         </LinearLayout>
     </LinearLayout>
 

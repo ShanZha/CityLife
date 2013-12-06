@@ -61,8 +61,8 @@
     <!-- 星级计分style-默认不可点击 -->
     <style name="rating_bar_style" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/rating_bar_selector</item>
-        <item name="android:minHeight">16dp</item>
-        <item name="android:maxHeight">16dp</item>
+        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">20dp</item>
         <item name="android:max">10</item>
         <item name="android:numStars">5</item>
         <item name="android:stepSize">0.5</item>
@@ -76,4 +76,35 @@
         <item name="android:minWidth">100dp</item>
     </style>
 
+    <!-- 多行EditText的style -->
+    <style name="et_multi_lint_style">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:minLines">6</item>
+        <item name="android:gravity">top</item>
+    </style>
+
+    <!-- 添加spinner的style -->
+    <style name="spinner_add_style">
+        <item name="android:background">@drawable/spinner_selector</item>
+        <item name="android:padding">@dimen/margin_5</item>
+    </style>
+
+    <!-- 列表里缩略图style -->
+    <style name="iv_thumb_list_style">
+        <item name="android:layout_width">@dimen/subject_list_thumbnail_width</item>
+        <item name="android:layout_height">@dimen/subject_list_thumbnail_height</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:src">@drawable/list_thumb</item>
+    </style>
+
+    <!-- 添加里缩略图style -->
+    <style name="iv_thumb_add_style">
+        <item name="android:layout_width">@dimen/subject_list_thumbnail_width</item>
+        <item name="android:layout_height">@dimen/subject_list_thumbnail_height</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:src">@drawable/list_thumb</item>
+        <!-- <item name="android:background">@android:color/black</item>
+        <item name="android:padding">@dimen/margin_5</item> -->
+        <item name="android:onClick">onClickThumb</item>
+    </style>
 </resources>

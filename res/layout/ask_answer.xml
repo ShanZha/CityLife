@@ -79,11 +79,11 @@
 
     <EditText
         android:id="@+id/ask_answer_et_answer_content"
+        style="@style/et_multi_lint_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_10"
-        android:hint="@string/ask_answer_hint"
-        android:minLines="8" />
+        android:hint="@string/ask_answer_hint" />
 
     <!-- 提交 -->
 

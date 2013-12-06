@@ -8,13 +8,10 @@
 
     <ImageView
         android:id="@+id/party_list_item_iv_thunmb"
-        android:layout_width="@dimen/subject_list_thumbnail_width"
-        android:layout_height="@dimen/subject_list_thumbnail_height"
+        style="@style/iv_thumb_list_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:scaleType="fitCenter"
-        android:src="@drawable/list_thumb" />
+        android:layout_marginLeft="@dimen/margin_10" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -41,7 +38,6 @@
             style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_10"
             android:singleLine="true" />
 
         <!-- 聚会时间 -->

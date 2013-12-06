@@ -14,12 +14,12 @@
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/titlebar_back_right" />
+            layout="@layout/titlebar_back" />
 
         <!-- 主题 -->
 
         <TextView
-            android:id="@+id/party_detail_tv_subject"
+            android:id="@+id/china_lane_detail_tv_subject"
             style="@style/list_first_level_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,18 +27,15 @@
             android:layout_marginRight="@dimen/margin_10"
             android:layout_marginTop="@dimen/margin_10" />
 
-        <!-- 添加店铺 -->
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_20" >
+            android:layout_margin="@dimen/margin_10" >
 
             <!-- 缩略图 -->
 
             <include
-                android:id="@+id/party_detail_fr_thumbnail"
+                android:id="@+id/china_lane_detail_fr_thumbnail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 layout="@layout/thumb_detail" />
@@ -49,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/margin_5"
-                android:layout_toRightOf="@+id/party_detail_fr_thumbnail" >
+                android:layout_toRightOf="@+id/china_lane_detail_fr_thumbnail" >
 
                 <!-- 发起者 -->
 
@@ -64,7 +61,7 @@
                         android:text="@string/party_initiator" />
 
                     <TextView
-                        android:id="@+id/party_detail_tv_initiator"
+                        android:id="@+id/china_lane_detail_tv_initiator"
                         style="@style/list_second_level_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -84,34 +81,14 @@
                         android:text="@string/party_initiate_time" />
 
                     <TextView
-                        android:id="@+id/party_detail_tv_initiate_time"
+                        android:id="@+id/china_lane_detail_tv_initiate_time"
                         style="@style/list_second_level_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true" />
                 </TableRow>
 
-                <!-- 报名截止 -->
-
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-
-                    <TextView
-                        style="@style/list_second_level_black_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/party_sign_up_end_time" />
-
-                    <TextView
-                        android:id="@+id/party_detail_tv_sign_up_end_time"
-                        style="@style/list_second_level_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:singleLine="true" />
-                </TableRow>
-
-                <!-- 活动时间 -->
+                <!-- 过期时间 -->
 
                 <TableRow
                     android:layout_width="wrap_content"
@@ -123,8 +100,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/party_time" />
 
-                    <com.fourkkm.citylife.view.ScrollingTextView
-                        android:id="@+id/party_detail_tv_time"
+                    <TextView
+                        android:id="@+id/china_lane_detail_tv_expire_time"
                         style="@style/list_second_level_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -139,7 +116,7 @@
             android:layout_marginBottom="@dimen/margin_10"
             android:src="@drawable/divider" />
 
-        <!-- 活动地址 -->
+        <!-- 联系人 -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -151,105 +128,108 @@
                 style="@style/list_second_level_black_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/party_contact" />
+
+            <TextView
+                android:id="@+id/china_lane_detail_tv_contact"
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- 联系方式 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/party_contact_tel" />
+
+            <TextView
+                android:id="@+id/china_lane_detail_tv_contact_tel"
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- 电子邮件 -->
+
+        <LinearLayout
+            android:id="@+id/china_lane_detail_ll_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/china_lane_email" />
+
+            <TextView
+                android:id="@+id/china_lane_detail_tv_email"
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- 即时联系方式 -->
+
+        <LinearLayout
+            android:id="@+id/china_lane_detail_ll_im"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/china_lane_im" />
+
+            <TextView
+                android:id="@+id/china_lane_detail_tv_im"
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- 联系地址 -->
+
+        <LinearLayout
+            android:id="@+id/china_lane_detail_ll_addr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:text="@string/party_address" />
 
             <TextView
-                android:id="@+id/party_detail_tv_addr"
-                style="@style/list_second_level_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true" />
-        </LinearLayout>
-
-        <!-- 性别限制 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10" >
-
-            <TextView
-                style="@style/list_second_level_black_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/party_sex_limit" />
-
-            <TextView
-                android:id="@+id/party_detail_tv_sex_limit"
-                style="@style/list_second_level_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true" />
-        </LinearLayout>
-
-        <!-- 活动费用 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10" >
-
-            <TextView
-                style="@style/list_second_level_black_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="@string/party_cost" />
-
-            <TextView
-                android:id="@+id/party_detail_tv_cost"
-                style="@style/list_second_level_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true" />
-        </LinearLayout>
-
-        <!-- 计划人数 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10" >
-
-            <TextView
-                style="@style/list_second_level_black_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="@string/party_plan_person_num" />
-
-            <TextView
-                android:id="@+id/party_detail_tv_plan_person_num"
-                style="@style/list_second_level_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true" />
-        </LinearLayout>
-
-        <!-- 已报名人数 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10" >
-
-            <TextView
-                style="@style/list_second_level_black_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="@string/party_sign_up_num" />
-
-            <TextView
-                android:id="@+id/party_detail_tv_sign_up_num"
+                android:id="@+id/china_lane_detail_tv_addr"
                 style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -268,51 +248,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10"
-            android:text="@string/party_desc_2" />
+            android:text="@string/china_lane_desc" />
 
-        <!-- 活动简介 -->
+        <!-- 详情介绍 -->
 
         <TextView
-            android:id="@+id/party_detail_tv_desc"
+            android:id="@+id/china_lane_detail_tv_desc"
             style="@style/list_second_level_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginRight="@dimen/margin_10"
             android:layout_marginTop="@dimen/margin_5" />
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10"
-            android:src="@drawable/divider" />
-
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/progress_bar_small" />
-
-        <!-- 已报名会员名字 -->
-
-        <TextView
-            android:id="@+id/party_detail_tv_sign_up_members_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10" />
-
-        <!-- 查看网页信息 -->
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10"
-            android:onClick="onClickWeiInfo"
-            android:text="@string/party_web_info" />
     </LinearLayout>
 
 </ScrollView>

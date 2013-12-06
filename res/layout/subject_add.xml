@@ -19,10 +19,7 @@
 
         <ImageView
             android:id="@+id/more_subject_add_iv_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickUploadPic"
-            android:src="@drawable/list_thumb" />
+            style="@style/iv_thumb_add_style" />
 
         <TableLayout
             android:id="@+id/more_subject_add_tl"
@@ -48,9 +45,9 @@
 
                 <EditText
                     android:id="@+id/more_subject_add_et_name"
+                    style="@style/et_add_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
                     android:hint="请输入名称" />
             </TableRow>
 
@@ -69,9 +66,9 @@
 
                 <EditText
                     android:id="@+id/more_subject_add_et_addr"
+                    style="@style/et_add_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
                     android:hint="请输入地址" />
             </TableRow>
 
@@ -90,9 +87,9 @@
 
                 <EditText
                     android:id="@+id/more_subject_add_et_tel"
+                    style="@style/et_add_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
                     android:hint="请输入名称" />
             </TableRow>
         </TableLayout>
@@ -124,13 +121,12 @@
 
     <EditText
         android:id="@+id/more_subject_add_et_impression"
+        style="@style/et_multi_lint_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
         android:layout_marginRight="@dimen/margin_10"
-        android:background="@null"
-        android:hint="@string/subject_impression_hint"
-        android:lines="4" />
+        android:hint="@string/subject_impression_hint" />
 
     <ImageView
         android:layout_width="match_parent"
