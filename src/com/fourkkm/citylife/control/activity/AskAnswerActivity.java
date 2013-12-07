@@ -96,7 +96,7 @@ public class AskAnswerActivity extends BaseActivity {
 		mCurrAnswer.setCatid(mCurrAsk.getCatid());
 		mCurrAnswer.setContent(content);
 //		mCurrAnswer.setBrief("这个是不能为空,但我没有入口填??????");
-		mCurrAnswer.setIp(com.zj.app.utils.CommonUtil.getLocalIPAddress(this));
+//		mCurrAnswer.setIp(com.zj.app.utils.CommonUtil.getLocalIPAddress(this));
 		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
 				.getCurrMember();
 		mCurrAnswer.setUid(member);
