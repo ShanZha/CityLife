@@ -36,6 +36,9 @@
     <string name="subject_sort_pic_count">图片数量</string>
     <string name="subject_sort_composite_review">综合点评</string>
     <string name="subject_sort_cost_per">人均消费</string>
+    <string name="subject_collection_start">正在收藏</string>
+    <string name="subject_collection_success">收藏成功</string>
+    <string name="subject_collection_fail">收藏失败</string>
     <string name="review_detail_composite">综合</string>
     <string name="review_good">一般</string>
     <string name="review_best">好评</string>
@@ -61,6 +64,8 @@
     <string name="ask_detail">问题详情</string>
     <string name="ask_answer">回答问题</string>
     <string name="ask_answer_success">回答成功</string>
+    <string name="ask_update_title">结束问题</string>
+    <string name="ask_update_best_review_hint">您对最佳点评有什么说的呢</string>
     <string name="party_state_all">全部活动</string>
     <string name="party_state_signning">报名中</string>
     <string name="party_state_ongoing">进行中</string>

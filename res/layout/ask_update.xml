@@ -1,0 +1,94 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical" >
+
+    <!-- 顶部标题 -->
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/titlebar_back" />
+
+    <!-- 问题标题 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10" >
+
+        <TextView
+            style="@style/list_first_level_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/subject_detail_impression"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="@string/ask_title_tip" />
+
+        <EditText
+            android:id="@+id/ask_update_et_title"
+            style="@style/et_add_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- 内容 -->
+
+    <EditText
+        android:id="@+id/ask_update_et_content"
+        style="@style/et_multi_lint_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10" />
+
+    <!-- 最佳答案 -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10" >
+
+        <TextView
+            style="@style/list_second_level_black_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ask_best_answer" />
+
+        <Spinner
+            android:id="@+id/ask_update_spinner_best_answer"
+            style="@style/spinner_add_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_5"
+            android:layout_weight="1" >
+        </Spinner>
+    </LinearLayout>
+
+    <!-- 对最佳答案的评论 -->
+
+    <EditText
+        android:id="@+id/ask_update_et_best_answer_review"
+        style="@style/et_multi_lint_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10" 
+        android:hint="@string/ask_update_best_review_hint"/>
+
+    <!-- 提交 -->
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_20"
+        android:onClick="onClickAdd"
+        android:text="@string/ask_commit" />
+
+</LinearLayout>

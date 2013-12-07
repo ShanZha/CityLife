@@ -13,13 +13,18 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerFavorites;
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerReview;
 import com.andrnes.modoer.ModoerReviewOpt;
 import com.andrnes.modoer.ModoerSubject;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.BaseActivity;
+import com.zj.app.constant.Config;
+import com.zj.app.utils.AppUtils;
 import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.observer.model.Param;
 
@@ -31,6 +36,7 @@ import com.zj.support.observer.model.Param;
  */
 public class SubjectDetailActivity extends BaseActivity {
 
+	private static final int REQ_LOGIN_CODE = 1;
 	private static final String SORT_1 = "sort1";
 	private static final String SORT_2 = "sort2";
 	private static final String SORT_3 = "sort3";
@@ -206,12 +212,34 @@ public class SubjectDetailActivity extends BaseActivity {
 		mProBarReviewOpt.setVisibility(View.GONE);
 	}
 
+	/**
+	 *  ’≤ÿ
+	 */
+	private void onCollection() {
+		this.showToast(this.getString(R.string.subject_collection_start));
+		ModoerFavorites favorite = new ModoerFavorites();
+		favorite.setAddtime(CommonUtil.getCurrTimeByPHP());
+		favorite.setSid(mSubject);
+		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
+				.getCurrMember();
+		favorite.setUid(member);
+		favorite.setUsername(member.getUsername());
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_SUBJECT_CONNLECTION);
+		this.getStoreOperation().saveOrUpdate(favorite, param);
+	}
+
 	public void onClickBack(View view) {// ∑µªÿ
 		this.finish();
 	}
 
 	public void onClickRight(View view) {//  ’≤ÿ
-
+		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
+			this.startActivityForResult(new Intent(this, LoginActivity.class),
+					REQ_LOGIN_CODE);
+			return;
+		}
+		this.onCollection();
 	}
 
 	public void onClickThumbnail(View view) {// Àı¬‘Õº
@@ -252,6 +280,22 @@ public class SubjectDetailActivity extends BaseActivity {
 
 	public void onClickError(View view) {// ±®¥Ì
 
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (RESULT_OK == resultCode && REQ_LOGIN_CODE == requestCode) {
+			this.onCollection();
+		}
+	}
+
+	@Override
+	public void onSuccessSaveOrUpdate(Param out) {
+		// TODO Auto-generated method stub
+		super.onSuccessSaveOrUpdate(out);
+		this.showToast(this.getString(R.string.subject_collection_success));
 	}
 
 	@Override
@@ -309,5 +353,9 @@ public class SubjectDetailActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onFails(out);
 		// this.hideReviewLoading();
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_SUBJECT_CONNLECTION == operator) {
+			this.showToast(this.getString(R.string.subject_collection_fail));
+		}
 	}
 }

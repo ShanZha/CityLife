@@ -318,7 +318,7 @@ public class SubjectListActivity extends BaseListActivity implements
 	}
 
 	public void onClickRight(View view) {// ÃÌº”
-
+		this.startActivity(new Intent(this, SubjectAddActivity.class));
 	}
 
 	public void onClickFloatingFirst(View view) {// æ‡¿Î

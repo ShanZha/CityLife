@@ -1,10 +1,11 @@
 package com.fourkkm.citylife.control.activity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
@@ -16,9 +17,14 @@ import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
+import com.weibo.sdk.android.Weibo;
+import com.weibo.sdk.android.WeiboAuthListener;
+import com.weibo.sdk.android.WeiboDialogError;
+import com.weibo.sdk.android.WeiboException;
 import com.zj.app.BaseActivity;
 import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.utils.AppUtils;
+import com.zj.app.utils.DateFormatMethod;
 import com.zj.app.utils.EncryptionUtil;
 import com.zj.support.observer.model.Param;
 
@@ -36,6 +42,8 @@ public class LoginActivity extends BaseActivity {
 	private CheckBox mCbPswd, mCbAutoLogin;
 
 	private ProgressDialogProxy mDialogProxy;
+
+	private Weibo mSinaWeibo;
 
 	@Override
 	protected void prepareViews() {
@@ -77,6 +85,10 @@ public class LoginActivity extends BaseActivity {
 							GlobalConfig.SharePre.KEY_PSWD);
 			mEtPswd.setText(pswd);
 		}
+
+		mSinaWeibo = Weibo.getInstance(GlobalConfig.SINA_WEIBO_APP_KEY,
+				GlobalConfig.SINA_WEIBO_REDIRECT_URL,
+				GlobalConfig.SINA_WEIBO_SCOPE);
 	}
 
 	/**
@@ -130,7 +142,7 @@ public class LoginActivity extends BaseActivity {
 	}
 
 	public void onClickSinaWeibo(View view) {// ÐÂÀËÎ¢²©µÇÂ¼
-
+		mSinaWeibo.anthorize(this, new SinaAuthListener());
 	}
 
 	public void onClickTaoBao(View view) {// ÌÔ±¦µÇÂ¼
@@ -192,4 +204,42 @@ public class LoginActivity extends BaseActivity {
 		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.login_fail));
 	}
+
+	/**
+	 * ÐÂÀË¼øÈ¨¼àÌý
+	 */
+	private class SinaAuthListener implements WeiboAuthListener {
+
+		@Override
+		public void onComplete(Bundle values) {// sdk×Ô¶¯±£´æµ½SharePrefrence
+			String uid = values.getString("uid");
+			String accessToken = values.getString("access_token");
+			String expiresIn = values.getString("expires_in");
+			System.out.println("onComplete() accessToken= " + accessToken
+					+ " expiresIn = " + expiresIn + " uid = " + uid);
+			long expires = Long.valueOf(expiresIn);
+			System.out.println(" expireTime = "
+					+ DateFormatMethod.formatDate(new Date(expires)));
+		}
+
+		@Override
+		public void onWeiboException(WeiboException e) {
+			if (e != null) {
+				System.out.println("shan-->onWeiboException");
+				// Toast.makeText(DemoLoginButton.this, e.getMessage(),
+				// Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		@Override
+		public void onError(WeiboDialogError e) {
+			System.out.println(" onError " + e.getMessage());
+		}
+
+		@Override
+		public void onCancel() {
+			System.out.println(" onCancel");
+		}
+	}
+
 }

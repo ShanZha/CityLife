@@ -46,6 +46,10 @@ public class CommonUtil {
 		return DateFormatMethod.formatDate(new Date(javaTime), format);
 	}
 
+	public static int getCurrTimeByPHP() {
+		return (int) (System.currentTimeMillis() / 1000);
+	}
+
 	public static boolean isEmail(String email) {
 		String format = "^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
 		if (email.matches(format)) {

@@ -14,12 +14,10 @@ public interface GlobalConfig {
 	public static final int CATEGORY_RECREATION = 44;// 休闲娱乐
 	public static final int CATEGORY_TRAVEL = 61;// 汽车出行
 
-	public static final String APP_KEY_SINA_WEIBO = "3135167460";
-	public static final String APP_SECRET_SINA_WEIBO = "671e00bc3b8ff89efaa74e57733b21a7";
-	// 替换为开发者REDIRECT_URL
-	public static final String REDIRECT_URL_SINA = "http://www.baidu.com";
-	// 新支持scope：支持传入多个scope权限，用逗号分隔
-	public static final String SCOPE_SINA = "email,direct_messages_read,direct_messages_write,"
+	public static final String SINA_WEIBO_APP_KEY = "3135167460";
+	public static final String SINA_WEIBO_APP_SECRET = "671e00bc3b8ff89efaa74e57733b21a7";
+	public static final String SINA_WEIBO_REDIRECT_URL = "http://www.baidu.com";
+	public static final String SINA_WEIBO_SCOPE = "email,direct_messages_read,direct_messages_write,"
 			+ "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
 			+ "follow_app_official_microblog," + "invitation_write";
 
@@ -60,6 +58,7 @@ public interface GlobalConfig {
 		public static final int OPERATION_FINDALL_CHINA_AREA = 10;
 		public static final int OPERATION_FINDALL_SUBJECT_AREA = 11;
 		public static final int OPERATION_SAVE_ASK = 12;
+		public static final int OPERATION_SUBJECT_CONNLECTION = 13;
 	}
 
 	public static class SharePre {

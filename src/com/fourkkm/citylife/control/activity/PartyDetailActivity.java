@@ -78,7 +78,7 @@ public class PartyDetailActivity extends BaseActivity {
 				.findViewById(R.id.progress_bar_small_probar);
 
 		mTvTitle.setText(this.getString(R.string.party_detail));
-		mBtnRight.setText(this.getStrBySex(R.string.party_sign_up_me));
+		mBtnRight.setText(this.getString(R.string.party_sign_up_me));
 	}
 
 	@Override
