@@ -21,6 +21,20 @@ public interface GlobalConfig {
 			+ "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
 			+ "follow_app_official_microblog," + "invitation_write";
 
+	public static final String TENCENT_QQ_APP_ID = "1101125359";
+	// public static final String TENCENT_QQ_APP_KEY = "3ZchWagCse1ppGRe";
+	public static final String TENCENT_QQ_SCOPE = "all";
+	// public static final String TENCENT_QQ_SCOPE =
+	// "get_user_info;upload_pic;get_info;add_t;add_pic_t;add_one_blog";
+
+	public static final String TENCENT_WEIBO_APP_KEY = "801455412";
+	public static final String TENCENT_WEIBO_APP_SECRET = "0e84a41d4f77ba9d14d33e461f9bee17";
+	public static final String TENCENT_WEIBO_REDIRECT_URL = "http://www.baidu.com";
+
+	public static final String TAOBAO_APP_KEY = "21701340";
+	public static final String TAOBAO_APP_SECRET = "eea04b5e585b877f770213a80508fc47";
+	public static final String TAOBAO_REDIRECT_URL = "com.fourkkm.citylife://authresult";
+
 	public static class FloatingType {
 		public static final int TYPE_SUBJECT_DISTANCE = 0;
 		public static final int TYPE_SUBJECT_CATEGORY = 1;

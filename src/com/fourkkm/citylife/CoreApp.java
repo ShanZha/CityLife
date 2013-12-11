@@ -2,6 +2,8 @@ package com.fourkkm.citylife;
 
 import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerMembers;
+import com.fourkkm.citylife.constant.GlobalConfig;
+import com.taobao.top.android.TopAndroidClient;
 import com.zj.app.BaseApp;
 
 public class CoreApp extends BaseApp {
@@ -14,6 +16,10 @@ public class CoreApp extends BaseApp {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+
+		TopAndroidClient.registerAndroidClient(this,
+				GlobalConfig.TAOBAO_APP_KEY, GlobalConfig.TAOBAO_APP_SECRET,
+				GlobalConfig.TAOBAO_REDIRECT_URL);
 	}
 
 	public void setCurrMember(ModoerMembers member) {

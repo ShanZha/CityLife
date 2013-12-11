@@ -23,6 +23,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name="com.fourkkm.citylife.CoreApp"
@@ -157,10 +158,39 @@
         <activity
             android:name="com.fourkkm.citylife.control.activity.LoginActivity"
             android:screenOrientation="portrait" >
+
+            <!-- 淘宝 -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- 注册应用中回调URL的前半部分 -->
+                <data android:scheme="com.fourkkm.citylife" />
+            </intent-filter>
         </activity>
         <!-- 注册界面 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.RegisterActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 腾讯qq鉴权界面 -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- tencent加QQ_APP_ID -->
+                <data android:scheme="tencent1101125359" />
+            </intent-filter>
+        </activity>
+        <!-- 腾讯微博鉴权界面 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.TencentAuthActivity"
             android:screenOrientation="portrait" >
         </activity>
         <!-- 新浪微博分享界面 -->
