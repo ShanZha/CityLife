@@ -24,7 +24,6 @@
     <string name="impression">店铺印象</string>
     <string name="review">用户点评</string>
     <string name="review_detail">评论详情</string>
-    
     <string name="subject_distance_500">500</string>
     <string name="subject_distance_1000">1000</string>
     <string name="subject_distance_2000">2000</string>
@@ -114,9 +113,9 @@
     <string name="more_help">新手帮助</string>
     <string name="more_about">关于我们</string>
     <string name="more_exit">退出应用</string>
-    <string name="subject_name">店铺名称</string>
-    <string name="subject_addr">店铺地址</string>
-    <string name="subject_tel">店铺电话</string>
+    <string name="subject_name">店铺名称：</string>
+    <string name="subject_addr">店铺地址：</string>
+    <string name="subject_tel">店铺电话：</string>
     <string name="subject_impression_hint">请填写您对店铺的印象</string>
     <string name="subject_add">添加</string>
     <string name="subject_detail">店铺详情</string>
@@ -174,11 +173,29 @@
     <string name="user_update_old_pswd_error">原始密码错误</string>
     <string name="add_success">提交成功</string>
     <string name="add_fail">提交失败</string>
+    <string name="share">分享</string>
+    <string name="share_success">分享成功</string>
+    <string name="share_fail">分享失败</string>
+    <string name="share_cancel">分享取消</string>
+    <string name="share_et_limit">还可输入140个字</string>
+    <string name="share_sina_uninstall">您还没安装新浪微博客户端，暂不支持分享</string>
+    <string name="share_sina_version_mismatch">您的新浪微博客户端版本太旧，请先升级</string>
+    <string name="share_sms_unsupport">您没安装短信客户端，暂不支持短信分享</string>
+    <string name="share_email_unsupport">您没安装邮件客户端，暂不支持邮件分享</string>
+    <string name="share_email_subject">推荐个商铺给您</string>
 
     <string-array name="sex_array">
         <item>男女不限</item>
         <item>仅男性</item>
         <item>仅女性</item>
+    </string-array>
+    <string-array name="share_array">
+        <item>分享到新浪微博</item>
+        <item>分享到腾讯微博</item>
+        <item>分享到QQ空间</item>
+        <item>分享给QQ好友或群组</item>
+        <item>发送短信</item>
+        <item>发送邮件</item>
     </string-array>
 
 </resources>

@@ -57,6 +57,13 @@
         <activity
             android:name="com.fourkkm.citylife.control.activity.SubjectDetailActivity"
             android:screenOrientation="portrait" >
+
+            <!-- 新浪微博分享必须的 -->
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <!-- 商铺地址地图展示 -->
         <activity
@@ -193,15 +200,10 @@
             android:name="com.fourkkm.citylife.control.activity.TencentAuthActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <!-- 新浪微博分享界面 -->
+        <!-- 腾讯微博/QQ分享界面 -->
         <activity
-            android:name="com.fourkkm.citylife.control.activity.SinaWeiboShareActivity"
+            android:name="com.fourkkm.citylife.control.activity.ShareActivity"
             android:screenOrientation="portrait" >
-            <intent-filter>
-                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
     </application>
 
