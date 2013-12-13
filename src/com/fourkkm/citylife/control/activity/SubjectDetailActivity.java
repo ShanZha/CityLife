@@ -1,10 +1,14 @@
 package com.fourkkm.citylife.control.activity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,10 +24,16 @@ import com.andrnes.modoer.ModoerReviewOpt;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
+import com.fourkkm.citylife.SinaWeiboShareProxy;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
+import com.fourkkm.citylife.widget.FloatingTranslucentProxy;
+import com.fourkkm.citylife.widget.IFloatingItemClick;
+import com.sina.weibo.sdk.WeiboSDK;
+import com.sina.weibo.sdk.api.BaseResponse;
+import com.sina.weibo.sdk.api.IWeiboAPI;
+import com.sina.weibo.sdk.api.IWeiboHandler;
 import com.zj.app.BaseActivity;
-import com.zj.app.constant.Config;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.observer.model.Param;
@@ -34,13 +44,9 @@ import com.zj.support.observer.model.Param;
  * @author ShanZha
  * 
  */
-public class SubjectDetailActivity extends BaseActivity {
+public class SubjectDetailActivity extends BaseActivity implements
+		IFloatingItemClick, IWeiboHandler.Response {
 
-	private static final int REQ_LOGIN_CODE = 1;
-	private static final String SORT_1 = "sort1";
-	private static final String SORT_2 = "sort2";
-	private static final String SORT_3 = "sort3";
-	private static final String SORT_4 = "sort4";
 	private ModoerSubject mSubject;
 	private RelativeLayout mRlAddress, mRlTel;
 	private TextView mTvTitle, mTvShopName, mTvThumbnailCount, mTvAveragePer,
@@ -60,6 +66,13 @@ public class SubjectDetailActivity extends BaseActivity {
 	private ProgressBar mProBarReviewOpt;
 
 	private ImageButton mBtn;
+
+	/** 分享选择代理 **/
+	private FloatingTranslucentProxy mFloatingShareProxy;
+	private List<String> mShareList;
+
+	// private IWeiboAPI mSinaWeiboApi;
+	private SinaWeiboShareProxy mSinaShareProxy;
 
 	@Override
 	protected void prepareViews() {
@@ -127,6 +140,7 @@ public class SubjectDetailActivity extends BaseActivity {
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		this.prepareShare();
 		mTvTitle.setText(this.getString(R.string.subject_detail));
 		mBtn.setBackgroundResource(R.drawable.subject_detail_collection_selector);
 
@@ -192,6 +206,38 @@ public class SubjectDetailActivity extends BaseActivity {
 				new Param(this.hashCode(), GlobalConfig.URL_CONN));
 	}
 
+	private void prepareShare() {
+		mShareList = new ArrayList<String>();
+		String[] arrays = this.getResources().getStringArray(
+				R.array.share_array);
+		mShareList.addAll(Arrays.asList(arrays));
+		mFloatingShareProxy = new FloatingTranslucentProxy(this, 0);
+		mFloatingShareProxy.setFloatingItemClickListener(this);
+		mFloatingShareProxy.setDatas(mShareList);
+
+		IWeiboAPI mSinaWeiboApi = WeiboSDK.createWeiboAPI(this,
+				GlobalConfig.SINA_WEIBO_APP_KEY);
+		mSinaShareProxy = new SinaWeiboShareProxy(this, mSinaWeiboApi);
+	}
+
+	private String buildShareContent() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(mSubject.getName());
+		sb.append("\n");
+		String address = mSubject.getAddress();
+		if (!TextUtils.isEmpty(address)) {
+			sb.append(this.getString(R.string.subject_addr));
+			sb.append(address);
+			sb.append("\n");
+		}
+		String tel = mSubject.getTel();
+		if (!TextUtils.isEmpty(tel)) {
+			sb.append(this.getString(R.string.subject_tel));
+			sb.append(tel);
+		}
+		return sb.toString();
+	}
+
 	private void showReviewLoading() {
 		mRlReview.setVisibility(View.GONE);
 		mProBarReview.setVisibility(View.VISIBLE);
@@ -236,7 +282,7 @@ public class SubjectDetailActivity extends BaseActivity {
 	public void onClickRight(View view) {// 收藏
 		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
 			this.startActivityForResult(new Intent(this, LoginActivity.class),
-					REQ_LOGIN_CODE);
+					REQ_LOGIN_CODE_COLLECTION);
 			return;
 		}
 		this.onCollection();
@@ -267,7 +313,9 @@ public class SubjectDetailActivity extends BaseActivity {
 	}
 
 	public void onClickShareTo(View view) {// 分享到
-
+		if (null != mFloatingShareProxy) {
+			mFloatingShareProxy.showLocation(view, Gravity.CENTER, 0, 0);
+		}
 	}
 
 	public void onClickReview(View view) {// 评价
@@ -283,10 +331,19 @@ public class SubjectDetailActivity extends BaseActivity {
 	}
 
 	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		mSinaShareProxy.setResponseListener(intent, this);
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		if (RESULT_OK == resultCode && REQ_LOGIN_CODE == requestCode) {
+		if (RESULT_OK != resultCode) {
+			return;
+		}
+		if (REQ_LOGIN_CODE_COLLECTION == requestCode) {
 			this.onCollection();
 		}
 	}
@@ -358,4 +415,107 @@ public class SubjectDetailActivity extends BaseActivity {
 			this.showToast(this.getString(R.string.subject_collection_fail));
 		}
 	}
+
+	@Override
+	public void onFloatingItemClick(int pos, String key, int type) {
+		// TODO Auto-generated method stub
+		this.showToast("pos = " + pos + " name = " + key);
+		switch (pos) {
+		case POS_SINA_WEIBO:
+			if (!mSinaShareProxy.isInstall()) {
+				this.showToast(this.getString(R.string.share_sina_uninstall));
+				return;
+			}
+			if (!mSinaShareProxy.isAppSupport()) {
+				this.showToast(this
+						.getString(R.string.share_sina_version_mismatch));
+				return;
+			}
+			if (((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
+				if (mSinaShareProxy.isSessionValid()) {
+					mSinaShareProxy.share(this.buildShareContent());
+				} else {
+
+				}
+			} else {
+				this.startActivityForResult(new Intent(this,
+						LoginActivity.class), REQ_LOGIN_CODE_SINA_WEIBO);
+			}
+			break;
+		case POS_TENCENT_WEIBO:
+			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO);
+			break;
+		case POS_TENCENT_QZONE:
+			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_QZONE);
+			break;
+		case POS_TENCENT_QQ:
+			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_QQ);
+			break;
+		case POS_SMS:
+			try {
+				Uri smsToUri = Uri.parse("smsto:");
+				Intent sendIntent = new Intent(Intent.ACTION_VIEW, smsToUri);
+				sendIntent.putExtra("sms_body", this.buildShareContent());
+				sendIntent.setType("vnd.android-dir/mms-sms");
+				this.startActivityForResult(sendIntent, REQ_LOGIN_CODE_SMS);
+			} catch (Exception e) {
+				this.showToast(this.getString(R.string.share_sms_unsupport));
+			}
+			break;
+		case POS_EMAIL:
+			try {
+				Intent data = new Intent(Intent.ACTION_SENDTO);
+				data.setData(Uri.parse("mailto:"));
+				data.putExtra(Intent.EXTRA_SUBJECT,
+						this.getString(R.string.share_email_subject));
+				data.putExtra(Intent.EXTRA_TEXT, this.buildShareContent());
+				this.startActivityForResult(data, REQ_LOGIN_CODE_EMAIL);
+			} catch (Exception e) {
+				this.showToast(this.getString(R.string.share_email_unsupport));
+			}
+			break;
+		}
+	}
+
+	@Override
+	public void onResponse(BaseResponse baseResp) {// 新浪微博分享回调
+		// TODO Auto-generated method stub
+		switch (baseResp.errCode) {
+		case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_OK:
+			this.showToast(this.getString(R.string.share_success));
+			break;
+		case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_CANCEL:
+			this.showToast(this.getString(R.string.share_cancel));
+			break;
+		case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_FAIL:
+			this.showToast(this.getString(R.string.share_fail)
+					+ baseResp.errMsg);
+			break;
+		}
+	}
+
+	private void onShareTencent(int index) {
+		Intent intent = new Intent(this, ShareActivity.class);
+		intent.putExtra("shareIndex", index);
+		intent.putExtra("shareContent", this.buildShareContent());
+		this.startActivity(intent);
+	}
+
+	/** 收藏 **/
+	private static final int REQ_LOGIN_CODE_COLLECTION = 1;
+	/** 新浪微博 **/
+	private static final int REQ_LOGIN_CODE_SINA_WEIBO = 2;
+	private static final int REQ_LOGIN_CODE_SMS = 3;
+	private static final int REQ_LOGIN_CODE_EMAIL = 4;
+	private static final int POS_SINA_WEIBO = 0;
+	private static final int POS_TENCENT_WEIBO = 1;
+	private static final int POS_TENCENT_QZONE = 2;
+	private static final int POS_TENCENT_QQ = 3;
+	private static final int POS_SMS = 4;
+	private static final int POS_EMAIL = 5;
+	private static final String SORT_1 = "sort1";
+	private static final String SORT_2 = "sort2";
+	private static final String SORT_3 = "sort3";
+	private static final String SORT_4 = "sort4";
+
 }

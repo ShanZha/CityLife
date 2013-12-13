@@ -30,10 +30,12 @@ import com.taobao.top.android.auth.AuthorizeListener;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;
+import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.Weibo;
 import com.weibo.sdk.android.WeiboAuthListener;
 import com.weibo.sdk.android.WeiboDialogError;
 import com.weibo.sdk.android.WeiboException;
+import com.weibo.sdk.android.util.AccessTokenKeeper;
 import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.http.StoreOperation;
 import com.zj.app.utils.AppUtils;
@@ -222,6 +224,10 @@ public class LoginActivity extends AuthActivity implements ICallback {
 			System.out.println(" expireTime = "
 					+ DateFormatMethod.formatDate(new Date(expires)));
 			showToast("新浪微博登录成功");
+			// 保存AccessToken
+			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,
+					expiresIn);
+			AccessTokenKeeper.keepAccessToken(LoginActivity.this, token);
 		}
 
 		@Override

@@ -81,4 +81,10 @@ public interface GlobalConfig {
 		public static final String KEY_IS_REMBER_PSWD = "isRemberPswd";
 		public static final String KEY_IS_AUTO_LOGIN = "isAutoLogin";
 	}
+
+	public static class IntentKey {
+		public static final int INDEX_TENCENT_QZONE = 0;
+		public static final int INDEX_TENCENT_WEIBO = 1;
+		public static final int INDEX_TENCENT_QQ = 2;
+	}
 }
