@@ -36,7 +36,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/hello_world" />
 
-            <!-- 右边-收藏 -->
+            <!-- 右边-我要报名 -->
 
             <Button
                 android:id="@+id/titlebar_back_right_btn_operator"
@@ -45,7 +45,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/margin_5"
-                android:onClick="onClickCollection" />
+                android:onClick="onClickRight" />
         </RelativeLayout>
 
         <!-- 主题 -->
