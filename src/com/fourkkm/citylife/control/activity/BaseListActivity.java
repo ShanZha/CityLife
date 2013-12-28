@@ -10,10 +10,9 @@ import android.widget.BaseAdapter;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.view.PullUpDownListView.IPullDownListViewListener;
-import com.zj.app.BaseActivity;
-import com.zj.support.observer.model.Param;
+import com.zj.app.BaseFragmentActivity;
 
-public abstract class BaseListActivity extends BaseActivity implements
+public abstract class BaseListActivity extends BaseFragmentActivity implements
 		OnItemClickListener, IPullDownListViewListener {
 
 	protected BaseAdapter mAdapter;
@@ -75,6 +74,7 @@ public abstract class BaseListActivity extends BaseActivity implements
 			mListView.stopLoadMore();
 			if (!mHaveMore) {
 				this.setEnbaleLoad(false);
+				mListView.setFooterDividersEnabled(true);
 			}
 		}
 	}

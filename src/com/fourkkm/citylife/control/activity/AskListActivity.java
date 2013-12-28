@@ -10,12 +10,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+import android.widget.PopupWindow.OnDismissListener;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerAskAnswer;
 import com.andrnes.modoer.ModoerAskCategory;
 import com.andrnes.modoer.ModoerAsks;
+import com.andrnes.modoer.ModoerMembers;
 import com.fourkkm.citylife.AskCategoryManager;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerAskItemView;
@@ -23,6 +27,7 @@ import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.FloatingTwoMenuProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
+import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.adapter.ItemSingleAdapter;
 
@@ -33,7 +38,7 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
  * 
  */
 public class AskListActivity extends BaseListActivity implements
-		IFloatingItemClick {
+		IFloatingItemClick, OnDismissListener {
 
 	private static final String TAG = "AskListActivity";
 	// 常量定义见实体类
@@ -42,8 +47,8 @@ public class AskListActivity extends BaseListActivity implements
 	private static final int ASK_STATE_REWARD = 2;
 	private static final int ASK_STATE_ALL = 3;
 
-	private LinearLayout mLlTopCheck;
-	private ProgressBar mProBarTopCheck;
+	private LinearLayout mLlTopCheck, mLlTopCheckLoading;
+	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond;
 	private TextView mTvTitle, mTvCategory, mTvState;
 	private List<ModoerAsks> mAskList;
 	/** 状态名字列表 **/
@@ -57,6 +62,7 @@ public class AskListActivity extends BaseListActivity implements
 	private FloatingOneMenuProxy mFloatingState;
 
 	private AskCategoryManager mAskCategoryMgr;
+	private int mOperator = -1;
 
 	@Override
 	protected void prepareViews() {
@@ -68,15 +74,18 @@ public class AskListActivity extends BaseListActivity implements
 				.findViewById(R.id.ask_list_listview);
 		mLlTopCheck = (LinearLayout) this
 				.findViewById(R.id.floating_layout_ll_all);
-		mProBarTopCheck = (ProgressBar) this
-				.findViewById(R.id.progress_bar_small_probar);
+		mLlTopCheckLoading = (LinearLayout) this
+				.findViewById(R.id.ask_list_ll_top_loading);
 		mTvCategory = (TextView) this
 				.findViewById(R.id.floating_layout_tv_first);
 		mTvState = (TextView) this.findViewById(R.id.floating_layout_tv_second);
-		this.findViewById(R.id.floating_layout_ll_third).setVisibility(
+		mRlFloatingFirst = (RelativeLayout) this
+				.findViewById(R.id.floating_layout_rl_first);
+		mRlFloatingSecond = (RelativeLayout) this
+				.findViewById(R.id.floating_layout_rl_second);
+		this.findViewById(R.id.floating_layout_rl_third).setVisibility(
 				View.GONE);
 
-		mTvTitle.setText(this.getString(R.string.ask));
 		super.prepareViews();
 	}
 
@@ -84,24 +93,46 @@ public class AskListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
-		mAskCategoryMgr = new AskCategoryManager();
+
 		mAskList = new ArrayList<ModoerAsks>();
-		mAskStateList = new ArrayList<String>();
 		mAdapter = new ItemSingleAdapter<ModoerAskItemView, ModoerAsks>(
 				mAskList, this);
+		Intent intent = this.getIntent();
+		mOperator = intent.getIntExtra("operator", -1);
+		if (GlobalConfig.IntentKey.ASK_ME == mOperator) {
+			mLlTopCheck.setVisibility(View.GONE);
+			mLlTopCheckLoading.setVisibility(View.GONE);
+			mTvTitle.setText(this.getString(R.string.user_my_question));
+			mListView.setAdapter(mAdapter);
+			this.onFirstLoadSetting();
+			this.onLoadMore();
+		} else if (GlobalConfig.IntentKey.ASK_ANSWER_ME == mOperator) {
+			mLlTopCheck.setVisibility(View.GONE);
+			mLlTopCheckLoading.setVisibility(View.GONE);
+			mTvTitle.setText(this.getString(R.string.user_my_answer));
+			mListView.setAdapter(mAdapter);
+			this.onFirstLoadSetting();
+			this.onLoadMore();
+		} else {
+			mTvTitle.setText(this.getString(R.string.ask));
+			mAskCategoryMgr = new AskCategoryManager();
+			mAskStateList = new ArrayList<String>();
 
-		mFloatingCategory = new FloatingTwoMenuProxy(this,
-				GlobalConfig.FloatingType.TYPE_ASK_CATEGORY);
-		mFloatingState = new FloatingOneMenuProxy(this,
-				GlobalConfig.FloatingType.TYPE_ASK_STATE);
-		mFloatingCategory.setFloatingItemClickListener(this);
-		mFloatingState.setFloatingItemClickListener(this);
+			mFloatingCategory = new FloatingTwoMenuProxy(this,
+					GlobalConfig.FloatingType.TYPE_CATEGORY);
+			mFloatingState = new FloatingOneMenuProxy(this,
+					GlobalConfig.FloatingType.TYPE_ASK_STATE);
+			mFloatingCategory.setFloatingItemClickListener(this);
+			mFloatingCategory.setFloatingDismissListener(this);
+			mFloatingState.setFloatingItemClickListener(this);
+			mFloatingState.setFloatingDismissListener(this);
 
-		this.prepareAskStateNames();
-		mFloatingState.setDatas(mAskStateList);
+			this.prepareAskStateNames();
+			mFloatingState.setDatas(mAskStateList);
+			this.showLoadingCategory();
+			this.fetchAskCategory();
+		}
 
-		this.showLoadingCategory();
-		this.fetchAskCategory();
 	}
 
 	private void prepareAskStateNames() {
@@ -131,13 +162,30 @@ public class AskListActivity extends BaseListActivity implements
 				new ModoerAsks(), param);
 	}
 
+	private void fetchAskAnswer() {
+		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
+				.getCurrMember();
+		if (null == member) {
+			return;
+		}
+		String selectCode = "from com.andrnes.modoer.ModoerAskAnswer maa where maa.uid.id = "
+				+ member.getId();
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("max", GlobalConfig.MAX);
+		paramsMap.put("offset", GlobalConfig.MAX * mPage);
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_ASK_ANSWER);
+		this.getStoreOperation().findAll(selectCode, paramsMap, true,
+				new ModoerAskAnswer(), param);
+	}
+
 	private void showLoadingCategory() {
-		mProBarTopCheck.setVisibility(View.VISIBLE);
+		mLlTopCheckLoading.setVisibility(View.VISIBLE);
 		mLlTopCheck.setVisibility(View.GONE);
 	}
 
 	private void hideLoadingCategory() {
-		mProBarTopCheck.setVisibility(View.GONE);
+		mLlTopCheckLoading.setVisibility(View.GONE);
 		mLlTopCheck.setVisibility(View.VISIBLE);
 	}
 
@@ -149,6 +197,14 @@ public class AskListActivity extends BaseListActivity implements
 	private String buildSelectCode() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("from com.andrnes.modoer.ModoerAsks");
+		if (GlobalConfig.IntentKey.REVIEW_ME == mOperator) {
+			ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
+					.getCurrMember();
+			if (null != member) {
+				sb.append(" ma where uid.id = " + member.getId());
+			}
+			return sb.toString();
+		}
 		if (null == mCurrAskCategory) {// 选择“所有类别”时
 			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
 			if (ASK_STATE_REWARD == mCurrAskState) {
@@ -237,7 +293,11 @@ public class AskListActivity extends BaseListActivity implements
 	public void onLoadMore() {
 		// TODO Auto-generated method stub
 		super.onLoadMore();
-		this.fecthAsks();
+		if (GlobalConfig.IntentKey.ASK_ANSWER_ME == mOperator) {
+			this.fetchAskAnswer();
+		} else {
+			this.fecthAsks();
+		}
 	}
 
 	public void onClickBack(View view) {
@@ -253,6 +313,14 @@ public class AskListActivity extends BaseListActivity implements
 			return;
 		}
 		mFloatingCategory.showAsDropDown(view);
+		if (null == mCurrAskCategory) {
+			mFloatingCategory
+					.resetDataByKey(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
+		} else {
+			mFloatingCategory.resetDataByKey(mCurrAskCategory.getName());
+		}
+		mRlFloatingFirst
+				.setBackgroundResource(R.drawable.floating_item_selected_bg);
 	}
 
 	public void onClickFloatingSecond(View view) {// 状态选择
@@ -260,6 +328,9 @@ public class AskListActivity extends BaseListActivity implements
 			return;
 		}
 		mFloatingState.showAsDropDown(view);
+		mFloatingState.resetSelectItemBg(mTvState.getText().toString().trim());
+		mRlFloatingSecond
+				.setBackgroundResource(R.drawable.floating_item_selected_bg);
 	}
 
 	@Override
@@ -298,6 +369,17 @@ public class AskListActivity extends BaseListActivity implements
 			this.pretreatmentResults(results);
 			this.notifyLoadOver();
 			break;
+		case GlobalConfig.Operator.OPERATION_FINDALL_ASK_ANSWER:
+			for (int i = 0; i < results.size(); i++) {
+				ModoerAskAnswer answer = (ModoerAskAnswer) results.get(i);
+				ModoerAsks ask = answer.getAskid();
+				if (null != ask && ask.getId() != 0) {
+					mAskList.add(ask);
+				}
+			}
+			this.pretreatmentResults(results);
+			this.notifyLoadOver();
+			break;
 		}
 
 	}
@@ -307,7 +389,8 @@ public class AskListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		super.onFails(out);
 		int operator = out.getOperator();
-		if (GlobalConfig.Operator.OPERATION_FINDALL_ASK == operator) {
+		if (GlobalConfig.Operator.OPERATION_FINDALL_ASK == operator
+				|| GlobalConfig.Operator.OPERATION_FINDALL_ASK_ANSWER == operator) {
 			this.notifyLoadOver();
 		} else {
 			this.hideLoadingCategory();
@@ -329,7 +412,7 @@ public class AskListActivity extends BaseListActivity implements
 	@Override
 	public void onFloatingItemClick(int pos, String key, int type) {
 		// TODO Auto-generated method stub
-		if (GlobalConfig.FloatingType.TYPE_ASK_CATEGORY == type) {// 问题类别改变
+		if (GlobalConfig.FloatingType.TYPE_CATEGORY == type) {// 问题类别改变
 			if (this.isCurrCategory(key)) {
 				return;
 			}
@@ -354,5 +437,12 @@ public class AskListActivity extends BaseListActivity implements
 		this.onFirstLoadSetting();
 		// 重新加载数据
 		this.onLoadMore();
+	}
+
+	@Override
+	public void onDismiss() {
+		// TODO Auto-generated method stub
+		mRlFloatingFirst.setBackgroundResource(0);
+		mRlFloatingSecond.setBackgroundResource(0);
 	}
 }

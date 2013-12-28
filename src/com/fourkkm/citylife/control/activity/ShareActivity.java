@@ -76,7 +76,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		mContent = intent.getStringExtra("shareContent");
 		mEtContent.setText(mContent);
 
-		mTencent = Tencent.createInstance(GlobalConfig.TENCENT_QQ_APP_ID,
+		mTencent = Tencent.createInstance(GlobalConfig.Third.TENCENT_QQ_APP_ID,
 				this.getApplicationContext());
 
 	}

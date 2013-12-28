@@ -1,7 +1,5 @@
 package com.fourkkm.citylife.itemview;
 
-import java.util.Date;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
@@ -10,9 +8,7 @@ import android.widget.TextView;
 import com.andrnes.modoer.ModoerAskCategory;
 import com.andrnes.modoer.ModoerAsks;
 import com.fourkkm.citylife.R;
-import com.fourkkm.citylife.control.activity.BaseListActivity;
 import com.fourkkm.citylife.util.CommonUtil;
-import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.widget.item.BaseItem;
 import com.zj.support.widget.itemview.ItemView;
 

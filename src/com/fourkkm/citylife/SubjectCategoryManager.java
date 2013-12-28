@@ -14,9 +14,9 @@ import com.andrnes.modoer.ModoerCategory;
 public class SubjectCategoryManager implements IModoerManager<ModoerCategory> {
 
 	/** 常量定义见实体ModoerCategory level字段 **/
-	private static final int LEVEL_FIRST = 1;
-	private static final int LEVEL_SECOND = 2;
-	private static final int LEVEL_THIRD = 3;
+	public static final int LEVEL_FIRST = 1;
+	public static final int LEVEL_SECOND = 2;
+	public static final int LEVEL_THIRD = 3;
 	private List<ModoerCategory> mCategoryList;
 
 	public SubjectCategoryManager() {

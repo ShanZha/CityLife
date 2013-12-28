@@ -24,8 +24,8 @@ import com.zj.support.widget.itemview.ItemView;
 public class ModoerReviewItemView extends RelativeLayout implements ItemView {
 
 	private static final int BEST = 2;
-	private static final int BAD = 1;
-	private static final int GOOD = 0;
+	private static final int BAD = 0;
+	private static final int GOOD = 1;
 	private TextView mTvUsername, mTvAveragePer, mTvContent, mTvOverallRating,
 			mTvTime;
 	private RatingBar mRatingBar;
@@ -86,7 +86,7 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView {
 		switch (best) {
 		case GOOD:// “ª∞„
 			mTvOverallRating.setText(mCtx.getString(R.string.overall_rating)
-					+ mCtx.getString(R.string.review_good));
+					+ mCtx.getString(R.string.review_middle));
 			break;
 		case BAD:// ≤Ó∆¿
 			mTvOverallRating.setText(mCtx.getString(R.string.overall_rating)

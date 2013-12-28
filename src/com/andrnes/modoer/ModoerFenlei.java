@@ -21,13 +21,14 @@ public class ModoerFenlei extends ItemSingle implements Serializable {
 
 	/** 分类ID */
 	@Lazy(isLazy = true)
-	private ModoerFenlei catid;
+	private ModoerFenleiCategory catid;
 
 	/** 城市ID */
 	@Lazy(isLazy = true)
 	private ModoerArea cityId;
 
 	/** 地区id */
+	@Lazy(isLazy = true)
 	private ModoerArea aid;
 
 	/** 相关主题 */
@@ -107,11 +108,11 @@ public class ModoerFenlei extends ItemSingle implements Serializable {
 		this.id = id;
 	}
 
-	public ModoerFenlei getCatid() {
+	public ModoerFenleiCategory getCatid() {
 		return catid;
 	}
 
-	public void setCatid(ModoerFenlei catid) {
+	public void setCatid(ModoerFenleiCategory catid) {
 		this.catid = catid;
 	}
 

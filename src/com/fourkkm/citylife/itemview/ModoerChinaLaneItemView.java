@@ -76,10 +76,10 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 		ModoerFenlei lane = (ModoerFenlei) item;
 		mTvSubject.setText(lane.getSubject());
 		mTvContent.setText(lane.getContent());
-		ModoerArea cityId = lane.getCityId();
-		if (null != cityId && cityId.getId() != 0) {
+		ModoerArea aid = lane.getAid();
+		if (null != aid && aid.getId() != 0) {
 			mTvArea.setText(mCtx.getString(R.string.china_lane_area)
-					+ cityId.getName());
+					+ aid.getName());
 		} else {
 			mTvArea.setVisibility(View.GONE);
 		}

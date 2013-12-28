@@ -47,19 +47,42 @@ public class AreaManager implements IModoerManager<ModoerArea> {
 		for (int i = 0; i < mAreaList.size(); i++) {
 			ModoerArea area = mAreaList.get(i);
 			if (AREA_LEVEL_CITY == area.getLevel()) {
-				map.put(area.getName(), this.getAreaChild(area.getId()));
+				map.put(area.getName(), this.getAreaCountyChild(area.getId()));
 			}
 		}
 		return map;
 	}
 
 	/**
-	 * 获取某省/州的所有子Name列表
+	 * 获取某国家下的所有子Name列表，即省/州列表
 	 * 
 	 * @param parentId
 	 * @return
 	 */
-	private List<String> getAreaChild(int parentId) {
+	public List<String> getAreaCityChild(int parentId) {
+		List<String> childNames = new ArrayList<String>();
+		if (null == mAreaList) {
+			return childNames;
+		}
+		for (int i = 0; i < mAreaList.size(); i++) {
+			ModoerArea area = mAreaList.get(i);
+			if (AREA_LEVEL_CITY == area.getLevel()) {
+				ModoerArea parent = area.getPid();
+				if (null != parent && parentId == parent.getId()) {
+					childNames.add(area.getName());
+				}
+			}
+		}
+		return childNames;
+	}
+
+	/**
+	 * 获取某省/州的所有子Name列表，即县级列表
+	 * 
+	 * @param parentId
+	 * @return
+	 */
+	public List<String> getAreaCountyChild(int parentId) {
 		List<String> childNames = new ArrayList<String>();
 		if (null == mAreaList) {
 			return childNames;

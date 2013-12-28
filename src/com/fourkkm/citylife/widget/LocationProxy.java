@@ -23,12 +23,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.zj.app.utils.AppUtils;
 
 public class LocationProxy implements
 		GooglePlayServicesClient.ConnectionCallbacks,
-		GooglePlayServicesClient.OnConnectionFailedListener {
+		GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
 
 	private static final String TAG = "LocationProxy";
 	private static final String APPTAG = "CityLife";
@@ -45,7 +46,7 @@ public class LocationProxy implements
 	public static final int UPDATE_INTERVAL_IN_SECONDS = 5;
 
 	// A fast interval ceiling
-	public static final int FAST_CEILING_IN_SECONDS = 1;
+	public static final int FAST_CEILING_IN_SECONDS = 16;
 
 	// Update interval in milliseconds
 	public static final long UPDATE_INTERVAL_IN_MILLISECONDS = MILLISECONDS_PER_SECOND
@@ -154,12 +155,25 @@ public class LocationProxy implements
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "shan-->onConnected");
+		if (null != mLocationClient) {
+			mLocationClient.requestLocationUpdates(mLocationRequest, this);
+		}
 	}
 
 	@Override
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "shan-->onDisconnected");
+	}
+
+	public void fetchCurrLocation() {
+		if (mLocationClient != null && mLocationClient.isConnected()) {
+			Location location = mLocationClient.getLastLocation();
+			Log.i(TAG,
+					"shan-->fecthCurrLocation: "
+							+ (null == location ? " locatoin is null"
+									: location.toString()));
+		}
 	}
 
 	public void fetchAddress(IAddressListener listener) {
@@ -281,5 +295,11 @@ public class LocationProxy implements
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "shan-->onLocationChanged: " + location.toString());
 	}
 }

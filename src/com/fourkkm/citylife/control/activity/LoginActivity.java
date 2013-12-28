@@ -1,10 +1,9 @@
 package com.fourkkm.citylife.control.activity;
 
-import java.util.Date;
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,31 +15,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andrnes.modoer.ModoerMemberPassport;
 import com.andrnes.modoer.ModoerMembers;
+import com.andrnes.modoer.ModoerUsergroups;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.third.BaseQQRequestListener;
+import com.fourkkm.citylife.third.IThirdAuthListener;
+import com.fourkkm.citylife.third.IThirdUserInfoListener;
+import com.fourkkm.citylife.third.QQAuthListener;
+import com.fourkkm.citylife.third.SinaWeiboAuthListener;
+import com.fourkkm.citylife.third.SinaWeiboUserInfoTask;
+import com.fourkkm.citylife.third.TaobaoAuthListener;
+import com.fourkkm.citylife.util.MD5;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.taobao.top.android.TopAndroidClient;
-import com.taobao.top.android.auth.AccessToken;
 import com.taobao.top.android.auth.AuthActivity;
-import com.taobao.top.android.auth.AuthError;
-import com.taobao.top.android.auth.AuthException;
 import com.taobao.top.android.auth.AuthorizeListener;
-import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Constants;
 import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
-import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.Weibo;
-import com.weibo.sdk.android.WeiboAuthListener;
-import com.weibo.sdk.android.WeiboDialogError;
-import com.weibo.sdk.android.WeiboException;
-import com.weibo.sdk.android.util.AccessTokenKeeper;
 import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.http.StoreOperation;
 import com.zj.app.utils.AppUtils;
-import com.zj.app.utils.DateFormatMethod;
-import com.zj.app.utils.EncryptionUtil;
 import com.zj.support.observer.Observer;
 import com.zj.support.observer.inter.ICallback;
 import com.zj.support.observer.model.Param;
@@ -51,20 +49,31 @@ import com.zj.support.observer.model.Param;
  * @author ShanZha
  * 
  */
-public class LoginActivity extends AuthActivity implements ICallback {
+public class LoginActivity extends AuthActivity implements ICallback,
+		IThirdAuthListener, IThirdUserInfoListener {
 
+	private static final String TAG = "LoginActivity";
+	private static final int TYPE_SINA_WEIBO = 1;
+	private static final int TYPE_QQ = 2;
+	private static final int TYPE_TENCENT_WEIBO = 3;
+	private static final int TYPE_TAOBAO = 4;
 	private static final int REGISTER_REQ_CODE = 1;
 	private static final int TENCENT_WEIBO_REQ_CODE = 2;
 	private TextView mTvTitle;
 	private EditText mEtUsername, mEtPswd;
 	private CheckBox mCbPswd, mCbAutoLogin;
 
+	private ModoerMembers mMember;
+	private ModoerUsergroups mUserGroup;
+	private ModoerMemberPassport mMemberPassport;
 	private ProgressDialogProxy mDialogProxy;
+	/** 第三方登录时，用户名为昵称，密码为uid，邮箱未知？？ **/
+	private String mUserName, mUserPswd, mEmail = "test@sina.com";
 
 	private Weibo mSinaWeibo;
 	private Tencent mTencent;
 	private TopAndroidClient mTaobao = TopAndroidClient
-			.getAndroidClientByAppKey(GlobalConfig.TAOBAO_APP_KEY);
+			.getAndroidClientByAppKey(GlobalConfig.Third.TAOBAO_APP_KEY);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -119,15 +128,19 @@ public class LoginActivity extends AuthActivity implements ICallback {
 			mEtPswd.setText(pswd);
 		}
 
-		mSinaWeibo = Weibo.getInstance(GlobalConfig.SINA_WEIBO_APP_KEY,
-				GlobalConfig.SINA_WEIBO_REDIRECT_URL,
-				GlobalConfig.SINA_WEIBO_SCOPE);
-		mTencent = Tencent.createInstance(GlobalConfig.TENCENT_QQ_APP_ID,
+		mSinaWeibo = Weibo.getInstance(GlobalConfig.Third.SINA_WEIBO_APP_KEY,
+				GlobalConfig.Third.SINA_WEIBO_REDIRECT_URL,
+				GlobalConfig.Third.SINA_WEIBO_SCOPE);
+		mTencent = Tencent.createInstance(GlobalConfig.Third.TENCENT_QQ_APP_ID,
 				this.getApplicationContext());
 	}
 
 	private void showToast(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+	}
+
+	private StoreOperation getStoreOperation() {
+		return StoreOperation.getInstance(this);
 	}
 
 	/**
@@ -138,8 +151,75 @@ public class LoginActivity extends AuthActivity implements ICallback {
 	 * @return
 	 */
 	private boolean isPswdCorrect(String inputPswd, String dbPswd) {
-		String encrytPswd = EncryptionUtil.encryptionString(inputPswd);
+		String encrytPswd = MD5.encryptMd5(inputPswd);
 		return encrytPswd.equals(dbPswd);
+	}
+
+	private void fetchUserGroup() {
+		String selectCode = "from com.andrnes.modoer.ModoerUsergroups mug where mug.grouptype=:groupType order by point";
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("groupType", "member");
+
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		this.getStoreOperation().findAll(selectCode, paramMap, false,
+				new ModoerUsergroups(), param);
+	}
+
+	private void onSaveMemeber() {
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_MEMBER);
+		mMember = new ModoerMembers();
+		mMember.setUsername(mUserName);
+		mMember.setEmail(mEmail);
+		mMember.setPassword(MD5.encryptMd5(mUserPswd));
+		mMember.setRegdate((int) (System.currentTimeMillis() / 1000));
+		mMember.setRmb(new BigDecimal(0));
+		mMember.setNewmsg("0");
+		mMember.setPoint(0);
+		mMember.setPoint1(0);
+		mMember.setPoint2(0);
+		mMember.setPoint3(0);
+		mMember.setPoint4(0);
+		mMember.setPoint5(0);
+		mMember.setPoint6(0);
+		mMember.setGroupid(mUserGroup);
+		this.getStoreOperation().saveOrUpdate(mMember, param);
+	}
+
+	/**
+	 * 确保已经保存Member成功
+	 */
+	private void onSaveMemberPassport() {
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_MEMBER_PASSPORT);
+		mMemberPassport.setUid(mMember);
+		this.getStoreOperation().saveOrUpdate(mMemberPassport, param);
+	}
+
+	/**
+	 * 第三方鉴权完毕时，构建ModoerMemberPassport
+	 * 
+	 * @param psname
+	 * @param accessToken
+	 * @param uid
+	 * @param expireTime
+	 */
+	private void buildMemberPassport(String psname, String accessToken,
+			String uid, long expireTime) {
+		mMemberPassport = new ModoerMemberPassport();
+		mMemberPassport.setPsname(psname);
+		mMemberPassport.setAccessToken(accessToken);
+		mMemberPassport.setExpired((int) expireTime);
+		mMemberPassport.setPsuid(uid);
+		mMemberPassport.setIsbind(1);
+	}
+
+	private void fecthQQUserInfo() {
+		if (null != mTencent && mTencent.ready(this.getApplicationContext())) {
+			mTencent.requestAsync(Constants.GRAPH_SIMPLE_USER_INFO, null,
+					Constants.HTTP_GET,
+					new BaseQQRequestListener(TYPE_QQ, this), null);
+		}
 	}
 
 	public void onClickBack(View view) {
@@ -168,13 +248,13 @@ public class LoginActivity extends AuthActivity implements ICallback {
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("username", username);
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-		StoreOperation.getInstance(this).find(selectCode, paramsMap, true,
+		this.getStoreOperation().find(selectCode, paramsMap, true,
 				new ModoerMembers(), param);
 	}
 
 	public void onClickQQ(View view) {// qq登录
-		mTencent.login(this, GlobalConfig.TENCENT_QQ_SCOPE,
-				new TencentUIListener());
+		mTencent.login(this, GlobalConfig.Third.TENCENT_QQ_SCOPE,
+				new QQAuthListener(TYPE_QQ, this));
 	}
 
 	public void onClickTencentWeibo(View view) {// 腾讯微博登录
@@ -184,7 +264,8 @@ public class LoginActivity extends AuthActivity implements ICallback {
 	}
 
 	public void onClickSinaWeibo(View view) {// 新浪微博登录
-		mSinaWeibo.anthorize(this, new SinaAuthListener());
+		mSinaWeibo.anthorize(this, new SinaWeiboAuthListener(TYPE_SINA_WEIBO,
+				this));
 	}
 
 	public void onClickTaoBao(View view) {// 淘宝登录
@@ -204,147 +285,11 @@ public class LoginActivity extends AuthActivity implements ICallback {
 			this.setResult(RESULT_OK);
 			this.finish();
 		} else if (TENCENT_WEIBO_REQ_CODE == requestCode) {// 腾讯微博登录成功
-			// Do nothing
-		}
-	}
-
-	/**
-	 * 新浪鉴权监听
-	 */
-	private class SinaAuthListener implements WeiboAuthListener {
-
-		@Override
-		public void onComplete(Bundle values) {// sdk自动保存到SharePrefrence
-			String uid = values.getString("uid");
-			String accessToken = values.getString("access_token");
-			String expiresIn = values.getString("expires_in");
-			System.out.println("onComplete() accessToken= " + accessToken
-					+ " expiresIn = " + expiresIn + " uid = " + uid);
-			long expires = Long.valueOf(expiresIn);
-			System.out.println(" expireTime = "
-					+ DateFormatMethod.formatDate(new Date(expires)));
-			showToast("新浪微博登录成功");
-			// 保存AccessToken
-			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,
-					expiresIn);
-			AccessTokenKeeper.keepAccessToken(LoginActivity.this, token);
-		}
-
-		@Override
-		public void onWeiboException(WeiboException e) {
-			if (e != null) {
-				System.out.println("shan-->onWeiboException");
+			if (null != data) {
+				this.onThirdAuthSuccess(TYPE_TENCENT_WEIBO,
+						data.getBundleExtra("values"));
 			}
 		}
-
-		@Override
-		public void onError(WeiboDialogError e) {
-			showToast("新浪微博登录出错");
-			System.out.println(" onError " + e.getMessage());
-		}
-
-		@Override
-		public void onCancel() {
-			showToast("新浪微博登录取消");
-			System.out.println(" onCancel");
-		}
-	}
-
-	/**
-	 * 腾讯QQ登录监听
-	 * 
-	 * @author ShanZha
-	 * 
-	 */
-	private class TencentUIListener implements IUiListener {
-
-		@Override
-		public void onCancel() {
-			// TODO Auto-generated method stub
-			System.out.println(" Tencent--oncancel()");
-			showToast("腾讯登录取消");
-		}
-
-		@Override
-		public void onComplete(JSONObject arg0) {
-			// TODO Auto-generated method stub
-			showToast("腾讯登录成功");
-			System.out.println("onComplete(): " + arg0.toString());
-			try {
-				String accessToken = arg0.getString("access_token");
-				String openid = arg0.getString("openid");
-				String expires_in = arg0.getString("expires_in");
-				// Util.saveSharePersistent(getApplicationContext(),
-				// "TENCENT_ACCESS_TOKEN", accessToken);
-				// Util.saveSharePersistent(getApplicationContext(),
-				// "TENCENT_OPEN_ID", openid);
-				// Util.saveSharePersistent(getApplicationContext(),
-				// "TENCENT_EXPIRES_IN", expires_in);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		@Override
-		public void onError(UiError arg0) {
-			// TODO Auto-generated method stub
-			showToast("腾讯登录失败:" + arg0.errorMessage);
-			System.out.println(" Tencent--onerror()-->" + arg0.toString());
-		}
-
-	}
-
-	/**
-	 * 淘宝鉴权监听
-	 * 
-	 * @author ShanZha
-	 * 
-	 */
-	private class TaobaoAuthListener implements AuthorizeListener {
-
-		@Override
-		public void onComplete(AccessToken accessToken) {
-			// TODO Auto-generated method stub
-			showToast("淘宝授权成功");
-			System.out.println("Taobao-onCompelete: " + accessToken.toString());
-			String id = accessToken.getAdditionalInformation().get(
-					AccessToken.KEY_SUB_TAOBAO_USER_ID);
-			if (id == null) {
-				id = accessToken.getAdditionalInformation().get(
-						AccessToken.KEY_TAOBAO_USER_ID);
-			}
-			long userId = Long.parseLong(id);
-			String nick = accessToken.getAdditionalInformation().get(
-					AccessToken.KEY_SUB_TAOBAO_USER_NICK);
-			if (nick == null) {
-				nick = accessToken.getAdditionalInformation().get(
-						AccessToken.KEY_TAOBAO_USER_NICK);
-			}
-			String r2_expires = accessToken.getAdditionalInformation().get(
-					AccessToken.KEY_R2_EXPIRES_IN);
-			Date start = accessToken.getStartDate();
-			Date end = new Date(start.getTime() + Long.parseLong(r2_expires)
-					* 1000L);
-			System.out.println(" onCompelete() nick = " + nick
-					+ " r2_expires = " + r2_expires + " id " + id
-					+ " userId = " + userId);
-		}
-
-		@Override
-		public void onError(AuthError e) {
-			// TODO Auto-generated method stub
-			Log.e("LoginActivity", "TaoBao-onError" + e.getErrorDescription());
-			showToast("淘宝授权出错");
-		}
-
-		@Override
-		public void onAuthException(AuthException e) {
-			// TODO Auto-generated method stub
-			Log.e("LoginActivity", "TaoBao-onAuthException: " + e.getMessage());
-			showToast("淘宝授权失败");
-		}
-
 	}
 
 	@Override
@@ -356,19 +301,55 @@ public class LoginActivity extends AuthActivity implements ICallback {
 	@Override
 	protected AuthorizeListener getAuthorizeListener() {
 		// TODO Auto-generated method stub
-		return new TaobaoAuthListener();
+		return new TaobaoAuthListener(TYPE_TAOBAO, this);
 	}
 
 	@Override
 	public void onSuccessFindAll(Param out) {
 		// TODO Auto-generated method stub
+		List<Object> results = (List<Object>) out.getResult();
+		if (null == results) {
+			Log.e(TAG, "shan--->results is null");
+			return;
+		}
+		if (results.size() > 0) {
+			mUserGroup = (ModoerUsergroups) results.get(0);
+		}
+		if (null == mUserGroup) {
+			mDialogProxy.hideDialog();
+			this.showToast(this.getString(R.string.login_fail));
+		} else {// Step 3:保存ModoerMembers
+			this.onSaveMemeber();
+		}
 
 	}
 
 	@Override
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
-
+		int operator = out.getOperator();
+		switch (operator) {
+		case GlobalConfig.Operator.OPERATION_SAVE_MEMBER:
+			// Step 4:保存MemberPassport（最后一步）
+			onSaveMemberPassport();
+			break;
+		case GlobalConfig.Operator.OPERATION_SAVE_MEMBER_PASSPORT:
+			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
+			SharedPreferenceUtil.getSharedPrefercence().put(
+					this.getApplicationContext(),
+					GlobalConfig.SharePre.KEY_USERNAME, mMember.getUsername());
+			SharedPreferenceUtil.getSharedPrefercence().put(
+					this.getApplicationContext(),
+					GlobalConfig.SharePre.KEY_PSWD, mUserPswd);
+			SharedPreferenceUtil.getSharedPrefercence().put(
+					this.getApplicationContext(),
+					GlobalConfig.SharePre.KEY_IS_REMBER_PSWD, true);
+			mDialogProxy.hideDialog();
+			this.showToast(this.getString(R.string.login_success));
+			this.setResult(RESULT_OK);
+			this.finish();
+			break;
+		}
 	}
 
 	@Override
@@ -410,13 +391,13 @@ public class LoginActivity extends AuthActivity implements ICallback {
 			this.showToast(this.getString(R.string.login_info_incorrect));
 			return;
 		}
-		ModoerMembers member = (ModoerMembers) result;
+		mMember = (ModoerMembers) result;
 		if (this.isPswdCorrect(mEtPswd.getText().toString().trim(),
-				member.getPassword())) {
-			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(member);
+				mMember.getPassword())) {
+			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
 			SharedPreferenceUtil.getSharedPrefercence().put(
 					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_USERNAME, member.getUsername());
+					GlobalConfig.SharePre.KEY_USERNAME, mMember.getUsername());
 			SharedPreferenceUtil.getSharedPrefercence().put(
 					this.getApplicationContext(),
 					GlobalConfig.SharePre.KEY_PSWD,
@@ -442,6 +423,95 @@ public class LoginActivity extends AuthActivity implements ICallback {
 	public void onFails(Param out) {
 		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.login_fail));
+	}
+
+	@Override
+	public void onThirdUserInfoSuccess(final int type, final String nickname) {
+		// TODO Auto-generated method stub
+		AppUtils.getHandler(getApplicationContext()).post(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				switch (type) {
+				case TYPE_SINA_WEIBO:
+				case TYPE_QQ:
+					mUserName = nickname;
+					// Step 2:获取ModoerUserGroup
+					LoginActivity.this.fetchUserGroup();
+					break;
+				}
+
+			}
+		});
+
+	}
+
+	@Override
+	public void onThirdUserInfoFail(int type, String error) {
+		// TODO Auto-generated method stub
+		AppUtils.getHandler(getApplicationContext()).post(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				mDialogProxy.hideDialog();
+				LoginActivity.this.showToast(LoginActivity.this
+						.getString(R.string.login_fail));
+			}
+		});
+	}
+
+	@Override
+	public void onThirdAuthSuccess(int type, Bundle bundle) {
+		// TODO Auto-generated method stub
+		String accessToken = bundle
+				.getString(GlobalConfig.Third.KEY_ACCESS_TOKEN);
+		String uid = bundle.getString(GlobalConfig.Third.KEY_UID);
+		long expireTime = bundle.getLong(GlobalConfig.Third.KEY_EXPIRE_TIME);
+		Log.e(TAG, "shan-->onThirdAuthSuccess: " + accessToken + "," + uid
+				+ "," + expireTime);
+		mUserPswd = uid;
+		if (null != mDialogProxy) {
+			mDialogProxy.showDialog();
+		}
+		switch (type) {
+		case TYPE_SINA_WEIBO:
+			this.buildMemberPassport(GlobalConfig.Third.PSNAME_SINA_WEIBO,
+					accessToken, uid, expireTime);
+			// Step 1:获取用户第三方的昵称
+			AppUtils.getExecutors(getApplicationContext()).submit(
+					new SinaWeiboUserInfoTask(accessToken, uid, this,
+							TYPE_SINA_WEIBO));
+			break;
+		case TYPE_QQ:
+			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_QQ,
+					accessToken, uid, expireTime);
+			// Step 1:获取用户第三方的昵称
+			this.fecthQQUserInfo();
+			break;
+		case TYPE_TENCENT_WEIBO:// 已有昵称，直接进入第二步
+			mUserName = bundle.getString(GlobalConfig.Third.KEY_NICK_NAME);
+			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_WEIBO,
+					accessToken, uid, expireTime);
+			// Step 2:获取ModoerUserGroup
+			LoginActivity.this.fetchUserGroup();
+			break;
+		case TYPE_TAOBAO:// 已有昵称，直接进入第二步
+			mUserName = bundle.getString(GlobalConfig.Third.KEY_NICK_NAME);
+			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TAOBAO,
+					accessToken, uid, expireTime);
+			// Step 2:获取ModoerUserGroup
+			LoginActivity.this.fetchUserGroup();
+			break;
+		}
+	}
+
+	@Override
+	public void onThirdAuthFail(int type, String e) {
+		// TODO Auto-generated method stub
+		Log.e(TAG, "shan-->onThirdAuthFail: " + e);
+		this.showToast(this.getString(R.string.login_fail) + "：" + e);
 	}
 
 }

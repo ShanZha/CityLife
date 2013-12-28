@@ -62,11 +62,11 @@ public class ModoerParty extends ItemSingle implements Serializable {
 	/** 预计费用 */
 	private int price;
 
-	/** 报名需要积分或rmb */
+	/** 报名需要积分或rmb 'none','rmb','point1','point2','point3','point4','point5','point6'*/
 	private String applypriceType;
 
 	/** 报名费用 */
-	private BigDecimal applyprice;
+	private float applyprice;
 	/** 活动描述 */
 	@Validates(info = "描述不能为空,描述长度不能超过255个字符", type = "isNull,maxSize255")
 	private String des;
@@ -236,11 +236,11 @@ public class ModoerParty extends ItemSingle implements Serializable {
 		this.applypriceType = applypriceType;
 	}
 
-	public BigDecimal getApplyprice() {
+	public float getApplyprice() {
 		return applyprice;
 	}
 
-	public void setApplyprice(BigDecimal applyprice) {
+	public void setApplyprice(float applyprice) {
 		this.applyprice = applyprice;
 	}
 

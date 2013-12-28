@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,6 +31,7 @@ import com.zj.support.observer.model.Param;
 public class PartyDetailActivity extends BaseActivity {
 
 	private static final String TAG = "PartyDetailActivity";
+	private static final int REQ_SIGN_UP_CODE = 1;
 	/** 常量定义见ModoerParty实体 **/
 	private static final int SEX_LIMIT_NONE = 0;
 	private static final int SEX_LIMIT_WOMAN = 1;
@@ -39,7 +40,8 @@ public class PartyDetailActivity extends BaseActivity {
 	private TextView mTvTitle, mTvSubject, mTvInitiator, mTvInitiateTime,
 			mTvSignUpEndTime, mTvTime, mTvAddr, mTvSexLimit, mTvCost,
 			mTvPlanNum, mTvSignUpNum, mTvDesc, mTvSignUpMemberNames;
-	private Button mBtnRight;
+	// private Button mBtnRight;
+	private LinearLayout mLlSignUpMembers;
 	private ProgressBar mProBarSignUpMembers;
 
 	private ModoerParty mParty;
@@ -51,8 +53,6 @@ public class PartyDetailActivity extends BaseActivity {
 		this.setContentView(R.layout.party_detail);
 		mTvTitle = (TextView) this
 				.findViewById(R.id.titlebar_back_right_tv_title);
-		mBtnRight = (Button) this
-				.findViewById(R.id.titlebar_back_right_btn_operator);
 		mIvThumb = (ImageView) this.findViewById(R.id.thumb_detail_iv_thumb);
 		mTvSubject = (TextView) this.findViewById(R.id.party_detail_tv_subject);
 		mTvInitiator = (TextView) this
@@ -74,11 +74,12 @@ public class PartyDetailActivity extends BaseActivity {
 		mTvSignUpMemberNames = (TextView) this
 				.findViewById(R.id.party_detail_tv_sign_up_members_name);
 
+		mLlSignUpMembers = (LinearLayout) this
+				.findViewById(R.id.party_detail_ll_sign_up);
 		mProBarSignUpMembers = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 
 		mTvTitle.setText(this.getString(R.string.party_detail));
-		mBtnRight.setText(this.getString(R.string.party_sign_up_me));
 	}
 
 	@Override
@@ -130,12 +131,12 @@ public class PartyDetailActivity extends BaseActivity {
 
 	private void showLoadingSignUpMember() {
 		mProBarSignUpMembers.setVisibility(View.VISIBLE);
-		mTvSignUpMemberNames.setVisibility(View.GONE);
+		mLlSignUpMembers.setVisibility(View.GONE);
 	}
 
 	private void hideLoadingSignUpMember() {
 		mProBarSignUpMembers.setVisibility(View.GONE);
-		mTvSignUpMemberNames.setVisibility(View.VISIBLE);
+		mLlSignUpMembers.setVisibility(View.VISIBLE);
 	}
 
 	private void fetchSignUpMember() {
@@ -152,11 +153,43 @@ public class PartyDetailActivity extends BaseActivity {
 	}
 
 	public void onClickRight(View view) {// 我要报名
-
+		Intent intent = new Intent(this, PartyApplyActivity.class);
+		intent.putExtra("party", mParty);
+		this.startActivityForResult(intent, REQ_SIGN_UP_CODE);
 	}
 
-	public void onClickWeiInfo(View view) {// 查看网页信息
+	public void onClickWonderfulReview(View view) {// 精彩回顾
+		this.showToast("暂无链接");
+	}
 
+	public void onClickEventPhoto(View view) {// 活动图片
+		this.showToast("暂无链接");
+	}
+
+	public void onClickThumbnail(View view) {// 点击缩略图
+		// Do nothing
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (REQ_SIGN_UP_CODE == requestCode) {
+			if (RESULT_OK == resultCode) {
+				int applyNum = mParty.getApplynum();
+				mTvSignUpNum.setText("" + (applyNum + 1));
+				if (View.GONE == mLlSignUpMembers.getVisibility()) {
+					mLlSignUpMembers.setVisibility(View.VISIBLE);
+				}
+				if (null == data) {
+					return;
+				}
+				String temp = mTvSignUpMemberNames.getText().toString();
+				String signUpName = data.getStringExtra("signUpName");
+				mTvSignUpMemberNames.setText(temp + signUpName + ";");
+
+			}
+		}
 	}
 
 	@Override
@@ -179,14 +212,18 @@ public class PartyDetailActivity extends BaseActivity {
 				}
 			}
 			mTvSignUpMemberNames.setText(sb.toString());
+			this.hideLoadingSignUpMember();
+		} else {
+			mProBarSignUpMembers.setVisibility(View.GONE);
+			mLlSignUpMembers.setVisibility(View.GONE);
 		}
-		this.hideLoadingSignUpMember();
 	}
 
 	@Override
 	public void onFails(Param out) {
 		// TODO Auto-generated method stub
 		super.onFails(out);
-		this.hideLoadingSignUpMember();
+		mProBarSignUpMembers.setVisibility(View.GONE);
+		mLlSignUpMembers.setVisibility(View.GONE);
 	}
 }

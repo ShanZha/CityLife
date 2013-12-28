@@ -10,18 +10,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.PopupWindow.OnDismissListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerParty;
 import com.andrnes.modoer.ModoerPartyCategory;
 import com.andrnes.modoer.ModoerSubject;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerPartyItemView;
 import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
+import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.adapter.ItemSingleAdapter;
 
@@ -32,7 +37,7 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
  * 
  */
 public class PartyListActivity extends BaseListActivity implements
-		IFloatingItemClick {
+		IFloatingItemClick, OnDismissListener {
 
 	private static final String TAG = "PartyListActivity";
 	/** 全部状态 **/
@@ -47,8 +52,10 @@ public class PartyListActivity extends BaseListActivity implements
 	private static final int PARTY_MOST_NEW = 0;
 	/** 最旺人气 **/
 	private static final int PARTY_MOST_POPULAR = 1;
-	private ProgressBar mProBarTopCheck;
-	private LinearLayout mLlTopCheck;
+//	private ProgressBar mProBarTopCheck;
+	private LinearLayout mLlTopCheck,mLlTopCheckLoading;
+	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond,
+			mRlFloatingThird;
 	private TextView mTvTitle, mTvCategory, mTvState, mTvMost;
 
 	private List<ModoerParty> mPartyList;
@@ -62,14 +69,16 @@ public class PartyListActivity extends BaseListActivity implements
 			mFloatingMost;
 	private List<String> mStateList, mMostList;
 
+	private int mOperator = -1;
+
 	@Override
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		this.setContentView(R.layout.party_list);
 		mTvTitle = (TextView) this
 				.findViewById(R.id.titlebar_back_right_tv_title);
-		mProBarTopCheck = (ProgressBar) this
-				.findViewById(R.id.progress_bar_small_probar);
+		mLlTopCheckLoading = (LinearLayout) this
+				.findViewById(R.id.party_list_ll_top_loading);
 		mLlTopCheck = (LinearLayout) this
 				.findViewById(R.id.floating_layout_ll_all);
 		mTvCategory = (TextView) this
@@ -79,6 +88,13 @@ public class PartyListActivity extends BaseListActivity implements
 		mListView = (PullUpDownListView) this
 				.findViewById(R.id.party_list_listview);
 
+		mRlFloatingFirst = (RelativeLayout) this
+				.findViewById(R.id.floating_layout_rl_first);
+		mRlFloatingSecond = (RelativeLayout) this
+				.findViewById(R.id.floating_layout_rl_second);
+		mRlFloatingThird = (RelativeLayout) this
+				.findViewById(R.id.floating_layout_rl_third);
+
 		mTvTitle.setText(this.getString(R.string.party));
 		super.prepareViews();
 	}
@@ -87,13 +103,24 @@ public class PartyListActivity extends BaseListActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
-		this.prepareFloatingDatas();
+
 		mPartyList = new ArrayList<ModoerParty>();
 		mAdapter = new ItemSingleAdapter<ModoerPartyItemView, ModoerParty>(
 				mPartyList, this);
-
-		this.showLoadingCategory();
-		this.fetchPartyCategory();
+		Intent intent = this.getIntent();
+		mOperator = intent.getIntExtra("operator", -1);
+		if (GlobalConfig.IntentKey.PARTY_ME == mOperator) {
+			mListView.setAdapter(mAdapter);
+			mLlTopCheck.setVisibility(View.GONE);
+			mLlTopCheckLoading.setVisibility(View.GONE);
+			mTvTitle.setText(this.getString(R.string.user_my_party));
+			this.onFirstLoadSetting();
+			this.onLoadMore();
+		} else {
+			this.prepareFloatingDatas();
+			this.showLoadingCategory();
+			this.fetchPartyCategory();
+		}
 	}
 
 	private void prepareFloatingDatas() {
@@ -102,7 +129,7 @@ public class PartyListActivity extends BaseListActivity implements
 		mMostList = new ArrayList<String>();
 
 		mFloatingCategory = new FloatingOneMenuProxy(this,
-				GlobalConfig.FloatingType.TYPE_PARTY_CATEGORY);
+				GlobalConfig.FloatingType.TYPE_CATEGORY);
 		mFloatingState = new FloatingOneMenuProxy(this,
 				GlobalConfig.FloatingType.TYPE_PARTY_STATE);
 		mFloatingMost = new FloatingOneMenuProxy(this,
@@ -111,6 +138,10 @@ public class PartyListActivity extends BaseListActivity implements
 		mFloatingCategory.setFloatingItemClickListener(this);
 		mFloatingState.setFloatingItemClickListener(this);
 		mFloatingMost.setFloatingItemClickListener(this);
+
+		mFloatingCategory.setFloatingDismissListener(this);
+		mFloatingState.setFloatingDismissListener(this);
+		mFloatingMost.setFloatingDismissListener(this);
 
 		mStateList.add(this.getString(R.string.party_state_all));
 		mStateList.add(this.getString(R.string.party_state_signning));
@@ -141,12 +172,12 @@ public class PartyListActivity extends BaseListActivity implements
 	}
 
 	private void showLoadingCategory() {
-		mProBarTopCheck.setVisibility(View.VISIBLE);
+		mLlTopCheckLoading.setVisibility(View.VISIBLE);
 		mLlTopCheck.setVisibility(View.GONE);
 	}
 
 	private void hideLoadingCategory() {
-		mProBarTopCheck.setVisibility(View.GONE);
+		mLlTopCheckLoading.setVisibility(View.GONE);
 		mLlTopCheck.setVisibility(View.VISIBLE);
 	}
 
@@ -178,6 +209,15 @@ public class PartyListActivity extends BaseListActivity implements
 	private String buildFetchPartys() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("from com.andrnes.modoer.ModoerParty mp where mp.status = 1 ");
+		if (GlobalConfig.IntentKey.PARTY_ME == mOperator) {
+			ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
+					.getCurrMember();
+			if (null == member) {
+				return sb.toString();
+			}
+			sb.append(" and mp.uid.id = " + member.getId());
+			return sb.toString();
+		}
 		// Step 1:类别限制
 		if (null != mCurrCategory) {
 			sb.append(" and mp.catid.id = ");
@@ -296,18 +336,30 @@ public class PartyListActivity extends BaseListActivity implements
 	public void onClickFloatingFirst(View view) {// 类别
 		if (null != mFloatingCategory) {
 			mFloatingCategory.showAsDropDown(view);
+			mFloatingCategory.resetSelectItemBg(mTvCategory.getText()
+					.toString().trim());
+			mRlFloatingFirst
+					.setBackgroundResource(R.drawable.floating_item_selected_bg);
 		}
 	}
 
 	public void onClickFloatingSecond(View view) {// 状态
 		if (null != mFloatingState) {
 			mFloatingState.showAsDropDown(view);
+			mFloatingState.resetSelectItemBg(mTvState.getText().toString()
+					.trim());
+			mRlFloatingSecond
+					.setBackgroundResource(R.drawable.floating_item_selected_bg);
 		}
 	}
 
 	public void onClickFloatingThird(View view) {// 最之系列
 		if (null != mFloatingMost) {
 			mFloatingMost.showAsDropDown(view);
+			mFloatingMost
+					.resetSelectItemBg(mTvMost.getText().toString().trim());
+			mRlFloatingThird
+					.setBackgroundResource(R.drawable.floating_item_selected_bg);
 		}
 	}
 
@@ -381,7 +433,7 @@ public class PartyListActivity extends BaseListActivity implements
 		// 是否需要重置并请求数据
 		boolean isReset = true;
 		switch (type) {
-		case GlobalConfig.FloatingType.TYPE_PARTY_CATEGORY:
+		case GlobalConfig.FloatingType.TYPE_CATEGORY:
 			if (this.isCurrCategory(key)) {
 				isReset = false;
 				return;
@@ -412,5 +464,13 @@ public class PartyListActivity extends BaseListActivity implements
 			this.onFirstLoadSetting();
 			this.onLoadMore();
 		}
+	}
+
+	@Override
+	public void onDismiss() {
+		// TODO Auto-generated method stub
+		mRlFloatingFirst.setBackgroundResource(0);
+		mRlFloatingSecond.setBackgroundResource(0);
+		mRlFloatingThird.setBackgroundResource(0);
 	}
 }

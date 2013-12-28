@@ -42,8 +42,6 @@ public class MainActivity extends BaseFragmentActivity implements
 
 	private TextView mTvTitle;
 	private List<ModoerArea> mAreaList;
-	// private Gallery mGallery;
-	// private BaseAdapter mGalleryAdapter;
 	private ViewPager mViewPager;
 	private BasePicPagerAdapter mPagerAdapter;
 	/** 图片轮播对象集 **/
@@ -71,7 +69,6 @@ public class MainActivity extends BaseFragmentActivity implements
 		setContentView(R.layout.main);
 
 		mTvTitle = (TextView) this.findViewById(R.id.titlebar_drop_tv_title);
-		// mGallery = (Gallery) this.findViewById(R.id.main_gallery);
 		mViewPager = (HackyViewPager) this.findViewById(R.id.main_view_pager);
 		mRlBcastr = (RelativeLayout) this.findViewById(R.id.main_rl_scroll_pic);
 		mProBarBcastr = (ProgressBar) this
@@ -93,8 +90,6 @@ public class MainActivity extends BaseFragmentActivity implements
 		mAreaList = new ArrayList<ModoerArea>();
 		mBcastrList = new ArrayList<ModoerBcastr>();
 		mBcastrUrlList = new ArrayList<String>();
-		// mGallery.setOnItemSelectedListener(this);
-		// mGallery.setOnItemClickListener(this);
 		mViewPager.setOnPageChangeListener(this);
 
 		this.fetchCountryArea();
@@ -103,16 +98,16 @@ public class MainActivity extends BaseFragmentActivity implements
 	}
 
 	@Override
-	protected void onStart() {
+	protected void prepareResume() {
 		// TODO Auto-generated method stub
-		super.onStart();
+		super.prepareResume();
 		mLocationProxy.connect();
 	}
 
 	@Override
-	protected void prepareRelease() {
+	protected void preparePause() {
 		// TODO Auto-generated method stub
-		super.prepareRelease();
+		super.preparePause();
 		mLocationProxy.disconnect();
 	}
 
@@ -135,9 +130,8 @@ public class MainActivity extends BaseFragmentActivity implements
 		String selectCode = "from com.andrnes.modoer.ModoerBcastr mb where mb.available = 1 and mb.city.level = 1";
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_BCASTR);
-		this.getStoreOperation()
-				.findAll(selectCode, new HashMap<String, Object>(), false,
-						new ModoerBcastr(), param);
+		this.getStoreOperation().findAll(selectCode,
+				new HashMap<String, Object>(), true, new ModoerBcastr(), param);
 	}
 
 	private void notifyPagerAdapterChanged() {
@@ -189,6 +183,7 @@ public class MainActivity extends BaseFragmentActivity implements
 			return;
 		}
 		mFloatingProxy.showAsDropDown(mTvTitle);
+		mFloatingProxy.resetSelectItemBg(mTvTitle.getText().toString().trim());
 	}
 
 	public void onClickFood(View view) {// 美食
@@ -218,7 +213,7 @@ public class MainActivity extends BaseFragmentActivity implements
 
 	public void onClickSearchCity(View view) {// 搜全城
 		Intent intent = new Intent(this, SubjectListActivity.class);
-		intent.putExtra("isSearchCity", true);
+		intent.putExtra("operator", GlobalConfig.IntentKey.SUBJECT_SEACH_CITY);
 		this.startActivity(intent);
 	}
 
@@ -239,8 +234,9 @@ public class MainActivity extends BaseFragmentActivity implements
 	}
 
 	public void onClickMore(View view) {// 更多
-//		this.startActivity(new Intent(this, MoreActivity.class));
+		this.startActivity(new Intent(this, MoreActivity.class));
 		this.startActivity(new Intent(this, LoginActivity.class));
+		// mLocationProxy.fetchAddress(this);
 	}
 
 	@Override
@@ -337,37 +333,6 @@ public class MainActivity extends BaseFragmentActivity implements
 		}
 
 	}
-
-	// @Override
-	// public void onItemSelected(AdapterView<?> parent, View view, int
-	// position,
-	// long id) {
-	// // TODO Auto-generated method stub
-	// mBcastrCurrPos = position;
-	// RadioButton radBtn = (RadioButton) mRadioGroup.getChildAt(position);
-	// radBtn.setChecked(true);
-	// ModoerBcastr bcastr = mBcastrList.get(position);
-	// if (null != bcastr) {
-	// mTvPicName.setText(bcastr.getItemtitle());
-	// }
-	// }
-	//
-	// @Override
-	// public void onNothingSelected(AdapterView<?> parent) {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	//
-	// @Override
-	// public void onItemClick(AdapterView<?> parent, View view, int position,
-	// long id) {
-	// // TODO Auto-generated method stub
-	// ModoerBcastr bacastr = mBcastrList.get(position);
-	// String url = bacastr.getItemUrl();
-	// Intent intent = new Intent(Intent.ACTION_VIEW);
-	// intent.setData(Uri.parse(url));
-	// this.startActivity(intent);
-	// }
 
 	@Override
 	public void onFloatingItemClick(int pos, String key, int type) {

@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 import com.andrnes.modoer.ModoerAskAnswer;
 import com.andrnes.modoer.ModoerAsks;
 import com.andrnes.modoer.ModoerMembers;
+import com.andrnes.modoer.ModoerUsergroups;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
@@ -33,7 +37,9 @@ public class AskDetailActivity extends BaseActivity {
 			mTvLevelAndUsername;
 	private TextView mTvBestContent, mTvBestTime, mTvBestLevelAndUsername,
 			mTvBestTips;
+	private Button mBtnAnswer;
 	private TextView mTvBestComment, mTvBestCommentTips;
+	private ImageView mIvDividerBestAnswer, mIvDividerBestAnswerComment;
 	private LinearLayout mLlOtherAnswerContainer;
 	private ProgressBar mProBarOtherAnswer;
 
@@ -66,6 +72,13 @@ public class AskDetailActivity extends BaseActivity {
 				.findViewById(R.id.ask_detail_ll_other_answer_container);
 		mProBarOtherAnswer = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
+
+		mIvDividerBestAnswer = (ImageView) this
+				.findViewById(R.id.ask_detail_iv_divider_best_answer);
+		mIvDividerBestAnswerComment = (ImageView) this
+				.findViewById(R.id.ask_detail_iv_divider_best_answer_comment);
+		
+		mBtnAnswer = (Button)this.findViewById(R.id.ask_detail_btn_answer);
 	}
 
 	@Override
@@ -86,15 +99,14 @@ public class AskDetailActivity extends BaseActivity {
 		mTvTime.setText(CommonUtil.getTimeByPHP(mCurrAsk.getDateline(),
 				"yyyy-MM-dd HH:mm"));
 		ModoerMembers member = mCurrAsk.getUid();
-		if (null != member && member.getId() != 0) {// 暂时仅设置Username
-			mTvLevelAndUsername.setText(member.getUsername());
-		}
+		this.setUserNameAndGroup(member, mTvLevelAndUsername);
 		ModoerAskAnswer bestAnswer = mCurrAsk.getBestanswer();
 		if (null != bestAnswer && bestAnswer.getId() != 0) {
 			mTvBestContent.setText(bestAnswer.getContent());
 			mTvBestTime.setText(CommonUtil.getTimeByPHP(
 					bestAnswer.getDateline(), "yyyy-MM-dd HH:mm"));
-			mTvBestLevelAndUsername.setText(bestAnswer.getUsername());// 暂时仅设置Username
+			this.setUserNameAndGroup(bestAnswer.getUid(),
+					mTvBestLevelAndUsername);
 			mTvBestComment.setText(bestAnswer.getFeel());
 		} else {
 			mTvBestTips.setVisibility(View.GONE);
@@ -103,6 +115,8 @@ public class AskDetailActivity extends BaseActivity {
 			mTvBestLevelAndUsername.setVisibility(View.GONE);
 			mTvBestComment.setVisibility(View.GONE);
 			mTvBestCommentTips.setVisibility(View.GONE);
+			mIvDividerBestAnswer.setVisibility(View.GONE);
+			mIvDividerBestAnswerComment.setVisibility(View.GONE);
 		}
 
 		this.showLoadingOtherAnswers();
@@ -132,8 +146,14 @@ public class AskDetailActivity extends BaseActivity {
 	}
 
 	private void addOtherAnswer(ModoerAskAnswer answer) {
+		if (null == mLlOtherAnswerContainer) {
+			return;
+		}
+		if (View.GONE == mLlOtherAnswerContainer.getVisibility()) {
+			mLlOtherAnswerContainer.setVisibility(View.VISIBLE);
+		}
 		View view = this.getLayoutInflater().inflate(R.layout.ask_detail_other,
-				mLlOtherAnswerContainer);
+				null);
 		TextView tvContent = (TextView) view
 				.findViewById(R.id.ask_detail_other_tv_content);
 		TextView tvTime = (TextView) view
@@ -143,9 +163,25 @@ public class AskDetailActivity extends BaseActivity {
 		tvContent.setText(answer.getContent());
 		tvTime.setText(CommonUtil.getTimeByPHP(answer.getDateline(),
 				"yyyy-MM-dd HH:mm"));
-		ModoerMembers member = answer.getUid();
-		if (null != member && member.getId() != 0) {// 暂时仅设置用户名
-			tvLevelAndUsername.setText(member.getUsername());
+		this.setUserNameAndGroup(answer.getUid(), tvLevelAndUsername);
+		mLlOtherAnswerContainer.addView(view);
+	}
+
+	private void setUserNameAndGroup(ModoerMembers member, TextView tv) {
+		if (null != member && member.getId() != 0) {
+			ModoerUsergroups group = member.getGroupid();
+			String username = member.getUsername();
+			if (null != group && group.getId() != 0) {
+				String groupName = group.getGroupname();
+				if (!TextUtils.isEmpty(groupName)) {
+					tv.setText(groupName + "|" + username);
+					return;
+				}
+			}
+			if (TextUtils.isEmpty(username)) {
+				return;
+			}
+			tv.setText(username);
 		}
 	}
 
@@ -154,7 +190,7 @@ public class AskDetailActivity extends BaseActivity {
 	}
 
 	public void onClickAnswer(View view) {// 我要回答
-		Intent intent = new Intent(this, AskAnswerActivity.class);
+		Intent intent = new Intent(this, AskUpdateActivity.class);
 		intent.putExtra("modoerAsk", mCurrAsk);
 		this.startActivityForResult(intent, ANSWER_REQ_CODE);
 	}

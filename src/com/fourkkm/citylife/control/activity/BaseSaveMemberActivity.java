@@ -5,12 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerUsergroups;
@@ -25,45 +21,25 @@ import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 
 /**
- * 注册界面
+ * 保存会员基类
  * 
  * @author ShanZha
  * 
  */
-public class RegisterActivity extends BaseActivity {
+public class BaseSaveMemberActivity extends BaseActivity {
 
-	private static final String TAG = "RegisterActivity";
-	private TextView mTvTitle;
-	private EditText mEtUsername, mEtEmail, mEtPswd, mEtPswdSure;
-	private CheckBox mCbProtocal;
-
+	private static final String TAG = "BaseSaveMemberActivity";
 	private ModoerMembers mMember;
 	private ModoerUsergroups mUserGroup;
-	private ProgressDialogProxy mDialogProxy;
-
-	@Override
-	protected void prepareViews() {
-		// TODO Auto-generated method stub
-		super.prepareViews();
-		this.setContentView(R.layout.register);
-
-		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
-		mEtUsername = (EditText) this.findViewById(R.id.register_et_username);
-		mEtEmail = (EditText) this.findViewById(R.id.register_et_email);
-		mEtPswd = (EditText) this.findViewById(R.id.register_et_pswd);
-		mEtPswdSure = (EditText) this.findViewById(R.id.register_et_pswd_sure);
-		mCbProtocal = (CheckBox) this
-				.findViewById(R.id.register_check_box_protocal);
-	}
+	protected ProgressDialogProxy mDialogProxy;
+	protected String mUserName = "", mUserPswd = "", mEmail = "";
 
 	@Override
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
-		mTvTitle.setText(this.getString(R.string.register_user));
 
 		mDialogProxy = new ProgressDialogProxy(this);
-		mDialogProxy.setMessage(this.getText(R.string.register_ing));
 	}
 
 	public void onClickBack(View view) {
@@ -71,15 +47,7 @@ public class RegisterActivity extends BaseActivity {
 		this.finish();
 	}
 
-	public void onClickRegister(View view) {// 注册
-		if (!this.validate()) {
-			return;
-		}
-		mDialogProxy.showDialog();
-		this.fetchUserGroup();
-	}
-
-	private void fetchUserGroup() {
+	protected void fetchUserGroup() {
 		String selectCode = "from com.andrnes.modoer.ModoerUsergroups mug where mug.grouptype=:groupType order by point";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("groupType", "member");
@@ -90,17 +58,14 @@ public class RegisterActivity extends BaseActivity {
 	}
 
 	private void onRegister() {
-		String username = mEtUsername.getText().toString().trim();
-		String email = mEtEmail.getText().toString().trim();
-		String pswd = mEtPswd.getText().toString().trim();
-
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_MEMBER);
 		if (null == mMember) {
 			mMember = new ModoerMembers();
 		}
-		mMember.setUsername(username);
-		mMember.setEmail(email);
-		mMember.setPassword(MD5.encryptMd5(pswd));
+		mMember.setUsername(mUserName);
+		mMember.setEmail(mEmail);
+		mMember.setPassword(MD5.encryptMd5(mUserPswd));
 		mMember.setRegdate((int) (System.currentTimeMillis() / 1000));
 		mMember.setRmb(new BigDecimal(0));
 		mMember.setNewmsg("0");
@@ -113,22 +78,6 @@ public class RegisterActivity extends BaseActivity {
 		mMember.setPoint6(0);
 		mMember.setGroupid(mUserGroup);
 		this.getStoreOperation().saveOrUpdate(mMember, param);
-	}
-
-	private boolean validate() {
-		if (!mCbProtocal.isChecked()) {
-			this.showToast(this
-					.getString(R.string.register_use_protocal_unchecked));
-			return false;
-		}
-		String pswd = mEtPswd.getText().toString().trim();
-		String pswdSure = mEtPswdSure.getText().toString().trim();
-		if (TextUtils.isEmpty(pswd) || TextUtils.isEmpty(pswdSure)
-				|| !pswd.equals(pswdSure)) {
-			this.showToast(this.getString(R.string.register_pswd_not_correct));
-			return false;
-		}
-		return true;
 	}
 
 	@Override
@@ -162,7 +111,7 @@ public class RegisterActivity extends BaseActivity {
 				GlobalConfig.SharePre.KEY_USERNAME, mMember.getUsername());
 		SharedPreferenceUtil.getSharedPrefercence().put(
 				this.getApplicationContext(), GlobalConfig.SharePre.KEY_PSWD,
-				mEtPswd.getText().toString().trim());
+				mUserPswd);
 		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.register_success));
 		this.setResult(RESULT_OK);

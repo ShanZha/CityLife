@@ -1,9 +1,16 @@
 package com.andrnes.modoer;
 
+import android.content.Context;
+import android.view.ViewGroup;
+
+import com.fourkkm.citylife.R;
 import com.zj.app.annotation.Lazy;
+import com.zj.app.annotation.Validates;
+import com.zj.support.widget.item.ItemSingle;
+import com.zj.support.widget.itemview.ItemView;
 
 /** 主题图片表 */
-public class ModoerPictures {
+public class ModoerPictures extends ItemSingle {
 
 	private int id;
 	/** 相册id */
@@ -20,15 +27,19 @@ public class ModoerPictures {
 	private ModoerMembers uid;
 
 	/** 用户名称 */
+	@Validates(info = "用户名不能为空,用户名长度不能超过16个字符", type = "isNull,maxSize16")
 	private String username;
 
 	/** 标题 */
+	@Validates(info = "标题不能为空,标题长度不能超过60个字符", type = "isNull,maxSize60")
 	private String title;
 
 	/** 缩略图 */
+	@Validates(info = "缩略图不能为空,缩略图长度不能超过255个字符", type = "isNull,maxSize255")
 	private String thumb;
 
-	/** 文件名 */
+	/** 大图 */
+	@Validates(info = "大图不能为空,大图长度不能超过255个字符", type = "isNull,maxSize255")
 	private String filename;
 
 	/** 图片宽度 */
@@ -209,5 +220,11 @@ public class ModoerPictures {
 				+ ",thumb = " + thumb + ",size = " + size + ",width = " + width
 				+ "height = " + height + " ,url = " + url + ",filename = "
 				+ filename + "]";
+	}
+
+	@Override
+	public ItemView newCell(Context context, ViewGroup root) {
+		// TODO Auto-generated method stub
+		return this.createCellFromXml(context, R.layout.upload_pic_item, root);
 	}
 }

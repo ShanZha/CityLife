@@ -84,9 +84,7 @@ public class FloatingTranslucentProxy implements OnClickListener,
 	 * @param anchor
 	 */
 	public void showAsDropDown(View anchor) {
-		if (mParent != null && mParent.getParent() != null) {
-			((ViewGroup) mParent.getParent()).removeAllViews();
-		}
+		this.reset();
 		if (null != mPopWindow) {
 			mPopWindow.showAsDropDown(anchor);
 		}
@@ -100,20 +98,22 @@ public class FloatingTranslucentProxy implements OnClickListener,
 	 * @param yoff
 	 */
 	public void showAsDropDown(View anchor, int xoff, int yoff) {
-		if (mParent != null && mParent.getParent() != null) {
-			((ViewGroup) mParent.getParent()).removeAllViews();
-		}
+		this.reset();
 		if (null != mPopWindow) {
 			mPopWindow.showAsDropDown(anchor, xoff, yoff);
 		}
 	}
 
 	public void showLocation(View parent, int gravity, int x, int y) {
-		if (mParent != null && mParent.getParent() != null) {
-			((ViewGroup) mParent.getParent()).removeAllViews();
-		}
+		this.reset();
 		if (null != mPopWindow) {
 			mPopWindow.showAtLocation(parent, gravity, x, y);
+		}
+	}
+
+	private void reset() {
+		if (null != mParent && mParent.getParent() != null) {
+			((ViewGroup) mParent.getParent()).removeAllViews();
 		}
 	}
 

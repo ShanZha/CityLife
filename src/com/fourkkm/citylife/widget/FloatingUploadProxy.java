@@ -1,6 +1,5 @@
 package com.fourkkm.citylife.widget;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -13,60 +12,69 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.PopupWindow.OnDismissListener;
 
+import com.andrnes.modoer.ModoerPictures;
 import com.fourkkm.citylife.R;
+import com.fourkkm.citylife.itemview.UploadPicItemView;
+import com.zj.support.widget.adapter.ItemSingleAdapter;
 
 /**
- * 漂浮的一级菜单代理
+ * 漂浮上传框
  * 
  * @author ShanZha
  * 
  */
-public class FloatingOneMenuProxy implements OnItemClickListener,
-		OnClickListener {
+public class FloatingUploadProxy implements OnItemClickListener {
 
 	private Context mCtx;
-	private View mParent;
-	private ListView mListView;
+	private GridView mGvPics;
+	private ImageView mIvClose;
+	private Button mBtnCommit;
 	private BaseAdapter mAdapter;
 	private PopupWindow mPopWindow;
-	private List<String> mDatas;
+	private List<ModoerPictures> mPicsList;
 	private IFloatingItemClick mOnItemClickListener;
+	private OnClickListener mOnClickListener;
 	private int mType = -1;
+	private View mParent;
 
 	/**
 	 * @param context
 	 * @param type
 	 *            漂浮的操作类型，见GlobalConfig.FloatingType
 	 */
-	public FloatingOneMenuProxy(Context context, int type) {
+	public FloatingUploadProxy(Context context, OnClickListener listener,
+			int type) {
 		this.mCtx = context;
 		this.mType = type;
+		this.mOnClickListener = listener;
 		this.prepare();
 	}
 
 	private void prepare() {
-		mParent = LayoutInflater.from(mCtx).inflate(R.layout.floating_one_menu,
+		mParent = LayoutInflater.from(mCtx).inflate(R.layout.floating_upload,
 				null);
-		mListView = (ListView) mParent
-				.findViewById(R.id.floating_one_menu_listview);
-		mListView.setOnItemClickListener(this);
+		mGvPics = (GridView) mParent.findViewById(R.id.floating_upload_gv_pics);
+		mIvClose = (ImageView) mParent
+				.findViewById(R.id.floating_upload_iv_close);
+		mBtnCommit = (Button) mParent
+				.findViewById(R.id.floating_upload_btn_commit);
+		mGvPics.setOnItemClickListener(this);
+		mIvClose.setOnClickListener(mOnClickListener);
+		mBtnCommit.setOnClickListener(mOnClickListener);
+
 		mPopWindow = new PopupWindow(mParent, LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT);
-		mParent.setOnClickListener(this);
 		// 设置PopupWindow外部区域是否可触摸
-		mPopWindow.setOutsideTouchable(true);
+		// mPopWindow.setOutsideTouchable(true);
 		mPopWindow.setBackgroundDrawable(new BitmapDrawable());
 		mPopWindow.setFocusable(true);
 		mPopWindow.setTouchable(true);
 
-		mDatas = new ArrayList<String>();
-
-		mAdapter = new FloatingAdapter(mCtx, mDatas, 2);
-		mListView.setAdapter(mAdapter);
 	}
 
 	/**
@@ -74,8 +82,8 @@ public class FloatingOneMenuProxy implements OnItemClickListener,
 	 * 
 	 * @param datas
 	 */
-	public void setDatas(List<String> datas) {
-		this.mDatas.addAll(datas);
+	public void setDatas(List<ModoerPictures> datas) {
+		this.mPicsList = datas;
 		this.notifyDataChanged();
 	}
 
@@ -83,10 +91,8 @@ public class FloatingOneMenuProxy implements OnItemClickListener,
 		this.mOnItemClickListener = listener;
 	}
 
-	public void setFloatingDismissListener(OnDismissListener listener) {
-		if (null != mPopWindow) {
-			mPopWindow.setOnDismissListener(listener);
-		}
+	public void setOnClickListener(OnClickListener listener) {
+		this.mOnClickListener = listener;
 	}
 
 	/**
@@ -115,9 +121,11 @@ public class FloatingOneMenuProxy implements OnItemClickListener,
 		}
 	}
 
-	public void resetSelectItemBg(String key) {
-		((FloatingAdapter) mAdapter).mCurrName = key;
-		this.notifyDataChanged();
+	public void showLocation(View parent, int gravity, int x, int y) {
+		this.reset();
+		if (null != mPopWindow) {
+			mPopWindow.showAtLocation(parent, gravity, x, y);
+		}
 	}
 
 	private void reset() {
@@ -133,7 +141,14 @@ public class FloatingOneMenuProxy implements OnItemClickListener,
 	}
 
 	private void notifyDataChanged() {
-		if (null != mAdapter) {
+		if (null == mPicsList) {
+			return;
+		}
+		if (null == mAdapter) {
+			mAdapter = new ItemSingleAdapter<UploadPicItemView, ModoerPictures>(
+					mPicsList, mCtx);
+			mGvPics.setAdapter(mAdapter);
+		} else {
 			mAdapter.notifyDataSetChanged();
 		}
 	}
@@ -143,15 +158,7 @@ public class FloatingOneMenuProxy implements OnItemClickListener,
 			long id) {
 		// TODO Auto-generated method stub
 		if (null != mOnItemClickListener) {
-			mOnItemClickListener.onFloatingItemClick(position,
-					mDatas.get(position), mType);
+			mOnItemClickListener.onFloatingItemClick(position, "", mType);
 		}
-		this.dismiss();
-	}
-
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		this.dismiss();
 	}
 }

@@ -1,7 +1,10 @@
 package com.andrnes.modoer;
 
-public class ModoerFenleiCategory {
+import java.io.Serializable;
 
+public class ModoerFenleiCategory implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int id;
 	/** 上级分类ID */
 	private ModoerFenleiCategory pid;

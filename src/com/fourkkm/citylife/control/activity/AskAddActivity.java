@@ -23,6 +23,7 @@ import com.fourkkm.citylife.AskCategoryManager;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.zj.app.BaseActivity;
 import com.zj.app.utils.AppUtils;
@@ -153,6 +154,7 @@ public class AskAddActivity extends BaseActivity implements
 		ask.setContent(content);
 		ask.setReward(Integer.valueOf(rewardPoint));
 		ask.setKeywords(keywords);
+		ask.setDateline((int) CommonUtil.getCurrTimeByPHP());
 
 		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
 				.getCurrMember();
@@ -245,7 +247,7 @@ public class AskAddActivity extends BaseActivity implements
 					.getAskCategoryChild(parentCategory.getId());
 			mCategoryChildList.clear();
 			mCategoryChildList.addAll(childNames);
-//			mSpCategoryChild.setSelection(0);
+			// mSpCategoryChild.setSelection(0);
 			this.notifyCategoryChildDataChanged();
 		} catch (Exception e) {
 		}

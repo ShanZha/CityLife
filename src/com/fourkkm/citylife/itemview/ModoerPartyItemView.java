@@ -1,9 +1,8 @@
 package com.fourkkm.citylife.itemview;
 
-import java.util.Date;
-
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -11,9 +10,7 @@ import android.widget.TextView;
 import com.andrnes.modoer.ModoerParty;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
-import com.fourkkm.citylife.control.activity.BaseListActivity;
 import com.fourkkm.citylife.util.CommonUtil;
-import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.widget.item.BaseItem;
 import com.zj.support.widget.itemview.ItemView;
@@ -72,14 +69,19 @@ public class ModoerPartyItemView extends RelativeLayout implements ItemView {
 		String url = GlobalConfig.URL_PIC + party.getThumb();
 		AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvThumb);
 		mTvSubject.setText(party.getSubject());
-		mTvAddress.setText(mCtx.getString(R.string.party_address)
+		mTvAddress.setText(mCtx.getString(R.string.party_address_detail)
 				+ party.getAddress());
-		mTvTime.setText(mCtx.getString(R.string.party_time)
+		mTvTime.setText(mCtx.getString(R.string.party_time_detail)
 				+ CommonUtil.getTimeByPHP(party.getBegintime(), "MM-dd hh:mm")
 				+ "~"
 				+ CommonUtil.getTimeByPHP(party.getEndtime(), "MM-dd hh:mm"));
-		mTvDesc.setText(mCtx.getString(R.string.party_desc) + party.getDes());
-		mTvSignUpCount.setText(party.getApplynum() + "");
+		mTvDesc.setText(mCtx.getString(R.string.party_desc_detail) + party.getDes());
+		int applyNum = party.getApplynum();
+		if (applyNum > 0) {
+			mTvSignUpCount.setText("已报名" + applyNum + "人");
+		} else {
+			mTvSignUpCount.setVisibility(View.GONE);
+		}
 
 	}
 

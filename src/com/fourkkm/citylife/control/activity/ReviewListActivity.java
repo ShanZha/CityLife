@@ -10,11 +10,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerReview;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerReviewItemView;
 import com.fourkkm.citylife.view.PullUpDownListView;
+import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.adapter.ItemSingleAdapter;
 
@@ -29,6 +32,7 @@ public class ReviewListActivity extends BaseListActivity {
 	private TextView mTvTitle;
 	private int mSujectId = 0;
 	private List<ModoerReview> mReviewLists;
+	private int mOperator = -1;
 
 	@Override
 	protected void prepareViews() {
@@ -37,7 +41,7 @@ public class ReviewListActivity extends BaseListActivity {
 		mListView = (PullUpDownListView) this
 				.findViewById(R.id.review_list_listview);
 		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
-		mTvTitle.setText(this.getString(R.string.review));
+
 		super.prepareViews();
 	}
 
@@ -46,11 +50,17 @@ public class ReviewListActivity extends BaseListActivity {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
 		mReviewLists = new ArrayList<ModoerReview>();
-		Intent intent = this.getIntent();
-		mSujectId = intent.getIntExtra("subjectId", 0);
 		mAdapter = new ItemSingleAdapter<ModoerReviewItemView, ModoerReview>(
 				mReviewLists, this);
 		mListView.setAdapter(mAdapter);
+		Intent intent = this.getIntent();
+		mOperator = intent.getIntExtra("operator", -1);
+		if (GlobalConfig.IntentKey.PARTY_ME == mOperator) {
+			mTvTitle.setText(this.getString(R.string.user_my_review));
+		} else {
+			mTvTitle.setText(this.getString(R.string.review));
+			mSujectId = intent.getIntExtra("subjectId", 0);
+		}
 		this.onFirstLoadSetting();
 		this.onLoadMore();
 	}
@@ -64,12 +74,21 @@ public class ReviewListActivity extends BaseListActivity {
 		// TODO Auto-generated method stub
 		super.onLoadMore();
 
-		String selectCode = "from com.andrnes.modoer.ModoerReview mr where mr.status = 1 and mr.sid.id = "
-				+ mSujectId;
+		StringBuilder sb = new StringBuilder();
+		sb.append("from com.andrnes.modoer.ModoerReview mr where mr.status = 1");
+		if (GlobalConfig.IntentKey.REVIEW_ME == mOperator) {
+			ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
+					.getCurrMember();
+			if (null != member) {
+				sb.append(" and mr.uid.id = " + member.getId());
+			}
+		} else {
+			sb.append(" and mr.sid.id = " + mSujectId);
+		}
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("max", GlobalConfig.MAX);
 		paramsMap.put("offset", GlobalConfig.MAX * mPage);
-		this.getStoreOperation().findAll(selectCode, paramsMap, true,
+		this.getStoreOperation().findAll(sb.toString(), paramsMap, true,
 				new ModoerReview(),
 				new Param(this.hashCode(), GlobalConfig.URL_CONN));
 	}
@@ -79,11 +98,11 @@ public class ReviewListActivity extends BaseListActivity {
 			long id) {
 		// TODO Auto-generated method stub
 		super.onItemClick(parent, view, position, id);
-		ModoerReview review = (ModoerReview) parent.getAdapter().getItem(
-				position);
-		Intent intent = new Intent(this, ReviewDetailActivity.class);
-		intent.putExtra("review", review);
-		this.startActivity(intent);
+//		ModoerReview review = (ModoerReview) parent.getAdapter().getItem(
+//				position);
+//		Intent intent = new Intent(this, ReviewDetailActivity.class);
+//		intent.putExtra("review", review);
+//		this.startActivity(intent);
 	}
 
 	@Override

@@ -10,30 +10,35 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerAlbum;
 import com.andrnes.modoer.ModoerFavorites;
 import com.andrnes.modoer.ModoerMembers;
+import com.andrnes.modoer.ModoerPictures;
 import com.andrnes.modoer.ModoerReview;
 import com.andrnes.modoer.ModoerReviewOpt;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
-import com.fourkkm.citylife.SinaWeiboShareProxy;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.third.SinaWeiboShareProxy;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.FloatingTranslucentProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
+import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.sina.weibo.sdk.WeiboSDK;
 import com.sina.weibo.sdk.api.BaseResponse;
 import com.sina.weibo.sdk.api.IWeiboAPI;
 import com.sina.weibo.sdk.api.IWeiboHandler;
-import com.zj.app.BaseActivity;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.observer.model.Param;
@@ -44,18 +49,19 @@ import com.zj.support.observer.model.Param;
  * @author ShanZha
  * 
  */
-public class SubjectDetailActivity extends BaseActivity implements
+public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		IFloatingItemClick, IWeiboHandler.Response {
 
 	private ModoerSubject mSubject;
-	private RelativeLayout mRlAddress, mRlTel;
+	private RelativeLayout mRlAddress, mRlTel, mRlDesc;
 	private TextView mTvTitle, mTvShopName, mTvThumbnailCount, mTvAveragePer,
-			mTvTaste, mTvAddress, mTvTel, mTvImpression, mTvReviewCount,
+			mTvTaste, mTvAddress, mTvTel, mTvDesc, mTvReviewCount,
 			mTvReviewUserName, mTvReviewAveragePer, mTvReviewContent,
 			mTvCompositeScore;
 	/** 4项评分 **/
 	private TextView mTvSort1, mTvSort2, mTvSort3, mTvSort4;
-	private ImageView mIvThumbnail;
+	private ImageView mIvThumbnail, mIvTax, mIvRecommend, mIvLuxury,
+			mIvDividerTel, mIvDividerDesc;
 	private RatingBar mRatingBar;
 	private RatingBar mRatingBarReview;
 
@@ -65,7 +71,9 @@ public class SubjectDetailActivity extends BaseActivity implements
 	private RelativeLayout mRlReviewOpt;
 	private ProgressBar mProBarReviewOpt;
 
-	private ImageButton mBtn;
+	private LinearLayout mLlCollectLoading, mLlUpload;
+
+	private ImageButton mBtnCollection;
 
 	/** 分享选择代理 **/
 	private FloatingTranslucentProxy mFloatingShareProxy;
@@ -73,6 +81,8 @@ public class SubjectDetailActivity extends BaseActivity implements
 
 	// private IWeiboAPI mSinaWeiboApi;
 	private SinaWeiboShareProxy mSinaShareProxy;
+	private ProgressDialogProxy mDialogProxy;
+	private ModoerAlbum mAlbum;
 
 	@Override
 	protected void prepareViews() {
@@ -82,7 +92,9 @@ public class SubjectDetailActivity extends BaseActivity implements
 
 		mTvTitle = (TextView) this
 				.findViewById(R.id.titlebar_back_right_tv_title);
-		mBtn = (ImageButton) this
+		mLlCollectLoading = (LinearLayout) this
+				.findViewById(R.id.titlebar_back_right_ll_probar);
+		mBtnCollection = (ImageButton) this
 				.findViewById(R.id.titlebar_back_right_btn_operator);
 		mTvShopName = (TextView) this
 				.findViewById(R.id.subject_detail_tv_shop_name);
@@ -97,7 +109,7 @@ public class SubjectDetailActivity extends BaseActivity implements
 		mTvAddress = (TextView) this
 				.findViewById(R.id.subject_detail_tv_address);
 		mTvTel = (TextView) this.findViewById(R.id.subject_detail_tv_tel);
-		mTvImpression = (TextView) this
+		mTvDesc = (TextView) this
 				.findViewById(R.id.subject_detail_tv_impression);
 		mTvReviewCount = (TextView) this
 				.findViewById(R.id.subject_detail_tv_review_counts);
@@ -113,10 +125,21 @@ public class SubjectDetailActivity extends BaseActivity implements
 
 		mIvThumbnail = (ImageView) this
 				.findViewById(R.id.thumb_detail_iv_thumb);
+		mIvTax = (ImageView) this.findViewById(R.id.subject_list_item_iv_tax);
+		mIvRecommend = (ImageView) this
+				.findViewById(R.id.subject_list_item_iv_recommend);
+		mIvLuxury = (ImageView) this
+				.findViewById(R.id.subject_list_item_iv_luxury);
+		mIvDividerTel = (ImageView) this
+				.findViewById(R.id.subject_detail_iv_divider_tel);
+		mIvDividerDesc = (ImageView) this
+				.findViewById(R.id.subject_detail_iv_divider_desc);
 
 		mRlAddress = (RelativeLayout) this
 				.findViewById(R.id.subject_detail_rl_address);
 		mRlTel = (RelativeLayout) this.findViewById(R.id.subject_detail_rl_tel);
+		mRlDesc = (RelativeLayout) this
+				.findViewById(R.id.subject_detail_rl_impression);
 
 		mRatingBar = (RatingBar) this
 				.findViewById(R.id.subject_detail_ratingBar);
@@ -133,17 +156,23 @@ public class SubjectDetailActivity extends BaseActivity implements
 		mProBarReviewOpt = (ProgressBar) this
 				.findViewById(R.id.subject_detail_proBar_review_opt);
 
+		mLlUpload = (LinearLayout) this
+				.findViewById(R.id.subject_detail_ll_upload);
+		mGvPics = (GridView) this.findViewById(R.id.floating_upload_gv_pics);
+
 		mTvThumbnailCount.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
+		mIsAutoLogin = false;
 		super.prepareDatas();
 		this.prepareShare();
 		mTvTitle.setText(this.getString(R.string.subject_detail));
-		mBtn.setBackgroundResource(R.drawable.subject_detail_collection_selector);
-
+		mBtnCollection
+				.setBackgroundResource(R.drawable.subject_detail_collection_selector);
+		mDialogProxy = new ProgressDialogProxy(this);
 		mSubject = (ModoerSubject) this.getIntent().getSerializableExtra(
 				"ModoerSubject");
 		if (null != mSubject) {
@@ -151,24 +180,22 @@ public class SubjectDetailActivity extends BaseActivity implements
 			mTvThumbnailCount.setText("" + mSubject.getPictures());
 			mTvAveragePer.setText(this.getString(R.string.average_per)
 					+ mSubject.getAvgprice());
-			String address = mSubject.getAddress();
-			if (TextUtils.isEmpty(address)) {
-				mRlAddress.setVisibility(View.GONE);
-			} else {
-				mTvAddress.setText(address);
+			this.setTxtValue(mRlAddress, mTvAddress, mSubject.getAddress());
+			this.setTxtValue(mRlTel, mTvTel, mSubject.getTel());
+			this.setTxtValue(mRlDesc, mTvDesc, mSubject.getDescription());
+			if (TextUtils.isEmpty(mSubject.getDescription())) {
+				mIvDividerDesc.setVisibility(View.GONE);
 			}
-			String tel = mSubject.getTel();
-			if (TextUtils.isEmpty(tel)) {
-				mRlTel.setVisibility(View.GONE);
-			} else {
-				mTvTel.setText(tel);
+			if (TextUtils.isEmpty(mSubject.getTel())
+					&& TextUtils.isEmpty(mSubject.getAddress())) {
+				mIvDividerTel.setVisibility(View.GONE);
 			}
 
 			mTvReviewCount.setText(this.getString(R.string.review) + "("
 					+ mSubject.getReviews() + ")");
 			mTvCompositeScore.setText(this.getString(R.string.composite_score)
-					+ mSubject.getAvgsort().intValue());
-			mRatingBar.setProgress(mSubject.getAvgsort().intValue());
+					+ mSubject.getAvgsort());
+			mRatingBar.setProgress((int)mSubject.getAvgsort());
 			String thumbnailUrl = GlobalConfig.URL_PIC + mSubject.getThumb();
 			AsyncImageLoader.getImageLoad(this).showPic(thumbnailUrl,
 					mIvThumbnail);
@@ -201,9 +228,24 @@ public class SubjectDetailActivity extends BaseActivity implements
 	private void fetchOneBestReview(int subjectId) {
 		String selectCode = "from com.andrnes.modoer.ModoerReview mr where mr.sid.id = "
 				+ subjectId + " and mr.status = 1 and mr.best = 2";
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_FIND_REVIEW_BY_SUBJECT);
 		this.getStoreOperation().find(selectCode,
-				new HashMap<String, Object>(), true, new ModoerReview(),
-				new Param(this.hashCode(), GlobalConfig.URL_CONN));
+				new HashMap<String, Object>(), true, new ModoerReview(), param);
+	}
+
+	/**
+	 * 获取此主题相册
+	 * 
+	 * @param subjectId
+	 */
+	private void fetchModoerAlbum(int subjectId) {
+		String selectCode = "from com.andrnes.modoer.ModoerAlbum ma where ma.sid.id = "
+				+ subjectId;
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_FIND_ALBUM_BY_SUBJECT);
+		this.getStoreOperation().find(selectCode,
+				new HashMap<String, Object>(), true, new ModoerAlbum(), param);
 	}
 
 	private void prepareShare() {
@@ -211,13 +253,22 @@ public class SubjectDetailActivity extends BaseActivity implements
 		String[] arrays = this.getResources().getStringArray(
 				R.array.share_array);
 		mShareList.addAll(Arrays.asList(arrays));
-		mFloatingShareProxy = new FloatingTranslucentProxy(this, 0);
+		mFloatingShareProxy = new FloatingTranslucentProxy(this,
+				GlobalConfig.FloatingType.TYPE_SHARE);
 		mFloatingShareProxy.setFloatingItemClickListener(this);
 		mFloatingShareProxy.setDatas(mShareList);
 
 		IWeiboAPI mSinaWeiboApi = WeiboSDK.createWeiboAPI(this,
-				GlobalConfig.SINA_WEIBO_APP_KEY);
+				GlobalConfig.Third.SINA_WEIBO_APP_KEY);
 		mSinaShareProxy = new SinaWeiboShareProxy(this, mSinaWeiboApi);
+	}
+
+	private void setTxtValue(View parent, TextView tv, String content) {
+		if (TextUtils.isEmpty(content)) {
+			parent.setVisibility(View.GONE);
+		} else {
+			tv.setText(content);
+		}
 	}
 
 	private String buildShareContent() {
@@ -236,6 +287,16 @@ public class SubjectDetailActivity extends BaseActivity implements
 			sb.append(tel);
 		}
 		return sb.toString();
+	}
+
+	private void showLoadingCollection() {
+		mLlCollectLoading.setVisibility(View.VISIBLE);
+		mBtnCollection.setVisibility(View.GONE);
+	}
+
+	private void hideLoadingCollection() {
+		mLlCollectLoading.setVisibility(View.GONE);
+		mBtnCollection.setVisibility(View.VISIBLE);
 	}
 
 	private void showReviewLoading() {
@@ -262,9 +323,10 @@ public class SubjectDetailActivity extends BaseActivity implements
 	 * 收藏
 	 */
 	private void onCollection() {
+		this.showLoadingCollection();
 		this.showToast(this.getString(R.string.subject_collection_start));
 		ModoerFavorites favorite = new ModoerFavorites();
-		favorite.setAddtime(CommonUtil.getCurrTimeByPHP());
+		favorite.setAddtime((int) CommonUtil.getCurrTimeByPHP());
 		favorite.setSid(mSubject);
 		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
 				.getCurrMember();
@@ -275,11 +337,32 @@ public class SubjectDetailActivity extends BaseActivity implements
 		this.getStoreOperation().saveOrUpdate(favorite, param);
 	}
 
+	private void onSaveModoerAlbum() {
+		if (null == mAlbum) {
+			return;
+		}
+		// Step 3：保存ModoerPictures
+		List<Object> objs = new ArrayList<Object>();
+		for (ModoerPictures pic : mPicList) {
+			pic.setAlbumid(mAlbum);
+			pic.setSid(mSubject);
+			pic.setStatus(1);
+			pic.setUrl("");
+		}
+		objs.addAll(mPicList);
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_PICS);
+		this.getStoreOperation().saveOrUpdateArray(objs, param);
+	}
+
 	public void onClickBack(View view) {// 返回
 		this.finish();
 	}
 
 	public void onClickRight(View view) {// 收藏
+		if (this.isUploading()) {
+			return;
+		}
 		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
 			this.startActivityForResult(new Intent(this, LoginActivity.class),
 					REQ_LOGIN_CODE_COLLECTION);
@@ -289,6 +372,9 @@ public class SubjectDetailActivity extends BaseActivity implements
 	}
 
 	public void onClickThumbnail(View view) {// 缩略图
+		if (this.isUploading()) {
+			return;
+		}
 		Intent intent = new Intent(this, SubjectAlbumActivity.class);
 		intent.putExtra("subjectId", mSubject.getId());
 		intent.putExtra("subjectName", mSubject.getName());
@@ -297,37 +383,112 @@ public class SubjectDetailActivity extends BaseActivity implements
 	}
 
 	public void onClickAddress(View view) {// 地址
+		if (this.isUploading()) {
+			return;
+		}
 		Intent intent = new Intent(this, SubjectMapMarkerActivity.class);
 		intent.putExtra("ModoerSubject", mSubject);
 		this.startActivity(intent);
 	}
 
 	public void onClickTel(View view) {// 电话
-
+		if (this.isUploading()) {
+			return;
+		}
+		try {
+			Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"
+					+ mSubject.getTel()));
+			this.startActivity(intent);
+		} catch (Exception e) {
+			this.showToast(this.getString(R.string.share_tel_unsupport));
+		}
 	}
 
 	public void onClickReviewContent(View view) {// 评价内容
+		if (this.isUploading()) {
+			return;
+		}
 		Intent intent = new Intent(this, ReviewListActivity.class);
 		intent.putExtra("subjectId", mSubject.getId());
 		this.startActivity(intent);
 	}
 
 	public void onClickShareTo(View view) {// 分享到
+		if (this.isUploading()) {
+			return;
+		}
 		if (null != mFloatingShareProxy) {
 			mFloatingShareProxy.showLocation(view, Gravity.CENTER, 0, 0);
 		}
 	}
 
 	public void onClickReview(View view) {// 评价
-
+		if (this.isUploading()) {
+			return;
+		}
+		Intent intent = new Intent(this, ReviewAddActivity.class);
+		intent.putExtra("ModoerSubject", mSubject);
+		this.startActivity(intent);
 	}
 
 	public void onClickUploadPic(View view) {// 上传图片
-
+		if (this.isUploading()) {
+			return;
+		}
+		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
+			this.startActivityForResult(new Intent(this, LoginActivity.class),
+					REQ_LOGIN_CODE_UPLOAD);
+			return;
+		} else {
+			this.prepare();
+		}
+		this.onUploadShow();
 	}
 
 	public void onClickError(View view) {// 报错
+		if (this.isUploading()) {
+			return;
+		}
+	}
 
+	public void onClickClose(View view) {
+		this.onUploadHide();
+	}
+
+	public void onClickAdd(View view) {
+		this.showToast("add");
+		if (!this.isUploadFinished()) {
+			this.showToast(this.getString(R.string.subject_upload_pic_unfinish));
+			return;
+		}
+		if (this.getPicCount() > 0) {
+			if (null != mDialogProxy) {
+				mDialogProxy.showDialog();
+			}
+			if (null == mAlbum) {
+				if (null != mSubject) {
+					this.fetchModoerAlbum(mSubject.getId());
+				}
+			} else {
+				this.onSaveModoerAlbum();
+			}
+		}
+	}
+
+	private void onUploadShow() {
+		mLlUpload.startAnimation(AnimationUtils.loadAnimation(this,
+				R.anim.ani_common_bottombar_in));
+		mLlUpload.setVisibility(View.VISIBLE);
+	}
+
+	private void onUploadHide() {
+		mLlUpload.startAnimation(AnimationUtils.loadAnimation(this,
+				R.anim.ani_common_bottombar_out));
+		mLlUpload.setVisibility(View.GONE);
+	}
+
+	private boolean isUploading() {
+		return mLlUpload.getVisibility() == View.VISIBLE;
 	}
 
 	@Override
@@ -345,6 +506,9 @@ public class SubjectDetailActivity extends BaseActivity implements
 		}
 		if (REQ_LOGIN_CODE_COLLECTION == requestCode) {
 			this.onCollection();
+		} else if (REQ_LOGIN_CODE_UPLOAD == requestCode) {
+			this.prepare();
+			this.onUploadShow();
 		}
 	}
 
@@ -353,28 +517,49 @@ public class SubjectDetailActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
 		this.showToast(this.getString(R.string.subject_collection_success));
+		this.hideLoadingCollection();
+	}
+
+	@Override
+	public void onSuccessSaveOrUpdateArray(Param out) {
+		// TODO Auto-generated method stub
+		super.onSuccessSaveOrUpdateArray(out);
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_SAVE_PICS == operator) {
+			if (null != mDialogProxy) {
+				mDialogProxy.hideDialog();
+			}
+			this.showToast(this.getString(R.string.commit_success));
+			this.onUploadHide();
+		}
 	}
 
 	@Override
 	public void onSuccessFind(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessFind(out);
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_FIND_ALBUM_BY_SUBJECT == operator) {
+			mAlbum = (ModoerAlbum) out.getResult();
+			this.onSaveModoerAlbum();
+		} else if (GlobalConfig.Operator.OPERATION_FIND_REVIEW_BY_SUBJECT == operator) {
+			ModoerReview review = (ModoerReview) out.getResult();
+			if (null != review) {
+				mTvReviewAveragePer.setText(this
+						.getString(R.string.average_per) + review.getPrice());
 
-		ModoerReview review = (ModoerReview) out.getResult();
-		if (null != review) {
-			mTvReviewAveragePer.setText(this.getString(R.string.average_per)
-					+ review.getPrice());
-
-			mTvReviewContent.setText(review.getContent());
-			ModoerMembers member = review.getUid();
-			if (null != member && member.getId() != 0) {
-				mTvReviewUserName.setText(member.getUsername());
+				mTvReviewContent.setText(review.getContent());
+				ModoerMembers member = review.getUid();
+				if (null != member && member.getId() != 0) {
+					mTvReviewUserName.setText(member.getUsername());
+				}
+				int average = (review.getSort1() + review.getSort2()
+						+ review.getSort3() + review.getSort4()) / 4;
+				mRatingBarReview.setProgress(average);
 			}
-			int average = (review.getSort1() + review.getSort2()
-					+ review.getSort3() + review.getSort4()) / 4;
-			mRatingBarReview.setProgress(average);
+			this.hideReviewLoading();
 		}
-		this.hideReviewLoading();
+
 	}
 
 	@Override
@@ -413,13 +598,27 @@ public class SubjectDetailActivity extends BaseActivity implements
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SUBJECT_CONNLECTION == operator) {
 			this.showToast(this.getString(R.string.subject_collection_fail));
+			this.hideLoadingCollection();
+		} else if (GlobalConfig.Operator.OPERATION_FIND_ALBUM_BY_SUBJECT == operator) {
+			if (null != mDialogProxy) {
+				mDialogProxy.hideDialog();
+			}
+			this.showToast(this.getString(R.string.commit_fail));
+		} else if (GlobalConfig.Operator.OPERATION_SAVE_PICS == operator) {
+			if (null != mDialogProxy) {
+				mDialogProxy.hideDialog();
+			}
+			this.showToast(this.getString(R.string.commit_fail));
 		}
 	}
 
 	@Override
 	public void onFloatingItemClick(int pos, String key, int type) {
 		// TODO Auto-generated method stub
-		this.showToast("pos = " + pos + " name = " + key);
+		if (GlobalConfig.FloatingType.TYPE_SHARE != type) {
+			super.onFloatingItemClick(pos, key, type);
+			return;
+		}
 		switch (pos) {
 		case POS_SINA_WEIBO:
 			if (!mSinaShareProxy.isInstall()) {
@@ -502,7 +701,9 @@ public class SubjectDetailActivity extends BaseActivity implements
 	}
 
 	/** 收藏 **/
-	private static final int REQ_LOGIN_CODE_COLLECTION = 1;
+	private static final int REQ_LOGIN_CODE_COLLECTION = 4;
+	/** 上传 **/
+	private static final int REQ_LOGIN_CODE_UPLOAD = 5;
 	/** 新浪微博 **/
 	private static final int REQ_LOGIN_CODE_SINA_WEIBO = 2;
 	private static final int REQ_LOGIN_CODE_SMS = 3;

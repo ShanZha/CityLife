@@ -1,16 +1,17 @@
 package com.fourkkm.citylife.control.activity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -20,11 +21,11 @@ import com.andrnes.modoer.ModoerPartyCategory;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
-import com.fourkkm.citylife.widget.ProgressDialogProxy;
-import com.zj.app.BaseActivity;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.observer.model.Param;
+import com.zj.support.widget.AsyncImageView;
 
 /**
  * 聚会添加
@@ -32,26 +33,38 @@ import com.zj.support.observer.model.Param;
  * @author ShanZha
  * 
  */
-public class PartyAddActivity extends BaseActivity {
+public class PartyAddActivity extends BaseAddActivity {
 
 	private static final String TAG = "PartyAddActivity";
-	private static final int REQ_LOGIN_CODE = 1;
+	/** 常量定义见ModoerParty实体-sex字段 **/
+	private static final int SEX_MAN = 2;
+	private static final int SEX_WOMAN = 1;
+	private static final int SEX_NONE = 0;
+	/** 常量定义见ModoerParty实体-applypriceType字段 **/
+	private static final String INTEGRATION_PONIT = "point1";
+	private static final String INTEGRATION_RMB = "rmb";
+	private static final String INTEGRATION_NONE = "none";
+
+	private static final int POS_INTEGRATION_POINT = 0;
+	private static final int POS_INTEGRATION_RMB = 1;
+	private LinearLayout mLlCategoryLoading;
 	private TextView mTvTitle, mTvInitiator, mTvInitiateTime;
 	private EditText mEtSubject, mEtSignupEnd, mEtBeginTime, mEtEndTime,
-			mEtContact, mEtContactTel, mEtLocationArea, mEtAddrDetail, mEtCost,
-			mEtPlanNum, mEtDesc;
-
-	private Spinner mSpinnerCategoty, mSpinnerSex;
-	private ArrayAdapter<String> mCategoryAdapter, mSexAdapter;
+			mEtContact, mEtContactTel, mEtAddrDetail, mEtCost, mEtPlanNum,
+			mEtIntegration, mEtDesc;
+	private Spinner mSpinnerCategoty, mSpIntegration;
+	private RadioGroup mRgSex;
+	private ArrayAdapter<String> mCategoryAdapter, mIntegrationAdapter;
 	private List<ModoerPartyCategory> mPartyCategoryList;
-
-	private ProgressDialogProxy mDialogProxy;
+	private List<String> mCategoryList, mIntegrationList;
 
 	@Override
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		super.prepareViews();
 		this.setContentView(R.layout.party_add);
+		mIvThumb = (AsyncImageView) this
+				.findViewById(R.id.party_add_iv_thumb_upload);
 		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
 		mTvInitiator = (TextView) this
 				.findViewById(R.id.party_add_tv_initiator);
@@ -67,48 +80,66 @@ public class PartyAddActivity extends BaseActivity {
 		mEtContact = (EditText) this.findViewById(R.id.party_add_et_contact);
 		mEtContactTel = (EditText) this
 				.findViewById(R.id.party_add_et_contact_tel);
-		mEtLocationArea = (EditText) this
-				.findViewById(R.id.party_add_et_location_area);
 		mEtAddrDetail = (EditText) this
 				.findViewById(R.id.party_add_et_addr_detail);
 		mEtCost = (EditText) this.findViewById(R.id.party_add_et_cost);
 		mEtPlanNum = (EditText) this.findViewById(R.id.party_add_et_plan_num);
 		mEtDesc = (EditText) this.findViewById(R.id.party_add_et_desc);
+		mEtIntegration = (EditText) this
+				.findViewById(R.id.party_add_et_integration);
 
 		mSpinnerCategoty = (Spinner) this
 				.findViewById(R.id.party_add_spinner_category);
-		mSpinnerSex = (Spinner) this.findViewById(R.id.party_add_spinner_sex);
-
+		mSpIntegration = (Spinner) this
+				.findViewById(R.id.party_add_spinner_integration);
+		mRgSex = (RadioGroup) this.findViewById(R.id.party_add_radio_group);
+		mSpAreaFirst = (Spinner) this
+				.findViewById(R.id.party_add_spinner_area_first);
+		mSpAreaSecond = (Spinner) this
+				.findViewById(R.id.party_add_spinner_area_second);
+		mLlArea = (LinearLayout) this.findViewById(R.id.party_add_ll_area);
+		mLlAreaLoading = (LinearLayout) this
+				.findViewById(R.id.party_add_ll_area_loading);
+		mLlCategoryLoading = (LinearLayout) this
+				.findViewById(R.id.party_add_ll_category_loading);
+		mLlThumbLoading = (LinearLayout) this
+				.findViewById(R.id.party_add_ll_thumb_loading);
 	}
 
 	@Override
-	protected void prepareDatas() {
-		// TODO Auto-generated method stub
-		super.prepareDatas();
-		// 如果没有登录，先登录
-		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
-			this.startActivityForResult(new Intent(this, LoginActivity.class),
-					REQ_LOGIN_CODE);
-			return;
-		}
-		this.prepare();
+	protected void prepare() {
+		super.prepare();
+		mTvTitle.setText(this.getString(R.string.party_add));
+		mPartyCategoryList = new ArrayList<ModoerPartyCategory>();
+		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
+				.getCurrMember();
+		mTvInitiator.setText(member.getUsername());
+		mTvInitiateTime.setText(DateFormatMethod.getCurrentDate());
+
+		this.fetchPartyCategory();
 	}
 
-	private void prepare() {
-		mTvTitle.setText(this.getString(R.string.party_add));
-
-		mPartyCategoryList = new ArrayList<ModoerPartyCategory>();
-		mSexAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, this.getResources()
-						.getStringArray(R.array.sex_array));
-		mSexAdapter
+	@Override
+	protected void setSpAdapter() {
+		// TODO Auto-generated method stub
+		super.setSpAdapter();
+		mCategoryList = new ArrayList<String>();
+		mCategoryAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, mCategoryList);
+		mSpinnerCategoty.setAdapter(mCategoryAdapter);
+		mCategoryAdapter
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		mSpinnerSex.setAdapter(mSexAdapter);
 
-		mDialogProxy = new ProgressDialogProxy(this);
+		mIntegrationList = new ArrayList<String>();
+		String[] arrays = this.getResources().getStringArray(
+				R.array.party_sign_up);
+		mIntegrationList.addAll(Arrays.asList(arrays));
+		mIntegrationAdapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, mIntegrationList);
+		mSpIntegration.setAdapter(mIntegrationAdapter);
+		mIntegrationAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-		this.prepareDataByMember();
-		this.fetchPartyCategory();
 	}
 
 	private void fetchPartyCategory() {
@@ -120,51 +151,109 @@ public class PartyAddActivity extends BaseActivity {
 				param);
 	}
 
-	private void prepareDataByMember() {
-		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
-				.getCurrMember();
-		mTvInitiator.setText(member.getUsername());
-		mTvInitiateTime.setText(DateFormatMethod.getCurrentDate());
-
+	private int getSexByCheckId(int checkId) {
+		switch (checkId) {
+		case R.id.party_add_rbtn_sex_man:
+			return SEX_MAN;
+		case R.id.party_add_rbtn_sex_woman:
+			return SEX_WOMAN;
+		case R.id.party_add_rbtn_sex_none:
+			return SEX_NONE;
+		default:
+			return SEX_NONE;
+		}
 	}
 
-	private boolean validate() {
-		String subject = mEtSubject.getText().toString().trim();
-		if (TextUtils.isEmpty(subject)) {
-			return false;
+	private String getIntegrationType() {
+		int checkPos = mSpIntegration.getSelectedItemPosition();
+		switch (checkPos) {
+		case POS_INTEGRATION_POINT:
+			return INTEGRATION_PONIT;
+		case POS_INTEGRATION_RMB:
+			return INTEGRATION_RMB;
 		}
-		return false;
+		return INTEGRATION_NONE;
 	}
 
 	public void onClickBack(View view) {
 		this.finish();
 	}
 
-	public void onClickThumb(View view) {// 缩略图
-
+	private boolean validate() {
+		long signUpTime = CommonUtil.formatTimeByPHP(mEtSignupEnd.getText()
+				.toString().trim());
+		long beginTime = CommonUtil.formatTimeByPHP(mEtBeginTime.getText()
+				.toString().trim());
+		long endTime = CommonUtil.formatTimeByPHP(mEtEndTime.getText()
+				.toString().trim());
+		if (0 == signUpTime || 0 == beginTime || 0 == endTime) {
+			this.showToast(this.getString(R.string.time_format_error));
+			return false;
+		}
+		String planNum = mEtPlanNum.getText().toString().trim();
+		if (TextUtils.isEmpty(planNum)) {
+			this.showToast(this.getString(R.string.plan_num_not_null));
+			return false;
+		}
+		return true;
 	}
 
 	public void onClickAdd(View view) {// 添加
 		if (!this.validate()) {
 			return;
 		}
-		mDialogProxy.showDialog();
-		ModoerParty party = new ModoerParty();
-		party.setApplypriceType("rmb");
-		int categoryPos = mSpinnerCategoty.getSelectedItemPosition();
-		party.setCatid(mPartyCategoryList.get(categoryPos));
-		int sexPos = mSpinnerSex.getSelectedItemPosition();
-	}
+		try {
+			ModoerParty party = new ModoerParty();
+			int categoryPos = mSpinnerCategoty.getSelectedItemPosition();
+			party.setCatid(mPartyCategoryList.get(categoryPos));
+			party.setCityId(((CoreApp) AppUtils.getBaseApp(this)).getCurrArea());
+			int secondPos = mSpAreaSecond.getSelectedItemPosition();
+			String secondAreaName = mAreaSecond.get(secondPos);
+			party.setAid(mAreaMgr.getSubjectAreaByName(secondAreaName));
+			party.setUid(mCurrMember);
+			party.setUsername(mCurrMember.getUsername());
+			int checkId = mRgSex.getCheckedRadioButtonId();
+			party.setSex(this.getSexByCheckId(checkId));
+			party.setSubject(mEtSubject.getText().toString().trim());
+			long signUpTime = CommonUtil.formatTimeByPHP(mEtSignupEnd.getText()
+					.toString().trim());
+			long beginTime = CommonUtil.formatTimeByPHP(mEtBeginTime.getText()
+					.toString().trim());
+			long endTime = CommonUtil.formatTimeByPHP(mEtEndTime.getText()
+					.toString().trim());
+			party.setJoinendtime((int) signUpTime);
+			party.setBegintime((int) beginTime);
+			party.setEndtime((int) endTime);
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (RESULT_OK == resultCode && REQ_LOGIN_CODE == requestCode) {
-			this.prepare();
-		} else {
-			this.finish();
+			String planNum = mEtPlanNum.getText().toString().trim();
+			party.setPlannum(Integer.valueOf(planNum));
+			party.setThumb(mThumbPath);
+			String cost = mEtCost.getText().toString().trim();
+			String integration = mEtIntegration.getText().toString().trim();
+			if (!TextUtils.isEmpty(cost)) {
+				party.setPrice(Integer.valueOf(cost));
+			}
+			if (!TextUtils.isEmpty(integration)) {
+				party.setApplypriceType(this.getIntegrationType());
+				party.setApplyprice(Float.valueOf(integration));
+			} else {
+				party.setApplypriceType(INTEGRATION_NONE);
+			}
+			party.setLinkman(mEtContact.getText().toString().trim());
+			party.setContact(mEtContactTel.getText().toString().trim());
+			party.setAddress(mEtAddrDetail.getText().toString().trim());
+			party.setDes(mEtDesc.getText().toString().trim());
+			party.setDateline((int) CommonUtil.getCurrTimeByPHP());
+			party.setStatus(1);
+			this.showWaiting();
+			Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+			param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_PARTY);
+			this.getStoreOperation().saveOrUpdate(party, param);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.showToast(this.getString(R.string.commit_tip));
 		}
+
 	}
 
 	@Override
@@ -177,17 +266,20 @@ public class PartyAddActivity extends BaseActivity {
 			Log.e(TAG, "shan-->results is null");
 			return;
 		}
-		String[] categoryNames = new String[results.size()];
-		for (int i = 0; i < results.size(); i++) {
-			ModoerPartyCategory category = (ModoerPartyCategory) results.get(i);
-			categoryNames[i] = category.getName();
-			mPartyCategoryList.add(category);
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_FINDALL_PARTY_CATEGORY == operator) {
+			for (int i = 0; i < results.size(); i++) {
+				ModoerPartyCategory category = (ModoerPartyCategory) results
+						.get(i);
+				mCategoryList.add(category.getName());
+				mPartyCategoryList.add(category);
+			}
+			this.notifyDataChanged(mCategoryAdapter);
+			this.showLoading(mSpinnerCategoty);
+			this.hideLoading(mLlCategoryLoading);
+
 		}
-		mCategoryAdapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, categoryNames);
-		mSpinnerCategoty.setAdapter(mCategoryAdapter);
-		mCategoryAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 	}
+
 }

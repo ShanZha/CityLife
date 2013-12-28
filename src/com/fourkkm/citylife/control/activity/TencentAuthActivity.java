@@ -2,6 +2,7 @@ package com.fourkkm.citylife.control.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -38,9 +39,10 @@ public class TencentAuthActivity extends Activity {
 		this.showLoadingWebview();
 		int state = (int) Math.random() * 1000 + 111;
 		mUrl = "https://open.t.qq.com/cgi-bin/oauth2/authorize?client_id="
-				+ GlobalConfig.TENCENT_WEIBO_APP_KEY
+				+ GlobalConfig.Third.TENCENT_WEIBO_APP_KEY
 				+ "&response_type=token&redirect_uri="
-				+ GlobalConfig.TENCENT_WEIBO_REDIRECT_URL + "&state=" + state;
+				+ GlobalConfig.Third.TENCENT_WEIBO_REDIRECT_URL + "&state="
+				+ state;
 
 		WebSettings webSettings = mWebView.getSettings();
 		mWebView.setVerticalScrollBarEnabled(false);
@@ -120,9 +122,15 @@ public class TencentAuthActivity extends Activity {
 			// GlobalConfig.TENCENT_APP_KEY);
 			// Util.saveSharePersistent(context, "AUTHORIZETIME",
 			// String.valueOf(System.currentTimeMillis() / 1000l));
-			Toast.makeText(TencentAuthActivity.this, "ÊÚÈ¨³É¹¦", Toast.LENGTH_SHORT)
-					.show();
-			this.setResult(RESULT_OK);
+			Intent intent = new Intent();
+			Bundle bundle = new Bundle();
+			bundle.putString(GlobalConfig.Third.KEY_ACCESS_TOKEN, accessToken);
+			bundle.putString(GlobalConfig.Third.KEY_UID, openid);
+			bundle.putLong(GlobalConfig.Third.KEY_EXPIRE_TIME,
+					Long.parseLong(expiresIn));
+			bundle.putString(GlobalConfig.Third.KEY_NICK_NAME, nick);
+			intent.putExtra("values", bundle);
+			this.setResult(RESULT_OK, intent);
 			this.finish();
 			// isShow = true;
 		}

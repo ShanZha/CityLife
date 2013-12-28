@@ -2,6 +2,7 @@ package com.andrnes.modoer;
 
 import java.util.Map;
 
+import com.zj.app.annotation.Lazy;
 import com.zj.app.annotation.Validates;
 
 /** 聚会申请表 **/
@@ -11,6 +12,7 @@ public class ModoerPartyApply {
 	/** 申请聚会id */
 	private ModoerParty partyid;
 
+	@Lazy(isLazy = true)
 	private ModoerMembers uid;
 
 	/** 用户名 */

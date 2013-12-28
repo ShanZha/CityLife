@@ -30,7 +30,8 @@ public class AskUpdateActivity extends BaseActivity {
 
 	private static final String TAG = "AskUpdateActivity";
 	private TextView mTvTitle;
-	private EditText mEtSubject, mEtContent, mEtBestAnswerReview;
+	private EditText mEtSubject, mEtContent, mEtRewardPoint,
+			mEtBestAnswerReview;
 	private Spinner mSpBestAnswer;
 	private BaseAdapter mAdapter;
 	private List<String> mAnswerContentList;
@@ -46,12 +47,14 @@ public class AskUpdateActivity extends BaseActivity {
 		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
 		mEtSubject = (EditText) this.findViewById(R.id.ask_update_et_title);
 		mEtContent = (EditText) this.findViewById(R.id.ask_update_et_content);
+		mEtRewardPoint = (EditText) this
+				.findViewById(R.id.ask_update_et_reward_point);
 		mEtBestAnswerReview = (EditText) this
 				.findViewById(R.id.ask_update_et_best_answer_review);
 		mSpBestAnswer = (Spinner) this
 				.findViewById(R.id.ask_update_spinner_best_answer);
 
-		mTvTitle.setText(this.getString(R.string.ask_update_title));
+		mTvTitle.setText(this.getString(R.string.ask_answer_manager));
 	}
 
 	@Override
@@ -101,7 +104,11 @@ public class AskUpdateActivity extends BaseActivity {
 		this.finish();
 	}
 
-	public void onClickAdd(View view) {// 提交
+	public void onClickUpdateAsk(View view) {// 修改问题
+
+	}
+
+	public void onClickCloseAsk(View view) {// 结束问题
 
 	}
 

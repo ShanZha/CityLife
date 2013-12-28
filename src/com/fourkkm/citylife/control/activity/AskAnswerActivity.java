@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.andrnes.modoer.ModoerAskAnswer;
 import com.andrnes.modoer.ModoerAsks;
 import com.andrnes.modoer.ModoerMembers;
+import com.andrnes.modoer.ModoerUsergroups;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
@@ -68,18 +69,30 @@ public class AskAnswerActivity extends BaseActivity {
 		mTvAskDesc.setText(mCurrAsk.getContent());
 		mTvAskTime.setText(CommonUtil.getTimeByPHP(mCurrAsk.getDateline(),
 				"yyyy-MM-dd HH:mm"));
-		ModoerMembers member = mCurrAsk.getUid();
-		if (null != member && member.getId() != 0) {
-			String name = member.getUsername();
-			if (!TextUtils.isEmpty(name)) {
-				mTvAskMemberName.setText(name);
-			}
-		}
+		this.setUserNameAndGroup(mCurrAsk.getUid(), mTvAskMemberName);
 		// 如果没有登录，先登录
 		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
 			this.startActivityForResult(new Intent(this, LoginActivity.class),
 					REQ_LOGIN_CODE);
 			return;
+		}
+	}
+
+	private void setUserNameAndGroup(ModoerMembers member, TextView tv) {
+		if (null != member && member.getId() != 0) {
+			ModoerUsergroups group = member.getGroupid();
+			String username = member.getUsername();
+			if (null != group && group.getId() != 0) {
+				String groupName = group.getGroupname();
+				if (!TextUtils.isEmpty(groupName)) {
+					tv.setText(groupName + "|" + username);
+					return;
+				}
+			}
+			if (TextUtils.isEmpty(username)) {
+				return;
+			}
+			tv.setText(username);
 		}
 	}
 
@@ -95,8 +108,7 @@ public class AskAnswerActivity extends BaseActivity {
 		mCurrAnswer.setAskid(mCurrAsk);
 		mCurrAnswer.setCatid(mCurrAsk.getCatid());
 		mCurrAnswer.setContent(content);
-//		mCurrAnswer.setBrief("这个是不能为空,但我没有入口填??????");
-//		mCurrAnswer.setIp(com.zj.app.utils.CommonUtil.getLocalIPAddress(this));
+		mCurrAnswer.setIp(com.zj.app.utils.CommonUtil.getLocalIPAddress(this));
 		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
 				.getCurrMember();
 		mCurrAnswer.setUid(member);

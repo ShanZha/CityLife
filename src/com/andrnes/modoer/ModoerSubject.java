@@ -1,6 +1,5 @@
 package com.andrnes.modoer;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 import android.content.Context;
@@ -46,31 +45,31 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	private String subname;
 
 	/** 平均分 */
-	private BigDecimal avgsort;
+	private double avgsort;
 
 	/** 平分1 */
-	private BigDecimal sort1;
+	private double sort1;
 
 	/** 平分2 */
-	private BigDecimal sort2;
+	private double sort2;
 
 	/** 平分3 */
-	private BigDecimal sort3;
+	private double sort3;
 
 	/** 平分4 */
-	private BigDecimal sort4;
+	private double sort4;
 
 	/** 平分5 */
-	private BigDecimal sort5;
+	private double sort5;
 
 	/** 平分6 */
-	private BigDecimal sort6;
+	private double sort6;
 
 	/** 平分7 */
-	private BigDecimal sort7;
+	private double sort7;
 
 	/** 平分8 */
-	private BigDecimal sort8;
+	private double sort8;
 
 	/** 平均消费 */
 	private int avgprice;
@@ -118,10 +117,10 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	private int status;
 
 	/** 地图坐标 */
-	private BigDecimal mapLng;
+	private double mapLng;
 
 	/** 地图坐标 */
-	private BigDecimal mapLat;
+	private double mapLat;
 
 	/** 简介 */
 	private String description;
@@ -198,75 +197,75 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 		this.subname = subname;
 	}
 
-	public BigDecimal getAvgsort() {
+	public double getAvgsort() {
 		return avgsort;
 	}
 
-	public void setAvgsort(BigDecimal avgsort) {
+	public void setAvgsort(double avgsort) {
 		this.avgsort = avgsort;
 	}
 
-	public BigDecimal getSort1() {
+	public double getSort1() {
 		return sort1;
 	}
 
-	public void setSort1(BigDecimal sort1) {
+	public void setSort1(double sort1) {
 		this.sort1 = sort1;
 	}
 
-	public BigDecimal getSort2() {
+	public double getSort2() {
 		return sort2;
 	}
 
-	public void setSort2(BigDecimal sort2) {
+	public void setSort2(double sort2) {
 		this.sort2 = sort2;
 	}
 
-	public BigDecimal getSort3() {
+	public double getSort3() {
 		return sort3;
 	}
 
-	public void setSort3(BigDecimal sort3) {
+	public void setSort3(double sort3) {
 		this.sort3 = sort3;
 	}
 
-	public BigDecimal getSort4() {
+	public double getSort4() {
 		return sort4;
 	}
 
-	public void setSort4(BigDecimal sort4) {
+	public void setSort4(double sort4) {
 		this.sort4 = sort4;
 	}
 
-	public BigDecimal getSort5() {
+	public double getSort5() {
 		return sort5;
 	}
 
-	public void setSort5(BigDecimal sort5) {
+	public void setSort5(double sort5) {
 		this.sort5 = sort5;
 	}
 
-	public BigDecimal getSort6() {
+	public double getSort6() {
 		return sort6;
 	}
 
-	public void setSort6(BigDecimal sort6) {
+	public void setSort6(double sort6) {
 		this.sort6 = sort6;
 	}
 
-	public BigDecimal getSort7() {
+	public double getSort7() {
 		return sort7;
 	}
 
-	public void setSort7(BigDecimal sort7) {
+	public void setSort7(double sort7) {
 		this.sort7 = sort7;
 	}
 
-	public BigDecimal getSort8() {
+	public double getSort8() {
 		return sort8;
 	}
 
-	public void setSort8(BigDecimal sort8) {
+	public void setSort8(double sort8) {
 		this.sort8 = sort8;
 	}
 
@@ -382,19 +381,19 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 		this.status = status;
 	}
 
-	public BigDecimal getMapLng() {
+	public double getMapLng() {
 		return mapLng;
 	}
 
-	public void setMapLng(BigDecimal mapLng) {
+	public void setMapLng(double mapLng) {
 		this.mapLng = mapLng;
 	}
 
-	public BigDecimal getMapLat() {
+	public double getMapLat() {
 		return mapLat;
 	}
 
-	public void setMapLat(BigDecimal mapLat) {
+	public void setMapLat(double mapLat) {
 		this.mapLat = mapLat;
 	}
 

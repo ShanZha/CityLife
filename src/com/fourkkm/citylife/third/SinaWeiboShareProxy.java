@@ -1,4 +1,4 @@
-package com.fourkkm.citylife;
+package com.fourkkm.citylife.third;
 
 import android.app.Activity;
 import android.content.Intent;

@@ -2,10 +2,11 @@ package com.fourkkm.citylife.util;
 
 import java.util.Date;
 
+import android.content.Context;
+import android.text.TextUtils;
+
 import com.fourkkm.citylife.R;
 import com.zj.app.utils.DateFormatMethod;
-
-import android.content.Context;
 
 public class CommonUtil {
 
@@ -13,6 +14,9 @@ public class CommonUtil {
 	public static final String FORMAT_MINUTE = "yyyy-MM-dd HH:mm";
 	public static final String FORMAT_MONTH = "yyyy-MM";
 	public static final String FORMAT_DAY = "yyyy-MM-dd";
+
+	private static final double PI = Math.PI;
+	private static final double EARTH_RADIUS = 6378137.0;
 
 	/**
 	 * 根据得分获取评价（10分满分）
@@ -22,16 +26,16 @@ public class CommonUtil {
 	 * @return
 	 */
 	public static String getStringByScore(Context ctx, int score) {
-		if (score >= 0 && score < 2) {// 差评
+		if (score <= 2) {
 			return ctx.getString(R.string.review_bad);
-		} else if (score >= 2 && score < 4) {
-			return ctx.getString(R.string.review_good);
 		} else if (score >= 4 && score < 6) {
-			return ctx.getString(R.string.review_best);
+			return ctx.getString(R.string.review_middle);
 		} else if (score >= 6 && score < 8) {
-			return ctx.getString(R.string.review_very_good);
+			return ctx.getString(R.string.review_good);
 		} else if (score >= 8 && score < 10) {
-			return ctx.getString(R.string.review_very_very_good);
+			return ctx.getString(R.string.review_very_good);
+		} else if (score >= 10) {
+			return ctx.getString(R.string.review_best);
 		}
 		return "";
 	}
@@ -46,8 +50,19 @@ public class CommonUtil {
 		return DateFormatMethod.formatDate(new Date(javaTime), format);
 	}
 
-	public static int getCurrTimeByPHP() {
+	public static long getCurrTimeByPHP() {
 		return (int) (System.currentTimeMillis() / 1000);
+	}
+
+	public static long formatTimeByPHP(String time) {
+		if (TextUtils.isEmpty(time)) {
+			return 0;
+		}
+		long jTime = DateFormatMethod.parseDate(time, FORMAT_MINUTE);
+		if (jTime == 0) {
+			return 0;
+		}
+		return jTime / 1000;
 	}
 
 	public static boolean isEmail(String email) {
@@ -60,4 +75,58 @@ public class CommonUtil {
 			return false;
 		}
 	}
+
+	/**
+	 * 获取某个经纬度多少米以内的最大、最小两个经纬度坐标
+	 * 
+	 * @param raidus
+	 *            单位米
+	 * @return minLat,minLng,maxLat,maxLng
+	 */
+
+	public static double[] getAround(double lat, double lon, int raidus) {
+		Double latitude = lat;
+		Double longitude = lon;
+		Double degree = (24901 * 1609) / 360.0;
+		double raidusMile = raidus;
+		Double dpmLat = 1 / degree;
+		Double radiusLat = dpmLat * raidusMile;
+		Double minLat = latitude - radiusLat;
+		Double maxLat = latitude + radiusLat;
+		Double mpdLng = degree * Math.cos(latitude * (PI / 180));
+		Double dpmLng = 1 / mpdLng;
+		Double radiusLng = dpmLng * raidusMile;
+		Double minLng = longitude - radiusLng;
+		Double maxLng = longitude + radiusLng;
+		return new double[] { minLat, minLng, maxLat, maxLng };
+
+	}
+
+	/**
+	 * 获取两点之间距离（单位为m）
+	 * 
+	 * @param longitude1
+	 * @param latitude1
+	 * @param longitude2
+	 * @param latitude2
+	 * @return
+	 */
+	public static double getDistance(double longitude1, double latitude1,
+			double longitude2, double latitude2) {
+		double Lat1 = rad(latitude1);
+		double Lat2 = rad(latitude2);
+		double a = Lat1 - Lat2;
+		double b = rad(longitude1) - rad(longitude2);
+		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+				+ Math.cos(Lat1) * Math.cos(Lat2)
+				* Math.pow(Math.sin(b / 2), 2)));
+		s = s * EARTH_RADIUS;
+		s = Math.round(s * 10000) / 10000;
+		return s;
+	}
+
+	private static double rad(double d) {
+		return d * Math.PI / 180.0;
+	}
+
 }

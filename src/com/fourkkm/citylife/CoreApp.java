@@ -11,6 +11,10 @@ public class CoreApp extends BaseApp {
 	private ModoerMembers mCurrMember;
 	/** 当前所处国家 **/
 	private ModoerArea mCurrArea;
+	/** 当前经度--测试 **/
+	public double mCurrLng = 151.063;
+	/** 当前纬度--测试 **/
+	public double mCurrLat = -33.825;
 
 	@Override
 	public void onCreate() {
@@ -18,8 +22,9 @@ public class CoreApp extends BaseApp {
 		super.onCreate();
 
 		TopAndroidClient.registerAndroidClient(this,
-				GlobalConfig.TAOBAO_APP_KEY, GlobalConfig.TAOBAO_APP_SECRET,
-				GlobalConfig.TAOBAO_REDIRECT_URL);
+				GlobalConfig.Third.TAOBAO_APP_KEY,
+				GlobalConfig.Third.TAOBAO_APP_SECRET,
+				GlobalConfig.Third.TAOBAO_REDIRECT_URL);
 	}
 
 	public void setCurrMember(ModoerMembers member) {
