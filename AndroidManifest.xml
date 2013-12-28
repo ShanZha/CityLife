@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--
      The following two permissions are not required to use
      Google Maps Android API v2, but are recommended.
@@ -24,6 +25,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:name="com.fourkkm.citylife.CoreApp"
@@ -65,9 +67,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <!-- 商铺评价 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.ReviewAddActivity"
+            android:screenOrientation="portrait" >
+        </activity>
         <!-- 商铺地址地图展示 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.SubjectMapMarkerActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 地图选点 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.MapMarkerActivity"
             android:screenOrientation="portrait" >
         </activity>
         <!-- 相册页面 -->
@@ -123,6 +135,11 @@
         <!-- 添加聚会 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.PartyAddActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 聚会报名 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.PartyApplyActivity"
             android:screenOrientation="portrait" >
         </activity>
         <!-- 唐人巷列表 -->

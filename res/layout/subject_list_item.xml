@@ -63,6 +63,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_5"
                 android:text="@string/average_per" />
+
+            <!-- 税 -->
+
+            <ImageView
+                android:id="@+id/subject_list_item_iv_tax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:src="@drawable/tax" />
+
+            <!-- 荐 -->
+
+            <ImageView
+                android:id="@+id/subject_list_item_iv_recommend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/recommend" />
+
+            <!-- 奢 -->
+
+            <ImageView
+                android:id="@+id/subject_list_item_iv_luxury"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/luxury" />
         </LinearLayout>
 
         <!-- 底部 -->
@@ -110,7 +135,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/margin_5"
-        android:src="@drawable/list_divider"
+        android:src="@drawable/divider_dash"
         android:visibility="gone" />
 
 </com.fourkkm.citylife.itemview.ModoerSubjectItemView>

@@ -1,145 +1,338 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
-    android:orientation="vertical" >
+    android:background="@color/main_bg" >
 
     <include
+        android:id="@+id/subject_add_rl_titlebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         layout="@layout/titlebar_back" />
 
-    <!-- 添加店铺 -->
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_20" >
+        android:layout_height="match_parent"
+        android:layout_below="@+id/subject_add_rl_titlebar" >
 
-        <ImageView
-            android:id="@+id/more_subject_add_iv_upload"
-            style="@style/iv_thumb_add_style" />
-
-        <TableLayout
-            android:id="@+id/more_subject_add_tl"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/margin_5"
-            android:layout_toLeftOf="@+id/more_subject_add_btn_addr_map"
-            android:layout_toRightOf="@+id/more_subject_add_iv_upload" >
+            android:orientation="vertical" >
 
-            <!-- 商铺名称 -->
+            <!-- 添加店铺 -->
 
-            <TableRow
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_20" >
+
+                <FrameLayout
+                    android:id="@+id/subject_add_fr_thumb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white" >
+
+                    <com.zj.support.widget.AsyncImageView
+                        xmlns:asyncImageView="http://schemas.android.com/apk/res/com.fourkkm.citylife"
+                        android:id="@+id/subject_add_iv_upload"
+                        style="@style/iv_thumb_add_style"
+                        android:padding="@dimen/margin_5"
+                        asyncImageView:defaultSrc="@drawable/add_thumb" />
+
+                    <include
+                        android:id="@+id/subject_add_ll_thumb_loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        layout="@layout/progress_bar_small"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <TableLayout
+                    android:id="@+id/more_subject_add_tl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/subject_add_fr_thumb"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_toRightOf="@+id/subject_add_fr_thumb" >
+
+                    <!-- 商铺名称 -->
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" >
+
+                        <TextView
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/subject_name" />
+
+                        <EditText
+                            android:id="@+id/subject_add_et_name"
+                            style="@style/et_add_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_5" />
+                    </TableRow>
+
+                    <!-- 商铺子名称 -->
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_5" >
+
+                        <TextView
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/subject_subname" />
+
+                        <EditText
+                            android:id="@+id/subject_add_et_subname"
+                            style="@style/et_add_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_5" />
+                    </TableRow>
+
+                    <!-- 商铺电话 -->
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_5" >
+
+                        <TextView
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/subject_tel" />
+
+                        <EditText
+                            android:id="@+id/subject_add_et_tel"
+                            style="@style/et_add_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_5"
+                            android:inputType="phone" />
+                    </TableRow>
+                </TableLayout>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
+
+            <!-- 分类加载中 -->
+
+            <include
+                android:id="@+id/subject_add_ll_category_loading"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_10"
+                layout="@layout/progress_bar_small" />
+
+            <!-- 商铺分类 -->
+
+            <LinearLayout
+                android:id="@+id/subject_add_ll_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:visibility="gone" >
 
                 <TextView
+                    style="@style/list_second_level_black_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="@string/subject_name"
-                    android:textColor="@android:color/black" />
+                    android:text="@string/subject_category" />
 
-                <EditText
-                    android:id="@+id/more_subject_add_et_name"
-                    style="@style/et_add_style"
+                <!-- 一级分类 -->
+
+                <Spinner
+                    android:id="@+id/subject_add_spinner_category_first"
+                    style="@style/spinner_add_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="请输入名称" />
-            </TableRow>
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
 
-            <!-- 商铺地址 -->
+                <!-- 二级分类 -->
 
-            <TableRow
+                <Spinner
+                    android:id="@+id/subject_add_spinner_category_second"
+                    style="@style/spinner_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
+            </LinearLayout>
+
+            <!-- 地区加载中 -->
+
+            <include
+                android:id="@+id/subject_add_ll_area_loading"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_10"
+                layout="@layout/progress_bar_small" />
+
+            <!-- 商铺地区 -->
+
+            <LinearLayout
+                android:id="@+id/subject_add_ll_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:visibility="gone" >
 
                 <TextView
+                    style="@style/list_second_level_black_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:text="@string/subject_addr"
-                    android:textColor="@android:color/black" />
+                    android:text="@string/subject_area" />
 
-                <EditText
-                    android:id="@+id/more_subject_add_et_addr"
-                    style="@style/et_add_style"
+                <!-- 一级分类 -->
+
+                <Spinner
+                    android:id="@+id/subject_add_spinner_area_first"
+                    style="@style/spinner_add_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="请输入地址" />
-            </TableRow>
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
 
-            <!-- 商铺电话 -->
+                <!-- 二级分类 -->
 
-            <TableRow
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                <Spinner
+                    android:id="@+id/subject_add_spinner_area_second"
+                    style="@style/spinner_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
+            </LinearLayout>
+
+            <!-- 详细地址 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
 
                 <TextView
+                    style="@style/list_second_level_black_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
-                    android:text="@string/subject_tel"
-                    android:textColor="@android:color/black" />
+                    android:text="@string/subject_detail_address" />
 
                 <EditText
-                    android:id="@+id/more_subject_add_et_tel"
+                    android:id="@+id/subject_add_et_detail_address"
                     style="@style/et_add_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_weight="1" />
+
+                <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="请输入名称" />
-            </TableRow>
-        </TableLayout>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:background="@drawable/map_point_selector"
+                    android:onClick="onClickMapPoint" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/more_subject_add_btn_addr_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/ic_launcher"
-            android:onClick="onClickAddrMap" />
-    </RelativeLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/divider" />
+            <!-- 商铺介绍 -->
 
-    <!-- 商铺映像 -->
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:text="@string/impression" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_20"
-        android:text="@string/impression"
-        android:textColor="@android:color/black" />
+            <EditText
+                android:id="@+id/subject_add_et_desc"
+                style="@style/et_multi_lint_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:hint="@string/subject_impression_hint" />
 
-    <EditText
-        android:id="@+id/more_subject_add_et_impression"
-        style="@style/et_multi_lint_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:hint="@string/subject_impression_hint" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/divider" />
+            <!-- 商铺图片 -->
 
-    <!-- 添加 -->
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:text="@string/subject_pics" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_15"
-        android:onClick="onClickAdd"
-        android:text="@string/subject_add" />
+            <com.fourkkm.citylife.view.AlbumGridView
+                android:id="@+id/subject_add_gv_pics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_marginRight="@dimen/margin_5"
+                android:horizontalSpacing="@dimen/margin_10"
+                android:numColumns="3"
+                android:scrollbars="none"
+                android:verticalSpacing="@dimen/margin_10" >
+            </com.fourkkm.citylife.view.AlbumGridView>
 
-</LinearLayout>
+            <!-- 添加 -->
+
+            <Button
+                android:id="@+id/subject_add_btn_commit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_15"
+                android:layout_marginTop="@dimen/margin_15"
+                android:background="@drawable/commit_btn_selector"
+                android:onClick="onClickAdd"
+                android:text="@string/commit"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

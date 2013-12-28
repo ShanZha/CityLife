@@ -1,0 +1,258 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg" >
+
+    <!-- 顶部标题 -->
+
+    <include
+        android:id="@+id/review_add_rl_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/titlebar_back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/review_add_rl_titlebar"
+        android:scrollbars="none" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <!-- 评论标题 -->
+
+            <TextView
+                android:id="@+id/review_add_tv_title"
+                style="@style/list_first_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:singleLine="true" />
+
+            <!-- 各类评分加载中 -->
+
+            <include
+                android:id="@+id/review_add_ll_loading_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_10"
+                layout="@layout/progress_bar_small" />
+
+            <!-- 各类评分父类 -->
+
+            <TableLayout
+                android:id="@+id/review_add_ll_sort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:orientation="vertical" >
+
+                <!-- 评分之一 -->
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:id="@+id/review_add_tv_sort1"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <!-- 用户评价中评分 -->
+
+                    <RatingBar
+                        android:id="@+id/review_add_ratingBar_sort1"
+                        style="@style/rating_bar_style_gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_10" />
+
+                    <TextView
+                        android:id="@+id/review_add_tv_sort1_level"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_20" />
+                </TableRow>
+
+                <!-- 评分之二 -->
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        android:id="@+id/review_add_tv_sort2"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <!-- 用户评价中评分 -->
+
+                    <RatingBar
+                        android:id="@+id/review_add_ratingBar_sort2"
+                        style="@style/rating_bar_style_gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_10" />
+
+                    <TextView
+                        android:id="@+id/review_add_tv_sort2_level"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_20" />
+                </TableRow>
+
+                <!-- 评分之三 -->
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        android:id="@+id/review_add_tv_sort3"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <!-- 用户评价中评分 -->
+
+                    <RatingBar
+                        android:id="@+id/review_add_ratingBar_sort3"
+                        style="@style/rating_bar_style_gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_10" />
+
+                    <TextView
+                        android:id="@+id/review_add_tv_sort3_level"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_20" />
+                </TableRow>
+
+                <!-- 评分之四 -->
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        android:id="@+id/review_add_tv_sort4"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <!-- 用户评价中评分 -->
+
+                    <RatingBar
+                        android:id="@+id/review_add_ratingBar_sort4"
+                        style="@style/rating_bar_style_gray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_10" />
+
+                    <TextView
+                        android:id="@+id/review_add_tv_sort4_level"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_20" />
+                </TableRow>
+            </TableLayout>
+
+            <!-- 人均 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <TextView
+                    android:id="@+id/review_add_tv_per_average"
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/average_per_2" />
+
+                <EditText
+                    android:id="@+id/review_add_et_per_average"
+                    style="@style/et_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
+
+            <!-- 标签加载中 -->
+
+            <include
+                android:id="@+id/review_add_ll_loading_tags"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_10"
+                layout="@layout/progress_bar_small" />
+
+            <!-- 标签 -->
+
+            <TableLayout
+                android:id="@+id/review_add_tl_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:visibility="gone" >
+            </TableLayout>
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
+
+            <!-- 评价内容 -->
+
+            <EditText
+                android:id="@+id/review_add_et_content"
+                style="@style/et_multi_lint_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10" />
+
+            <!-- 提交 -->
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/commit_btn_selector"
+                android:onClick="onClickCommit"
+                android:text="@string/commit" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

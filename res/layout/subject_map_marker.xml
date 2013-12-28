@@ -4,10 +4,46 @@
     android:background="@color/main_bg"
     android:orientation="vertical" >
 
-    <include
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/titlebar_back" />
+        android:background="@drawable/titlebar_bg" >
+
+        <!-- 左边-返回 -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/back"
+            android:clickable="true"
+            android:drawableRight="@drawable/back_divider"
+            android:onClick="onClickBack" />
+
+        <!-- 标题部分 -->
+
+        <TextView
+            android:id="@+id/titlebar_back_right_tv_title"
+            style="@style/title_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/map_subject_title" />
+
+        <!-- 右边-确定 -->
+
+        <Button
+            android:id="@+id/titlebar_back_right_btn_operator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_5"
+            android:background="@drawable/party_right_btn_selector"
+            android:onClick="onClickSure"
+            android:text="@string/sure"
+            android:textColor="@android:color/white" 
+            android:visibility="gone"/>
+    </RelativeLayout>
 
     <fragment
         android:id="@+id/subject_map_marker_fragment"

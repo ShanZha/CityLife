@@ -154,7 +154,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 搜全城 -->
 
@@ -201,7 +201,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 问答 -->
 
@@ -248,7 +248,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 聚会 -->
 
@@ -295,7 +295,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 唐人巷 -->
 
@@ -342,7 +342,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 会员中心 -->
 
@@ -389,7 +389,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 更多 -->
 
@@ -436,7 +436,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
         </LinearLayout>
     </ScrollView>
 

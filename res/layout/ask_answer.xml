@@ -22,7 +22,9 @@
         android:layout_marginLeft="@dimen/margin_10"
         android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_10"
-        android:drawableLeft="@drawable/subject_detail_address" >
+        android:drawableLeft="@drawable/ask_question_icon"
+        android:drawablePadding="@dimen/margin_5"
+        android:gravity="center_vertical" >
     </TextView>
 
     <!-- 问题内容 -->
@@ -73,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_10"
-        android:src="@drawable/divider" />
+        android:background="@drawable/divider" />
 
     <!-- 回答的内容 -->
 
@@ -91,7 +93,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:background="@drawable/commit_btn_selector"
         android:onClick="onClickCommit"
-        android:text="@string/ask_answer_commit" />
+        android:text="@string/ask_answer_commit"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

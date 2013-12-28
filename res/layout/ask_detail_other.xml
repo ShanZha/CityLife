@@ -2,8 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/margin_10"
-    android:layout_marginRight="@dimen/margin_10"
     android:orientation="vertical" >
 
     <!-- 答案内容 -->
@@ -13,12 +11,16 @@
         style="@style/list_second_level_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_10" >
     </TextView>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_10" >
 
         <!-- 答案时间 -->
@@ -43,5 +45,13 @@
             android:singleLine="true" >
         </TextView>
     </RelativeLayout>
+
+    <!-- 分割线 -->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:background="@drawable/divider"/>
 
 </LinearLayout>

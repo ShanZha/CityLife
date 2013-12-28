@@ -15,360 +15,426 @@
 
     <!-- 中间-内容 -->
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/subject_detail_rl_top"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10" >
+        android:layout_above="@+id/subject_detail_ll_bottom"
+        android:layout_below="@+id/subject_detail_rl_top" >
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent" >
 
-            <!-- 商店名称 -->
-
-            <TextView
-                android:id="@+id/subject_detail_tv_shop_name"
-                style="@style/list_first_level_style"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                <!-- 商店名称 -->
 
-                <!-- 缩略图 -->
-
-                <include
-                    android:id="@+id/subject_detail_fr_thumbnail"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/subject_detail_tv_shop_name"
+                    style="@style/list_first_level_style"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    layout="@layout/thumb_detail" />
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10" />
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/subject_detail_fr_thumbnail" >
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginRight="@dimen/margin_10" >
 
-                    <!-- 评分 -->
+                    <!-- 缩略图 -->
 
-                    <RatingBar
-                        android:id="@+id/subject_detail_ratingBar"
-                        style="@style/rating_bar_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <!-- 综合得分 -->
-
-                    <TextView
-                        android:id="@+id/subject_detail_composite_score"
+                    <include
+                        android:id="@+id/subject_detail_fr_thumbnail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_5"
-                        android:layout_toRightOf="@+id/subject_detail_ratingBar"
-                        android:singleLine="true"
-                        android:text="@string/composite_score" />
-
-                    <!-- 人均 -->
-
-                    <TextView
-                        android:id="@+id/subject_detail_tv_average"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/subject_detail_ratingBar"
-                        android:layout_marginTop="@dimen/margin_10"
-                        android:singleLine="true"
-                        android:text="@string/average_per" />
-
-                    <!-- 各类评分父类 -->
-
-                    <ProgressBar
-                        android:id="@+id/subject_detail_proBar_review_opt"
-                        style="?android:attr/progressBarStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/subject_detail_tv_average"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/margin_10" />
+                        layout="@layout/thumb_detail" />
 
                     <RelativeLayout
-                        android:id="@+id/subject_detail_ll_review_opt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/subject_detail_tv_average"
-                        android:layout_marginTop="@dimen/margin_10" >
+                        android:layout_toRightOf="@+id/subject_detail_fr_thumbnail" >
 
-                        <TextView
-                            android:id="@+id/subject_detail_tv_sort1"
+                        <!-- 评分 -->
+
+                        <RatingBar
+                            android:id="@+id/subject_detail_ratingBar"
+                            style="@style/rating_bar_style"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
-                        <TextView
-                            android:id="@+id/subject_detail_tv_sort2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_10"
-                            android:layout_toRightOf="@+id/subject_detail_tv_sort1" />
+                        <!-- 综合得分 -->
 
                         <TextView
-                            android:id="@+id/subject_detail_tv_sort3"
+                            android:id="@+id/subject_detail_composite_score"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/subject_detail_tv_sort1" />
+                            android:layout_marginLeft="@dimen/margin_5"
+                            android:layout_toRightOf="@+id/subject_detail_ratingBar"
+                            android:singleLine="true"
+                            android:text="@string/composite_score"
+                            android:textColor="@android:color/black" />
 
-                        <TextView
-                            android:id="@+id/subject_detail_tv_sort4"
+                        <LinearLayout
+                            android:id="@+id/subject_detail_ll_tags"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/subject_detail_tv_sort1"
-                            android:layout_marginLeft="@dimen/margin_10"
-                            android:layout_toRightOf="@+id/subject_detail_tv_sort3" />
+                            android:layout_below="@+id/subject_detail_ratingBar"
+                            android:layout_marginLeft="-5dp"
+                            android:layout_marginTop="@dimen/margin_10" >
+
+                            <!-- 税 -->
+
+                            <ImageView
+                                android:id="@+id/subject_list_item_iv_tax"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_5"
+                                android:src="@drawable/tax" />
+
+                            <!-- 荐 -->
+
+                            <ImageView
+                                android:id="@+id/subject_list_item_iv_recommend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/recommend" />
+
+                            <!-- 奢 -->
+
+                            <ImageView
+                                android:id="@+id/subject_list_item_iv_luxury"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/luxury" />
+
+                            <!-- 人均 -->
+
+                            <TextView
+                                android:id="@+id/subject_detail_tv_average"
+                                style="@style/list_second_level_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_5"
+                                android:singleLine="true"
+                                android:text="@string/average_per" />
+                        </LinearLayout>
+
+                        <!-- 各类评分父类 -->
+
+                        <ProgressBar
+                            android:id="@+id/subject_detail_proBar_review_opt"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/subject_detail_ll_tags"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/margin_10" />
+
+                        <RelativeLayout
+                            android:id="@+id/subject_detail_ll_review_opt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/subject_detail_ll_tags"
+                            android:layout_marginTop="@dimen/margin_10" >
+
+                            <TextView
+                                android:id="@+id/subject_detail_tv_sort1"
+                                style="@style/list_second_level_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:id="@+id/subject_detail_tv_sort2"
+                                style="@style/list_second_level_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/margin_10"
+                                android:layout_toRightOf="@+id/subject_detail_tv_sort1" />
+
+                            <TextView
+                                android:id="@+id/subject_detail_tv_sort3"
+                                style="@style/list_second_level_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/subject_detail_tv_sort1" />
+
+                            <TextView
+                                android:id="@+id/subject_detail_tv_sort4"
+                                style="@style/list_second_level_style"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/subject_detail_tv_sort1"
+                                android:layout_marginLeft="@dimen/margin_10"
+                                android:layout_toRightOf="@+id/subject_detail_tv_sort3" />
+                        </RelativeLayout>
                     </RelativeLayout>
                 </RelativeLayout>
-            </RelativeLayout>
-
-            <!-- 地址 -->
-
-            <RelativeLayout
-                android:id="@+id/subject_detail_rl_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10"
-                android:onClick="onClickAddress" >
 
                 <!-- 分割线 -->
 
                 <ImageView
-                    android:id="@+id/subject_detail_iv_address_divider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/divider" />
+                    android:background="@drawable/divider" />
 
-                <ImageView
-                    android:id="@+id/subject_detail_iv_address_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/subject_detail_iv_address_divider"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:src="@drawable/subject_detail_address" />
-
-                <TextView
-                    android:id="@+id/subject_detail_tv_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/subject_detail_iv_address_divider"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:layout_marginTop="@dimen/margin_15"
-                    android:layout_toLeftOf="@+id/subject_detail_iv_address_more"
-                    android:layout_toRightOf="@+id/subject_detail_iv_address_icon"
-                    android:singleLine="true" />
-
-                <ImageView
-                    android:id="@+id/subject_detail_iv_address_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/subject_detail_iv_address_divider"
-                    android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:src="@drawable/main_more" />
-            </RelativeLayout>
-
-            <!-- 电话 -->
-
-            <RelativeLayout
-                android:id="@+id/subject_detail_rl_tel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="onClickTel" >
-
-                <!-- 分割线 -->
-
-                <ImageView
-                    android:id="@+id/subject_detail_iv_tel_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_10"
-                    android:src="@drawable/divider" />
-
-                <ImageView
-                    android:id="@+id/subject_detail_iv_tel_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/subject_detail_iv_tel_divider"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:src="@drawable/subject_detail_tel" />
-
-                <TextView
-                    android:id="@+id/subject_detail_tv_tel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/subject_detail_iv_tel_divider"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:layout_marginTop="@dimen/margin_15"
-                    android:layout_toLeftOf="@+id/subject_detail_iv_tel_more"
-                    android:layout_toRightOf="@+id/subject_detail_iv_tel_icon"
-                    android:singleLine="true"
-                    android:text="010-88888888" />
-
-                <ImageView
-                    android:id="@+id/subject_detail_iv_tel_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/subject_detail_iv_tel_divider"
-                    android:layout_marginRight="@dimen/margin_10"
-                    android:layout_marginTop="@dimen/margin_5"
-                    android:src="@drawable/main_more" />
-            </RelativeLayout>
-
-            <!-- 分割线 -->
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
-
-            <!-- 商铺印象Tips -->
-
-            <RelativeLayout
-                android:id="@+id/subject_detail_rl_impression"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
-
-                <ImageView
-                    android:id="@+id/subject_detail_iv_impression_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:src="@drawable/subject_detail_impression" />
-
-                <TextView
-                    android:id="@+id/subject_detail_tv_impression_tip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/subject_detail_iv_impression_icon"
-                    android:text="@string/impression"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/subject_detail_tv_impression"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/subject_detail_tv_impression_tip"
-                    android:layout_below="@+id/subject_detail_tv_impression_tip"
-                    android:layout_marginTop="@dimen/margin_5" />
-            </RelativeLayout>
-
-            <!-- 评价 -->
-
-            <ProgressBar
-                android:id="@+id/subject_detail_proBar_review"
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/margin_10" />
-
-            <!-- 分割线 -->
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10"
-                android:src="@drawable/divider" />
-
-            <RelativeLayout
-                android:id="@+id/subject_detail_rl_review"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
-
-                <ImageView
-                    android:id="@+id/subject_detail_iv_review_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:src="@drawable/subject_detail_review" />
-
-                <!-- 评价数量 -->
-
-                <TextView
-                    android:id="@+id/subject_detail_tv_review_counts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/subject_detail_iv_review_icon"
-                    android:singleLine="true"
-                    android:text="@string/review"
-                    android:textSize="16sp" />
-
-                <!-- 评价用户名称 -->
-
-                <TextView
-                    android:id="@+id/subject_detail_tv_review_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
-                    android:layout_below="@+id/subject_detail_iv_review_icon"
-                    android:singleLine="true" />
-
-                <!-- 用户评价中评分 -->
-
-                <RatingBar
-                    android:id="@+id/subject_detail_review_ratingBar"
-                    style="@style/rating_bar_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
-                    android:layout_below="@+id/subject_detail_tv_review_username" />
-
-                <!-- 用户评价中人均 -->
-
-                <TextView
-                    android:id="@+id/subject_detail_tv_review_average_per"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/subject_detail_tv_review_username"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:layout_toRightOf="@+id/subject_detail_review_ratingBar"
-                    android:singleLine="true"
-                    android:text="@string/average_per" />
-
-                <!-- 评价内容 -->
+                <!-- 地址 -->
 
                 <RelativeLayout
+                    android:id="@+id/subject_detail_rl_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
-                    android:layout_below="@+id/subject_detail_review_ratingBar"
-                    android:onClick="onClickReviewContent" >
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:onClick="onClickAddress" >
 
-                    <TextView
-                        android:id="@+id/subject_detail_tv_review_content"
+                    <ImageView
+                        android:id="@+id/subject_detail_iv_address_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
                         android:layout_marginTop="@dimen/margin_5"
-                        android:layout_toLeftOf="@+id/subject_detail_iv_review_more" />
+                        android:src="@drawable/subject_detail_address" />
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_address"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_toLeftOf="@+id/subject_detail_iv_address_more"
+                        android:layout_toRightOf="@+id/subject_detail_iv_address_icon"
+                        android:singleLine="true" />
 
                     <ImageView
-                        android:id="@+id/subject_detail_iv_review_more"
+                        android:id="@+id/subject_detail_iv_address_more"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/margin_10"
+                        android:layout_marginTop="@dimen/margin_5"
                         android:src="@drawable/main_more" />
                 </RelativeLayout>
-            </RelativeLayout>
-        </LinearLayout>
-    </ScrollView>
+
+                <!-- 分割线 -->
+
+                <ImageView
+                    android:id="@+id/subject_detail_iv_divider_tel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:background="@drawable/divider" />
+                <!-- 电话 -->
+
+                <RelativeLayout
+                    android:id="@+id/subject_detail_rl_tel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:onClick="onClickTel" >
+
+                    <ImageView
+                        android:id="@+id/subject_detail_iv_tel_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:src="@drawable/subject_detail_tel" />
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_tel"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:layout_marginTop="@dimen/margin_15"
+                        android:layout_toLeftOf="@+id/subject_detail_iv_tel_more"
+                        android:layout_toRightOf="@+id/subject_detail_iv_tel_icon"
+                        android:singleLine="true" />
+
+                    <ImageView
+                        android:id="@+id/subject_detail_iv_tel_more"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/margin_10"
+                        android:layout_marginTop="@dimen/margin_5"
+                        android:src="@drawable/main_more" />
+                </RelativeLayout>
+
+                <!-- 分割线 -->
+
+                <ImageView
+                    android:id="@+id/subject_detail_iv_divider_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:background="@drawable/divider" />
+
+                <!-- 商铺介绍Tips -->
+
+                <RelativeLayout
+                    android:id="@+id/subject_detail_rl_impression"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <ImageView
+                        android:id="@+id/subject_detail_iv_impression_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/desc" />
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_impression_tip"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/subject_detail_iv_impression_icon"
+                        android:text="@string/impression"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_impression"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/subject_detail_tv_impression_tip"
+                        android:layout_below="@+id/subject_detail_tv_impression_tip"
+                        android:layout_marginTop="@dimen/margin_5" />
+                </RelativeLayout>
+
+                <!-- 评价 -->
+
+                <ProgressBar
+                    android:id="@+id/subject_detail_proBar_review"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_10" />
+
+                <!-- 分割线 -->
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:background="@drawable/divider" />
+
+                <RelativeLayout
+                    android:id="@+id/subject_detail_rl_review"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <ImageView
+                        android:id="@+id/subject_detail_iv_review_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:src="@drawable/subject_detail_review" />
+
+                    <!-- 评价数量 -->
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_review_counts"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:layout_toRightOf="@+id/subject_detail_iv_review_icon"
+                        android:singleLine="true"
+                        android:text="@string/review"
+                        android:textSize="16sp" />
+
+                    <!-- 评价用户名称 -->
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_review_username"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
+                        android:layout_below="@+id/subject_detail_iv_review_icon"
+                        android:singleLine="true" />
+
+                    <!-- 用户评价中评分 -->
+
+                    <RatingBar
+                        android:id="@+id/subject_detail_review_ratingBar"
+                        style="@style/rating_bar_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
+                        android:layout_below="@+id/subject_detail_tv_review_username" />
+
+                    <!-- 用户评价中人均 -->
+
+                    <TextView
+                        android:id="@+id/subject_detail_tv_review_average_per"
+                        style="@style/list_second_level_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/subject_detail_tv_review_username"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:layout_toRightOf="@+id/subject_detail_review_ratingBar"
+                        android:singleLine="true"
+                        android:text="@string/average_per" />
+
+                    <!-- 评价内容 -->
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
+                        android:layout_below="@+id/subject_detail_review_ratingBar"
+                        android:onClick="onClickReviewContent" >
+
+                        <TextView
+                            android:id="@+id/subject_detail_tv_review_content"
+                            style="@style/list_second_level_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="@dimen/margin_5"
+                            android:layout_toLeftOf="@+id/subject_detail_iv_review_more" />
+
+                        <ImageView
+                            android:id="@+id/subject_detail_iv_review_more"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/main_more" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- 上传布局 -->
+
+        <include
+            android:id="@+id/subject_detail_ll_upload"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            layout="@layout/floating_upload"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <!-- 底部 -->
 

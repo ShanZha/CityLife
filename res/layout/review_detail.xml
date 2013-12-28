@@ -52,8 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_15"
-                android:singleLine="true"
-                android:text="@string/review_good" />
+                android:singleLine="true" />
         </TableRow>
         <!-- 评价一 -->
 

@@ -1,0 +1,427 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg" >
+
+    <include
+        android:id="@+id/china_lane_add_rl_titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        layout="@layout/titlebar_back" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/china_lane_add_rl_titlebar" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <!-- 标题 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10" >
+
+                <TextView
+                    style="@style/list_first_level_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/party_title_tip" />
+
+                <EditText
+                    android:id="@+id/china_lane_add_et_title"
+                    style="@style/et_add_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <!-- 第二部分 -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10" >
+
+                <!-- 缩略图 -->
+
+                <FrameLayout
+                    android:id="@+id/china_lane_add_fr_thumb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white" >
+
+                    <com.zj.support.widget.AsyncImageView
+                        xmlns:asyncImageView="http://schemas.android.com/apk/res/com.fourkkm.citylife"
+                        android:id="@+id/china_lane_add_iv_thumb_upload"
+                        style="@style/iv_thumb_add_style"
+                        android:padding="@dimen/margin_5"
+                        asyncImageView:defaultSrc="@drawable/add_thumb" />
+
+                    <include
+                        android:id="@+id/china_lane_add_ll_thumb_loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        layout="@layout/progress_bar_small"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/china_lane_add_fr_thumb"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_toRightOf="@+id/china_lane_add_fr_thumb" >
+
+                    <LinearLayout
+                        android:id="@+id/china_lane_add_ll_initiator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true" >
+
+                        <!-- 发起者-字样 -->
+
+                        <TextView
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/party_initiator" />
+
+                        <!-- 发起者 -->
+
+                        <TextView
+                            android:id="@+id/china_lane_add_tv_initiator"
+                            style="@style/list_second_level_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/china_lane_add_ll_initiate_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/china_lane_add_ll_initiator"
+                        android:layout_marginTop="@dimen/margin_5" >
+
+                        <!-- 发起时间-字样 -->
+
+                        <TextView
+                            android:id="@+id/china_lane_add_tv_initiate_time_tip"
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/party_initiate_time" />
+
+                        <!-- 发起时间 -->
+
+                        <TextView
+                            android:id="@+id/china_lane_add_tv_initiate_time"
+                            style="@style/list_second_level_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/china_lane_add_ll_initiate_time"
+                        android:layout_marginTop="@dimen/margin_5" >
+
+                        <!-- 过期时间-字样 -->
+
+                        <TextView
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/china_lane_expire_time_add" />
+
+                        <!-- 过期时间 -->
+
+                        <EditText
+                            android:id="@+id/china_lane_add_et_expire_time"
+                            style="@style/et_add_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_5"
+                            android:hint="@string/time_et_hint" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/divider" />
+
+            <!-- 分类加载中 -->
+
+            <include
+                android:id="@+id/china_lane_add_ll_category_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_10"
+                layout="@layout/progress_bar_small" />
+
+            <!-- 分类 -->
+
+            <LinearLayout
+                android:id="@+id/china_lane_add_ll_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/china_lane_add_category" />
+
+                <!-- 一级分类 -->
+
+                <Spinner
+                    android:id="@+id/china_lane_add_spinner_category_first"
+                    style="@style/spinner_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
+
+                <!-- 二级分类 -->
+
+                <Spinner
+                    android:id="@+id/china_lane_add_spinner_category_second"
+                    style="@style/spinner_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
+            </LinearLayout>
+
+            <!-- 地区加载中 -->
+
+            <include
+                android:id="@+id/china_lane_add_ll_area_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_10"
+                layout="@layout/progress_bar_small" />
+
+            <!-- 所在地区 -->
+
+            <LinearLayout
+                android:id="@+id/china_lane_add_ll_area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:visibility="gone" >
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/party_location_area" />
+
+                <!-- 一级分类 -->
+
+                <Spinner
+                    android:id="@+id/china_lane_add_spinner_area_first"
+                    style="@style/spinner_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
+
+                <!-- 二级分类 -->
+
+                <Spinner
+                    android:id="@+id/china_lane_add_spinner_area_second"
+                    style="@style/spinner_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
+            </LinearLayout>
+
+            <!-- 联系人 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/party_contact" />
+
+                <EditText
+                    android:id="@+id/china_lane_add_et_contact"
+                    style="@style/et_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_20" />
+            </LinearLayout>
+
+            <!-- 联系人方式 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/party_contact_tel" />
+
+                <EditText
+                    android:id="@+id/china_lane_add_et_contact_tel"
+                    style="@style/et_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:inputType="phone" />
+            </LinearLayout>
+
+            <!-- 电子邮箱 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/china_lane_email_add" />
+
+                <EditText
+                    android:id="@+id/china_lane_add_et_email"
+                    style="@style/et_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+
+            <!-- QQ/MSN -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/china_lane_im_add" />
+
+                <EditText
+                    android:id="@+id/china_lane_add_et_im"
+                    style="@style/et_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5" />
+            </LinearLayout>
+
+            <!-- 联系地址 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/china_lane_address_detail_add" />
+
+                <EditText
+                    android:id="@+id/china_lane_add_et_addr"
+                    style="@style/et_add_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_weight="1" />
+
+                <!-- 应该没有此功能？ -->
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:background="@drawable/map_point_selector"
+                    android:onClick="onClickMapPoint"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
+
+            <!-- 第五部分-描述 -->
+
+            <EditText
+                android:id="@+id/china_lane_add_et_desc"
+                style="@style/et_multi_lint_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:hint="@string/china_lane_desc" />
+
+            <!-- 添加 -->
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/commit_btn_selector"
+                android:onClick="onClickAdd"
+                android:text="@string/party_add"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

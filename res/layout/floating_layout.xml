@@ -3,13 +3,13 @@
     android:id="@+id/floating_layout_ll_all"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#33ffe4"
+    android:background="@drawable/floating_item_bg"
     android:baselineAligned="false" >
 
     <!-- 第一项 -->
 
     <RelativeLayout
-        android:id="@+id/floating_layout_ll_first"
+        android:id="@+id/floating_layout_rl_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -34,7 +34,7 @@
     <!-- 第二项 -->
 
     <RelativeLayout
-        android:id="@+id/floating_layout_ll_second"
+        android:id="@+id/floating_layout_rl_second"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -59,7 +59,7 @@
     <!-- 第三项 -->
 
     <RelativeLayout
-        android:id="@+id/floating_layout_ll_third"
+        android:id="@+id/floating_layout_rl_third"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"

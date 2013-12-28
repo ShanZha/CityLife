@@ -23,7 +23,8 @@
             style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/subject_detail_impression"
+            android:drawableLeft="@drawable/ask_question_icon"
+            android:drawablePadding="@dimen/margin_5"
             android:gravity="center_vertical"
             android:singleLine="true"
             android:text="@string/ask_title_tip" />
@@ -56,7 +57,7 @@
         android:layout_margin="@dimen/margin_10" >
 
         <TextView
-            style="@style/list_second_level_black_style"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ask_reward_point_tip" />
@@ -79,7 +80,7 @@
         android:layout_marginRight="@dimen/margin_10" >
 
         <TextView
-            style="@style/list_second_level_black_style"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ask_category_tip" />
@@ -109,7 +110,7 @@
         android:layout_margin="@dimen/margin_10" >
 
         <TextView
-            style="@style/list_second_level_black_style"
+            style="@style/list_first_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ask_keyword_tip" />
@@ -119,7 +120,7 @@
             style="@style/et_add_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_5" />
+            android:layout_marginLeft="23dp" />
     </LinearLayout>
 
     <!-- 提交 -->
@@ -129,7 +130,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/margin_20"
+        android:background="@drawable/commit_btn_selector"
         android:onClick="onClickAdd"
-        android:text="@string/ask_commit" />
+        android:text="@string/ask_commit"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

@@ -1,175 +1,224 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bg" >
 
-    <LinearLayout
+    <!-- 顶部标题 -->
+
+    <include
+        android:id="@+id/ask_detail_rl_titlebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_alignParentTop="true"
+        layout="@layout/titlebar_back" />
 
-        <!-- 顶部标题 -->
-
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/titlebar_back" />
-
-        <!-- 主题 -->
-
-        <TextView
-            android:id="@+id/ask_detail_tv_subject"
-            style="@style/list_first_level_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_10"
-            android:drawableLeft="@drawable/main_more" />
-
-        <!-- 内容 -->
-
-        <TextView
-            android:id="@+id/ask_detail_tv_content"
-            style="@style/list_second_level_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10" >
-
-            <!-- 时间 -->
-
-            <TextView
-                android:id="@+id/ask_detail_tv_time"
-                style="@style/list_second_level_black_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:singleLine="true" >
-            </TextView>
-
-            <!-- 等级和UserName -->
-
-            <TextView
-                android:id="@+id/ask_detail_tv_level_and_username"
-                style="@style/list_second_level_black_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:singleLine="true" >
-            </TextView>
-        </RelativeLayout>
-
-        <!-- 我要回答 -->
-
-        <Button
-            android:id="@+id/ask_detail_btn_answer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/margin_10"
-            android:onClick="onClickAnswer"
-            android:text="@string/ask_me_answer" />
-
-        <!-- 最佳答案字样 -->
-
-        <TextView
-            android:id="@+id/ask_detail_tv_best_answer_tip"
-            style="@style/list_first_level_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/main_more"
-            android:singleLine="true"
-            android:text="@string/ask_best_answer" >
-        </TextView>
-
-        <!-- 最佳答案内容 -->
-
-        <TextView
-            android:id="@+id/ask_detail_tv_best_answer"
-            style="@style/list_second_level_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10" >
-        </TextView>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10" >
-
-            <!-- 最佳答案时间 -->
-
-            <TextView
-                android:id="@+id/ask_detail_tv_best_time"
-                style="@style/list_second_level_black_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:singleLine="true" >
-            </TextView>
-
-            <!-- 最佳答案等级和UserName -->
-
-            <TextView
-                android:id="@+id/ask_detail_tv_best_level_and_username"
-                style="@style/list_second_level_black_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:singleLine="true" >
-            </TextView>
-        </RelativeLayout>
-
-        <!-- 提问者对最佳答案评论字样 -->
-
-        <TextView
-            android:id="@+id/ask_detail_tv_best_comment_tip"
-            style="@style/list_first_level_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_10"
-            android:drawableLeft="@drawable/main_more"
-            android:text="@string/ask_comment_best_answer" />
-
-        <TextView
-            android:id="@+id/ask_detail_tv_best_comment"
-            style="@style/list_second_level_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10" />
-
-        <!-- 加载ProgressBar -->
-
-        <include
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/progress_bar_small" />
-
-        <!-- 其他回答的父容器 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ask_detail_rl_titlebar"
+        android:scrollbars="none" >
 
         <LinearLayout
-            android:id="@+id/ask_detail_ll_other_answer_container"
-            style="@style/list_first_level_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone" >
+            android:orientation="vertical" >
 
-            <!-- 其他回答字样 -->
+            <!-- 主题 -->
 
             <TextView
+                android:id="@+id/ask_detail_tv_subject"
+                style="@style/list_first_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:drawableLeft="@drawable/ask_question_icon"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical" />
+
+            <!-- 内容 -->
+
+            <TextView
+                android:id="@+id/ask_detail_tv_content"
                 style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10" />
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/main_more"
-                android:text="@string/ask_other_answer" />
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10" >
 
-</ScrollView>
+                <!-- 时间 -->
+
+                <TextView
+                    android:id="@+id/ask_detail_tv_time"
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:singleLine="true" >
+                </TextView>
+
+                <!-- 等级和UserName -->
+
+                <TextView
+                    android:id="@+id/ask_detail_tv_level_and_username"
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:singleLine="true" >
+                </TextView>
+            </RelativeLayout>
+
+            <!-- 我要回答 -->
+
+            <Button
+                android:id="@+id/ask_detail_btn_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/commit_btn_selector"
+                android:onClick="onClickAnswer"
+                android:text="@string/ask_me_answer"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
+
+            <!-- 最佳答案字样 -->
+
+            <TextView
+                android:id="@+id/ask_detail_tv_best_answer_tip"
+                style="@style/list_first_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:drawableLeft="@drawable/ask_best_answer_icon"
+                android:drawablePadding="@dimen/margin_5"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="@string/ask_best_answer" >
+            </TextView>
+
+            <!-- 最佳答案内容 -->
+
+            <TextView
+                android:id="@+id/ask_detail_tv_best_answer"
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10" >
+            </TextView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10" >
+
+                <!-- 最佳答案时间 -->
+
+                <TextView
+                    android:id="@+id/ask_detail_tv_best_time"
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:singleLine="true" >
+                </TextView>
+
+                <!-- 最佳答案等级和UserName -->
+
+                <TextView
+                    android:id="@+id/ask_detail_tv_best_level_and_username"
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:singleLine="true" >
+                </TextView>
+            </RelativeLayout>
+
+            <!-- 分割线-虚的 -->
+
+            <ImageView
+                android:id="@+id/ask_detail_iv_divider_best_answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider_dash" />
+
+            <!-- 提问者对最佳答案评论字样 -->
+
+            <TextView
+                android:id="@+id/ask_detail_tv_best_comment_tip"
+                style="@style/list_first_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:text="@string/ask_comment_best_answer" />
+
+            <TextView
+                android:id="@+id/ask_detail_tv_best_comment"
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10" />
+
+            <!-- 分割线 -->
+
+            <ImageView
+                android:id="@+id/ask_detail_iv_divider_best_answer_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
+
+            <!-- 加载ProgressBar -->
+
+            <include
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                layout="@layout/progress_bar_small" />
+
+            <!-- 其他回答的父容器 -->
+
+            <LinearLayout
+                android:id="@+id/ask_detail_ll_other_answer_container"
+                style="@style/list_first_level_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <!-- 其他回答字样 -->
+
+                <TextView
+                    style="@style/list_first_level_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:drawableLeft="@drawable/ask_other_icon"
+                    android:drawablePadding="@dimen/margin_5"
+                    android:gravity="center_vertical"
+                    android:text="@string/ask_other_answer" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

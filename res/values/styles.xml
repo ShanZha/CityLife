@@ -33,7 +33,7 @@
     <!-- 可上拉加载ListViewStlye -->
     <style name="list_view_style">
         <item name="android:cacheColorHint">@android:color/transparent</item>
-        <item name="android:divider">@drawable/list_divider</item>
+        <item name="android:divider">@drawable/divider</item>
         <!-- <item name="android:footerDividersEnabled">false</item> -->
         <item name="android:headerDividersEnabled">false</item>
         <item name="android:scrollbars">none</item>
@@ -68,25 +68,39 @@
         <item name="android:stepSize">0.5</item>
         <item name="android:isIndicator">true</item>
     </style>
+    <!-- 星级计分style-灰色，可点击 -->
+    <style name="rating_bar_style_gray" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating_bar_selector_gray</item>
+        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">20dp</item>
+        <item name="android:max">10</item>
+        <item name="android:numStars">5</item>
+        <item name="android:stepSize">0.5</item>
+    </style>
 
     <!-- 添加EditText的style -->
     <style name="et_add_style">
-        <item name="android:background">@android:color/white</item>
-        <item name="android:padding">@dimen/margin_5</item>
+        <item name="android:background">@drawable/et_bg</item>
+        <item name="android:paddingLeft">@dimen/margin_5</item>
         <item name="android:minWidth">100dp</item>
     </style>
 
     <!-- 多行EditText的style -->
     <style name="et_multi_lint_style">
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">@drawable/et_bg</item>
+        <item name="android:paddingLeft">@dimen/margin_5</item>
+        <item name="android:paddingTop">@dimen/margin_5</item>
         <item name="android:minLines">6</item>
         <item name="android:gravity">top</item>
     </style>
 
     <!-- 添加spinner的style -->
     <style name="spinner_add_style">
-        <item name="android:background">@drawable/spinner_selector</item>
-        <item name="android:padding">@dimen/margin_5</item>
+        <item name="android:background">@drawable/sp_bg</item>
+        <item name="android:paddingLeft">@dimen/margin_5</item>
+        <item name="android:paddingTop">@dimen/margin_5</item>
+        <item name="android:paddingBottom">@dimen/margin_5</item>
+        <item name="android:paddingRight">@dimen/margin_20</item>
     </style>
 
     <!-- 列表里缩略图style -->
@@ -99,12 +113,35 @@
 
     <!-- 添加里缩略图style -->
     <style name="iv_thumb_add_style">
-        <item name="android:layout_width">@dimen/subject_list_thumbnail_width</item>
-        <item name="android:layout_height">@dimen/subject_list_thumbnail_height</item>
+        <item name="android:layout_width">@dimen/subject_add_thumbnail_width</item>
+        <item name="android:layout_height">@dimen/subject_add_thumbnail_height</item>
         <item name="android:scaleType">fitXY</item>
         <item name="android:src">@drawable/list_thumb</item>
-        <!-- <item name="android:background">@android:color/black</item>
-        <item name="android:padding">@dimen/margin_5</item> -->
         <item name="android:onClick">onClickThumb</item>
     </style>
+
+    <!-- 登录、注册等CheckBox的style -->
+    <style name="cb_style" parent="@style/list_second_level_style">
+        <item name="android:background">@null</item>
+        <item name="android:button">@null</item>
+        <item name="android:drawableLeft">@drawable/review_add_checkbox_selector</item>
+        <item name="android:drawablePadding">@dimen/margin_5</item>
+    </style>
+
+    <!-- 评论添加标签的style -->
+    <style name="review_cb_add_style" parent="@style/list_second_level_style">
+        <item name="android:layout_weight">1</item>
+        <item name="android:button">@drawable/review_add_checkbox_selector</item>
+        <item name="android:paddingLeft">@dimen/margin_5</item>
+    </style>
+
+    <!-- 会员中心及更多里TextView的style -->
+    <style name="user_center_tv_style" parent="@style/list_second_level_black_style">
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:drawablePadding">@dimen/margin_10</item>
+        <item name="android:paddingLeft">@dimen/margin_10</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
 </resources>

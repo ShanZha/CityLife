@@ -2,7 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:background="@color/main_bg"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/margin_5"
+    android:paddingTop="@dimen/margin_5" >
 
     <!-- 缩略图 -->
 
@@ -14,7 +17,7 @@
         android:layout_marginLeft="@dimen/margin_10" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/margin_10"
@@ -22,14 +25,32 @@
         android:layout_toRightOf="@+id/party_list_item_iv_thunmb"
         android:orientation="vertical" >
 
-        <!-- 主题 -->
-
-        <TextView
-            android:id="@+id/party_list_item_tv_subject"
-            style="@style/list_first_level_style"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true" />
+            android:layout_marginRight="@dimen/margin_10" >
+
+            <!-- 主题 -->
+
+            <TextView
+                android:id="@+id/party_list_item_tv_subject"
+                style="@style/list_first_level_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true" />
+
+            <!-- 已报名人数 -->
+
+            <TextView
+                android:id="@+id/party_list_item_tv_sign_up_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:background="@drawable/party_sign_up_gb"
+                android:singleLine="true"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
 
         <!-- 聚会地址 -->
 
@@ -59,54 +80,16 @@
             android:singleLine="true" />
     </LinearLayout>
 
-    <!-- 右边 -->
+    <!-- 右边-更多图标 -->
 
-    <RelativeLayout
-        android:id="@+id/party_list_item_rl_right"
+    <ImageView
+        android:id="@+id/party_list_item_iv_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/margin_5"
-        android:layout_marginRight="@dimen/margin_10" >
-
-        <LinearLayout
-            android:id="@+id/party_list_item_ll_sign_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:orientation="vertical" >
-
-            <!-- 已报名字样 -->
-
-            <TextView
-                android:id="@+id/party_list_item_tv_sign_up"
-                style="@style/list_second_level_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:text="@string/party_sign_up" />
-
-            <!-- 已报名人数 -->
-
-            <TextView
-                android:id="@+id/party_list_item_tv_sign_up_count"
-                style="@style/list_second_level_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:singleLine="true" />
-        </LinearLayout>
-
-        <!-- 更多图标 -->
-
-        <ImageView
-            android:id="@+id/party_list_item_iv_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_5"
-            android:layout_toRightOf="@+id/party_list_item_ll_sign_up"
-            android:src="@drawable/main_more" />
-    </RelativeLayout>
+        android:layout_marginRight="@dimen/margin_5"
+        android:src="@drawable/main_more" />
 
 </com.fourkkm.citylife.itemview.ModoerPartyItemView>

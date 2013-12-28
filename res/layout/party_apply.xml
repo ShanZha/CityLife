@@ -1,0 +1,162 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/titlebar_back" />
+
+        <!-- 主题 -->
+
+        <TextView
+            android:id="@+id/party_apply_tv_subject"
+            style="@style/list_first_level_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:gravity="center_vertical"
+            android:text="【车友聚会】武汉市电话费款到发货上开发和思考了付款减法" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@drawable/divider" />
+
+        <!-- 性别 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/party_sex_limit" />
+
+            <RadioGroup
+                android:id="@+id/party_apply_radio_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/party_apply_rbtn_sex_man"
+                    style="@style/list_first_level_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableLeft="@drawable/sex_selector"
+                    android:text="@string/sex_man" />
+
+                <RadioButton
+                    android:id="@+id/party_apply_rbtn_sex_woman"
+                    style="@style/list_first_level_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:background="@null"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/sex_selector"
+                    android:text="@string/sex_woman" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <!-- 联系人 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/party_contact" />
+
+            <EditText
+                android:id="@+id/party_apply_et_contact"
+                style="@style/et_add_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp" />
+        </LinearLayout>
+
+        <!-- 联系人方式 -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10" >
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/party_contact_tel" />
+
+            <EditText
+                android:id="@+id/party_apply_et_contact_tel"
+                style="@style/et_add_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:inputType="phone" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@drawable/divider" />
+
+        <!-- 备注 -->
+
+        <EditText
+            android:id="@+id/party_apply_et_remark"
+            style="@style/et_multi_lint_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10"
+            android:hint="@string/party_apply_remark_hint" />
+
+        <!-- 添加 -->
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@drawable/commit_btn_selector"
+            android:onClick="onClickAdd"
+            android:text="@string/party_apply"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</ScrollView>

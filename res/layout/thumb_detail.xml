@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/subject_list_thumbnail_width"
-    android:layout_height="@dimen/subject_list_thumbnail_height"
+    android:layout_width="@dimen/subject_detail_thumbnail_width"
+    android:layout_height="@dimen/subject_detail_thumbnail_height"
     android:background="@drawable/subject_detail_thumb_bg"
     android:clickable="true"
     android:onClick="onClickThumbnail" >
@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/thumb_detail_iv_thumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:padding="@dimen/margin_5"
         android:scaleType="fitXY"
         android:src="@drawable/list_thumb" />

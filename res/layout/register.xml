@@ -14,9 +14,11 @@
 
     <EditText
         android:id="@+id/register_et_username"
+        style="@style/et_add_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_20"
         android:hint="@string/username" />
 
@@ -24,6 +26,7 @@
 
     <EditText
         android:id="@+id/register_et_email"
+        style="@style/et_add_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
@@ -36,6 +39,7 @@
 
     <EditText
         android:id="@+id/register_et_pswd"
+        style="@style/et_add_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
@@ -48,6 +52,7 @@
 
     <EditText
         android:id="@+id/register_et_pswd_sure"
+        style="@style/et_add_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
@@ -60,10 +65,12 @@
 
     <CheckBox
         android:id="@+id/register_check_box_protocal"
-        style="@style/list_second_level_style"
+        style="@style/cb_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
         android:checked="true"
         android:text="@string/register_use_protocal" />
 
@@ -77,8 +84,10 @@
         android:layout_marginLeft="@dimen/margin_10"
         android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_10"
+        android:background="@drawable/commit_btn_selector"
         android:onClick="onClickRegister"
-        android:text="@string/register" />
+        android:text="@string/register"
+        android:textColor="@android:color/white" />
 
     <!-- 分割线 -->
 
@@ -86,9 +95,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_10"
-        android:src="@drawable/divider" />
+        android:background="@drawable/divider" />
 
-    <!-- 免责声明 -->
+    <!-- 用户使用协议 -->
 
     <TextView
         style="@style/list_second_level_black_style"
@@ -98,7 +107,7 @@
         android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_10"
         android:singleLine="true"
-        android:text="@string/register_disclaimer_tip" />
+        android:text="@string/register_use_protocal" />
 
     <TextView
         style="@style/list_second_level_style"
@@ -106,6 +115,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
         android:layout_marginRight="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
         android:text="@string/register_disclaimer" />
 
 </LinearLayout>

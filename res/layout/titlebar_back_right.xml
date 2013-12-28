@@ -24,6 +24,16 @@
         android:layout_centerInParent="true"
         android:text="@string/hello_world" />
 
+    <include
+        android:id="@+id/titlebar_back_right_ll_probar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_5"
+        layout="@layout/progress_bar_small"
+        android:visibility="gone" />
+
     <!-- 右边-操作按钮 -->
 
     <ImageButton
@@ -33,7 +43,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/margin_5"
-        android:onClick="onClickRight"
-        />
+        android:background="@drawable/add_selector"
+        android:onClick="onClickRight" />
 
 </RelativeLayout>

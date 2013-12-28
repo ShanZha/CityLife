@@ -1,7 +1,8 @@
 <RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content" 
-    android:background="@drawable/main_radio_btn_selector"
-    android:button="@null">
+    android:layout_height="wrap_content"
+    android:background="@null"
+    android:button="@null"
+    android:drawableLeft="@drawable/main_radio_btn_selector" >
 
 </RadioButton>

@@ -1,0 +1,28 @@
+<com.fourkkm.citylife.itemview.UploadPicItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <!-- 缩略图 -->
+
+    <com.zj.support.widget.AsyncImageView
+        xmlns:asyncImageView="http://schemas.android.com/apk/res/com.fourkkm.citylife"
+        android:id="@+id/upload_pic_item_iv_thumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="@dimen/margin_5"
+        android:scaleType="fitXY"
+        asyncImageView:defaultSrc="@drawable/list_thumb" />
+
+    <include
+        android:id="@+id/upload_pic_item_ll_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        layout="@layout/progress_bar_small"
+        android:visibility="gone" />
+
+</com.fourkkm.citylife.itemview.UploadPicItemView>

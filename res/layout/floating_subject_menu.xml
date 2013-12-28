@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/floating_bg"
     android:baselineAligned="false" >
 
     <ListView
@@ -9,8 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="@android:color/white"
-        android:cacheColorHint="@android:color/transparent" >
+        android:background="@color/floating_list_bg_gray"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none" >
     </ListView>
 
     <ListView
@@ -18,8 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="#333fff"
-        android:cacheColorHint="@android:color/transparent" >
+        android:background="@color/floating_list_bg_white"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none" >
     </ListView>
 
     <ListView
@@ -27,8 +30,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="#ff33ee"
-        android:cacheColorHint="@android:color/transparent" >
+        android:background="@color/floating_list_bg_gray"
+        android:cacheColorHint="@android:color/transparent"
+        android:scrollbars="none" >
     </ListView>
 
 </LinearLayout>

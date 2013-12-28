@@ -14,19 +14,18 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10"
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_20"
-        android:background="@android:color/white"
+        android:background="@drawable/floating_translucent_content_bg"
         android:onClick="onClickAddSubject" >
 
         <TextView
+            style="@style/user_center_tv_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_launcher"
-            android:drawablePadding="@dimen/margin_10"
-            android:gravity="center_vertical"
-            android:text="@string/more_add_subject"
-            android:textColor="@android:color/black" />
+            android:drawableLeft="@drawable/more_add_subject_icon"
+            android:text="@string/more_add_subject" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -36,128 +35,89 @@
             android:src="@drawable/main_more" />
     </RelativeLayout>
 
-    <!-- 版本说明 -->
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
         android:layout_marginRight="@dimen/margin_10"
         android:layout_marginTop="@dimen/margin_20"
-        android:background="@android:color/white"
-        android:onClick="onClickVersion" >
+        android:background="@drawable/floating_translucent_content_bg"
+        android:orientation="vertical" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/subject_detail_impression"
-            android:drawablePadding="@dimen/margin_10"
-            android:gravity="center_vertical"
-            android:text="@string/more_version"
-            android:textColor="@android:color/black" />
+        <!-- 版本说明 -->
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/main_more" />
-    </RelativeLayout>
-
-    <!-- 新手帮助 -->
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:background="@android:color/white"
-        android:onClick="onClickHelp" >
-
-        <ImageView
-            android:id="@+id/more_iv_help_divider"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/divider" />
+            android:onClick="onClickVersion" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/more_iv_help_divider"
-            android:drawableLeft="@drawable/subject_detail_impression"
-            android:drawablePadding="@dimen/margin_10"
-            android:gravity="center_vertical"
-            android:text="@string/more_help"
-            android:textColor="@android:color/black" />
+            <TextView
+                style="@style/user_center_tv_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/more_version_icon"
+                android:text="@string/more_version" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/main_more" />
-    </RelativeLayout>
-
-    <!-- 关于我们 -->
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:background="@android:color/white"
-        android:onClick="onClickAbout" >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
 
         <ImageView
-            android:id="@+id/more_iv_about_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider" />
+
+        <!-- 新手帮助 -->
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/divider" />
+            android:onClick="onClickHelp" >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/more_iv_about_divider"
-            android:drawableLeft="@drawable/subject_detail_impression"
-            android:drawablePadding="@dimen/margin_10"
-            android:gravity="center_vertical"
-            android:text="@string/more_about"
-            android:textColor="@android:color/black" />
+            <TextView
+                style="@style/user_center_tv_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/more_fresh_helper_icon"
+                android:text="@string/more_help" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/main_more" />
-    </RelativeLayout>
-
-    <!-- 退出应用 -->
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
-        android:background="@android:color/white"
-        android:onClick="onClickExit" >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/subject_detail_impression"
-            android:drawablePadding="@dimen/margin_10"
-            android:gravity="center_vertical"
-            android:text="@string/more_exit"
-            android:textColor="@android:color/black" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider" />
+
+        <!-- 关于我们 -->
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/main_more" />
-    </RelativeLayout>
+            android:onClick="onClickAbout" >
+
+            <TextView
+                style="@style/user_center_tv_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/more_about_us_icon"
+                android:text="@string/more_about" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/main_more" />
+        </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -1,393 +1,554 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_bg" >
 
-    <LinearLayout
+    <include
+        android:id="@+id/party_add_rl_titlebar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_alignParentTop="true"
+        layout="@layout/titlebar_back" />
 
-        <include
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/party_add_rl_titlebar" >
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/titlebar_back" />
+            android:orientation="vertical" >
 
-        <!-- 标题-第一部分 -->
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10" >
-
-            <TextView
-                android:id="@+id/party_add_tv_title_tip"
-                style="@style/list_first_level_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="@string/party_title_tip" />
-
-            <EditText
-                android:id="@+id/party_add_et_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/party_add_spinner_category"
-                android:layout_toRightOf="@+id/party_add_tv_title_tip" />
-
-            <Spinner
-                android:id="@+id/party_add_spinner_category"
-                style="@style/spinner_add_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" >
-            </Spinner>
-        </RelativeLayout>
-
-        <!-- 第二部分 -->
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10" >
-
-            <!-- 缩略图 -->
-
-            <ImageView
-                android:id="@+id/party_add_iv_thumb_upload"
-                style="@style/iv_thumb_add_style" />
+            <!-- 标题-第一部分 -->
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/party_add_iv_thumb_upload"
-                android:layout_alignTop="@+id/party_add_iv_thumb_upload"
-                android:layout_marginLeft="@dimen/margin_5"
-                android:layout_toRightOf="@+id/party_add_iv_thumb_upload" >
+                android:layout_margin="@dimen/margin_10" >
 
-                <LinearLayout
-                    android:id="@+id/party_add_ll_initiator"
+                <TextView
+                    android:id="@+id/party_add_tv_title_tip"
+                    style="@style/list_first_level_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true" >
+                    android:layout_centerVertical="true"
+                    android:text="@string/party_title_tip" />
 
-                    <!-- 发起者-字样 -->
+                <EditText
+                    android:id="@+id/party_add_et_title"
+                    style="@style/et_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_toLeftOf="@+id/party_add_ll_category"
+                    android:layout_toRightOf="@+id/party_add_tv_title_tip" />
 
-                    <TextView
-                        style="@style/list_second_level_black_style"
+                <LinearLayout
+                    android:id="@+id/party_add_ll_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/margin_5" >
+
+                    <include
+                        android:id="@+id/party_add_ll_category_loading"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/party_initiator" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="@dimen/margin_10"
+                        layout="@layout/progress_bar_small" />
 
-                    <!-- 发起者 -->
-
-                    <TextView
-                        android:id="@+id/party_add_tv_initiator"
-                        style="@style/list_second_level_style"
+                    <Spinner
+                        android:id="@+id/party_add_spinner_category"
+                        style="@style/spinner_add_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="呜呜uuu亢和交换机" />
+                        android:visibility="gone" >
+                    </Spinner>
                 </LinearLayout>
+            </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/party_add_ll_initiate_time"
+            <!-- 第二部分 -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10" >
+
+                <!-- 缩略图 -->
+
+                <FrameLayout
+                    android:id="@+id/party_add_fr_thumb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true" >
+                    android:background="@android:color/white" >
 
-                    <!-- 发起时间-字样 -->
+                    <com.zj.support.widget.AsyncImageView
+                        xmlns:asyncImageView="http://schemas.android.com/apk/res/com.fourkkm.citylife"
+                        android:id="@+id/party_add_iv_thumb_upload"
+                        style="@style/iv_thumb_add_style"
+                        android:padding="@dimen/margin_5"
+                        asyncImageView:defaultSrc="@drawable/add_thumb" />
+
+                    <include
+                        android:id="@+id/party_add_ll_thumb_loading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        layout="@layout/progress_bar_small"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/party_add_fr_thumb"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:layout_toRightOf="@+id/party_add_fr_thumb" >
+
+                    <LinearLayout
+                        android:id="@+id/party_add_ll_initiator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true" >
+
+                        <!-- 发起者-字样 -->
+
+                        <TextView
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/party_initiator" />
+
+                        <!-- 发起者 -->
+
+                        <TextView
+                            android:id="@+id/party_add_tv_initiator"
+                            style="@style/list_second_level_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/party_add_ll_initiate_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/party_add_ll_initiator"
+                        android:layout_marginTop="@dimen/margin_5" >
+
+                        <!-- 发起时间-字样 -->
+
+                        <TextView
+                            android:id="@+id/party_add_tv_initiate_time_tip"
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/party_initiate_time" />
+
+                        <!-- 发起时间 -->
+
+                        <TextView
+                            android:id="@+id/party_add_tv_initiate_time"
+                            style="@style/list_second_level_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2013-12-12 12:18" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/party_add_ll_initiate_time"
+                        android:layout_marginTop="@dimen/margin_5" >
+
+                        <!-- 报名截止-字样 -->
+
+                        <TextView
+                            android:id="@+id/party_add_tv_signup_end_tip"
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/party_sign_up_end_time" />
+
+                        <!-- 报名截止 -->
+
+                        <EditText
+                            android:id="@+id/party_add_et_signup_end"
+                            style="@style/et_add_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_5"
+                            android:hint="@string/time_et_hint" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/divider" />
+
+            <!-- 第三部分 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:orientation="vertical" >
+
+                <!-- 开始时间 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
 
                     <TextView
-                        android:id="@+id/party_add_tv_initiate_time_tip"
                         style="@style/list_second_level_black_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/party_initiate_time" />
-
-                    <!-- 发起时间 -->
-
-                    <TextView
-                        android:id="@+id/party_add_tv_initiate_time"
-                        style="@style/list_second_level_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2013-12-04 19:01" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true" >
-
-                    <!-- 报名截止-字样 -->
-
-                    <TextView
-                        android:id="@+id/party_add_tv_signup_end_tip"
-                        style="@style/list_second_level_black_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/party_initiate_time" />
-
-                    <!-- 报名截止 -->
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_begin_time" />
 
                     <EditText
-                        android:id="@+id/party_add_et_signup_end"
+                        android:id="@+id/party_add_et_begin_time"
                         style="@style/et_add_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/party_time_hint" />
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:hint="@string/time_et_hint" />
                 </LinearLayout>
-            </RelativeLayout>
-        </RelativeLayout>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/divider" />
+                <!-- 结束时间 -->
 
-        <!-- 第三部分 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10"
-            android:orientation="vertical" >
-
-            <!-- 开始时间 -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/party_begin_time" />
+                    android:layout_marginTop="@dimen/margin_10" >
 
-                <EditText
-                    android:id="@+id/party_add_et_begin_time"
-                    style="@style/et_add_style"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_end_time" />
+
+                    <EditText
+                        android:id="@+id/party_add_et_end_time"
+                        style="@style/et_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:hint="@string/time_et_hint" />
+                </LinearLayout>
+
+                <!-- 联系人 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/party_time_hint" />
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_contact" />
+
+                    <EditText
+                        android:id="@+id/party_add_et_contact"
+                        style="@style/et_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="18dp" />
+                </LinearLayout>
+
+                <!-- 联系人方式 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_contact_tel" />
+
+                    <EditText
+                        android:id="@+id/party_add_et_contact_tel"
+                        style="@style/et_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:inputType="phone" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- 结束时间 -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/divider" />
+
+            <!-- 第四部分 -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
+                android:layout_margin="@dimen/margin_10"
+                android:orientation="vertical" >
 
-                <TextView
-                    style="@style/list_second_level_black_style"
+                <!-- 地区加载中 -->
+
+                <include
+                    android:id="@+id/party_add_ll_area_loading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/party_end_time" />
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_10"
+                    layout="@layout/progress_bar_small" />
 
-                <EditText
-                    android:id="@+id/party_add_et_end_time"
-                    style="@style/et_add_style"
-                    android:layout_width="wrap_content"
+                <!-- 所在地区 -->
+
+                <LinearLayout
+                    android:id="@+id/party_add_ll_area"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/party_time_hint" />
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:visibility="gone" >
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_location_area" />
+
+                    <!-- 一级分类 -->
+
+                    <Spinner
+                        android:id="@+id/party_add_spinner_area_first"
+                        style="@style/spinner_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5" >
+                    </Spinner>
+
+                    <!-- 二级分类 -->
+
+                    <Spinner
+                        android:id="@+id/party_add_spinner_area_second"
+                        style="@style/spinner_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5" >
+                    </Spinner>
+                </LinearLayout>
+
+                <!-- 详细地址 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_addr_detail" />
+
+                    <EditText
+                        android:id="@+id/party_add_et_addr_detail"
+                        style="@style/et_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5" />
+                </LinearLayout>
+
+                <!-- 性别限制 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_sex_limit" />
+
+                    <RadioGroup
+                        android:id="@+id/party_add_radio_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:orientation="horizontal" >
+
+                        <RadioButton
+                            android:id="@+id/party_add_rbtn_sex_man"
+                            style="@style/list_first_level_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@null"
+                            android:button="@null"
+                            android:drawableLeft="@drawable/sex_selector"
+                            android:text="@string/sex_man" />
+
+                        <RadioButton
+                            android:id="@+id/party_add_rbtn_sex_woman"
+                            style="@style/list_first_level_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:background="@null"
+                            android:button="@null"
+                            android:drawableLeft="@drawable/sex_selector"
+                            android:text="@string/sex_woman" />
+
+                        <RadioButton
+                            android:id="@+id/party_add_rbtn_sex_none"
+                            style="@style/list_first_level_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_10"
+                            android:background="@null"
+                            android:button="@null"
+                            android:checked="true"
+                            android:drawableLeft="@drawable/sex_selector"
+                            android:text="@string/sex_none" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <!-- 活动费用 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_cost" />
+
+                    <EditText
+                        android:id="@+id/party_add_et_cost"
+                        style="@style/et_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:inputType="number" />
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:text="@string/party_cost_per_tip" />
+                </LinearLayout>
+
+                <!-- 报名费用-积分 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10"
+                    android:gravity="center_vertical" >
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/party_integration" />
+
+                    <EditText
+                        android:id="@+id/party_add_et_integration"
+                        style="@style/et_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:inputType="number" />
+
+                    <Spinner
+                        android:id="@+id/party_add_spinner_integration"
+                        style="@style/spinner_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5" >
+                    </Spinner>
+                </LinearLayout>
+
+                <!-- 活动人数 -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_plan_person_num" />
+
+                    <EditText
+                        android:id="@+id/party_add_et_plan_num"
+                        style="@style/et_add_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:inputType="number" />
+
+                    <TextView
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:text="@string/party_plan_per_num_tip" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- 联系人 -->
-
-            <LinearLayout
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
+                android:src="@drawable/divider" />
 
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/party_contact" />
+            <!-- 第五部分-描述 -->
 
-                <EditText
-                    android:id="@+id/party_add_et_contact"
-                    style="@style/et_add_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- 联系人方式 -->
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/party_add_et_desc"
+                style="@style/et_multi_lint_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
+                android:layout_margin="@dimen/margin_10"
+                android:hint="@string/party_desc_hint" />
 
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/party_contact_tel" />
+            <!-- 添加 -->
 
-                <EditText
-                    android:id="@+id/party_add_et_contact_tel"
-                    style="@style/et_add_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/commit_btn_selector"
+                android:onClick="onClickAdd"
+                android:text="@string/party_add"
+                android:textColor="@android:color/white" />
         </LinearLayout>
+    </ScrollView>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/divider" />
-
-        <!-- 第四部分 -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10"
-            android:orientation="vertical" >
-
-            <!-- 所在区域 -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
-
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/party_location_area" />
-
-                <EditText
-                    android:id="@+id/party_add_et_location_area"
-                    style="@style/et_add_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- 详细地址 -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
-
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/party_addr_detail" />
-
-                <EditText
-                    android:id="@+id/party_add_et_addr_detail"
-                    style="@style/et_add_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-            <!-- 性别限制 -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
-
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/party_sex_limit" />
-
-                <Spinner
-                    android:id="@+id/party_add_spinner_sex"
-                    style="@style/spinner_add_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-                </Spinner>
-            </LinearLayout>
-
-            <!-- 活动费用 -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
-
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/party_cost" />
-
-                <EditText
-                    android:id="@+id/party_add_et_cost"
-                    style="@style/et_add_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:text="@string/party_cost_per_tip" />
-            </LinearLayout>
-
-            <!-- 活动人数 -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_10" >
-
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/party_plan_person_num" />
-
-                <EditText
-                    android:id="@+id/party_add_et_plan_num"
-                    style="@style/et_add_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <TextView
-                    style="@style/list_second_level_black_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_5"
-                    android:text="@string/party_plan_per_num_tip" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/divider" />
-
-        <!-- 第五部分-描述 -->
-
-        <EditText
-            android:id="@+id/party_add_et_desc"
-            style="@style/et_multi_lint_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_10"
-            android:hint="@string/party_desc_hint" />
-
-        <!-- 添加 -->
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/margin_10"
-            android:onClick="onClickAdd"
-            android:text="@string/party_add" />
-    </LinearLayout>
-
-</ScrollView>
+</RelativeLayout>

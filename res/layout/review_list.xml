@@ -16,7 +16,8 @@
         android:id="@+id/review_list_listview"
         style="@style/list_view_style"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:divider="@drawable/divider_dash" >
     </com.fourkkm.citylife.view.PullUpDownListView>
 
 </LinearLayout>

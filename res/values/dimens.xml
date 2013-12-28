@@ -7,7 +7,12 @@
     <dimen name="margin_10">10dp</dimen>
     <dimen name="margin_15">15dp</dimen>
     <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
     <dimen name="subject_list_thumbnail_width">96dp</dimen>
-    <dimen name="subject_list_thumbnail_height">78dp</dimen>
+    <dimen name="subject_list_thumbnail_height">72dp</dimen>
+    <dimen name="subject_detail_thumbnail_height">120dp</dimen>
+    <dimen name="subject_detail_thumbnail_width">90dp</dimen>
+    <dimen name="subject_add_thumbnail_width">120dp</dimen>
+    <dimen name="subject_add_thumbnail_height">90dp</dimen>
 
 </resources>

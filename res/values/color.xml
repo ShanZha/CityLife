@@ -2,5 +2,9 @@
 <resources>
 
     <color name="main_bg">#e6e6e6</color>
+    <color name="floating_list_bg_gray">#e6e6e6</color>
+    <color name="floating_list_bg_white">#ffffff</color>
+    <color name="floating_bg">#b0000000</color>
+    <color name="party_sign_up_num">#f56f18</color>
 
 </resources>
