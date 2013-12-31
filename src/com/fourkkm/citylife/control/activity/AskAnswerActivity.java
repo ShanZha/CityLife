@@ -17,6 +17,7 @@ import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.zj.app.BaseActivity;
+import com.zj.app.db.dao.SqliteUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 
@@ -29,7 +30,6 @@ import com.zj.support.observer.model.Param;
 public class AskAnswerActivity extends BaseActivity {
 
 	private static final String TAG = "AskAnswerActivity";
-	private static final int REQ_LOGIN_CODE = 1;
 	private TextView mTvTitle, mTvAskTitle, mTvAskDesc, mTvAskTime,
 			mTvAskMemberName;
 	private EditText mEtAnswer;
@@ -70,12 +70,7 @@ public class AskAnswerActivity extends BaseActivity {
 		mTvAskTime.setText(CommonUtil.getTimeByPHP(mCurrAsk.getDateline(),
 				"yyyy-MM-dd HH:mm"));
 		this.setUserNameAndGroup(mCurrAsk.getUid(), mTvAskMemberName);
-		// 如果没有登录，先登录
-		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
-			this.startActivityForResult(new Intent(this, LoginActivity.class),
-					REQ_LOGIN_CODE);
-			return;
-		}
+
 	}
 
 	private void setUserNameAndGroup(ModoerMembers member, TextView tv) {
@@ -122,19 +117,13 @@ public class AskAnswerActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (RESULT_OK == resultCode && REQ_LOGIN_CODE == requestCode) {
-			return;
-		}
-		this.finish();
-	}
-
-	@Override
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerAsks.class.getName());
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerMembers.class.getName());
 		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.ask_answer_success));
 		Intent data = new Intent();

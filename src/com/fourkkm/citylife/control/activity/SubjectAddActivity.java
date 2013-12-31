@@ -26,6 +26,7 @@ import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.SubjectCategoryManager;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.AsyncImageView;
 
@@ -48,7 +49,6 @@ public class SubjectAddActivity extends BaseAddActivity {
 	private List<String> mCategoryFirstList, mCategorySecondList;
 
 	private SubjectCategoryManager mCategoryMgr;
-	private ModoerSubject mSubject;
 	/** 地图选点坐标 **/
 	private double mLat = 0, mLng = 0;
 
@@ -105,7 +105,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 		super.setSpAdapter();
 		mCategoryFirstList = new ArrayList<String>();
 		mCategorySecondList = new ArrayList<String>();
-		mAdapterCategoryFirst = new ArrayAdapter<String>(this,
+		mAdapterCategoryFirst = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mCategoryFirstList);
 		mSpCategoryFirst.setAdapter(mAdapterCategoryFirst);
 		mAdapterCategoryFirst
@@ -113,7 +113,9 @@ public class SubjectAddActivity extends BaseAddActivity {
 		mSpCategoryFirst
 				.setOnItemSelectedListener(mCategoryItemSelectedListener);
 
-		mAdapterCategorySecond = new ArrayAdapter<String>(this,
+		// mAdapterCategorySecond = new ArrayAdapter<String>(this,
+		// android.R.layout.simple_spinner_item, mCategorySecondList);
+		mAdapterCategorySecond = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mCategorySecondList);
 		mSpCategorySecond.setAdapter(mAdapterCategorySecond);
 		mAdapterCategorySecond
@@ -240,14 +242,15 @@ public class SubjectAddActivity extends BaseAddActivity {
 			objs.add(mSubject);
 			objs.add(mAlbum);
 			if (this.getPicCount() > 0) {
-				// Step 3：保存ModoerPictures
-				for (ModoerPictures pic : mPicList) {
+				// Step 3：保存ModoerPictures(排除第一项)
+				for (int i = 1; i < mPicList.size(); i++) {
+					ModoerPictures pic = mPicList.get(i);
 					pic.setAlbumid(mAlbum);
 					pic.setSid(mSubject);
 					pic.setStatus(1);
 					pic.setUrl("");
+					objs.add(pic);
 				}
-				objs.addAll(mPicList);
 			}
 
 			this.showWaiting();

@@ -95,6 +95,12 @@ public class ModoerReview extends ItemSingle implements Serializable {
 	/** 图片量 */
 	@Validates(info = "图片量不能超过40000个字符", type = "maxSize40000")
 	private String pictures;
+	
+	/** 图片组json格式--pictures与之一致 **/
+	private String picturesJson;
+	
+	/** 图片组json格式--taggroup与之一致 **/
+	private String taggroupJson;
 
 	private Map errors;
 
@@ -296,6 +302,22 @@ public class ModoerReview extends ItemSingle implements Serializable {
 
 	public void setErrors(Map errors) {
 		this.errors = errors;
+	}
+
+	public String getPicturesJson() {
+		return picturesJson;
+	}
+
+	public void setPicturesJson(String picturesJson) {
+		this.picturesJson = picturesJson;
+	}
+
+	public String getTaggroupJson() {
+		return taggroupJson;
+	}
+
+	public void setTaggroupJson(String taggroupJson) {
+		this.taggroupJson = taggroupJson;
 	}
 
 	@Override

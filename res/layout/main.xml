@@ -48,7 +48,6 @@
                         android:layout_marginLeft="@dimen/margin_10"
                         android:layout_toLeftOf="@+id/main_radio_group"
                         android:singleLine="true"
-                        android:text="美轮美奂的真实境况，让您无以言表"
                         android:textColor="@android:color/white" />
 
                     <!-- 当前选中小图标 -->
@@ -60,6 +59,8 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/margin_5"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:orientation="horizontal" >
                     </RadioGroup>
                 </RelativeLayout>

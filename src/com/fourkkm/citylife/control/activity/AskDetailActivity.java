@@ -17,10 +17,12 @@ import com.andrnes.modoer.ModoerAskAnswer;
 import com.andrnes.modoer.ModoerAsks;
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerUsergroups;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.BaseActivity;
+import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 
 /**
@@ -32,7 +34,9 @@ import com.zj.support.observer.model.Param;
 public class AskDetailActivity extends BaseActivity {
 
 	private static final String TAG = "AskDetailActivity";
-	private static final int ANSWER_REQ_CODE = 1;
+	private static final int REQ_LOGIN_CODE = 1;
+	private static final int ANSWER_REQ_CODE = 2;
+	private static final int ANSWER_MANAGER_REQ_CODE = 3;
 	private TextView mTvTitle, mTvSubject, mTvContent, mTvTime,
 			mTvLevelAndUsername;
 	private TextView mTvBestContent, mTvBestTime, mTvBestLevelAndUsername,
@@ -77,8 +81,8 @@ public class AskDetailActivity extends BaseActivity {
 				.findViewById(R.id.ask_detail_iv_divider_best_answer);
 		mIvDividerBestAnswerComment = (ImageView) this
 				.findViewById(R.id.ask_detail_iv_divider_best_answer_comment);
-		
-		mBtnAnswer = (Button)this.findViewById(R.id.ask_detail_btn_answer);
+
+		mBtnAnswer = (Button) this.findViewById(R.id.ask_detail_btn_answer);
 	}
 
 	@Override
@@ -89,6 +93,13 @@ public class AskDetailActivity extends BaseActivity {
 		mTvTitle.setText(this.getString(R.string.ask_detail));
 		Intent intent = this.getIntent();
 		mCurrAsk = (ModoerAsks) intent.getSerializableExtra("modoerAsk");
+		this.prepareByAsk();
+
+		this.showLoadingOtherAnswers();
+		this.fetchOtherAnswers();
+	}
+
+	private void prepareByAsk() {
 		if (null == mCurrAsk) {
 			Log.e(TAG, "mCurrAsk is null");
 			return;
@@ -118,9 +129,9 @@ public class AskDetailActivity extends BaseActivity {
 			mIvDividerBestAnswer.setVisibility(View.GONE);
 			mIvDividerBestAnswerComment.setVisibility(View.GONE);
 		}
-
-		this.showLoadingOtherAnswers();
-		this.fetchOtherAnswers();
+		if (mCurrAsk.getSuccess() == 1) {// 如果已经解决，则不提供回答/管理
+			mBtnAnswer.setVisibility(View.GONE);
+		}
 	}
 
 	private void showLoadingOtherAnswers() {
@@ -185,22 +196,50 @@ public class AskDetailActivity extends BaseActivity {
 		}
 	}
 
+	/**
+	 * 根据问题所属人回答界面跳转不一样
+	 */
+	private void onAnswer() {
+		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
+				.getCurrMember();
+		if (null == mCurrAsk || null == member) {
+			return;
+		}
+		ModoerMembers askMember = mCurrAsk.getUid();
+		if (askMember.getId() == member.getId()) {
+			Intent intent = new Intent(this, AskUpdateActivity.class);
+			intent.putExtra("modoerAsk", mCurrAsk);
+			this.startActivityForResult(intent, ANSWER_MANAGER_REQ_CODE);
+		} else {
+			Intent intent = new Intent(this, AskAnswerActivity.class);
+			intent.putExtra("modoerAsk", mCurrAsk);
+			this.startActivityForResult(intent, ANSWER_REQ_CODE);
+		}
+	}
+
 	public void onClickBack(View view) {
 		this.finish();
 	}
 
-	public void onClickAnswer(View view) {// 我要回答
-		Intent intent = new Intent(this, AskUpdateActivity.class);
-		intent.putExtra("modoerAsk", mCurrAsk);
-		this.startActivityForResult(intent, ANSWER_REQ_CODE);
+	public void onClickAnswer(View view) {// 我要回答/管理问题
+		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
+			this.startActivityForResult(new Intent(this, LoginActivity.class),
+					REQ_LOGIN_CODE);
+		} else {
+			this.onAnswer();
+		}
+
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		if (RESULT_OK == resultCode && ANSWER_REQ_CODE == requestCode) {
-			// 处理我回答问题
+		if (RESULT_OK != resultCode) {
+			return;
+		}
+		switch (requestCode) {
+		case ANSWER_REQ_CODE:// 回答问题成功
 			if (null == data) {
 				return;
 			}
@@ -209,7 +248,19 @@ public class AskDetailActivity extends BaseActivity {
 			if (null != answer) {
 				this.addOtherAnswer(answer);
 			}
+			break;
+		case REQ_LOGIN_CODE:// 登录成功
+			this.onAnswer();
+			break;
+		case ANSWER_MANAGER_REQ_CODE:// 修改问题/结束问题成功
+			if (null == data) {
+				return;
+			}
+			mCurrAsk = (ModoerAsks) data.getSerializableExtra("modoerAsk");
+			this.prepareByAsk();
+			break;
 		}
+
 	}
 
 	@Override

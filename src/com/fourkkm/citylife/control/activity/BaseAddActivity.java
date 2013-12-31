@@ -24,6 +24,7 @@ import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.AreaManager;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.constant.Config;
 import com.zj.app.db.dao.SqliteUtil;
 import com.zj.support.image.ScaleImageProcessor;
@@ -65,14 +66,14 @@ public class BaseAddActivity extends BaseUploadPicActivity {
 	protected void setSpAdapter() {
 		mAreaFirst = new ArrayList<String>();
 		mAreaSecond = new ArrayList<String>();
-		mAdapterAreaFirst = new ArrayAdapter<String>(this,
+		mAdapterAreaFirst = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mAreaFirst);
 		mSpAreaFirst.setAdapter(mAdapterAreaFirst);
 		((ArrayAdapter<String>) mAdapterAreaFirst)
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSpAreaFirst.setOnItemSelectedListener(mAreaItemSelectedListener);
 
-		mAdapterAreaSecond = new ArrayAdapter<String>(this,
+		mAdapterAreaSecond = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mAreaSecond);
 		mSpAreaSecond.setAdapter(mAdapterAreaSecond);
 		((ArrayAdapter<String>) mAdapterAreaSecond)
@@ -82,6 +83,7 @@ public class BaseAddActivity extends BaseUploadPicActivity {
 	@Override
 	protected void doUpload(String filePath) {
 		if (mIsUploadThumb) {
+			Log.i(TAG, "shan-->doUploadThumb() filepath = " + filePath);
 			mIsUploadingThumb = true;
 			this.showLoading(mLlThumbLoading);
 			this.uploadThumb(filePath);
@@ -211,7 +213,8 @@ public class BaseAddActivity extends BaseUploadPicActivity {
 			if (null != result) {
 				mThumbPath = result.get(Config.KEY_UPLOAD_THUMB);
 				String filepath = result.get(Config.KEY_UPLOAD_LOCAL_FILEPATH);
-				System.out.println(" filePath = " + filepath);
+				Log.i(TAG, "shan-->onSuccessUploadThumb() filepath = "
+						+ filepath);
 				ScaleImageProcessor scale = new ScaleImageProcessor((int) this
 						.getResources().getDimension(
 								R.dimen.subject_add_thumbnail_width),

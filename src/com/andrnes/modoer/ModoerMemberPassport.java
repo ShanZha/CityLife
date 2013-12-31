@@ -10,7 +10,7 @@ public class ModoerMemberPassport {
 	/** 绑定用户UID */
 	private ModoerMembers uid;
 
-	/** 绑定种类 */
+	/** 绑定种类 [weibo, qq, taobao, google, qzone, renren]*/
 	private String psname;
 
 	private String accessToken;

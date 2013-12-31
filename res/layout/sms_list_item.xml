@@ -1,0 +1,63 @@
+<com.fourkkm.citylife.itemview.ModoerSmsItemView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/sms_list_item_rl_top"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/sms_list_item_iv_more"
+        android:padding="@dimen/margin_10" >
+
+        <LinearLayout
+            android:id="@+id/sms_list_item_ll_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <!-- 主题 -->
+
+            <TextView
+                android:id="@+id/sms_list_item_tv_subject"
+                style="@style/list_first_level_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true" />
+
+            <!-- 时间 -->
+
+            <TextView
+                android:id="@+id/sms_list_item_tv_time"
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:singleLine="true" />
+        </LinearLayout>
+
+        <!-- 内容 -->
+
+        <TextView
+            android:id="@+id/sms_list_item_tv_content"
+            style="@style/list_second_level_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sms_list_item_ll_top"
+            android:layout_marginTop="@dimen/margin_10"
+            android:singleLine="true" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/sms_list_item_iv_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_10"
+        android:src="@drawable/main_more" />
+
+</com.fourkkm.citylife.itemview.ModoerSmsItemView>

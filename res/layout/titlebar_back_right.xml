@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,11 +7,13 @@
     <!-- 左边-返回 -->
 
     <TextView
+        android:id="@+id/titlebar_back_right_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/back"
         android:clickable="true"
         android:drawableRight="@drawable/back_divider"
+        android:gravity="center"
         android:onClick="onClickBack" />
 
     <!-- 标题部分 -->
@@ -19,17 +21,18 @@
     <TextView
         android:id="@+id/titlebar_back_right_tv_title"
         style="@style/title_style"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/hello_world" />
+        android:layout_marginLeft="@dimen/margin_10"
+        android:layout_marginRight="@dimen/margin_10"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:singleLine="true" />
 
     <include
         android:id="@+id/titlebar_back_right_ll_probar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/margin_5"
         layout="@layout/progress_bar_small"
         android:visibility="gone" />
@@ -40,10 +43,9 @@
         android:id="@+id/titlebar_back_right_btn_operator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
         android:layout_marginRight="@dimen/margin_5"
         android:background="@drawable/add_selector"
         android:onClick="onClickRight" />
 
-</RelativeLayout>
+</LinearLayout>

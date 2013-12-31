@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.andrnes.modoer.ModoerPictures;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
-import com.fourkkm.citylife.control.activity.BaseAddActivity;
 import com.fourkkm.citylife.control.activity.BaseUploadPicActivity;
 import com.zj.app.utils.CommonUtil;
 import com.zj.support.image.ScaleImageProcessor;
@@ -110,7 +109,9 @@ public class UploadPicItemView extends FrameLayout implements ItemView,
 			mIvThumb.setImageBitmap(mBmAdd);
 		} else {
 			String url = picture.getUrl();
-			if (!TextUtils.isEmpty(url)) {// 暂时将url设置为本地路劲
+			// 暂时将url设置为本地路径
+			if (!TextUtils.isEmpty(url)
+					&& GlobalConfig.STATUS_UPLOAD_SUCCESS == status) {
 				mIvThumb.setUrl(url);
 			} else {
 				mIvThumb.setImageBitmap(mBmDefault);
@@ -123,7 +124,6 @@ public class UploadPicItemView extends FrameLayout implements ItemView,
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		int pos = (Integer) v.getTag();
-		Toast.makeText(getContext(), "Pos = " + pos, Toast.LENGTH_SHORT).show();
 		((BaseUploadPicActivity) getContext()).onClickUploadPic(pos);
 	}
 

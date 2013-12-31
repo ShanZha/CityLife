@@ -43,8 +43,8 @@
 
                 <include
                     android:id="@+id/china_lane_detail_fr_thumbnail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/subject_detail_thumbnail_width"
+                    android:layout_height="@dimen/subject_detail_thumbnail_height"
                     layout="@layout/thumb_detail" />
 
                 <TableLayout

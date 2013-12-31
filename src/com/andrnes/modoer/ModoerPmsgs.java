@@ -1,13 +1,25 @@
 package com.andrnes.modoer;
 
-/** '短信息表 */
-public class ModoerPmsgs {
+import java.io.Serializable;
 
+import android.content.Context;
+import android.view.ViewGroup;
+
+import com.fourkkm.citylife.R;
+import com.zj.app.annotation.Lazy;
+import com.zj.support.widget.item.ItemSingle;
+import com.zj.support.widget.itemview.ItemView;
+
+/** '短信息表 */
+public class ModoerPmsgs extends ItemSingle implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private int id;
 	/** 发送者uid */
 	private ModoerMembers senduid;
 
 	/** 接受者uid */
+	@Lazy(isLazy = true)
 	private ModoerMembers recvuid;
 
 	/** 内容 */
@@ -87,6 +99,12 @@ public class ModoerPmsgs {
 
 	public void setDelflag(int delflag) {
 		this.delflag = delflag;
+	}
+
+	@Override
+	public ItemView newCell(Context context, ViewGroup root) {
+		// TODO Auto-generated method stub
+		return this.createCellFromXml(context, R.layout.sms_list_item, root);
 	}
 
 }

@@ -10,9 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.PopupWindow.OnDismissListener;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerMembers;
@@ -52,8 +51,8 @@ public class PartyListActivity extends BaseListActivity implements
 	private static final int PARTY_MOST_NEW = 0;
 	/** ×îÍúÈËÆø **/
 	private static final int PARTY_MOST_POPULAR = 1;
-//	private ProgressBar mProBarTopCheck;
-	private LinearLayout mLlTopCheck,mLlTopCheckLoading;
+	// private ProgressBar mProBarTopCheck;
+	private LinearLayout mLlTopCheck, mLlTopCheckLoading;
 	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond,
 			mRlFloatingThird;
 	private TextView mTvTitle, mTvCategory, mTvState, mTvMost;

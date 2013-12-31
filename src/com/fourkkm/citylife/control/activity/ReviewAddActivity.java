@@ -1,12 +1,18 @@
 package com.fourkkm.citylife.control.activity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -18,6 +24,7 @@ import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerReview;
 import com.andrnes.modoer.ModoerReviewOpt;
 import com.andrnes.modoer.ModoerSubject;
+import com.andrnes.modoer.ModoerTaggroup;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
@@ -130,6 +137,7 @@ public class ReviewAddActivity extends BaseActivity implements
 		this.showSortLoading();
 		this.fetchReviewOpt();
 		this.showTagsLoading();
+		this.fetctReviewTags();
 
 		mDialogProxy = new ProgressDialogProxy(this);
 	}
@@ -168,14 +176,33 @@ public class ReviewAddActivity extends BaseActivity implements
 	}
 
 	private void fetctReviewTags() {
-		// String selectCode =
-		// "from com.andrnes.modoer.ModoerReviewOpt mro where mro.enable = 1 and mro.gid.id = "
-		// + mSubject.getPid().getReviewOptGid().getId();
+		String selectCode = "from com.andrnes.modoer.ModoerTaggroup mt where mt.id in("
+				+ this.getTagGroupIdString() + ")";
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_REVIEW_TAGS);
-		// this.getStoreOperation().findAll(selectCode,
-		// new HashMap<String, Object>(), true, new ModoerReviewOpt(),
-		// new Param(this.hashCode(), GlobalConfig.URL_CONN));
+		this.getStoreOperation().findAll(selectCode,
+				new HashMap<String, Object>(), true, new ModoerTaggroup(),
+				new Param(this.hashCode(), GlobalConfig.URL_CONN));
+	}
+
+	private String getTagGroupIdString() {
+		StringBuilder sb = new StringBuilder();
+		try {
+			String configJson = mSubject.getPid().getConfigJson();
+			JSONObject json = new JSONObject(configJson);
+			JSONArray array = json.getJSONArray("taggroup");
+			for (int i = 0; i < array.length(); i++) {
+				String taggroupId = array.getString(i);
+				sb.append(taggroupId);
+				if (i != array.length() - 1) {
+					sb.append(",");
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sb.toString();
 	}
 
 	private boolean validate() {
@@ -204,6 +231,7 @@ public class ReviewAddActivity extends BaseActivity implements
 		if (!this.validate()) {
 			return;
 		}
+		System.out.println(" checkTagGroup = " + buildCheckedTaggroup());
 		ModoerReview review = new ModoerReview();
 		review.setIdtype("item_subject");
 		review.setContent(mEtContent.getText().toString().trim());
@@ -240,6 +268,22 @@ public class ReviewAddActivity extends BaseActivity implements
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_REVIEW);
 		this.getStoreOperation().saveOrUpdate(review, param);
 
+	}
+
+	private String buildCheckedTaggroup() {
+		StringBuilder sb = new StringBuilder();
+		if (null != mTlTag) {
+			int size = mTlTag.getChildCount();
+			for (int i = 0; i < size; i++) {
+				CheckBox cb = (CheckBox) mTlTag.getChildAt(i);
+				if (cb.isChecked()) {
+					String tag = cb.getText().toString();
+					sb.append(tag);
+					sb.append(",");
+				}
+			}
+		}
+		return sb.toString();
 	}
 
 	@Override
@@ -283,7 +327,17 @@ public class ReviewAddActivity extends BaseActivity implements
 			}
 			this.hideSortLoading();
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_REVIEW_TAGS == operator) {
-
+			for (int i = 0; i < results.size(); i++) {
+				ModoerTaggroup group = (ModoerTaggroup) results.get(i);
+				String options = group.getOptions();
+				String[] tags = options.split(",");
+				for (String tag : tags) {
+					CheckBox cb = (CheckBox) this.getLayoutInflater().inflate(
+							R.layout.review_tag_cb, null);
+					cb.setText(tag);
+					mTlTag.addView(cb);
+				}
+			}
 			this.hideTagsLoading();
 		}
 

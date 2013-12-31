@@ -83,6 +83,8 @@
         <item name="android:background">@drawable/et_bg</item>
         <item name="android:paddingLeft">@dimen/margin_5</item>
         <item name="android:minWidth">100dp</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <!-- 多行EditText的style -->
@@ -92,15 +94,18 @@
         <item name="android:paddingTop">@dimen/margin_5</item>
         <item name="android:minLines">6</item>
         <item name="android:gravity">top</item>
+        <item name="android:textColor">#666666</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <!-- 添加spinner的style -->
     <style name="spinner_add_style">
         <item name="android:background">@drawable/sp_bg</item>
         <item name="android:paddingLeft">@dimen/margin_5</item>
-        <item name="android:paddingTop">@dimen/margin_5</item>
-        <item name="android:paddingBottom">@dimen/margin_5</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
         <item name="android:paddingRight">@dimen/margin_20</item>
+        <item name="android:ellipsize">marquee</item>
     </style>
 
     <!-- 列表里缩略图style -->

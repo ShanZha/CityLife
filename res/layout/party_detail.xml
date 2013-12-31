@@ -52,6 +52,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/party_detail_ll_bottom"
         android:layout_below="@+id/party_detail_rl_titlebar"
         android:scrollbars="none" >
 
@@ -83,8 +84,8 @@
 
                 <include
                     android:id="@+id/party_detail_fr_thumbnail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/subject_detail_thumbnail_width"
+                    android:layout_height="@dimen/subject_detail_thumbnail_height"
                     layout="@layout/thumb_detail" />
 
                 <TableLayout
@@ -319,14 +320,14 @@
 
             <!-- 活动简介 -->
 
-            <TextView
-                android:id="@+id/party_detail_tv_desc"
-                style="@style/list_second_level_style"
+            <WebView
+                android:id="@+id/party_detail_wv_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_10"
                 android:layout_marginRight="@dimen/margin_10"
-                android:layout_marginTop="@dimen/margin_5" />
+                android:layout_marginTop="@dimen/margin_5"
+                android:background="@android:color/transparent" />
 
             <ImageView
                 android:layout_width="match_parent"
@@ -368,10 +369,10 @@
     <!-- 查看网页信息 -->
 
     <LinearLayout
+        android:id="@+id/party_detail_ll_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/margin_10" >
+        android:layout_alignParentBottom="true" >
 
         <!-- 活动图片 -->
 

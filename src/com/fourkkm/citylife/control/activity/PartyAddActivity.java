@@ -8,7 +8,6 @@ import java.util.List;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
@@ -22,6 +21,7 @@ import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
+import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.utils.AppUtils;
 import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.observer.model.Param;
@@ -54,7 +54,7 @@ public class PartyAddActivity extends BaseAddActivity {
 			mEtIntegration, mEtDesc;
 	private Spinner mSpinnerCategoty, mSpIntegration;
 	private RadioGroup mRgSex;
-	private ArrayAdapter<String> mCategoryAdapter, mIntegrationAdapter;
+	private SpinnerAdapter mCategoryAdapter, mIntegrationAdapter;
 	private List<ModoerPartyCategory> mPartyCategoryList;
 	private List<String> mCategoryList, mIntegrationList;
 
@@ -124,7 +124,7 @@ public class PartyAddActivity extends BaseAddActivity {
 		// TODO Auto-generated method stub
 		super.setSpAdapter();
 		mCategoryList = new ArrayList<String>();
-		mCategoryAdapter = new ArrayAdapter<String>(this,
+		mCategoryAdapter = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mCategoryList);
 		mSpinnerCategoty.setAdapter(mCategoryAdapter);
 		mCategoryAdapter
@@ -134,7 +134,7 @@ public class PartyAddActivity extends BaseAddActivity {
 		String[] arrays = this.getResources().getStringArray(
 				R.array.party_sign_up);
 		mIntegrationList.addAll(Arrays.asList(arrays));
-		mIntegrationAdapter = new ArrayAdapter<String>(this,
+		mIntegrationAdapter = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mIntegrationList);
 		mSpIntegration.setAdapter(mIntegrationAdapter);
 		mIntegrationAdapter

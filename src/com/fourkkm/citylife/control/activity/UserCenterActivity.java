@@ -154,7 +154,7 @@ public class UserCenterActivity extends BaseActivity {
 	}
 
 	public void onClickMySms(View view) {// 我的短信
-		this.showToast("暂未实现");
+		this.startActivity(new Intent(this, SmsListActivity.class));
 	}
 
 	public void onClickUpdateInfo(View view) {// 修改个人信息

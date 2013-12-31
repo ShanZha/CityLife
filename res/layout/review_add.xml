@@ -240,7 +240,8 @@
                 style="@style/et_multi_lint_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_10" />
+                android:layout_margin="@dimen/margin_10"
+                android:hint="@string/review_content_hint" />
 
             <!-- 提交 -->
 
@@ -251,7 +252,8 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:background="@drawable/commit_btn_selector"
                 android:onClick="onClickCommit"
-                android:text="@string/commit" />
+                android:text="@string/commit"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
 

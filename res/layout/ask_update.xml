@@ -76,7 +76,8 @@
                     style="@style/et_add_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_5" />
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:inputType="number" />
             </LinearLayout>
 
             <!-- 最佳答案 -->
@@ -112,7 +113,7 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:hint="@string/ask_update_best_review_hint" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_20" >
@@ -123,7 +124,7 @@
                     android:id="@+id/ask_update_btn_update"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_weight="1"
                     android:background="@drawable/commit_btn_selector"
                     android:gravity="center"
                     android:onClick="onClickUpdateAsk"
@@ -135,15 +136,14 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_marginLeft="@dimen/margin_10"
-                    android:layout_toRightOf="@+id/ask_update_btn_update"
+                    android:layout_weight="1"
                     android:background="@drawable/commit_btn_selector"
                     android:gravity="center"
                     android:onClick="onClickCloseAsk"
                     android:text="@string/ask_close"
                     android:textColor="@android:color/white" />
-            </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

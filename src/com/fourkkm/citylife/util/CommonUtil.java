@@ -129,4 +129,11 @@ public class CommonUtil {
 		return d * Math.PI / 180.0;
 	}
 
+	public static String formatHtml(String data) {
+		data = data.replaceAll("&amp;", "");
+		data = data.replaceAll("quot;", "\"");
+		data = data.replaceAll("lt;", "<");
+		data = data.replaceAll("gt;", ">");
+		return data;
+	}
 }

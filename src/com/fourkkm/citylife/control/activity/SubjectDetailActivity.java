@@ -167,6 +167,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		mIsAutoLogin = false;
+		mIsNeedUploadPics = true;
 		super.prepareDatas();
 		this.prepareShare();
 		mTvTitle.setText(this.getString(R.string.subject_detail));
@@ -195,7 +196,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 					+ mSubject.getReviews() + ")");
 			mTvCompositeScore.setText(this.getString(R.string.composite_score)
 					+ mSubject.getAvgsort());
-			mRatingBar.setProgress((int)mSubject.getAvgsort());
+			mRatingBar.setProgress((int) mSubject.getAvgsort());
 			String thumbnailUrl = GlobalConfig.URL_PIC + mSubject.getThumb();
 			AsyncImageLoader.getImageLoad(this).showPic(thumbnailUrl,
 					mIvThumbnail);
@@ -341,15 +342,16 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		if (null == mAlbum) {
 			return;
 		}
-		// Step 3：保存ModoerPictures
+		// Step 3：保存ModoerPictures(排除第一项)
 		List<Object> objs = new ArrayList<Object>();
-		for (ModoerPictures pic : mPicList) {
+		for (int i = 1; i < mPicList.size(); i++) {
+			ModoerPictures pic = mPicList.get(i);
 			pic.setAlbumid(mAlbum);
 			pic.setSid(mSubject);
 			pic.setStatus(1);
 			pic.setUrl("");
+			objs.add(pic);
 		}
-		objs.addAll(mPicList);
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_PICS);
 		this.getStoreOperation().saveOrUpdateArray(objs, param);
@@ -456,7 +458,6 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	}
 
 	public void onClickAdd(View view) {
-		this.showToast("add");
 		if (!this.isUploadFinished()) {
 			this.showToast(this.getString(R.string.subject_upload_pic_unfinish));
 			return;

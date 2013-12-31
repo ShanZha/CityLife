@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow.OnDismissListener;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerFenlei;
 import com.andrnes.modoer.ModoerFenleiCategory;
 import com.andrnes.modoer.ModoerMembers;
-import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.AreaManager;
 import com.fourkkm.citylife.ChinaLaneCategoryManager;
 import com.fourkkm.citylife.CoreApp;
@@ -356,8 +354,8 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 					return;
 				}
 				mCurrArea = area;
-				mTvArea.setText(key);
 			}
+			mTvArea.setText(key);
 		}
 		this.reset();
 		this.notifyDataChanged();

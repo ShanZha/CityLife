@@ -60,7 +60,7 @@ public class MainActivity extends BaseFragmentActivity implements
 	/** 国家切换-漂浮菜单代理 **/
 	private FloatingOneMenuProxy mFloatingProxy;
 
-	private LocationProxy mLocationProxy;
+//	private LocationProxy mLocationProxy;
 
 	@Override
 	protected void prepareViews() {
@@ -81,8 +81,8 @@ public class MainActivity extends BaseFragmentActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
-		mLocationProxy = new LocationProxy(this,
-				this.getSupportFragmentManager());
+//		mLocationProxy = new LocationProxy(this,
+//				this.getSupportFragmentManager());
 		mEnableDoubleExit = true;
 		mFloatingProxy = new FloatingOneMenuProxy(this,
 				GlobalConfig.FloatingType.TYPE_AREA);
@@ -101,14 +101,14 @@ public class MainActivity extends BaseFragmentActivity implements
 	protected void prepareResume() {
 		// TODO Auto-generated method stub
 		super.prepareResume();
-		mLocationProxy.connect();
+//		mLocationProxy.connect();
 	}
 
 	@Override
 	protected void preparePause() {
 		// TODO Auto-generated method stub
 		super.preparePause();
-		mLocationProxy.disconnect();
+//		mLocationProxy.disconnect();
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class MainActivity extends BaseFragmentActivity implements
 	private void startAautoLooperPic() {
 		if (null == mTimer) {
 			mTimer = new Timer();
-			mTimer.schedule(new GalleryTimerTask(), 10000, 5000);
+			mTimer.schedule(new GalleryTimerTask(), 30*1000, 5000);
 		}
 	}
 

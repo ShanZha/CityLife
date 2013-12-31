@@ -3,6 +3,8 @@ package com.fourkkm.citylife.control.activity;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
@@ -31,6 +33,8 @@ public class MapMarkerActivity extends BaseFragmentActivity implements
 	private static final String TAG = "MapMarkerActivity";
 	private GoogleMap mMap;
 	private Marker mCurrMarker;
+	private TextView mTvTitle;
+	private Button mBtnSure;
 
 	@Override
 	protected void prepareViews() {
@@ -39,12 +43,18 @@ public class MapMarkerActivity extends BaseFragmentActivity implements
 		this.setContentView(R.layout.subject_map_marker);
 		mMap = ((SupportMapFragment) this.getSupportFragmentManager()
 				.findFragmentById(R.id.subject_map_marker_fragment)).getMap();
+		mTvTitle = (TextView) this
+				.findViewById(R.id.titlebar_back_right_tv_title);
+		mBtnSure = (Button) this
+				.findViewById(R.id.titlebar_back_right_btn_operator);
 	}
 
 	@Override
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mTvTitle.setText(this.getString(R.string.map_point));
+		mBtnSure.setVisibility(View.VISIBLE);
 
 		mMap.setOnMarkerClickListener(this);
 		// mMap.setOnInfoWindowClickListener(this);

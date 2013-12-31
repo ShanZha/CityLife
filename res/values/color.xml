@@ -6,5 +6,6 @@
     <color name="floating_list_bg_white">#ffffff</color>
     <color name="floating_bg">#b0000000</color>
     <color name="party_sign_up_num">#f56f18</color>
+    <color name="spinner_text_color">#666666</color>
 
 </resources>

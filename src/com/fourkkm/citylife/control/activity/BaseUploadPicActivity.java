@@ -175,7 +175,6 @@ public class BaseUploadPicActivity extends BaseActivity implements
 	 * @param filePath
 	 */
 	protected void doUpload(String filePath) {
-		System.out.println(" doUpload : " + filePath);
 		if (mIsUploadThumb) {// 上传封面缩略图交给子类实现
 			return;
 		}
@@ -190,6 +189,7 @@ public class BaseUploadPicActivity extends BaseActivity implements
 			}
 			mUploadFileMap.put(filePath, false);
 		}
+		Log.i(TAG, "shan-->doUploadWithThumb() filepath = " + filePath);
 		ModoerPictures pic = new ModoerPictures();
 		pic.setStatus(GlobalConfig.STATUS_UPLOAD_START);
 		pic.setUrl(filePath);
@@ -218,6 +218,8 @@ public class BaseUploadPicActivity extends BaseActivity implements
 			ModoerPictures pic = (ModoerPictures) mAdapterPics.getItem(pos);
 			if (pic.getStatus() == GlobalConfig.STATUS_UPLOAD_FAIL) {
 				if (null != pic && !TextUtils.isEmpty(pic.getUrl())) {
+					pic.setStatus(GlobalConfig.STATUS_UPLOAD_START);
+					this.notifyDataChanged(mAdapterPics);
 					this.uploadPicWithThumb(pic.getUrl());
 				}
 			}
@@ -236,10 +238,6 @@ public class BaseUploadPicActivity extends BaseActivity implements
 		String[] fileNameStrs = filePath.split(GlobalConfig.SEPERATOR);
 		int size = fileNameStrs.length;
 		String mFileName = fileNameStrs[size - 1].toString();
-
-		Log.i(TAG, "onActivityResultAlbumPic() filepath = " + filePath
-				+ " filename = " + mFileName);
-
 		this.showToast(this.getString(R.string.upload_ing));
 		this.doUpload(filePath);
 	}
@@ -298,6 +296,8 @@ public class BaseUploadPicActivity extends BaseActivity implements
 	}
 
 	protected void onSaveSuccess() {
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerMembers.class.getName());
 		this.hideWaiting();
 		this.showToast(this.getString(R.string.commit_success));
 		this.finish();
@@ -403,9 +403,9 @@ public class BaseUploadPicActivity extends BaseActivity implements
 				String width = result.get(Config.KEY_UPLOAD_WIDTH);
 				String height = result.get(Config.KEY_UPLOAD_HEIGHT);
 				String filesize = result.get(Config.KEY_UPLOAD_FILESIZE);
-				System.out.println("upload Success: " + filePath);
 				mUploadFileMap.put(filePath, true);
 				ModoerPictures pic = this.getModoerPictureByUrl(filePath);
+				Log.i(TAG, "shan-->onSuccessUploadWithThumb(): " + filePath);
 				if (null != pic) {
 					pic.setStatus(GlobalConfig.STATUS_UPLOAD_SUCCESS);
 					pic.setThumb(thumb);
@@ -456,7 +456,7 @@ public class BaseUploadPicActivity extends BaseActivity implements
 			String filePath = out.getResult() + "";
 			Log.e(TAG, "shan-->subject upload pic fails: " + filePath);
 			ModoerPictures pic = this.getModoerPictureByUrl(filePath);
-			if (null != pic) {// 上传失败，则让缩略图不展示
+			if (null != pic) {// 上传失败
 				pic.setStatus(GlobalConfig.STATUS_UPLOAD_FAIL);
 			}
 			this.notifyDataChanged(mAdapterPics);

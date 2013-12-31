@@ -7,7 +7,6 @@ import java.util.List;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -17,7 +16,11 @@ import com.andrnes.modoer.ModoerAskAnswer;
 import com.andrnes.modoer.ModoerAsks;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.util.CommonUtil;
+import com.fourkkm.citylife.widget.ProgressDialogProxy;
+import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.BaseActivity;
+import com.zj.app.db.dao.SqliteUtil;
 import com.zj.support.observer.model.Param;
 
 /**
@@ -38,6 +41,7 @@ public class AskUpdateActivity extends BaseActivity {
 
 	private ModoerAsks mCurrAsk;
 	private List<ModoerAskAnswer> mAskAnswerList;
+	private ProgressDialogProxy mDialog;
 
 	@Override
 	protected void prepareViews() {
@@ -61,6 +65,7 @@ public class AskUpdateActivity extends BaseActivity {
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mDialog = new ProgressDialogProxy(this);
 		mAnswerContentList = new ArrayList<String>();
 		mAskAnswerList = new ArrayList<ModoerAskAnswer>();
 		Intent intent = this.getIntent();
@@ -71,6 +76,7 @@ public class AskUpdateActivity extends BaseActivity {
 		}
 		mEtSubject.setText(mCurrAsk.getSubject());
 		mEtContent.setText(mCurrAsk.getContent());
+		mEtRewardPoint.setText(mCurrAsk.getReward() + "");
 
 		this.fetchOtherAnswers();
 	}
@@ -90,10 +96,10 @@ public class AskUpdateActivity extends BaseActivity {
 	@SuppressWarnings("unchecked")
 	private void notifyAnswerListDataChanged() {
 		if (null == mAdapter) {
-			mAdapter = new ArrayAdapter<String>(this,
+			mAdapter = new SpinnerAdapter(this,
 					android.R.layout.simple_spinner_item, mAnswerContentList);
 			mSpBestAnswer.setAdapter(mAdapter);
-			((ArrayAdapter<String>) mAdapter)
+			((SpinnerAdapter) mAdapter)
 					.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		} else {
 			mAdapter.notifyDataSetChanged();
@@ -105,10 +111,46 @@ public class AskUpdateActivity extends BaseActivity {
 	}
 
 	public void onClickUpdateAsk(View view) {// 修改问题
+		String askTitle = mCurrAsk.getSubject();
+		String askContent = mCurrAsk.getContent();
+		int reward = mCurrAsk.getReward();
+		String inputTitle = mEtSubject.getText().toString().trim();
+		String inputContent = mEtContent.getText().toString().trim();
+		String inputReward = mEtRewardPoint.getText().toString().trim();
+		if (askTitle.equals(inputTitle) && askContent.equals(inputContent)
+				&& reward == Integer.parseInt(inputReward)) {
+			return;
+		}
+		mCurrAsk.setSubject(inputTitle);
+		mCurrAsk.setContent(inputContent);
+		mCurrAsk.setReward(Integer.valueOf(inputReward));
+		mDialog.showDialog();
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_ASK);
+		this.getStoreOperation().saveOrUpdate(mCurrAsk, param);
 
 	}
 
 	public void onClickCloseAsk(View view) {// 结束问题
+		try {
+			int pos = mSpBestAnswer.getSelectedItemPosition();
+			if (pos != -1) {
+				ModoerAskAnswer bestAnswer = mAskAnswerList.get(pos);
+				String bestAnswerReview = mEtBestAnswerReview.getText()
+						.toString().trim();
+				bestAnswer.setFeel(bestAnswerReview);
+				mCurrAsk.setBestanswer(bestAnswer);
+			}
+			mCurrAsk.setSuccess(1);
+			mCurrAsk.setSolvetime((int) CommonUtil.getCurrTimeByPHP());
+
+			mDialog.showDialog();
+			Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+			param.setOperator(GlobalConfig.Operator.OPERATION_CLOSE_ASK);
+			this.getStoreOperation().saveOrUpdate(mCurrAsk, param);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -130,8 +172,41 @@ public class AskUpdateActivity extends BaseActivity {
 	}
 
 	@Override
+	public void onSuccessSaveOrUpdate(Param out) {
+		// TODO Auto-generated method stub
+		super.onSuccessSaveOrUpdate(out);
+		int operator = out.getOperator();
+		switch (operator) {
+		case GlobalConfig.Operator.OPERATION_SAVE_ASK:
+			this.showToast(this.getString(R.string.update_success));
+			break;
+		case GlobalConfig.Operator.OPERATION_CLOSE_ASK:
+			this.showToast(this.getString(R.string.commit_success));
+			break;
+		}
+		Intent intent = new Intent();
+		intent.putExtra("modoerAsk", mCurrAsk);
+		this.setResult(RESULT_OK, intent);
+		mDialog.hideDialog();
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerAsks.class.getName());
+		this.finish();
+	}
+
+	@Override
 	public void onFails(Param out) {
 		// TODO Auto-generated method stub
 		super.onFails(out);
+		int operator = out.getOperator();
+		switch (operator) {
+		case GlobalConfig.Operator.OPERATION_SAVE_ASK:
+			mDialog.hideDialog();
+			this.showToast(this.getString(R.string.update_fail));
+			break;
+		case GlobalConfig.Operator.OPERATION_CLOSE_ASK:
+			mDialog.hideDialog();
+			this.showToast(this.getString(R.string.commit_fail));
+			break;
+		}
 	}
 }

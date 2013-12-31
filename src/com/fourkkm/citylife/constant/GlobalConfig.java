@@ -72,11 +72,11 @@ public interface GlobalConfig {
 		public static final int OPERATION_FINDALL_FAVORITE = 23;
 		public static final int OPERATION_FINDALL_ASK_ANSWER = 24;
 		public static final int OPERATION_SAVE_MEMBER = 25;
-		public static final int OPERATION_SAVE_MEMBER_PASSPORT = 26;
-		public static final int OPERATION_FINDALL_REVIEW_OPT = 27;
-		public static final int OPERATION_FINDALL_REVIEW_TAGS = 28;
-		public static final int OPERATION_FIND_REVIEW_BY_SUBJECT = 29;
-		public static final int OPERATION_FIND_ALBUM_BY_SUBJECT = 30;
+		public static final int OPERATION_FINDALL_REVIEW_OPT = 26;
+		public static final int OPERATION_FINDALL_REVIEW_TAGS = 27;
+		public static final int OPERATION_FIND_REVIEW_BY_SUBJECT = 28;
+		public static final int OPERATION_FIND_ALBUM_BY_SUBJECT = 29;
+		public static final int OPERATION_CLOSE_ASK = 30;
 	}
 
 	public static class SharePre {
@@ -126,9 +126,9 @@ public interface GlobalConfig {
 		public static final String TAOBAO_APP_SECRET = "eea04b5e585b877f770213a80508fc47";
 		public static final String TAOBAO_REDIRECT_URL = "com.fourkkm.citylife://authresult";
 
-		public static final String PSNAME_SINA_WEIBO = "sinaWeibo";
+		public static final String PSNAME_SINA_WEIBO = "weibo";
 		public static final String PSNAME_TENCENT_QQ = "qq";
-		public static final String PSNAME_TENCENT_WEIBO = "tencentWeibo";
+		public static final String PSNAME_TENCENT_WEIBO = "weibo";
 		public static final String PSNAME_TAOBAO = "taobao";
 
 		public static final String KEY_ACCESS_TOKEN = "AccessToken";

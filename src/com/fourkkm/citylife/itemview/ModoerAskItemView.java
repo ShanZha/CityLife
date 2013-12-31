@@ -5,7 +5,6 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.andrnes.modoer.ModoerAskCategory;
 import com.andrnes.modoer.ModoerAsks;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.util.CommonUtil;
@@ -57,10 +56,10 @@ public class ModoerAskItemView extends RelativeLayout implements ItemView {
 	public void setItem(BaseItem item, int pos) {
 		// TODO Auto-generated method stub
 		ModoerAsks ask = (ModoerAsks) item;
-		ModoerAskCategory category = ask.getCatid();
-		if (null != category && category.getId() != 0) {
-			mTvCategory.setText("[" + category.getName() + "]");
-		}
+//		ModoerAskCategory category = ask.getCatid();
+//		if (null != category && category.getId() != 0) {
+//			mTvCategory.setText("[" + category.getName() + "]");
+//		}
 		mTvSubject.setText(ask.getSubject());
 
 		mTvTime.setText(CommonUtil.getTimeByPHP(ask.getDateline(), "yyyy-MM-dd"));

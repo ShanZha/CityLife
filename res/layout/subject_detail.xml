@@ -51,13 +51,15 @@
 
                     <include
                         android:id="@+id/subject_detail_fr_thumbnail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/subject_detail_thumbnail_width"
+                        android:layout_height="@dimen/subject_detail_thumbnail_height"
                         layout="@layout/thumb_detail" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/subject_detail_fr_thumbnail"
+                        android:layout_marginLeft="@dimen/margin_5"
                         android:layout_toRightOf="@+id/subject_detail_fr_thumbnail" >
 
                         <!-- 评分 -->

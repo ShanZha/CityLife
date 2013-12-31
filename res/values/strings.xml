@@ -28,6 +28,7 @@
     <string name="impression">店铺简介</string>
     <string name="review">用户点评</string>
     <string name="review_detail">评论详情</string>
+    <string name="review_content_hint">评价内容</string>
     <string name="subject_distance_500">500</string>
     <string name="subject_distance_1000">1000</string>
     <string name="subject_distance_2000">2000</string>
@@ -81,7 +82,7 @@
     <string name="ask_answer">回答问题</string>
     <string name="ask_answer_success">回答成功</string>
     <string name="ask_update_title">结束问题</string>
-    <string name="ask_update_best_review_hint">您对最佳评论有什么说的呢</string>
+    <string name="ask_update_best_review_hint">您对最佳评论有什么说的呢（选填）</string>
     <string name="party_state_all">全部活动</string>
     <string name="party_state_signning">报名中</string>
     <string name="party_state_ongoing">进行中</string>
@@ -249,6 +250,8 @@
     <string name="upload_success">上传成功</string>
     <string name="upload_fail">上传失败</string>
     <string name="upload_ing">开始上传</string>
+    <string name="update_success">修改成功</string>
+    <string name="update_fail">修改失败</string>
     <string name="commit_success">提交成功</string>
     <string name="commit_fail">提交失败</string>
     <string name="time_et_hint">如2013-01-20 18:00</string>
@@ -257,6 +260,12 @@
     <string name="plan_num_not_null">预计人数不能为空</string>
     <string name="storageNot">Sd卡不存在或被挂起，此功能不可用</string>
     <string name="commit_tip">请确保所有信息完整无误</string>
+    <string name="location_ing">正在定位...</string>
+    <string name="location_fail">无法定位</string>
+    <string name="location_conn_fail">无法定位，需安装Google服务和Goodle play</string>
+    <string name="sms_send_time_tip">发送时间：</string>
+    <string name="sms_send_content_tip">短信内容：</string>
+    <string name="sms_detail">短信详情</string>
 
     <string-array name="share_array">
         <item>分享到新浪微博</item>

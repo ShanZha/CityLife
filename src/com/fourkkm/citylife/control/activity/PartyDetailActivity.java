@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebSettings.TextSize;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -31,16 +34,17 @@ import com.zj.support.observer.model.Param;
 public class PartyDetailActivity extends BaseActivity {
 
 	private static final String TAG = "PartyDetailActivity";
+	public static final TextSize[] FONT_SIZES = new TextSize[]{TextSize.SMALLER,TextSize.NORMAL,TextSize.LARGER}; 
 	private static final int REQ_SIGN_UP_CODE = 1;
 	/** 常量定义见ModoerParty实体 **/
 	private static final int SEX_LIMIT_NONE = 0;
 	private static final int SEX_LIMIT_WOMAN = 1;
 	private static final int SEX_LIMIT_MAN = 2;
 	private ImageView mIvThumb;
+	private WebView mWvDesc;
 	private TextView mTvTitle, mTvSubject, mTvInitiator, mTvInitiateTime,
 			mTvSignUpEndTime, mTvTime, mTvAddr, mTvSexLimit, mTvCost,
-			mTvPlanNum, mTvSignUpNum, mTvDesc, mTvSignUpMemberNames;
-	// private Button mBtnRight;
+			mTvPlanNum, mTvSignUpNum, mTvSignUpMemberNames;
 	private LinearLayout mLlSignUpMembers;
 	private ProgressBar mProBarSignUpMembers;
 
@@ -70,7 +74,7 @@ public class PartyDetailActivity extends BaseActivity {
 				.findViewById(R.id.party_detail_tv_plan_person_num);
 		mTvSignUpNum = (TextView) this
 				.findViewById(R.id.party_detail_tv_sign_up_num);
-		mTvDesc = (TextView) this.findViewById(R.id.party_detail_tv_desc);
+		mWvDesc = (WebView) this.findViewById(R.id.party_detail_wv_desc);
 		mTvSignUpMemberNames = (TextView) this
 				.findViewById(R.id.party_detail_tv_sign_up_members_name);
 
@@ -79,6 +83,7 @@ public class PartyDetailActivity extends BaseActivity {
 		mProBarSignUpMembers = (ProgressBar) this
 				.findViewById(R.id.progress_bar_small_probar);
 
+		this.handleWebView();
 		mTvTitle.setText(this.getString(R.string.party_detail));
 	}
 
@@ -110,10 +115,25 @@ public class PartyDetailActivity extends BaseActivity {
 		mTvCost.setText(mParty.getPrice() + "/人");
 		mTvPlanNum.setText(mParty.getPlannum() + "");
 		mTvSignUpNum.setText(mParty.getApplynum() + "");
-		mTvDesc.setText(mParty.getDes());
+		// mTvDesc.setText(mParty.getDes());
+		String desc = mParty.getDes();
+		if (TextUtils.isEmpty(desc)) {
+			mWvDesc.setVisibility(View.GONE);
+		} else {
+			System.out.println(" "+CommonUtil.formatHtml(desc));
+			mWvDesc.loadDataWithBaseURL(null, CommonUtil.formatHtml(desc),
+					"text/html", "utf-8", null);
+		}
 
 		this.showLoadingSignUpMember();
 		this.fetchSignUpMember();
+	}
+
+	private void handleWebView() {
+		mWvDesc.setBackgroundColor(0);
+		mWvDesc.getBackground().setAlpha(0);
+		WebSettings wb = mWvDesc.getSettings();
+		wb.setTextSize(FONT_SIZES[1]);
 	}
 
 	private String getStrBySex(int sex) {

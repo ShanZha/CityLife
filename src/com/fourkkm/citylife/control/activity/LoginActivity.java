@@ -1,6 +1,7 @@
 package com.fourkkm.citylife.control.activity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.fourkkm.citylife.third.QQAuthListener;
 import com.fourkkm.citylife.third.SinaWeiboAuthListener;
 import com.fourkkm.citylife.third.SinaWeiboUserInfoTask;
 import com.fourkkm.citylife.third.TaobaoAuthListener;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.util.MD5;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.taobao.top.android.TopAndroidClient;
@@ -68,12 +70,13 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	private ModoerMemberPassport mMemberPassport;
 	private ProgressDialogProxy mDialogProxy;
 	/** 第三方登录时，用户名为昵称，密码为uid，邮箱未知？？ **/
-	private String mUserName, mUserPswd, mEmail = "test@sina.com";
+	private String mUserName, mUserPswd, mEmail = "";
 
 	private Weibo mSinaWeibo;
 	private Tencent mTencent;
 	private TopAndroidClient mTaobao = TopAndroidClient
 			.getAndroidClientByAppKey(GlobalConfig.Third.TAOBAO_APP_KEY);
+	private int mRetryCount = 0;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -166,34 +169,30 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	}
 
 	private void onSaveMemeber() {
+		if (null == mMember) {
+			mMember = new ModoerMembers();
+			mMember.setUsername(mUserName);
+			mMember.setEmail(mEmail);
+			mMember.setPassword(MD5.encryptMd5(mUserPswd));
+			mMember.setRegdate((int) CommonUtil.getCurrTimeByPHP());
+			mMember.setRmb(new BigDecimal(0));
+			mMember.setNewmsg("0");
+			mMember.setPoint(0);
+			mMember.setPoint1(0);
+			mMember.setPoint2(0);
+			mMember.setPoint3(0);
+			mMember.setPoint4(0);
+			mMember.setPoint5(0);
+			mMember.setPoint6(0);
+			mMember.setGroupid(mUserGroup);
+			mMemberPassport.setUid(mMember);
+		}
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_MEMBER);
-		mMember = new ModoerMembers();
-		mMember.setUsername(mUserName);
-		mMember.setEmail(mEmail);
-		mMember.setPassword(MD5.encryptMd5(mUserPswd));
-		mMember.setRegdate((int) (System.currentTimeMillis() / 1000));
-		mMember.setRmb(new BigDecimal(0));
-		mMember.setNewmsg("0");
-		mMember.setPoint(0);
-		mMember.setPoint1(0);
-		mMember.setPoint2(0);
-		mMember.setPoint3(0);
-		mMember.setPoint4(0);
-		mMember.setPoint5(0);
-		mMember.setPoint6(0);
-		mMember.setGroupid(mUserGroup);
-		this.getStoreOperation().saveOrUpdate(mMember, param);
-	}
-
-	/**
-	 * 确保已经保存Member成功
-	 */
-	private void onSaveMemberPassport() {
-		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_MEMBER_PASSPORT);
-		mMemberPassport.setUid(mMember);
-		this.getStoreOperation().saveOrUpdate(mMemberPassport, param);
+		List<Object> objs = new ArrayList<Object>();
+		objs.add(mMember);
+		objs.add(mMemberPassport);
+		this.getStoreOperation().saveOrUpdateArray(objs, param);
 	}
 
 	/**
@@ -327,13 +326,13 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	@Override
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onSuccessSaveOrUpdateArray(Param out) {
+		// TODO Auto-generated method stub
 		int operator = out.getOperator();
-		switch (operator) {
-		case GlobalConfig.Operator.OPERATION_SAVE_MEMBER:
-			// Step 4:保存MemberPassport（最后一步）
-			onSaveMemberPassport();
-			break;
-		case GlobalConfig.Operator.OPERATION_SAVE_MEMBER_PASSPORT:
+		if (GlobalConfig.Operator.OPERATION_SAVE_MEMBER == operator) {
 			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
 			SharedPreferenceUtil.getSharedPrefercence().put(
 					this.getApplicationContext(),
@@ -348,14 +347,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 			this.showToast(this.getString(R.string.login_success));
 			this.setResult(RESULT_OK);
 			this.finish();
-			break;
 		}
-	}
-
-	@Override
-	public void onSuccessSaveOrUpdateArray(Param out) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -421,6 +413,14 @@ public class LoginActivity extends AuthActivity implements ICallback,
 
 	@Override
 	public void onFails(Param out) {
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_SAVE_MEMBER == operator) {
+			if (mRetryCount < 3) {// 第三方登录，保存失败时，重试三次
+				this.onSaveMemeber();
+				mRetryCount++;
+				return;
+			}
+		}
 		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.login_fail));
 	}
@@ -469,8 +469,8 @@ public class LoginActivity extends AuthActivity implements ICallback,
 				.getString(GlobalConfig.Third.KEY_ACCESS_TOKEN);
 		String uid = bundle.getString(GlobalConfig.Third.KEY_UID);
 		long expireTime = bundle.getLong(GlobalConfig.Third.KEY_EXPIRE_TIME);
-		Log.e(TAG, "shan-->onThirdAuthSuccess: " + accessToken + "," + uid
-				+ "," + expireTime);
+		Log.e(TAG, "shan-->onThirdAuthSuccess: " + accessToken + " ,uid: " + uid
+				+ " ,expireTime: " + expireTime);
 		mUserPswd = uid;
 		if (null != mDialogProxy) {
 			mDialogProxy.showDialog();

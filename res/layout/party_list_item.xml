@@ -77,7 +77,8 @@
             style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:visibility="gone" />
     </LinearLayout>
 
     <!-- 右边-更多图标 -->

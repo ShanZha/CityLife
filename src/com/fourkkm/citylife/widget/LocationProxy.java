@@ -11,10 +11,12 @@ import android.content.IntentSender;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,7 +31,7 @@ import com.zj.app.utils.AppUtils;
 
 public class LocationProxy implements
 		GooglePlayServicesClient.ConnectionCallbacks,
-		GooglePlayServicesClient.OnConnectionFailedListener, LocationListener {
+		GooglePlayServicesClient.OnConnectionFailedListener {
 
 	private static final String TAG = "LocationProxy";
 	private static final String APPTAG = "CityLife";
@@ -63,10 +65,13 @@ public class LocationProxy implements
 	private boolean mUpdatesRequested = false;
 
 	private FragmentManager mFragentMgr;
+	private ILocationConnListener mLocConnListener;
 
-	public LocationProxy(Context ctx, FragmentManager fragentMgr) {
+	public LocationProxy(Context ctx, FragmentManager fragentMgr,
+			ILocationConnListener connListener) {
 		this.mCtx = ctx;
 		this.mFragentMgr = fragentMgr;
+		this.mLocConnListener = connListener;
 		this.prepareDatas();
 	}
 
@@ -134,6 +139,10 @@ public class LocationProxy implements
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		// TODO Auto-generated method stub
+		if (null != mLocConnListener) {
+			mLocConnListener.onConnectFail(mCtx
+					.getString(R.string.location_conn_fail));
+		}
 		if (connectionResult.hasResolution()) {
 			try {
 				// Start an Activity that tries to resolve the error
@@ -154,28 +163,59 @@ public class LocationProxy implements
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
-		Log.i(TAG, "shan-->onConnected");
-		if (null != mLocationClient) {
-			mLocationClient.requestLocationUpdates(mLocationRequest, this);
+		if (null != mLocConnListener) {
+			mLocConnListener.onConnected(connectionHint);
 		}
 	}
 
 	@Override
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
-		Log.i(TAG, "shan-->onDisconnected");
-	}
-
-	public void fetchCurrLocation() {
-		if (mLocationClient != null && mLocationClient.isConnected()) {
-			Location location = mLocationClient.getLastLocation();
-			Log.i(TAG,
-					"shan-->fecthCurrLocation: "
-							+ (null == location ? " locatoin is null"
-									: location.toString()));
+		if (null != mLocConnListener) {
+			mLocConnListener.onDisconnect();
 		}
 	}
 
+	/**
+	 * 注册Location改变监听
+	 * 
+	 * @param listener
+	 */
+	public void registerLocationChangedListener(LocationListener listener) {
+		if (null != mLocationClient) {
+			mLocationClient.requestLocationUpdates(mLocationRequest, listener);
+		}
+	}
+
+	/**
+	 * 取消Location改变监听
+	 * 
+	 * @param listener
+	 */
+	public void removeLocationChangedListener(LocationListener listener) {
+		if (null != mLocationClient) {
+			mLocationClient.removeLocationUpdates(listener);
+		}
+	}
+
+	/**
+	 * 获取当前位置
+	 * 
+	 * @return location
+	 */
+	public Location fetchCurrLocation() {
+		if (mLocationClient != null && mLocationClient.isConnected()) {
+			Location location = mLocationClient.getLastLocation();
+			return location;
+		}
+		return null;
+	}
+
+	/**
+	 * 获取当前地址
+	 * 
+	 * @param listener
+	 */
 	public void fetchAddress(IAddressListener listener) {
 		// In Gingerbread and later, use Geocoder.isPresent() to see if a
 		// geocoder is available.
@@ -183,12 +223,21 @@ public class LocationProxy implements
 				&& !Geocoder.isPresent()) {
 			// No geocoder is present. Issue an error message
 			this.showToast(mCtx.getString(R.string.no_geocoder_available));
+			if (null != listener) {
+				listener.onAddressError(mCtx.getString(R.string.location_fail));
+			}
 			return;
 		}
 		if (this.servicesConnected()) {
 			Location location = mLocationClient.getLastLocation();
-			AppUtils.getExecutors(mCtx).submit(
-					new GetAddressTask(location, listener));
+			if (null == location) {
+				if (null != listener) {
+					listener.onAddressError(mCtx.getString(R.string.location_fail));
+				}
+				return;
+			}
+			FecthCurrAddrTask task = new FecthCurrAddrTask(listener);
+			task.execute(location);
 		}
 
 	}
@@ -242,42 +291,35 @@ public class LocationProxy implements
 	}
 
 	/**
-	 * 获取当前地址的任务
+	 * 获取当前地址
 	 * 
-	 * @author ShanZha
+	 * @author Administrator
 	 * 
 	 */
-	private class GetAddressTask implements Runnable {
+	private class FecthCurrAddrTask extends
+			AsyncTask<Location, Integer, String> {
 
-		private Location mLocation;
 		private IAddressListener mListener;
 
-		public GetAddressTask(Location location, IAddressListener listener) {
-			this.mLocation = location;
+		public FecthCurrAddrTask(IAddressListener listener) {
 			this.mListener = listener;
 		}
 
 		@Override
-		public void run() {
+		protected String doInBackground(Location... params) {
 			// TODO Auto-generated method stub
-			if (null == mLocation) {
-				if (null != mListener) {
-					mListener.onAddressError("Location is null");
-				}
-				return;
-			}
+			Location location = params[0];
 			Geocoder geocoder = new Geocoder(mCtx.getApplicationContext(),
 					Locale.getDefault());
 			List<Address> addrList = null;
 			try {// 仅仅获取最接近的那个地址
-				addrList = geocoder.getFromLocation(mLocation.getLatitude(),
-						mLocation.getLongitude(), 2);
+				addrList = geocoder.getFromLocation(location.getLatitude(),
+						location.getLongitude(), 2);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				if (null != mListener) {
-					mListener.onAddressError(e.getMessage());
-				}
+				return null;
+
 			}
 			if (null != addrList && addrList.size() > 0) {
 				// Get the first address
@@ -286,20 +328,27 @@ public class LocationProxy implements
 				sb.append(address.getMaxAddressLineIndex() > 0 ? address
 						.getAddressLine(0) : "");
 				// sb.append(address.getLocality());
+				return sb.toString();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if (TextUtils.isEmpty(result)) {
 				if (null != mListener) {
-					mListener.onAddressSuccess(sb.toString());
+					mListener.onAddressError(mCtx
+							.getString(R.string.location_fail));
 				}
 			} else {
 				if (null != mListener) {
-					mListener.onAddressError("Address List is null");
+					mListener.onAddressSuccess(result);
 				}
 			}
 		}
+
 	}
 
-	@Override
-	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-		Log.i(TAG, "shan-->onLocationChanged: " + location.toString());
-	}
 }

@@ -24,6 +24,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
@@ -160,6 +161,16 @@
         <!-- 会员中心 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.UserCenterActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 我的短信 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.SmsListActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 我的短信详情 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.SmsDetailActivity"
             android:screenOrientation="portrait" >
         </activity>
         <!-- 会员信息修改 -->

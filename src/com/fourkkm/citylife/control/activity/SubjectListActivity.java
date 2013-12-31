@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
+import android.location.Location;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,8 +32,12 @@ import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.FloatingSubjectMenuProxy;
 import com.fourkkm.citylife.widget.FloatingTwoMenuProxy;
+import com.fourkkm.citylife.widget.IAddressListener;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
+import com.fourkkm.citylife.widget.ILocationConnListener;
 import com.fourkkm.citylife.widget.LocationProxy;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationListener;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.adapter.ItemSingleAdapter;
@@ -43,13 +49,15 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
  * 
  */
 public class SubjectListActivity extends BaseListActivity implements
-		IFloatingItemClick, OnDismissListener {
+		IFloatingItemClick, OnDismissListener, ILocationConnListener,
+		IAddressListener {
 
 	private static final String TAG = "SubjectListActivity";
-	private LinearLayout mLlTopCheck, mLlTopCheckLoading;
+	private LinearLayout mLlTopCheck, mLlTopCheckLoading, mLlLocationLoading;
 	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond,
 			mRlFloatingThird;
-	private TextView mTvTitle, mTvNearOrSearch, mTvCategory, mTvSort;
+	private TextView mTvTitle, mTvNearOrSearch, mTvCategory, mTvSort,
+			mTvLocation;
 	private List<ModoerSubject> mSubjectList;
 	private List<String> mSortDatas, mNearDatas;
 	/** 上级传递过来的类别Id **/
@@ -92,6 +100,8 @@ public class SubjectListActivity extends BaseListActivity implements
 				.findViewById(R.id.subject_list_ll_top_loading);
 		mLlTopCheck = (LinearLayout) this
 				.findViewById(R.id.floating_layout_ll_all);
+		mLlLocationLoading = (LinearLayout) this
+				.findViewById(R.id.subject_list_ll_location_loading);
 		mListView = (PullUpDownListView) this
 				.findViewById(R.id.subject_list_listview);
 		mRlFloatingFirst = (RelativeLayout) this
@@ -105,6 +115,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		mTvCategory = (TextView) this
 				.findViewById(R.id.floating_layout_tv_second);
 		mTvSort = (TextView) this.findViewById(R.id.floating_layout_tv_third);
+		mTvLocation = (TextView) this
+				.findViewById(R.id.subject_list_tv_location);
 		super.prepareViews();
 	}
 
@@ -113,7 +125,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		super.prepareDatas();
 
-		mLocation = new LocationProxy(this, this.getSupportFragmentManager());
+		mLocation = new LocationProxy(this, this.getSupportFragmentManager(),
+				this);
 		mAreaMgr = new AreaManager();
 		mCategoryMgr = new SubjectCategoryManager();
 		mCurrCountry = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
@@ -398,6 +411,50 @@ public class SubjectListActivity extends BaseListActivity implements
 	}
 
 	@Override
+	public void onConnected(Bundle connectionHint) {
+		// TODO Auto-generated method stub
+		Location location = mLocation.fetchCurrLocation();
+		mLocation.fetchAddress(this);
+		if(null == location){
+			Log.i(TAG,"shan-->onConnected: location is null "+Thread.currentThread().getName());
+		}else{
+			Log.i(TAG, "shan-->onConnected: "  + " Thread : "
+					+ Thread.currentThread().getName());
+		}
+	}
+
+	@Override
+	public void onDisconnect() {
+		// TODO Auto-generated method stub
+		Log.i(TAG, "shan-->onDisconnect");
+	}
+
+	@Override
+	public void onConnectFail(String error) {
+		// TODO Auto-generated method stub
+		Log.e(TAG, "shan-->onConnectFail:" + error);
+		mLlLocationLoading.setVisibility(View.GONE);
+		mTvLocation.setVisibility(View.VISIBLE);
+		mTvLocation.setText(this.getString(R.string.location_conn_fail));
+	}
+
+	@Override
+	public void onAddressSuccess(String addr) {
+		// TODO Auto-generated method stub
+		mTvLocation.setVisibility(View.VISIBLE);
+		mLlLocationLoading.setVisibility(View.GONE);
+		mTvLocation.setText(addr);
+	}
+
+	@Override
+	public void onAddressError(String error) {
+		// TODO Auto-generated method stub
+		mTvLocation.setVisibility(View.VISIBLE);
+		mLlLocationLoading.setVisibility(View.GONE);
+		mTvLocation.setText(error);
+	}
+
+	@Override
 	public void onDismiss() {
 		// TODO Auto-generated method stub
 		switch (mCurrFloatingType) {
@@ -419,7 +476,7 @@ public class SubjectListActivity extends BaseListActivity implements
 	}
 
 	public void onClickRight(View view) {// 添加
-	// mLocation.fetchCurrLocation();
+		// mLocation.fetchCurrLocation();
 		this.startActivity(new Intent(this, SubjectAddActivity.class));
 	}
 
@@ -482,7 +539,7 @@ public class SubjectListActivity extends BaseListActivity implements
 			return sb.toString();
 		}
 		if (null != mCurrCategory) {
-			sb.append(" where ms.status = 1 and ms.pid.enabled = 1 and ms.pid.id = "
+			sb.append(" where ms.status = 1 and ms.pid.enabled = 1 and ms.catid.id = "
 					+ mCurrCategory.getId());
 			sb.append(" and");
 		} else {
@@ -674,4 +731,5 @@ public class SubjectListActivity extends BaseListActivity implements
 	private static final int SUBJECT_SORT_COMPOSITE_REVIEW = 7;
 	/** 排序-人均消费 **/
 	private static final int SUBJECT_SORT_COST_PER = 8;
+
 }

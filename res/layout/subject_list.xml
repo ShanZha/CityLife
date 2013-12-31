@@ -18,6 +18,7 @@
         android:id="@+id/subject_list_ll_top_loading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
         layout="@layout/progress_bar_small" />
 
     <!-- 菜单栏 -->
@@ -31,7 +32,58 @@
         android:id="@+id/subject_list_listview"
         style="@style/list_view_style"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="0dp"
+        android:layout_weight="1" >
     </com.fourkkm.citylife.view.PullUpDownListView>
+
+    <!-- 底部-定位 -->
+
+    <LinearLayout
+        android:id="@+id/subject_list_ll_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/location_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <!-- 正在定位 -->
+
+        <LinearLayout
+            android:id="@+id/subject_list_ll_location_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:orientation="horizontal" >
+
+            <ProgressBar
+                style="@android:style/Widget.ProgressBar.Small.Inverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+            <TextView
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:text="@string/location_ing" />
+        </LinearLayout>
+
+        <!-- 位置 -->
+
+        <TextView
+            android:id="@+id/subject_list_tv_location"
+            style="@style/list_second_level_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:drawableLeft="@drawable/location_icon"
+            android:drawablePadding="@dimen/margin_10"
+            android:singleLine="true"
+            android:text="@string/location_fail"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </LinearLayout>

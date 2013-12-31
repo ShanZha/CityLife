@@ -25,7 +25,9 @@ import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
+import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.BaseActivity;
+import com.zj.app.db.dao.SqliteUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 
@@ -104,7 +106,7 @@ public class AskAddActivity extends BaseActivity implements
 	@SuppressWarnings("unchecked")
 	private void notifyCategoryParentDataChanged() {
 		if (null == mAdapterCategotyParent) {
-			mAdapterCategotyParent = new ArrayAdapter<String>(this,
+			mAdapterCategotyParent = new SpinnerAdapter(this,
 					android.R.layout.simple_spinner_item, mCategoryParentList);
 			mSpCategoryParent.setAdapter(mAdapterCategotyParent);
 			((ArrayAdapter<String>) mAdapterCategotyParent)
@@ -117,7 +119,7 @@ public class AskAddActivity extends BaseActivity implements
 	@SuppressWarnings("unchecked")
 	private void notifyCategoryChildDataChanged() {
 		if (null == mAdapterCategoryChild) {
-			mAdapterCategoryChild = new ArrayAdapter<String>(this,
+			mAdapterCategoryChild = new SpinnerAdapter(this,
 					android.R.layout.simple_spinner_item, mCategoryChildList);
 			mSpCategoryChild.setAdapter(mAdapterCategoryChild);
 			((ArrayAdapter<String>) mAdapterCategoryChild)
@@ -218,7 +220,10 @@ public class AskAddActivity extends BaseActivity implements
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
-
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerAsks.class.getName());
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerMembers.class.getName());
 		mDialogProxy.hideDialog();
 		this.showToast(this.getString(R.string.add_success));
 		this.finish();

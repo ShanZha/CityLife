@@ -44,6 +44,9 @@ public class ModoerCategory implements Serializable {
 	/** 不可用子分类ID集合 */
 	private String nonuseSubcats;
 
+	/** 评论标签组 **/
+	private String configJson;
+
 	public int getId() {
 		return id;
 	}
@@ -138,5 +141,13 @@ public class ModoerCategory implements Serializable {
 
 	public void setNonuseSubcats(String nonuseSubcats) {
 		this.nonuseSubcats = nonuseSubcats;
+	}
+
+	public String getConfigJson() {
+		return configJson;
+	}
+
+	public void setConfigJson(String configJson) {
+		this.configJson = configJson;
 	}
 }

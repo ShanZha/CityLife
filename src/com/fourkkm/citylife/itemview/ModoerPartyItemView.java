@@ -75,7 +75,7 @@ public class ModoerPartyItemView extends RelativeLayout implements ItemView {
 				+ CommonUtil.getTimeByPHP(party.getBegintime(), "MM-dd hh:mm")
 				+ "~"
 				+ CommonUtil.getTimeByPHP(party.getEndtime(), "MM-dd hh:mm"));
-		mTvDesc.setText(mCtx.getString(R.string.party_desc_detail) + party.getDes());
+//		mTvDesc.setText(mCtx.getString(R.string.party_desc_detail) + party.getDes());
 		int applyNum = party.getApplynum();
 		if (applyNum > 0) {
 			mTvSignUpCount.setText("已报名" + applyNum + "人");

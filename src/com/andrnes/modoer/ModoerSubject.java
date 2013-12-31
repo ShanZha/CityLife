@@ -37,6 +37,12 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	@Lazy(isLazy = true)
 	private ModoerCategory catid;
 
+	@Lazy(isLazy = true)
+	private ModoerAttList cShopatts;
+
+	@Lazy(isLazy = true)
+	private ModoerAttList cShopatts2;
+
 	/** 名称 */
 	@Validates(info = "用户名称不能为空,用户名称长度不能超过60个字符", type = "isNull,maxSize60")
 	private String name;
@@ -427,6 +433,22 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 
 	public void setErrors(Map errors) {
 		this.errors = errors;
+	}
+
+	public ModoerAttList getCShopatts() {
+		return cShopatts;
+	}
+
+	public void setCShopatts(ModoerAttList cShopatts) {
+		this.cShopatts = cShopatts;
+	}
+
+	public ModoerAttList getCShopatts2() {
+		return cShopatts2;
+	}
+
+	public void setCShopatts2(ModoerAttList cShopatts2) {
+		this.cShopatts2 = cShopatts2;
 	}
 
 	@Override

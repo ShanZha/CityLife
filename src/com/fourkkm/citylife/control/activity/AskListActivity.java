@@ -240,11 +240,11 @@ public class AskListActivity extends BaseListActivity implements
 			return ASK_STATE_ALL;
 		}
 		switch (pos) {
-		case 0:
-			return ASK_STATE_UNRESOLVED;
 		case 1:
-			return ASK_STATE_RESOLVED;
+			return ASK_STATE_UNRESOLVED;
 		case 2:
+			return ASK_STATE_RESOLVED;
+		case 3:
 			return ASK_STATE_REWARD;
 		}
 		return ASK_STATE_UNRESOLVED;

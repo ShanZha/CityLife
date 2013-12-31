@@ -17,7 +17,8 @@ public class ModoerMembers implements Serializable {
 	private ModoerUsergroups groupid;
 
 	/** 用户Email */
-	@Validates(info = "邮箱不能为空,邮箱长度不能超过20个字符,邮箱格式不正确", type = "isNull,maxSize20,isEmail")
+	// @Validates(info = "邮箱不能为空,邮箱长度不能超过20个字符,邮箱格式不正确", type =
+	// "isNull,maxSize20,isEmail")
 	private String email;
 
 	/** 用户密码 */
@@ -74,6 +75,9 @@ public class ModoerMembers implements Serializable {
 	private int point6;
 
 	private Map errors;
+
+	/** 头像 **/
+	private String filePath;
 
 	public int getId() {
 		return id;
@@ -242,4 +246,13 @@ public class ModoerMembers implements Serializable {
 	public void setErrors(Map errors) {
 		this.errors = errors;
 	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
 }

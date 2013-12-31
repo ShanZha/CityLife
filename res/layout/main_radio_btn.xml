@@ -3,6 +3,8 @@
     android:layout_height="wrap_content"
     android:background="@null"
     android:button="@null"
-    android:drawableLeft="@drawable/main_radio_btn_selector" >
+    android:clickable="false"
+    android:drawableLeft="@drawable/main_radio_btn_selector"
+    android:focusable="false" >
 
 </RadioButton>

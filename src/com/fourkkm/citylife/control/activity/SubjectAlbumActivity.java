@@ -116,9 +116,10 @@ public class SubjectAlbumActivity extends BaseFragmentActivity implements
 		if (null != results) {
 			for (int i = 0; i < results.size(); i++) {
 				ModoerPictures pictures = (ModoerPictures) results.get(i);
-				String thumb = pictures.getFilename();
-				mThumbUrls.add(GlobalConfig.URL_PIC + thumb);
+				String bigPic = pictures.getFilename();
+				mThumbUrls.add(GlobalConfig.URL_PIC + bigPic);
 			}
+			mSubjectThumbCount = mThumbUrls.size();
 			this.hideLoading();
 			this.notifyDataChanged();
 		}

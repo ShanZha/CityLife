@@ -22,6 +22,7 @@ import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
+import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.utils.AppUtils;
 import com.zj.app.utils.DateFormatMethod;
 import com.zj.support.observer.model.Param;
@@ -71,7 +72,8 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 		mEtAddr = (EditText) this.findViewById(R.id.china_lane_add_et_addr);
 		mEtDesc = (EditText) this.findViewById(R.id.china_lane_add_et_desc);
 
-		mLlThumbLoading = (LinearLayout)this.findViewById(R.id.china_lane_add_ll_thumb_loading);
+		mLlThumbLoading = (LinearLayout) this
+				.findViewById(R.id.china_lane_add_ll_thumb_loading);
 		mLlCategory = (LinearLayout) this
 				.findViewById(R.id.china_lane_add_ll_category);
 		mLlCategoryLoading = (LinearLayout) this
@@ -109,7 +111,7 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 		super.setSpAdapter();
 
 		mCategoryListFirst = new ArrayList<String>();
-		mCategoryAdapterFirst = new ArrayAdapter<String>(this,
+		mCategoryAdapterFirst = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mCategoryListFirst);
 		mSpCategotyFirst.setAdapter(mCategoryAdapterFirst);
 		mCategoryAdapterFirst
@@ -118,7 +120,7 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 				.setOnItemSelectedListener(mCategoryItemSelectedListener);
 
 		mCategoryListSecond = new ArrayList<String>();
-		mCategoryAdapterSecond = new ArrayAdapter<String>(this,
+		mCategoryAdapterSecond = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mCategoryListSecond);
 		mSpCategotySecond.setAdapter(mCategoryAdapterSecond);
 		mCategoryAdapterSecond
