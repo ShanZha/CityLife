@@ -194,6 +194,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
+                    android:hint="0"
                     android:inputType="number" />
             </LinearLayout>
 
@@ -217,13 +218,17 @@
 
             <!-- 标签 -->
 
-            <TableLayout
-                android:id="@+id/review_add_tl_tags"
+            <com.fourkkm.citylife.view.AlbumGridView
+                android:id="@+id/review_add_gv_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_10"
+                android:horizontalSpacing="@dimen/margin_5"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="@dimen/margin_10"
                 android:visibility="gone" >
-            </TableLayout>
+            </com.fourkkm.citylife.view.AlbumGridView>
 
             <!-- 分割线 -->
 
@@ -243,12 +248,43 @@
                 android:layout_margin="@dimen/margin_10"
                 android:hint="@string/review_content_hint" />
 
+            <!-- 分割线 -->
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
+                android:background="@drawable/divider" />
+
+            <!-- 点评图片 -->
+
+            <TextView
+                style="@style/list_second_level_black_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
+                android:text="@string/review_add_pic_tips" />
+
+            <com.fourkkm.citylife.view.AlbumGridView
+                android:id="@+id/review_add_gv_pics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_marginRight="@dimen/margin_5"
+                android:horizontalSpacing="@dimen/margin_10"
+                android:numColumns="3"
+                android:scrollbars="none"
+                android:verticalSpacing="@dimen/margin_10" >
+            </com.fourkkm.citylife.view.AlbumGridView>
+
             <!-- 提交 -->
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_10"
                 android:layout_marginTop="@dimen/margin_10"
                 android:background="@drawable/commit_btn_selector"
                 android:onClick="onClickCommit"

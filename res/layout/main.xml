@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         layout="@layout/titlebar_drop" />
 
-    <ScrollView
+    <com.zj.support.widget.CustomScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -29,7 +29,8 @@
             <RelativeLayout
                 android:id="@+id/main_rl_scroll_pic"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:visibility="gone" >
 
                 <RelativeLayout
                     android:id="@+id/main_rl_pic_top"
@@ -78,6 +79,7 @@
             <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_10"
                 layout="@layout/progress_bar_small" />
 
             <!-- 附近 -->
@@ -439,7 +441,7 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:background="@drawable/divider" />
         </LinearLayout>
-    </ScrollView>
+    </com.zj.support.widget.CustomScrollView>
 
     <!-- 底部背景 -->
 

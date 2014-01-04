@@ -211,6 +211,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 
 	public void onClickMapPoint(View view) {// µØÍ¼Ñ¡µã
 		Intent intent = new Intent(this, MapMarkerActivity.class);
+		intent.putExtra("operator",GlobalConfig.IntentKey.MAP_POINT_ADD);
 		this.startActivityForResult(intent, REQ_CODE_MAP_POINT);
 	}
 
@@ -222,8 +223,6 @@ public class SubjectAddActivity extends BaseAddActivity {
 			this.showToast(this.getString(R.string.subject_upload_pic_unfinish));
 			return;
 		}
-		this.changedBtnState(mBtnCommit, false);
-		this.setBtnText(mBtnCommit, this.getString(R.string.add_ing));
 		try {
 			List<Object> objs = new ArrayList<Object>();
 
@@ -328,8 +327,6 @@ public class SubjectAddActivity extends BaseAddActivity {
 			Log.e(TAG, "shan-->subject category fetch fails");
 			break;
 		case GlobalConfig.Operator.OPERATION_SAVE_SUBJECT:
-			this.changedBtnState(mBtnCommit, true);
-			this.setBtnText(mBtnCommit, this.getString(R.string.commit));
 			this.hideWaiting();
 			this.showToast(this.getString(R.string.commit_fail));
 			break;

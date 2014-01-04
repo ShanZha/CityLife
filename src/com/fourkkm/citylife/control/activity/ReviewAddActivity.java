@@ -2,37 +2,42 @@ package com.fourkkm.citylife.control.activity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerMembers;
+import com.andrnes.modoer.ModoerPictures;
 import com.andrnes.modoer.ModoerReview;
 import com.andrnes.modoer.ModoerReviewOpt;
 import com.andrnes.modoer.ModoerSubject;
+import com.andrnes.modoer.ModoerTag;
 import com.andrnes.modoer.ModoerTaggroup;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.itemview.ReviewTagItemView;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
-import com.zj.app.BaseActivity;
+import com.zj.app.db.dao.SqliteUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
+import com.zj.support.widget.adapter.ItemSingleAdapter;
 
 /**
  * 评论添加
@@ -40,7 +45,7 @@ import com.zj.support.observer.model.Param;
  * @author ShanZha
  * 
  */
-public class ReviewAddActivity extends BaseActivity implements
+public class ReviewAddActivity extends BaseUploadPicActivity implements
 		OnRatingBarChangeListener {
 
 	private static final String TAG = "ReviewAddActivity";
@@ -48,7 +53,6 @@ public class ReviewAddActivity extends BaseActivity implements
 	private static final String SORT_2 = "sort2";
 	private static final String SORT_3 = "sort3";
 	private static final String SORT_4 = "sort4";
-	private static final int REQ_LOGIN_CODE = 1;
 	private TextView mTvTitle, mTvSubject, mTvSort1, mTvSort2, mTvSort3,
 			mTvSort4, mTvSort1Level, mTvSort2Level, mTvSort3Level,
 			mTvSort4Level;
@@ -57,7 +61,9 @@ public class ReviewAddActivity extends BaseActivity implements
 			mRatingBarSort4;
 
 	private LinearLayout mLlSort, mLlSortLoading, mLlTagsLoading;
-	private TableLayout mTlTag;
+	private GridView mGvTag;
+	private BaseAdapter mAdapterTags;
+	private List<ModoerTag> mTagList;
 
 	private ProgressDialogProxy mDialogProxy;
 
@@ -99,7 +105,8 @@ public class ReviewAddActivity extends BaseActivity implements
 		mLlSort = (LinearLayout) this.findViewById(R.id.review_add_ll_sort);
 		mLlSortLoading = (LinearLayout) this
 				.findViewById(R.id.review_add_ll_loading_sort);
-		mTlTag = (TableLayout) this.findViewById(R.id.review_add_tl_tags);
+		mGvTag = (GridView) this.findViewById(R.id.review_add_gv_tags);
+		mGvPics = (GridView) this.findViewById(R.id.review_add_gv_pics);
 		mLlTagsLoading = (LinearLayout) this
 				.findViewById(R.id.review_add_ll_loading_tags);
 
@@ -111,20 +118,13 @@ public class ReviewAddActivity extends BaseActivity implements
 	}
 
 	@Override
-	protected void prepareDatas() {
-		// TODO Auto-generated method stub
-		super.prepareDatas();
-
-		// 如果没有登录，先登录
-		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
-			this.startActivityForResult(new Intent(this, LoginActivity.class),
-					REQ_LOGIN_CODE);
-			return;
-		}
-		this.prepare();
-	}
-
-	private void prepare() {
+	protected void prepare() {
+		mIsNeedUploadPics = true;
+		super.prepare();
+		mTagList = new ArrayList<ModoerTag>();
+		mAdapterTags = new ItemSingleAdapter<ReviewTagItemView, ModoerTag>(
+				mTagList, this);
+		mGvTag.setAdapter(mAdapterTags);
 		mTvTitle.setText(this.getString(R.string.subject_review));
 		mSubject = (ModoerSubject) this.getIntent().getSerializableExtra(
 				"ModoerSubject");
@@ -153,13 +153,25 @@ public class ReviewAddActivity extends BaseActivity implements
 	}
 
 	private void showTagsLoading() {
-		mTlTag.setVisibility(View.GONE);
+		mGvTag.setVisibility(View.GONE);
 		mLlTagsLoading.setVisibility(View.VISIBLE);
 	}
 
 	private void hideTagsLoading() {
-		mTlTag.setVisibility(View.VISIBLE);
+		mGvTag.setVisibility(View.VISIBLE);
 		mLlTagsLoading.setVisibility(View.GONE);
+	}
+
+	private void showWaitting() {
+		if (null != mDialogProxy) {
+			mDialogProxy.showDialog();
+		}
+	}
+
+	private void hideWaitting() {
+		if (null != mDialogProxy) {
+			mDialogProxy.hideDialog();
+		}
 	}
 
 	/**
@@ -182,7 +194,7 @@ public class ReviewAddActivity extends BaseActivity implements
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_REVIEW_TAGS);
 		this.getStoreOperation().findAll(selectCode,
 				new HashMap<String, Object>(), true, new ModoerTaggroup(),
-				new Param(this.hashCode(), GlobalConfig.URL_CONN));
+				param);
 	}
 
 	private String getTagGroupIdString() {
@@ -231,7 +243,10 @@ public class ReviewAddActivity extends BaseActivity implements
 		if (!this.validate()) {
 			return;
 		}
-		System.out.println(" checkTagGroup = " + buildCheckedTaggroup());
+		if (!this.isUploadFinished()) {
+			this.showToast(this.getString(R.string.subject_upload_pic_unfinish));
+			return;
+		}
 		ModoerReview review = new ModoerReview();
 		review.setIdtype("item_subject");
 		review.setContent(mEtContent.getText().toString().trim());
@@ -239,9 +254,21 @@ public class ReviewAddActivity extends BaseActivity implements
 				.getCurrMember();
 		review.setUid(member);
 		review.setUsername(member.getUsername());
+		review.setSid(mSubject);
+		review.setPcatid(mSubject.getPid());
 		review.setCityId(((CoreApp) AppUtils.getBaseApp(this)).getCurrArea());
 		review.setSubject(mSubject.getName());
 		review.setStatus(1);
+		String tagJson = this.buildCheckedTaggroup();
+		if (!TextUtils.isEmpty(tagJson)) {
+			review.setTaggroup(tagJson);
+			review.setTaggroupJson(tagJson);
+		}
+		String picJson = this.buildUploadPic();
+		if (!TextUtils.isEmpty(picJson)) {
+			review.setPictures(picJson);
+			review.setPicturesJson(picJson);
+		}
 
 		int sort1 = mRatingBarSort1.getProgress();
 		int sort2 = mRatingBarSort2.getProgress();
@@ -262,39 +289,80 @@ public class ReviewAddActivity extends BaseActivity implements
 		}
 		review.setPosttime((int) (System.currentTimeMillis() / 1000));
 
-		mDialogProxy.showDialog();
-		// 标签组？？？格式暂时不知道
+		this.showWaitting();
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_REVIEW);
 		this.getStoreOperation().saveOrUpdate(review, param);
 
 	}
 
+	/**
+	 * 构建选中标签json
+	 * 
+	 * @return
+	 */
 	private String buildCheckedTaggroup() {
-		StringBuilder sb = new StringBuilder();
-		if (null != mTlTag) {
-			int size = mTlTag.getChildCount();
-			for (int i = 0; i < size; i++) {
-				CheckBox cb = (CheckBox) mTlTag.getChildAt(i);
-				if (cb.isChecked()) {
-					String tag = cb.getText().toString();
-					sb.append(tag);
-					sb.append(",");
+		// 以ModoerTaggroup的id，即parentId分组
+		Map<Integer, List<String>> map = new HashMap<Integer, List<String>>();
+		for (int i = 0; i < mTagList.size(); i++) {
+			ModoerTag tag = mTagList.get(i);
+			int parentId = tag.getParentId();
+			String name = tag.getName();
+			if (!tag.isChecked()) {
+				continue;
+			}
+			if (map.containsKey(parentId)) {
+				List<String> tagList = map.get(parentId);
+				if (null != tagList) {
+					tagList.add(name);
 				}
+			} else {
+				List<String> tagList = new ArrayList<String>();
+				tagList.add(name);
+				map.put(parentId, tagList);
 			}
 		}
-		return sb.toString();
+		if (map.size() < 1) {
+			return "";
+		}
+		try {
+			Set<Integer> set = map.keySet();
+			Iterator<Integer> it = set.iterator();
+			JSONObject root = new JSONObject();
+			while (it.hasNext()) {
+				int parentId = it.next();
+				JSONArray array = new JSONArray();
+				List<String> values = map.get(parentId);
+				for (String tag : values) {
+					array.put(tag);
+				}
+				root.put("" + parentId, array);
+			}
+			return root.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "";
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		if (RESULT_OK == resultCode && REQ_LOGIN_CODE == requestCode) {
-			this.prepare();
-			return;
+	/**
+	 * 构建图片Json
+	 * 
+	 * @return
+	 */
+	public String buildUploadPic() {
+		if (this.getPicCount() > 0) {
+			// 排除第一项,仅保存大图路径
+			JSONArray array = new JSONArray();
+			for (int i = 1; i < mPicList.size(); i++) {
+				ModoerPictures pic = mPicList.get(i);
+				String big = pic.getFilename();
+				array.put(big);
+			}
+			return array.toString();
 		}
-		this.finish();
+		return "";
 	}
 
 	@Override
@@ -332,12 +400,13 @@ public class ReviewAddActivity extends BaseActivity implements
 				String options = group.getOptions();
 				String[] tags = options.split(",");
 				for (String tag : tags) {
-					CheckBox cb = (CheckBox) this.getLayoutInflater().inflate(
-							R.layout.review_tag_cb, null);
-					cb.setText(tag);
-					mTlTag.addView(cb);
+					ModoerTag mTag = new ModoerTag();
+					mTag.setParentId(group.getId());
+					mTag.setName(tag);
+					mTagList.add(mTag);
 				}
 			}
+			this.notifyDataChanged(mAdapterTags);
 			this.hideTagsLoading();
 		}
 
@@ -347,7 +416,11 @@ public class ReviewAddActivity extends BaseActivity implements
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
-		mDialogProxy.hideDialog();
+		this.hideWaitting();
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerMembers.class.getName());
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerReview.class.getName());
 		this.showToast(this.getString(R.string.review_success));
 		this.finish();
 	}
@@ -358,7 +431,8 @@ public class ReviewAddActivity extends BaseActivity implements
 		super.onFails(out);
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_REVIEW == operator) {
-			mDialogProxy.hideDialog();
+			this.hideWaitting();
+			this.showToast(this.getString(R.string.review_fail));
 		} else {
 			this.hideSortLoading();
 		}
@@ -370,20 +444,16 @@ public class ReviewAddActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		switch (ratingBar.getId()) {
 		case R.id.review_add_ratingBar_sort1:
-			mTvSort1Level.setText(CommonUtil.getStringByScore(this,
-					(int) rating));
+			mTvSort1Level.setText(CommonUtil.getStringByScore(this, rating));
 			break;
 		case R.id.review_add_ratingBar_sort2:
-			mTvSort2Level.setText(CommonUtil.getStringByScore(this,
-					(int) rating));
+			mTvSort2Level.setText(CommonUtil.getStringByScore(this, rating));
 			break;
 		case R.id.review_add_ratingBar_sort3:
-			mTvSort3Level.setText(CommonUtil.getStringByScore(this,
-					(int) rating));
+			mTvSort3Level.setText(CommonUtil.getStringByScore(this, rating));
 			break;
 		case R.id.review_add_ratingBar_sort4:
-			mTvSort4Level.setText(CommonUtil.getStringByScore(this,
-					(int) rating));
+			mTvSort4Level.setText(CommonUtil.getStringByScore(this, rating));
 			break;
 		}
 	}

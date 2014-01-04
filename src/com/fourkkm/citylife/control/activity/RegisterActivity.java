@@ -174,6 +174,5 @@ public class RegisterActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onFails(out);
 		mDialogProxy.hideDialog();
-		this.showToast(this.getString(R.string.register_fail));
 	}
 }

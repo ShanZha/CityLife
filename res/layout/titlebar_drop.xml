@@ -12,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:padding="@dimen/margin_10"
         android:text="@string/hello_world" />
 
     <!-- 切换国家 -->
@@ -20,10 +19,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/titlebar_drop_tv_title"
+        android:layout_below="@+id/titlebar_drop_tv_title"
         android:layout_toRightOf="@+id/titlebar_drop_tv_title"
         android:clickable="true"
         android:onClick="onClickSwitchCountry"
+        android:paddingLeft="@dimen/margin_5"
         android:text="@string/switch_city"
         android:textColor="@android:color/white" />
 

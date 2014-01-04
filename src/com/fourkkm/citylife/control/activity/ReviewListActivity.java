@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerReview;
+import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
@@ -29,8 +30,8 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
  */
 public class ReviewListActivity extends BaseListActivity {
 
+	private ModoerSubject mSubject;
 	private TextView mTvTitle;
-	private int mSujectId = 0;
 	private List<ModoerReview> mReviewLists;
 	private int mOperator = -1;
 
@@ -59,7 +60,8 @@ public class ReviewListActivity extends BaseListActivity {
 			mTvTitle.setText(this.getString(R.string.user_my_review));
 		} else {
 			mTvTitle.setText(this.getString(R.string.review));
-			mSujectId = intent.getIntExtra("subjectId", 0);
+			mSubject = (ModoerSubject) this.getIntent().getSerializableExtra(
+					"ModoerSubject");
 		}
 		this.onFirstLoadSetting();
 		this.onLoadMore();
@@ -67,6 +69,12 @@ public class ReviewListActivity extends BaseListActivity {
 
 	public void onClickBack(View view) {
 		this.finish();
+	}
+
+	public void onClickReview(View view) {
+		Intent intent = new Intent(this, ReviewAddActivity.class);
+		intent.putExtra("ModoerSubject", mSubject);
+		this.startActivity(intent);
 	}
 
 	@Override
@@ -83,8 +91,9 @@ public class ReviewListActivity extends BaseListActivity {
 				sb.append(" and mr.uid.id = " + member.getId());
 			}
 		} else {
-			sb.append(" and mr.sid.id = " + mSujectId);
+			sb.append(" and mr.sid.id = " + mSubject.getId());
 		}
+		sb.append(" order by mr.posttime DESC,mr.id DESC");
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("max", GlobalConfig.MAX);
 		paramsMap.put("offset", GlobalConfig.MAX * mPage);
@@ -98,11 +107,11 @@ public class ReviewListActivity extends BaseListActivity {
 			long id) {
 		// TODO Auto-generated method stub
 		super.onItemClick(parent, view, position, id);
-//		ModoerReview review = (ModoerReview) parent.getAdapter().getItem(
-//				position);
-//		Intent intent = new Intent(this, ReviewDetailActivity.class);
-//		intent.putExtra("review", review);
-//		this.startActivity(intent);
+		// ModoerReview review = (ModoerReview) parent.getAdapter().getItem(
+		// position);
+		// Intent intent = new Intent(this, ReviewDetailActivity.class);
+		// intent.putExtra("review", review);
+		// this.startActivity(intent);
 	}
 
 	@Override

@@ -33,6 +33,7 @@
         android:id="@+id/titlebar_back_right_ll_probar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginRight="@dimen/margin_5"
         layout="@layout/progress_bar_small"
         android:visibility="gone" />

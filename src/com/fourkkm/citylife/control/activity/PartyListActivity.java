@@ -215,6 +215,7 @@ public class PartyListActivity extends BaseListActivity implements
 				return sb.toString();
 			}
 			sb.append(" and mp.uid.id = " + member.getId());
+			sb.append(" order by mp.dateline DESC,mp.id DESC");
 			return sb.toString();
 		}
 		// Step 1:类别限制
@@ -242,9 +243,9 @@ public class PartyListActivity extends BaseListActivity implements
 		}
 		// Step 3:最之限制
 		if (PARTY_MOST_NEW == mCurrMost) {
-			sb.append(" order by dateline DESC");
+			sb.append(" order by dateline DESC,mp.id DESC");
 		} else if (PARTY_MOST_POPULAR == mCurrMost) {
-			sb.append(" order by pageview DESC");
+			sb.append(" order by pageview DESC,mp.id DESC");
 		}
 
 		return sb.toString();
@@ -456,7 +457,6 @@ public class PartyListActivity extends BaseListActivity implements
 			break;
 		}
 		if (isReset) {
-			mTvCategory.setText(key);
 			this.setTextByCurrValue();
 			this.reset();
 			this.notifyDataChanged();

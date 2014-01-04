@@ -64,30 +64,23 @@
                 android:layout_marginLeft="@dimen/margin_5"
                 android:text="@string/average_per" />
 
-            <!-- 税 -->
+            <!-- 图标属性一 -->
 
             <ImageView
-                android:id="@+id/subject_list_item_iv_tax"
+                android:id="@+id/subject_list_item_iv_attr1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_5"
-                android:src="@drawable/tax" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_5" />
 
-            <!-- 荐 -->
+            <!-- 图标属性一二 -->
 
             <ImageView
-                android:id="@+id/subject_list_item_iv_recommend"
+                android:id="@+id/subject_list_item_iv_attr2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/recommend" />
-
-            <!-- 奢 -->
-
-            <ImageView
-                android:id="@+id/subject_list_item_iv_luxury"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/luxury" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_5" />
         </LinearLayout>
 
         <!-- 底部 -->

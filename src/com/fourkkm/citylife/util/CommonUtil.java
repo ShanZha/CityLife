@@ -25,16 +25,16 @@ public class CommonUtil {
 	 * @param score
 	 * @return
 	 */
-	public static String getStringByScore(Context ctx, int score) {
+	public static String getStringByScore(Context ctx, float score) {
 		if (score <= 2) {
 			return ctx.getString(R.string.review_bad);
-		} else if (score >= 4 && score < 6) {
+		} else if (score >= 2 && score < 4) {
 			return ctx.getString(R.string.review_middle);
-		} else if (score >= 6 && score < 8) {
+		} else if (score >= 4 && score < 6) {
 			return ctx.getString(R.string.review_good);
-		} else if (score >= 8 && score < 10) {
+		} else if (score >= 6 && score < 8) {
 			return ctx.getString(R.string.review_very_good);
-		} else if (score >= 10) {
+		} else if (score >= 8) {
 			return ctx.getString(R.string.review_best);
 		}
 		return "";

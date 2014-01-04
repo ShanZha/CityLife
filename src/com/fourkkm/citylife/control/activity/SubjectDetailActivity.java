@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -21,12 +22,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerAlbum;
+import com.andrnes.modoer.ModoerAttList;
 import com.andrnes.modoer.ModoerFavorites;
+import com.andrnes.modoer.ModoerMemberPassport;
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerPictures;
 import com.andrnes.modoer.ModoerReview;
 import com.andrnes.modoer.ModoerReviewOpt;
 import com.andrnes.modoer.ModoerSubject;
+import com.andrnes.modoer.ModoerSubjectlog;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
@@ -60,8 +64,8 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			mTvCompositeScore;
 	/** 4项评分 **/
 	private TextView mTvSort1, mTvSort2, mTvSort3, mTvSort4;
-	private ImageView mIvThumbnail, mIvTax, mIvRecommend, mIvLuxury,
-			mIvDividerTel, mIvDividerDesc;
+	private ImageView mIvThumbnail, mIvAttr1, mIvAttr2, mIvDividerTel,
+			mIvDividerDesc;
 	private RatingBar mRatingBar;
 	private RatingBar mRatingBarReview;
 
@@ -75,9 +79,9 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 
 	private ImageButton mBtnCollection;
 
-	/** 分享选择代理 **/
-	private FloatingTranslucentProxy mFloatingShareProxy;
-	private List<String> mShareList;
+	/** 分享、报错代理 **/
+	private FloatingTranslucentProxy mFloatingShareProxy, mFloatingErrorProxy;
+	private List<String> mShareList, mErrorList;
 
 	// private IWeiboAPI mSinaWeiboApi;
 	private SinaWeiboShareProxy mSinaShareProxy;
@@ -125,11 +129,10 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 
 		mIvThumbnail = (ImageView) this
 				.findViewById(R.id.thumb_detail_iv_thumb);
-		mIvTax = (ImageView) this.findViewById(R.id.subject_list_item_iv_tax);
-		mIvRecommend = (ImageView) this
-				.findViewById(R.id.subject_list_item_iv_recommend);
-		mIvLuxury = (ImageView) this
-				.findViewById(R.id.subject_list_item_iv_luxury);
+		mIvAttr1 = (ImageView) this
+				.findViewById(R.id.subject_detail_item_iv_attr1);
+		mIvAttr2 = (ImageView) this
+				.findViewById(R.id.subject_detail_item_iv_attr2);
 		mIvDividerTel = (ImageView) this
 				.findViewById(R.id.subject_detail_iv_divider_tel);
 		mIvDividerDesc = (ImageView) this
@@ -170,6 +173,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		mIsNeedUploadPics = true;
 		super.prepareDatas();
 		this.prepareShare();
+		this.prepareError();
 		mTvTitle.setText(this.getString(R.string.subject_detail));
 		mBtnCollection
 				.setBackgroundResource(R.drawable.subject_detail_collection_selector);
@@ -190,6 +194,20 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			if (TextUtils.isEmpty(mSubject.getTel())
 					&& TextUtils.isEmpty(mSubject.getAddress())) {
 				mIvDividerTel.setVisibility(View.GONE);
+			}
+			ModoerAttList attr1 = mSubject.getCShopatts();
+			if (null != attr1 && attr1.getIcon() != null) {
+				AsyncImageLoader.getImageLoad(this).showPic(
+						GlobalConfig.URL_ATTR_PIC + attr1.getIcon(), mIvAttr1);
+			} else {
+				mIvAttr1.setVisibility(View.GONE);
+			}
+			ModoerAttList attr2 = mSubject.getCShopatts2();
+			if (null != attr2 && attr2.getIcon() != null) {
+				AsyncImageLoader.getImageLoad(this).showPic(
+						GlobalConfig.URL_ATTR_PIC + attr2.getIcon(), mIvAttr2);
+			} else {
+				mIvAttr2.setVisibility(View.GONE);
 			}
 
 			mTvReviewCount.setText(this.getString(R.string.review) + "("
@@ -262,6 +280,17 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		IWeiboAPI mSinaWeiboApi = WeiboSDK.createWeiboAPI(this,
 				GlobalConfig.Third.SINA_WEIBO_APP_KEY);
 		mSinaShareProxy = new SinaWeiboShareProxy(this, mSinaWeiboApi);
+	}
+
+	private void prepareError() {
+		mErrorList = new ArrayList<String>();
+		String[] arrays = this.getResources().getStringArray(
+				R.array.error_array);
+		mErrorList.addAll(Arrays.asList(arrays));
+		mFloatingErrorProxy = new FloatingTranslucentProxy(this,
+				GlobalConfig.FloatingType.TYPE_ERROR);
+		mFloatingErrorProxy.setFloatingItemClickListener(this);
+		mFloatingErrorProxy.setDatas(mErrorList);
 	}
 
 	private void setTxtValue(View parent, TextView tv, String content) {
@@ -411,7 +440,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			return;
 		}
 		Intent intent = new Intent(this, ReviewListActivity.class);
-		intent.putExtra("subjectId", mSubject.getId());
+		intent.putExtra("ModoerSubject", mSubject);
 		this.startActivity(intent);
 	}
 
@@ -450,6 +479,14 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	public void onClickError(View view) {// 报错
 		if (this.isUploading()) {
 			return;
+		}
+		if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
+			this.startActivityForResult(new Intent(this, LoginActivity.class),
+					REQ_LOGIN_CODE_ERROR);
+			return;
+		}
+		if (null != mFloatingErrorProxy) {
+			mFloatingErrorProxy.showLocation(view, Gravity.CENTER, 0, 0);
 		}
 	}
 
@@ -492,6 +529,90 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		return mLlUpload.getVisibility() == View.VISIBLE;
 	}
 
+	private void onShare(int pos) {
+		switch (pos) {
+		case POS_SINA_WEIBO:
+			if (!mSinaShareProxy.isInstall()) {
+				this.showToast(this.getString(R.string.share_sina_uninstall));
+				return;
+			}
+			if (!mSinaShareProxy.isAppSupport()) {
+				this.showToast(this
+						.getString(R.string.share_sina_version_mismatch));
+				return;
+			}
+//			if (mSinaShareProxy.isSessionValid()) {
+//				mSinaShareProxy.share(this.buildShareContent());
+//			}
+			break;
+		case POS_TENCENT_WEIBO:
+			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO);
+			break;
+		case POS_TENCENT_QZONE:
+			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_QZONE);
+			break;
+		case POS_TENCENT_QQ:
+			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_QQ);
+			break;
+		case POS_SMS:
+			try {
+				Uri smsToUri = Uri.parse("smsto:");
+				Intent sendIntent = new Intent(Intent.ACTION_VIEW, smsToUri);
+				sendIntent.putExtra("sms_body", this.buildShareContent());
+				sendIntent.setType("vnd.android-dir/mms-sms");
+				this.startActivity(sendIntent);
+			} catch (Exception e) {
+				this.showToast(this.getString(R.string.share_sms_unsupport));
+			}
+			break;
+		case POS_EMAIL:
+			try {
+				Intent data = new Intent(Intent.ACTION_SENDTO);
+				data.setData(Uri.parse("mailto:"));
+				data.putExtra(Intent.EXTRA_SUBJECT,
+						this.getString(R.string.share_email_subject));
+				data.putExtra(Intent.EXTRA_TEXT, this.buildShareContent());
+				this.startActivity(data);
+			} catch (Exception e) {
+				this.showToast(this.getString(R.string.share_email_unsupport));
+			}
+			break;
+		}
+	}
+
+	private void onError(int pos, String info) {
+		if (pos == POS_LOCATION_ERROR) {// 地图报错
+			Intent intent = new Intent(this, MapMarkerActivity.class);
+			intent.putExtra("operator", GlobalConfig.IntentKey.MAP_POINT_ERROR);
+			double[] locArray = new double[2];
+			locArray[0] = mSubject.getMapLat();
+			locArray[1] = mSubject.getMapLng();
+			intent.putExtra("latlng", locArray);
+			this.startActivityForResult(intent, REQ_LOGIN_CODE_ERROR_MAP);
+		} else {
+			this.onSaveError(info);
+		}
+	}
+
+	/**
+	 * 报错
+	 * 
+	 * @param info
+	 */
+	private void onSaveError(String info) {
+		ModoerSubjectlog log = new ModoerSubjectlog();
+		log.setSid(mSubject);
+		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
+				.getCurrMember();
+		log.setUid(member);
+		log.setUsername(member.getUsername());
+		log.setPosttime((int) CommonUtil.getCurrTimeByPHP());
+		log.setUpcontent(info);
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_ERROR);
+		this.getStoreOperation().saveOrUpdate(log, param);
+	}
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -505,20 +626,53 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		if (RESULT_OK != resultCode) {
 			return;
 		}
-		if (REQ_LOGIN_CODE_COLLECTION == requestCode) {
+		switch (requestCode) {
+		case REQ_LOGIN_CODE_COLLECTION:
 			this.onCollection();
-		} else if (REQ_LOGIN_CODE_UPLOAD == requestCode) {
+			break;
+		case REQ_LOGIN_CODE_UPLOAD:
 			this.prepare();
 			this.onUploadShow();
+			break;
+		case REQ_LOGIN_CODE_ERROR:
+			if (null != mFloatingErrorProxy) {
+				mFloatingErrorProxy.showLocation(mRlAddress, Gravity.CENTER, 0,
+						0);
+			}
+			break;
+		case REQ_LOGIN_CODE_ERROR_MAP:
+			double lat = data.getDoubleExtra("lat", 0);
+			double lng = data.getDoubleExtra("lng", 0);
+			this.onSaveError(lng + "," + lat);
+			break;
+		case REQ_LOGIN_CODE_SINA_WEIBO:
+			this.onShare(POS_SINA_WEIBO);
+			break;
+		case REQ_LOGIN_CODE_QQ:
+			this.onShare(POS_TENCENT_QQ);
+			break;
+		case REQ_LOGIN_CODE_QZONE:
+			this.onShare(POS_TENCENT_QZONE);
+			break;
+		case REQ_LOGIN_CODE_TENCEN_WEIBO:
+			this.onShare(POS_TENCENT_WEIBO);
+			break;
 		}
+
 	}
 
 	@Override
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
-		this.showToast(this.getString(R.string.subject_collection_success));
-		this.hideLoadingCollection();
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_SUBJECT_CONNLECTION == operator) {
+			this.showToast(this.getString(R.string.subject_collection_success));
+			this.hideLoadingCollection();
+		} else if (GlobalConfig.Operator.OPERATION_SAVE_ERROR == operator) {
+			this.showToast(this.getString(R.string.subject_error_success));
+		}
+
 	}
 
 	@Override
@@ -610,71 +764,47 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 				mDialogProxy.hideDialog();
 			}
 			this.showToast(this.getString(R.string.commit_fail));
+		} else if (GlobalConfig.Operator.OPERATION_SAVE_ERROR == operator) {
+			this.showToast(this.getString(R.string.subject_error_fail));
 		}
 	}
 
 	@Override
 	public void onFloatingItemClick(int pos, String key, int type) {
 		// TODO Auto-generated method stub
-		if (GlobalConfig.FloatingType.TYPE_SHARE != type) {
-			super.onFloatingItemClick(pos, key, type);
-			return;
-		}
-		switch (pos) {
-		case POS_SINA_WEIBO:
-			if (!mSinaShareProxy.isInstall()) {
-				this.showToast(this.getString(R.string.share_sina_uninstall));
-				return;
-			}
-			if (!mSinaShareProxy.isAppSupport()) {
-				this.showToast(this
-						.getString(R.string.share_sina_version_mismatch));
-				return;
-			}
-			if (((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
-				if (mSinaShareProxy.isSessionValid()) {
-					mSinaShareProxy.share(this.buildShareContent());
-				} else {
-
-				}
+		if (GlobalConfig.FloatingType.TYPE_ERROR == type) {
+			this.onError(pos, key);
+		} else if (GlobalConfig.FloatingType.TYPE_SHARE == type) {
+			if (POS_SMS == pos || POS_EMAIL == pos) {
+				this.onShare(pos);
 			} else {
-				this.startActivityForResult(new Intent(this,
-						LoginActivity.class), REQ_LOGIN_CODE_SINA_WEIBO);
+				if (!((CoreApp) AppUtils.getBaseApp(this)).isLogin()) {
+					Intent intent = new Intent(this, LoginActivity.class);
+					switch (pos) {
+					case POS_SINA_WEIBO:
+						this.startActivityForResult(intent,
+								REQ_LOGIN_CODE_SINA_WEIBO);
+						break;
+					case POS_TENCENT_QQ:
+						this.startActivityForResult(intent, REQ_LOGIN_CODE_QQ);
+						break;
+					case POS_TENCENT_QZONE:
+						this.startActivityForResult(intent,
+								REQ_LOGIN_CODE_QZONE);
+						break;
+					case POS_TENCENT_WEIBO:
+						this.startActivityForResult(intent,
+								REQ_LOGIN_CODE_TENCEN_WEIBO);
+						break;
+					}
+				} else {
+					this.onShare(pos);
+				}
 			}
-			break;
-		case POS_TENCENT_WEIBO:
-			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO);
-			break;
-		case POS_TENCENT_QZONE:
-			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_QZONE);
-			break;
-		case POS_TENCENT_QQ:
-			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_QQ);
-			break;
-		case POS_SMS:
-			try {
-				Uri smsToUri = Uri.parse("smsto:");
-				Intent sendIntent = new Intent(Intent.ACTION_VIEW, smsToUri);
-				sendIntent.putExtra("sms_body", this.buildShareContent());
-				sendIntent.setType("vnd.android-dir/mms-sms");
-				this.startActivityForResult(sendIntent, REQ_LOGIN_CODE_SMS);
-			} catch (Exception e) {
-				this.showToast(this.getString(R.string.share_sms_unsupport));
-			}
-			break;
-		case POS_EMAIL:
-			try {
-				Intent data = new Intent(Intent.ACTION_SENDTO);
-				data.setData(Uri.parse("mailto:"));
-				data.putExtra(Intent.EXTRA_SUBJECT,
-						this.getString(R.string.share_email_subject));
-				data.putExtra(Intent.EXTRA_TEXT, this.buildShareContent());
-				this.startActivityForResult(data, REQ_LOGIN_CODE_EMAIL);
-			} catch (Exception e) {
-				this.showToast(this.getString(R.string.share_email_unsupport));
-			}
-			break;
+		} else {
+			super.onFloatingItemClick(pos, key, type);
 		}
+
 	}
 
 	@Override
@@ -705,16 +835,32 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	private static final int REQ_LOGIN_CODE_COLLECTION = 4;
 	/** 上传 **/
 	private static final int REQ_LOGIN_CODE_UPLOAD = 5;
+	/** 报错 **/
+	private static final int REQ_LOGIN_CODE_ERROR = 6;
+	/** 地图选点报错 **/
+	private static final int REQ_LOGIN_CODE_ERROR_MAP = 7;
 	/** 新浪微博 **/
-	private static final int REQ_LOGIN_CODE_SINA_WEIBO = 2;
-	private static final int REQ_LOGIN_CODE_SMS = 3;
-	private static final int REQ_LOGIN_CODE_EMAIL = 4;
+	private static final int REQ_LOGIN_CODE_SINA_WEIBO = 8;
+	/** QQ **/
+	private static final int REQ_LOGIN_CODE_QQ = 9;
+	/** QZone **/
+	private static final int REQ_LOGIN_CODE_QZONE = 10;
+	/** 腾讯微博 **/
+	private static final int REQ_LOGIN_CODE_TENCEN_WEIBO = 11;
+	/** Share POS(Begin) **/
 	private static final int POS_SINA_WEIBO = 0;
 	private static final int POS_TENCENT_WEIBO = 1;
 	private static final int POS_TENCENT_QZONE = 2;
 	private static final int POS_TENCENT_QQ = 3;
 	private static final int POS_SMS = 4;
 	private static final int POS_EMAIL = 5;
+	/** Share POS(End) **/
+	/** Error POS(Begin) **/
+	private static final int POS_SUBJECT_CLOSED = 0;
+	private static final int POS_LOCATION_ERROR = 1;
+	private static final int POS_SUBJECT_INFO_ERROR = 2;
+	private static final int POS_SUBJECT_REPEAT = 3;
+	/** Error POS(End) **/
 	private static final String SORT_1 = "sort1";
 	private static final String SORT_2 = "sort2";
 	private static final String SORT_3 = "sort3";

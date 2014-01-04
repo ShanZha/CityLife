@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
 
-    <string name="app_name">CityLife</string>
+    <string name="app_name">四万公里</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="dialog_title">提示</string>
@@ -11,6 +11,7 @@
     <string name="main_travel">汽车出行</string>
     <string name="main_shopping">生活购物</string>
     <string name="main_recreation">休闲娱乐</string>
+    <string name="main_title">请选择国家</string>
     <string name="search_city">搜全城</string>
     <string name="ask">微攻略</string>
     <string name="party">聚会</string>
@@ -26,6 +27,7 @@
     <string name="composite_score">综合得分：</string>
     <string name="overall_rating">总体评价：</string>
     <string name="impression">店铺简介</string>
+    <string name="review_tip">点评</string>
     <string name="review">用户点评</string>
     <string name="review_detail">评论详情</string>
     <string name="review_content_hint">评价内容</string>
@@ -49,16 +51,11 @@
     <string name="review_good">好评</string>
     <string name="review_very_good">很好</string>
     <string name="review_best">非常好</string>
-    <string name="review_add_tag_friends">朋友聚餐</string>
-    <string name="review_add_tag_ta">和TA一起</string>
-    <string name="review_add_tag_business">上午宴请</string>
-    <string name="review_add_tag_by_self">随便吃吃</string>
-    <string name="review_add_tag_family">家庭聚会</string>
-    <string name="review_add_tag_breakfast">早餐</string>
-    <string name="review_add_tag_afternoon_tea">下午茶</string>
+    <string name="review_add_pic_tips">点评图片</string>
     <string name="review_sort_null">请您先评分</string>
     <string name="review_per_aver">人均消费不能为空</string>
     <string name="review_success">评论成功</string>
+    <string name="review_fail">评论失败</string>
     <string name="ask_state_resolved">已解决问题</string>
     <string name="ask_state_unresolved">待解决问题</string>
     <string name="ask_state_reward">高悬赏问题</string>
@@ -177,6 +174,7 @@
     <string name="listview_footer_hint_normal">更多</string>
     <string name="listview_footer_hint_ready">松开载入更多</string>
     <string name="not_null">不能为空</string>
+    <string name="user_update_username_tip">用户名：</string>
     <string name="user_name_tip">用户名称：</string>
     <string name="user_nick_tip">用户昵称：</string>
     <string name="user_level_tip">用户等级：</string>
@@ -226,8 +224,10 @@
     <string name="user_update_desc_hint">简单说说自己吧</string>
     <string name="user_update_commit">确认修改</string>
     <string name="user_update_title">用户信息修改</string>
+    <string name="user_update_upload_avator">正在上传头像</string>
     <string name="user_update_old_pswd_error">原始密码错误</string>
-     <string name="commit">提交</string>
+    <string name="user_update_avator_tips">点击修改头像</string>
+    <string name="commit">提交</string>
     <string name="add_ing">提交中...</string>
     <string name="add_success">提交成功</string>
     <string name="add_fail">提交失败</string>
@@ -266,6 +266,9 @@
     <string name="sms_send_time_tip">发送时间：</string>
     <string name="sms_send_content_tip">短信内容：</string>
     <string name="sms_detail">短信详情</string>
+    <string name="subject_error_success">报错成功</string>
+    <string name="subject_error_fail">报错失败</string>
+    <string name="subject_error_map">商铺地图报错</string>
 
     <string-array name="share_array">
         <item>分享到新浪微博</item>
@@ -278,6 +281,12 @@
     <string-array name="pic_select">
         <item>手机拍照</item>
         <item>相册选择</item>
+    </string-array>
+    <string-array name="error_array">
+        <item>商铺已关</item>
+        <item>地图位置报错</item>
+        <item>商铺信息报错</item>
+        <item>商铺重复</item>
     </string-array>
     <string-array name="party_sign_up">
         <item>积分</item>

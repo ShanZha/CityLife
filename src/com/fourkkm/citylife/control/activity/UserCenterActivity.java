@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Intent;
-import android.preference.DialogPreference;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,7 +21,9 @@ import com.fourkkm.citylife.constant.GlobalConfig;
 import com.zj.app.BaseActivity;
 import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.utils.AppUtils;
+import com.zj.support.image.ScaleImageProcessor;
 import com.zj.support.observer.model.Param;
+import com.zj.support.widget.AsyncImageView;
 
 /**
  * 会员中心界面
@@ -30,7 +34,8 @@ import com.zj.support.observer.model.Param;
 public class UserCenterActivity extends BaseActivity {
 
 	private static final int REQ_LOGIN_CODE = 1;
-	private ImageView mIvAvator;
+	private static final int REQ_UPDATE_CODE = 2;
+	private AsyncImageView mIvAvator;
 	private TextView mTvTitle, mTvUsernmae, mTvLevel, mTvIntegration, mTvKm;
 	private LinearLayout mLlLoadingInfo;
 	private RelativeLayout mRlInfo;
@@ -43,7 +48,8 @@ public class UserCenterActivity extends BaseActivity {
 		super.prepareViews();
 
 		this.setContentView(R.layout.user_center);
-		mIvAvator = (ImageView) this.findViewById(R.id.user_center_iv_avator);
+		mIvAvator = (AsyncImageView) this
+				.findViewById(R.id.user_center_iv_avator);
 		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
 		mTvUsernmae = (TextView) this
 				.findViewById(R.id.user_center_tv_username);
@@ -104,6 +110,22 @@ public class UserCenterActivity extends BaseActivity {
 		}
 		mTvIntegration.setText(mMember.getPoint() + "");
 		mTvKm.setText(mMember.getPoint1() + "");
+		String filePath = mMember.getFilePath();
+		int thumbWidth = (int) this.getResources().getDimension(
+				R.dimen.subject_add_thumbnail_width);
+		int thumbHeight = (int) this.getResources().getDimension(
+				R.dimen.subject_add_thumbnail_height);
+		ScaleImageProcessor scale = new ScaleImageProcessor(thumbWidth,
+				thumbHeight);
+		mIvAvator.setImageProcessor(scale);
+		if (TextUtils.isEmpty(filePath)) {
+			Bitmap bm = BitmapFactory.decodeResource(getResources(),
+					R.drawable.list_thumb);
+			bm = ThumbnailUtils.extractThumbnail(bm, thumbWidth, thumbHeight);
+			mIvAvator.setDefaultImageBitmap(bm);
+		} else {
+			mIvAvator.setUrl(GlobalConfig.URL_UPLOAD + filePath);
+		}
 
 	}
 
@@ -158,17 +180,18 @@ public class UserCenterActivity extends BaseActivity {
 	}
 
 	public void onClickUpdateInfo(View view) {// 修改个人信息
-		this.startActivity(new Intent(this, UserUpdateActivity.class));
+		this.startActivityForResult(new Intent(this, UserUpdateActivity.class),
+				REQ_UPDATE_CODE);
 	}
 
 	public void onClickLoginExit(View view) {// 注销登录
 		((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(null);
-		SharedPreferenceUtil.getSharedPrefercence().clear(
+		SharedPreferenceUtil.getSharedPrefercence().remove(
 				this.getApplicationContext(), GlobalConfig.SharePre.KEY_PSWD);
-		SharedPreferenceUtil.getSharedPrefercence().clear(
+		SharedPreferenceUtil.getSharedPrefercence().remove(
 				this.getApplicationContext(),
 				GlobalConfig.SharePre.KEY_IS_REMBER_PSWD);
-		SharedPreferenceUtil.getSharedPrefercence().clear(
+		SharedPreferenceUtil.getSharedPrefercence().remove(
 				this.getApplicationContext(),
 				GlobalConfig.SharePre.KEY_IS_AUTO_LOGIN);
 		this.finish();
@@ -185,6 +208,12 @@ public class UserCenterActivity extends BaseActivity {
 				this.prepareMember();
 			} else {
 				this.finish();
+			}
+		}
+		if (REQ_UPDATE_CODE == requestCode) {
+			if (RESULT_OK == resultCode) {
+				mMember = ((CoreApp) AppUtils.getBaseApp(this)).getCurrMember();
+				this.prepareMember();
 			}
 		}
 	}

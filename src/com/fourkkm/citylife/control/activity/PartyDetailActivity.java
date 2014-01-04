@@ -10,6 +10,7 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebSettings.TextSize;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -34,12 +35,14 @@ import com.zj.support.observer.model.Param;
 public class PartyDetailActivity extends BaseActivity {
 
 	private static final String TAG = "PartyDetailActivity";
-	public static final TextSize[] FONT_SIZES = new TextSize[]{TextSize.SMALLER,TextSize.NORMAL,TextSize.LARGER}; 
+	public static final TextSize[] FONT_SIZES = new TextSize[] {
+			TextSize.SMALLER, TextSize.NORMAL, TextSize.LARGER };
 	private static final int REQ_SIGN_UP_CODE = 1;
 	/** 常量定义见ModoerParty实体 **/
 	private static final int SEX_LIMIT_NONE = 0;
 	private static final int SEX_LIMIT_WOMAN = 1;
 	private static final int SEX_LIMIT_MAN = 2;
+	private Button mBtnSignUp;
 	private ImageView mIvThumb;
 	private WebView mWvDesc;
 	private TextView mTvTitle, mTvSubject, mTvInitiator, mTvInitiateTime,
@@ -57,6 +60,8 @@ public class PartyDetailActivity extends BaseActivity {
 		this.setContentView(R.layout.party_detail);
 		mTvTitle = (TextView) this
 				.findViewById(R.id.titlebar_back_right_tv_title);
+		mBtnSignUp = (Button) this
+				.findViewById(R.id.titlebar_back_right_btn_operator);
 		mIvThumb = (ImageView) this.findViewById(R.id.thumb_detail_iv_thumb);
 		mTvSubject = (TextView) this.findViewById(R.id.party_detail_tv_subject);
 		mTvInitiator = (TextView) this
@@ -120,9 +125,14 @@ public class PartyDetailActivity extends BaseActivity {
 		if (TextUtils.isEmpty(desc)) {
 			mWvDesc.setVisibility(View.GONE);
 		} else {
-			System.out.println(" "+CommonUtil.formatHtml(desc));
+			System.out.println(" " + CommonUtil.formatHtml(desc));
 			mWvDesc.loadDataWithBaseURL(null, CommonUtil.formatHtml(desc),
 					"text/html", "utf-8", null);
+		}
+		int joinedTime = mParty.getJoinendtime();
+		int currTime = (int) CommonUtil.getCurrTimeByPHP();
+		if (currTime > joinedTime) {// 报名时间已过
+			mBtnSignUp.setVisibility(View.GONE);
 		}
 
 		this.showLoadingSignUpMember();
@@ -221,15 +231,8 @@ public class PartyDetailActivity extends BaseActivity {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < results.size(); i++) {
 				ModoerPartyApply apply = (ModoerPartyApply) results.get(i);
-				ModoerMembers member = apply.getUid();
-				if (null != member) {
-					String username = member.getUsername();
-					if (TextUtils.isEmpty(username)) {
-						continue;
-					}
-					sb.append(username);
-					sb.append(";");
-				}
+				sb.append(apply.getLinkman());
+				sb.append(";");
 			}
 			mTvSignUpMemberNames.setText(sb.toString());
 			this.hideLoadingSignUpMember();

@@ -203,12 +203,14 @@ public class AskListActivity extends BaseListActivity implements
 			if (null != member) {
 				sb.append(" ma where uid.id = " + member.getId());
 			}
+			sb.append(" order by ma.dateline DESC,ma.id DESC");
 			return sb.toString();
 		}
 		if (null == mCurrAskCategory) {// 选择“所有类别”时
 			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
 			if (ASK_STATE_REWARD == mCurrAskState) {
-				sb.append(" order by reward DESC");
+				sb.append(" order by reward DESC,ma.id DESC");
+				return sb.toString();
 			} else if (ASK_STATE_ALL == mCurrAskState) {// “所有问题”
 				// do nothing
 			} else {
@@ -219,13 +221,14 @@ public class AskListActivity extends BaseListActivity implements
 			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
 			if (ASK_STATE_REWARD == mCurrAskState) {
 				sb.append(" order by reward DESC");
+				return sb.toString();
 			} else if (ASK_STATE_ALL == mCurrAskState) {// “所有问题”
-				// do nothing
+				//do nothing
 			} else {
 				sb.append(" and ma.success = " + mCurrAskState);
 			}
 		}
-
+		sb.append(" order by ma.dateline DESC,ma.id DESC");
 		return sb.toString();
 	}
 

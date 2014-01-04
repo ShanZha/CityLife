@@ -1,5 +1,9 @@
 package com.andrnes.modoer;
 
+import java.util.Map;
+
+import com.zj.app.annotation.Lazy;
+
 /** 用户第三方帐号绑定表 */
 public class ModoerMemberPassport {
 
@@ -8,16 +12,19 @@ public class ModoerMemberPassport {
 	private String psuid;
 
 	/** 绑定用户UID */
+	@Lazy(isLazy = true)
 	private ModoerMembers uid;
 
-	/** 绑定种类 [weibo, qq, taobao, google, qzone, renren]*/
+	/** 绑定种类 [weibo, qq, taobao, google, qzone, renren] */
 	private String psname;
 
 	private String accessToken;
 
-	private int expired;
+	private long expired;
 
 	private int isbind;
+	
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -59,11 +66,11 @@ public class ModoerMemberPassport {
 		this.accessToken = accessToken;
 	}
 
-	public int getExpired() {
+	public long getExpired() {
 		return expired;
 	}
 
-	public void setExpired(int expired) {
+	public void setExpired(long expired) {
 		this.expired = expired;
 	}
 
@@ -73,5 +80,13 @@ public class ModoerMemberPassport {
 
 	public void setIsbind(int isbind) {
 		this.isbind = isbind;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 }

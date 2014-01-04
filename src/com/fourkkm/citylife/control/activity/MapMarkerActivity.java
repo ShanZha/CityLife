@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
+import com.fourkkm.citylife.constant.GlobalConfig;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
@@ -35,6 +36,7 @@ public class MapMarkerActivity extends BaseFragmentActivity implements
 	private Marker mCurrMarker;
 	private TextView mTvTitle;
 	private Button mBtnSure;
+	private int mOperator = -1;
 
 	@Override
 	protected void prepareViews() {
@@ -53,7 +55,20 @@ public class MapMarkerActivity extends BaseFragmentActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
-		mTvTitle.setText(this.getString(R.string.map_point));
+		Intent intent = this.getIntent();
+		mOperator = intent.getIntExtra("operator", -1);
+
+		LatLng latlng = null;
+		if (GlobalConfig.IntentKey.MAP_POINT_ADD == mOperator) {
+			mTvTitle.setText(this.getString(R.string.map_point));
+			// 虚拟当前位置，初始时在当前位置
+			latlng = new LatLng(((CoreApp) AppUtils.getBaseApp(this)).mCurrLat,
+					((CoreApp) AppUtils.getBaseApp(this)).mCurrLng);
+		} else if (GlobalConfig.IntentKey.MAP_POINT_ERROR == mOperator) {
+			mTvTitle.setText(this.getString(R.string.subject_error_map));
+			double[] locArray = intent.getDoubleArrayExtra("latlng");
+			latlng = new LatLng(locArray[0],locArray[1]);
+		}
 		mBtnSure.setVisibility(View.VISIBLE);
 
 		mMap.setOnMarkerClickListener(this);
@@ -63,10 +78,6 @@ public class MapMarkerActivity extends BaseFragmentActivity implements
 		// Hide the zoom controls as the button panel will cover it.
 		mMap.getUiSettings().setZoomControlsEnabled(false);
 
-		// 虚拟当前位置，初始时在当前位置
-		LatLng latlng = new LatLng(
-				((CoreApp) AppUtils.getBaseApp(this)).mCurrLat,
-				((CoreApp) AppUtils.getBaseApp(this)).mCurrLng);
 		MarkerOptions options = new MarkerOptions();
 		options.position(latlng);
 		options.draggable(true);

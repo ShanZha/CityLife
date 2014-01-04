@@ -19,14 +19,18 @@ import android.widget.Spinner;
 
 import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerFenlei;
+import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerParty;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.AreaManager;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.constant.Config;
 import com.zj.app.db.dao.SqliteUtil;
+import com.zj.app.utils.AppUtils;
 import com.zj.support.image.ScaleImageProcessor;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.AsyncImageView;
@@ -40,25 +44,21 @@ import com.zj.support.widget.AsyncImageView;
 public class BaseAddActivity extends BaseUploadPicActivity {
 
 	private static final String TAG = "BaseAddActivity";
-	protected static final int REQ_LOGIN_CODE = 1;
-	protected static final int REQ_CODE_ALBUM_IMG = 2;
-	protected static final int REQ_CODE_TAKE_PHOTO = 3;
-	protected static final int INDEX_TAKE_PHOTO = 0;
-	protected static final int INDEX_ALBUM_SELECT = 1;
 
-	protected AsyncImageView mIvThumb;
-	protected LinearLayout mLlThumbLoading, mLlArea, mLlAreaLoading;
+	protected LinearLayout mLlArea, mLlAreaLoading;
 	protected Spinner mSpAreaFirst, mSpAreaSecond;;
 	protected AreaManager mAreaMgr;
-	protected String mThumbPath;
 	protected ArrayAdapter<String> mAdapterAreaFirst, mAdapterAreaSecond;
 	protected List<String> mAreaFirst, mAreaSecond;
 	protected Button mBtnCommit;
+	private ProgressDialogProxy mDialogProxy;
 
 	@Override
 	protected void prepare() {
 		super.prepare();
 		mAreaMgr = new AreaManager();
+
+		mDialogProxy = new ProgressDialogProxy(this);
 		this.setSpAdapter();
 		this.fetchArea();
 	}
@@ -80,27 +80,16 @@ public class BaseAddActivity extends BaseUploadPicActivity {
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	}
 
-	@Override
-	protected void doUpload(String filePath) {
-		if (mIsUploadThumb) {
-			Log.i(TAG, "shan-->doUploadThumb() filepath = " + filePath);
-			mIsUploadingThumb = true;
-			this.showLoading(mLlThumbLoading);
-			this.uploadThumb(filePath);
-		} else {
-			super.doUpload(filePath);
+	protected void showWaiting() {
+		if (null != mDialogProxy) {
+			mDialogProxy.showDialog();
 		}
 	}
 
-	/**
-	 * …œ¥´Àı¬‘Õº--µÍ∆Ã∑‚√Ê
-	 * 
-	 * @param filePath
-	 */
-	private void uploadThumb(String filePath) {
-		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-		param.setOperator(GlobalConfig.Operator.OPERATION_UPLOAD_THUMB);
-		this.getStoreOperation().uploadThumb(new File(filePath), param);
+	protected void hideWaiting() {
+		if (null != mDialogProxy) {
+			mDialogProxy.hideDialog();
+		}
 	}
 
 	/**
@@ -128,24 +117,31 @@ public class BaseAddActivity extends BaseUploadPicActivity {
 				new ModoerArea(), param);
 	}
 
-	protected void changedBtnState(Button btn, boolean enable) {
-		if (null != btn) {
-			btn.setEnabled(enable);
-			btn.setClickable(enable);
-			btn.setFocusable(enable);
-		}
-	}
-
-	protected void setBtnText(Button btn, String text) {
-		if (null != btn) {
-			btn.setText(text);
-		}
-	}
+	// protected void changedBtnState(Button btn, boolean enable) {
+	// if (null != btn) {
+	// btn.setEnabled(enable);
+	// btn.setClickable(enable);
+	// btn.setFocusable(enable);
+	// }
+	// }
+	// protected void setBtnText(Button btn, String text) {
+	// if (null != btn) {
+	// btn.setText(text);
+	// }
+	// }
 
 	protected void notifyDataChanged(BaseAdapter adapter) {
 		if (null != adapter) {
 			adapter.notifyDataSetChanged();
 		}
+	}
+
+	protected void onSaveSuccess() {
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerMembers.class.getName());
+		this.hideWaiting();
+		this.showToast(this.getString(R.string.commit_success));
+		this.finish();
 	}
 
 	/**
@@ -166,7 +162,7 @@ public class BaseAddActivity extends BaseUploadPicActivity {
 		if (mIsUploadingThumb) {
 			return;
 		}
-		mIsUploadThumb = true;
+		mUploadType = UPLOAD_THUMB;
 		if (null != mFloatingPicProxy) {
 			mFloatingPicProxy.showLocation(view, Gravity.CENTER, 0, 0);
 		}

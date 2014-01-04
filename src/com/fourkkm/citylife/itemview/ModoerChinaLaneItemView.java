@@ -1,6 +1,8 @@
 package com.fourkkm.citylife.itemview;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -32,6 +34,7 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 	private TextView mTvArea;
 	private TextView mTvAuthor;
 	private TextView mTvTime;
+	private Bitmap mBmDefault;
 
 	public ModoerChinaLaneItemView(Context context) {
 		this(context, null);
@@ -45,6 +48,8 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 			int defStyle) {
 		super(context, attrs, defStyle);
 		this.mCtx = context;
+		mBmDefault = BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.list_thumb);
 	}
 
 	@Override
@@ -94,6 +99,8 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 		if (!TextUtils.isEmpty(thumb)) {
 			String url = GlobalConfig.URL_PIC + lane.getThumb();
 			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvShow);
+		}else {
+			mIvShow.setImageBitmap(mBmDefault);
 		}
 
 	}

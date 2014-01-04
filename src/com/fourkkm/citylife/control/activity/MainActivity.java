@@ -8,8 +8,10 @@ import java.util.TimerTask;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.PopupWindow.OnDismissListener;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -25,8 +27,10 @@ import com.fourkkm.citylife.widget.BasePicPagerAdapter;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.IAddressListener;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
+import com.fourkkm.citylife.widget.ILocationConnListener;
 import com.fourkkm.citylife.widget.LocationProxy;
 import com.zj.app.BaseFragmentActivity;
+import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.HackyViewPager;
@@ -38,11 +42,12 @@ import com.zj.support.widget.HackyViewPager;
  * 
  */
 public class MainActivity extends BaseFragmentActivity implements
-		IFloatingItemClick, ViewPager.OnPageChangeListener, IAddressListener {
+		IFloatingItemClick, OnDismissListener, ViewPager.OnPageChangeListener,
+		IAddressListener, ILocationConnListener {
 
 	private TextView mTvTitle;
 	private List<ModoerArea> mAreaList;
-	private ViewPager mViewPager;
+	private HackyViewPager mViewPager;
 	private BasePicPagerAdapter mPagerAdapter;
 	/** 图片轮播对象集 **/
 	private List<ModoerBcastr> mBcastrList;
@@ -60,7 +65,7 @@ public class MainActivity extends BaseFragmentActivity implements
 	/** 国家切换-漂浮菜单代理 **/
 	private FloatingOneMenuProxy mFloatingProxy;
 
-//	private LocationProxy mLocationProxy;
+	private LocationProxy mLocationProxy;
 
 	@Override
 	protected void prepareViews() {
@@ -81,34 +86,34 @@ public class MainActivity extends BaseFragmentActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
-//		mLocationProxy = new LocationProxy(this,
-//				this.getSupportFragmentManager());
+		mTvTitle.setText(this.getString(R.string.main_title));
+		mLocationProxy = new LocationProxy(this,
+				this.getSupportFragmentManager(), this);
 		mEnableDoubleExit = true;
 		mFloatingProxy = new FloatingOneMenuProxy(this,
 				GlobalConfig.FloatingType.TYPE_AREA);
 		mFloatingProxy.setFloatingItemClickListener(this);
+		mFloatingProxy.setFloatingDismissListener(this);
 		mAreaList = new ArrayList<ModoerArea>();
 		mBcastrList = new ArrayList<ModoerBcastr>();
 		mBcastrUrlList = new ArrayList<String>();
 		mViewPager.setOnPageChangeListener(this);
 
 		this.fetchCountryArea();
-		this.showBcastrLoading();
-		this.fetchBcastr();
 	}
 
 	@Override
 	protected void prepareResume() {
 		// TODO Auto-generated method stub
 		super.prepareResume();
-//		mLocationProxy.connect();
+		mLocationProxy.connect();
 	}
 
 	@Override
 	protected void preparePause() {
 		// TODO Auto-generated method stub
 		super.preparePause();
-//		mLocationProxy.disconnect();
+		mLocationProxy.disconnect();
 	}
 
 	@Override
@@ -126,11 +131,16 @@ public class MainActivity extends BaseFragmentActivity implements
 				new HashMap<String, Object>(), true, new ModoerArea(), param);
 	}
 
-	private void fetchBcastr() {// ？？？？暂时未定位，所以没加上地区的限制
-		String selectCode = "from com.andrnes.modoer.ModoerBcastr mb where mb.available = 1 and mb.city.level = 1";
+	private void fetchBcastr() {
+		ModoerArea city = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
+		StringBuilder sb = new StringBuilder();
+		sb.append("from com.andrnes.modoer.ModoerBcastr mb where mb.available = 1");
+		if (null != city) {
+			sb.append(" and mb.city.id = " + city.getId());
+		}
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_BCASTR);
-		this.getStoreOperation().findAll(selectCode,
+		this.getStoreOperation().findAll(sb.toString(),
 				new HashMap<String, Object>(), true, new ModoerBcastr(), param);
 	}
 
@@ -157,7 +167,28 @@ public class MainActivity extends BaseFragmentActivity implements
 	private void startAautoLooperPic() {
 		if (null == mTimer) {
 			mTimer = new Timer();
-			mTimer.schedule(new GalleryTimerTask(), 30*1000, 5000);
+			mTimer.schedule(new GalleryTimerTask(), 30 * 1000, 30 * 1000);
+		}
+	}
+
+	private boolean isCurrArea(ModoerArea area) {
+		ModoerArea city = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
+		if (null == city) {
+			return false;
+		}
+		return city.getId() == area.getId();
+	}
+
+	private void resetBcastr() {
+		if (null != mBcastrList) {
+			mBcastrList.clear();
+		}
+		if (null != mBcastrUrlList) {
+			mBcastrUrlList.clear();
+		}
+		mBcastrCurrPos = 0;
+		if (null != mRadioGroup) {
+			mRadioGroup.removeAllViews();
 		}
 	}
 
@@ -182,12 +213,11 @@ public class MainActivity extends BaseFragmentActivity implements
 		if (null == mAreaList || mAreaList.size() == 0) {
 			return;
 		}
-		mFloatingProxy.showAsDropDown(mTvTitle);
+		mFloatingProxy.showAsDropDown(view);
 		mFloatingProxy.resetSelectItemBg(mTvTitle.getText().toString().trim());
 	}
 
 	public void onClickFood(View view) {// 美食
-		// mLocationProxy.fetchAddress(this);
 		Intent intent = new Intent(this, SubjectListActivity.class);
 		intent.putExtra("category", GlobalConfig.CATEGORY_FOOD);
 		this.startActivity(intent);
@@ -235,7 +265,7 @@ public class MainActivity extends BaseFragmentActivity implements
 
 	public void onClickMore(View view) {// 更多
 		this.startActivity(new Intent(this, MoreActivity.class));
-		this.startActivity(new Intent(this, LoginActivity.class));
+		// this.startActivity(new Intent(this, LoginActivity.class));
 		// mLocationProxy.fetchAddress(this);
 	}
 
@@ -248,88 +278,61 @@ public class MainActivity extends BaseFragmentActivity implements
 		if (GlobalConfig.Operator.OPERATION_FINDALL_AREA == operator) {
 			List<Object> results = (List<Object>) out.getResult();
 			if (null != results) {
+				int currAreaId = SharedPreferenceUtil.getSharedPrefercence()
+						.getInt(this.getApplicationContext(),
+								GlobalConfig.SharePre.KEY_CURR_AREA_ID);
+				ModoerArea currArea = null;
 				List<String> countryNames = new ArrayList<String>();
 				for (int i = 0; i < results.size(); i++) {
 					ModoerArea area = (ModoerArea) results.get(i);
-					if (i == 0) {// 默认第一个为所处国家
-						mTvTitle.setText(area.getName());
-						((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(area);
+					if (null == currArea && currAreaId == area.getId()) {
+						currArea = area;
 					}
 					countryNames.add(area.getName());
 					mAreaList.add(area);
 				}
 				mFloatingProxy.setDatas(countryNames);
+				// 如果已经设置过当前Area，则默认，否则提示用户选择
+				if (null != currArea) {
+					((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(currArea);
+					mTvTitle.setText(currArea.getName());
+				} else {
+					ModoerArea area = mAreaList.get(0);
+					((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(area);
+					mTvTitle.setText(area.getName());
+					// this.onClickSwitchCountry(mTvTitle);
+				}
+				this.showBcastrLoading();
+				this.fetchBcastr();
 			}
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_BCASTR == operator) {
 			if (null == mBcastrList) {
 				return;
 			}
+			this.resetBcastr();
 			List<Object> results = (List<Object>) out.getResult();
 			if (null != results) {
 				for (int i = 0; i < results.size(); i++) {
 					ModoerBcastr bcastr = (ModoerBcastr) results.get(i);
 					mBcastrList.add(bcastr);
 					mBcastrUrlList.add(GlobalConfig.URL_PIC + bcastr.getLink());
+					// 根据ModoerBcastr条数，加上单选个数
+					RadioButton btn = (RadioButton) this.getLayoutInflater()
+							.inflate(R.layout.main_radio_btn, null);
+					mRadioGroup.addView(btn);
 				}
 			}
-			// 根据ModoerBcastr条数，加上单选个数
-			for (int i = 0; i < mBcastrList.size(); i++) {
-				// RadioButton btn = new RadioButton(this);
-				// btn.setButtonDrawable(this.getResources().getDrawable(
-				// R.drawable.main_radio_btn_selector));
-				RadioButton btn = (RadioButton) this.getLayoutInflater()
-						.inflate(R.layout.main_radio_btn, null);
-				// btn.setBackground(this.getResources().getDrawable(
-				// R.drawable.main_recreation_selector));
-				// btn.setBackgroundDrawable();
-				mRadioGroup.addView(btn);
-			}
-
-			// this.notifyGalleryDataChanged();
 			this.notifyPagerAdapterChanged();
-			this.hideBcastrLoading();
-			this.startAautoLooperPic();
-		}
-
-	}
-
-	/**
-	 * 图片自动轮播任务
-	 * 
-	 * @author ShanZha
-	 * 
-	 */
-	private class GalleryTimerTask extends TimerTask {
-
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			AppUtils.getHandler(MainActivity.this).post(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					if (null != mBcastrUrlList) {
-						int size = mBcastrUrlList.size();
-						if (size == 0) {
-							return;
-						}
-						if (mBcastrCurrPos == size - 1) {
-							mIsBcastrReverse = true;
-						}
-						if (mBcastrCurrPos == 0) {
-							mIsBcastrReverse = false;
-						}
-						if (mIsBcastrReverse) {
-							mBcastrCurrPos--;
-						} else {
-							mBcastrCurrPos++;
-						}
-						mViewPager.setCurrentItem(mBcastrCurrPos, true);
-						// mGallery.setSelection(mBcastrCurrPos);
-					}
-				}
-			});
+			int size = mBcastrList.size();
+			if (size > 1) {
+				this.startAautoLooperPic();
+			}
+			if (size > 0) {
+				this.hideBcastrLoading();
+			} else {
+				mRlBcastr.setVisibility(View.GONE);
+				mProBarBcastr.setVisibility(View.GONE);
+			}
 		}
 
 	}
@@ -338,7 +341,33 @@ public class MainActivity extends BaseFragmentActivity implements
 	public void onFloatingItemClick(int pos, String key, int type) {
 		// TODO Auto-generated method stub
 		ModoerArea area = mAreaList.get(pos);
+		if (this.isCurrArea(area)) {
+			return;
+		}
+		SharedPreferenceUtil.getSharedPrefercence().put(
+				this.getApplicationContext(),
+				GlobalConfig.SharePre.KEY_CURR_AREA_ID, area.getId());
 		mTvTitle.setText(area.getName());
+		((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(area);
+		this.showBcastrLoading();
+		this.fetchBcastr();
+	}
+
+	@Override
+	public void onDismiss() {
+		// TODO Auto-generated method stub
+		ModoerArea area = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
+		if (null == area) {// 如果没选择，则默认第一项
+			if (mAreaList.size() > 0) {
+				ModoerArea a = mAreaList.get(0);
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_CURR_AREA_ID, a.getId());
+				((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(a);
+				this.showBcastrLoading();
+				this.fetchBcastr();
+			}
+		}
 	}
 
 	@Override
@@ -380,4 +409,63 @@ public class MainActivity extends BaseFragmentActivity implements
 		// TODO Auto-generated method stub
 		System.out.println(" onAddressError: " + error);
 	}
+
+	@Override
+	public void onConnected(Bundle data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onDisconnect() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onConnectFail(String error) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * 图片自动轮播任务
+	 * 
+	 * @author ShanZha
+	 * 
+	 */
+	private class GalleryTimerTask extends TimerTask {
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			AppUtils.getHandler(MainActivity.this).post(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					if (null != mBcastrUrlList) {
+						int size = mBcastrUrlList.size();
+						if (size == 0) {
+							return;
+						}
+						if (mBcastrCurrPos == size - 1) {
+							mIsBcastrReverse = true;
+						}
+						if (mBcastrCurrPos == 0) {
+							mIsBcastrReverse = false;
+						}
+						if (mIsBcastrReverse) {
+							mBcastrCurrPos--;
+						} else {
+							mBcastrCurrPos++;
+						}
+						mViewPager.setCurrentItem(mBcastrCurrPos, true);
+					}
+				}
+			});
+		}
+
+	}
+
 }

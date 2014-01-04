@@ -191,6 +191,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 				return sb.toString();
 			}
 			sb.append(" and mf.uid.id = " + member.getId());
+			sb.append(" order by mf.dateline DESC,mf.id DESC");
 			return sb.toString();
 		}
 		if (null != mCurrCategory) {
@@ -201,6 +202,7 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 		} else {// 限制“国家级”
 			sb.append(" and mf.cityId.id = " + mCurrCountry.getId());
 		}
+		sb.append(" order by mf.dateline DESC,mf.id DESC");
 		return sb.toString();
 	}
 

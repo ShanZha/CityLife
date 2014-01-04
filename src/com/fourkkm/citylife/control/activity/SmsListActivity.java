@@ -72,8 +72,9 @@ public class SmsListActivity extends BaseListActivity {
 		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
 				.getCurrMember();
 		if (null != member) {
-			// sb.append(" where mp.recvuid.id = " + member.getId());
+			sb.append(" where mp.recvuid.id = " + member.getId());
 		}
+		sb.append(" order by mp.posttime DESC");
 
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("max", GlobalConfig.MAX);

@@ -116,7 +116,6 @@ public class PullUpDownListView extends ListView implements OnScrollListener {
 		if (!mEnablePullLoad) {
 			mFooterView.hide();
 			mFooterView.setOnClickListener(null);
-			this.removeFooterView(mFooterView);
 		} else {
 			mPullLoading = false;
 			mFooterView.show();

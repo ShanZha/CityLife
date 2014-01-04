@@ -77,6 +77,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	private TopAndroidClient mTaobao = TopAndroidClient
 			.getAndroidClientByAppKey(GlobalConfig.Third.TAOBAO_APP_KEY);
 	private int mRetryCount = 0;
+	private int mCurrThirdType = -1;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -158,6 +159,16 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		return encrytPswd.equals(dbPswd);
 	}
 
+	private void fecthMember(ModoerMembers member) {
+		String selectCode = "from com.andrnes.modoer.ModoerMembers mm where mm.username = :username";
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("username", member.getUsername());
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_FIND_MEMBER);
+		this.getStoreOperation().find(selectCode, paramsMap, true, member,
+				param);
+	}
+
 	private void fetchUserGroup() {
 		String selectCode = "from com.andrnes.modoer.ModoerUsergroups mug where mug.grouptype=:groupType order by point";
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -168,25 +179,38 @@ public class LoginActivity extends AuthActivity implements ICallback,
 				new ModoerUsergroups(), param);
 	}
 
+	private void fetchMemberByThirdInfo(ModoerMemberPassport passport) {
+		String selectCode = "from com.andrnes.modoer.ModoerMemberPassport mmp where mmp.psuid = :psuid and mmp.psname = :psname ";
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("psuid", passport.getPsuid());
+		paramsMap.put("psname", passport.getPsname());
+		// paramsMap.put("accessToken", passport.getAccessToken());
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT);
+		this.getStoreOperation().find(selectCode, paramsMap, true,
+				mMemberPassport, param);
+	}
+
 	private void onSaveMemeber() {
 		if (null == mMember) {
 			mMember = new ModoerMembers();
-			mMember.setUsername(mUserName);
-			mMember.setEmail(mEmail);
-			mMember.setPassword(MD5.encryptMd5(mUserPswd));
-			mMember.setRegdate((int) CommonUtil.getCurrTimeByPHP());
-			mMember.setRmb(new BigDecimal(0));
-			mMember.setNewmsg("0");
-			mMember.setPoint(0);
-			mMember.setPoint1(0);
-			mMember.setPoint2(0);
-			mMember.setPoint3(0);
-			mMember.setPoint4(0);
-			mMember.setPoint5(0);
-			mMember.setPoint6(0);
-			mMember.setGroupid(mUserGroup);
-			mMemberPassport.setUid(mMember);
 		}
+		mMember.setUsername(mUserName);
+		mMember.setEmail(mEmail);
+		mMember.setPassword(MD5.encryptMd5(mUserPswd));
+		mMember.setRegdate((int) CommonUtil.getCurrTimeByPHP());
+		mMember.setRmb(new BigDecimal(0));
+		mMember.setNewmsg("0");
+		mMember.setPoint(0);
+		mMember.setPoint1(0);
+		mMember.setPoint2(0);
+		mMember.setPoint3(0);
+		mMember.setPoint4(0);
+		mMember.setPoint5(0);
+		mMember.setPoint6(0);
+		mMember.setGroupid(mUserGroup);
+		mMemberPassport.setUid(mMember);
+
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_MEMBER);
 		List<Object> objs = new ArrayList<Object>();
@@ -208,7 +232,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		mMemberPassport = new ModoerMemberPassport();
 		mMemberPassport.setPsname(psname);
 		mMemberPassport.setAccessToken(accessToken);
-		mMemberPassport.setExpired((int) expireTime);
+		mMemberPassport.setExpired(expireTime);
 		mMemberPassport.setPsuid(uid);
 		mMemberPassport.setIsbind(1);
 	}
@@ -243,31 +267,34 @@ public class LoginActivity extends AuthActivity implements ICallback,
 			return;
 		}
 		mDialogProxy.showDialog();
-		String selectCode = "from com.andrnes.modoer.ModoerMembers mm where mm.username = :username";
-		Map<String, Object> paramsMap = new HashMap<String, Object>();
-		paramsMap.put("username", username);
-		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-		this.getStoreOperation().find(selectCode, paramsMap, true,
-				new ModoerMembers(), param);
+		mMember = new ModoerMembers();
+		mMember.setUsername(username);
+		mUserName = username;
+		mUserPswd = pswd;
+		this.fecthMember(mMember);
 	}
 
 	public void onClickQQ(View view) {// qq登录
+		mCurrThirdType = TYPE_QQ;
 		mTencent.login(this, GlobalConfig.Third.TENCENT_QQ_SCOPE,
 				new QQAuthListener(TYPE_QQ, this));
 	}
 
 	public void onClickTencentWeibo(View view) {// 腾讯微博登录
+		mCurrThirdType = TYPE_TENCENT_WEIBO;
 		this.startActivityForResult(
 				new Intent(this, TencentAuthActivity.class),
 				TENCENT_WEIBO_REQ_CODE);
 	}
 
 	public void onClickSinaWeibo(View view) {// 新浪微博登录
+		mCurrThirdType = TYPE_SINA_WEIBO;
 		mSinaWeibo.anthorize(this, new SinaWeiboAuthListener(TYPE_SINA_WEIBO,
 				this));
 	}
 
 	public void onClickTaoBao(View view) {// 淘宝登录
+		mCurrThirdType = TYPE_TAOBAO;
 		mTaobao.authorize(this);
 		this.finish();
 	}
@@ -317,7 +344,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		if (null == mUserGroup) {
 			mDialogProxy.hideDialog();
 			this.showToast(this.getString(R.string.login_fail));
-		} else {// Step 3:保存ModoerMembers
+		} else {// Step 4:保存ModoerMembers
 			this.onSaveMemeber();
 		}
 
@@ -377,37 +404,69 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	@Override
 	public void onSuccessFind(Param out) {
 		// TODO Auto-generated method stub
-		Object result = out.getResult();
-		if (null == result) {
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_FIND_MEMBER == operator) {
+			Object result = out.getResult();
+			if (null == result) {
+				mDialogProxy.hideDialog();
+				this.showToast(this.getString(R.string.login_info_incorrect));
+				return;
+			}
+			mMember = (ModoerMembers) result;
+			if (this.isPswdCorrect(mUserPswd, mMember.getPassword())) {
+				((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_USERNAME,
+						mMember.getUsername());
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_PSWD, mUserPswd);
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_IS_REMBER_PSWD,
+						mCbPswd.isChecked());
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_IS_AUTO_LOGIN,
+						mCbAutoLogin.isChecked());
+				this.setResult(RESULT_OK);
+				this.finish();
+			} else {
+				this.showToast(this.getString(R.string.login_info_incorrect));
+			}
 			mDialogProxy.hideDialog();
-			this.showToast(this.getString(R.string.login_info_incorrect));
-			return;
+		} else if (GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT == operator) {
+			Object result = out.getResult();
+			if (null == result) {// 第三方账号还没注册过，则自动注册
+				switch (mCurrThirdType) {
+				case TYPE_QQ:
+					// Step 2:获取用户第三方的昵称
+					this.fecthQQUserInfo();
+					break;
+				case TYPE_SINA_WEIBO:
+					// Step 2:获取用户第三方的昵称
+					AppUtils.getExecutors(getApplicationContext()).submit(
+							new SinaWeiboUserInfoTask(mMemberPassport
+									.getAccessToken(), mMemberPassport
+									.getPsuid(), this, TYPE_SINA_WEIBO));
+					break;
+				case TYPE_TENCENT_WEIBO:// 已有昵称，直接进入第三步
+					// Step 3:获取ModoerUserGroup
+					LoginActivity.this.fetchUserGroup();
+					break;
+				case TYPE_TAOBAO:// 已有昵称，直接进入第二步
+					// Step 3:获取ModoerUserGroup
+					LoginActivity.this.fetchUserGroup();
+					break;
+				}
+			} else {// 第三方账号之前已经登录过，则直接登录
+				mMemberPassport = (ModoerMemberPassport) result;
+				mMember = mMemberPassport.getUid();
+				this.fecthMember(mMember);
+			}
+
 		}
-		mMember = (ModoerMembers) result;
-		if (this.isPswdCorrect(mEtPswd.getText().toString().trim(),
-				mMember.getPassword())) {
-			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
-			SharedPreferenceUtil.getSharedPrefercence().put(
-					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_USERNAME, mMember.getUsername());
-			SharedPreferenceUtil.getSharedPrefercence().put(
-					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_PSWD,
-					mEtPswd.getText().toString().trim());
-			SharedPreferenceUtil.getSharedPrefercence().put(
-					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_IS_REMBER_PSWD,
-					mCbPswd.isChecked());
-			SharedPreferenceUtil.getSharedPrefercence().put(
-					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_IS_AUTO_LOGIN,
-					mCbAutoLogin.isChecked());
-			this.setResult(RESULT_OK);
-			this.finish();
-		} else {
-			this.showToast(this.getString(R.string.login_info_incorrect));
-		}
-		mDialogProxy.hideDialog();
 
 	}
 
@@ -469,8 +528,8 @@ public class LoginActivity extends AuthActivity implements ICallback,
 				.getString(GlobalConfig.Third.KEY_ACCESS_TOKEN);
 		String uid = bundle.getString(GlobalConfig.Third.KEY_UID);
 		long expireTime = bundle.getLong(GlobalConfig.Third.KEY_EXPIRE_TIME);
-		Log.e(TAG, "shan-->onThirdAuthSuccess: " + accessToken + " ,uid: " + uid
-				+ " ,expireTime: " + expireTime);
+		Log.e(TAG, "shan-->onThirdAuthSuccess: " + accessToken + " ,uid: "
+				+ uid + " ,expireTime: " + expireTime);
 		mUserPswd = uid;
 		if (null != mDialogProxy) {
 			mDialogProxy.showDialog();
@@ -479,32 +538,26 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		case TYPE_SINA_WEIBO:
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_SINA_WEIBO,
 					accessToken, uid, expireTime);
-			// Step 1:获取用户第三方的昵称
-			AppUtils.getExecutors(getApplicationContext()).submit(
-					new SinaWeiboUserInfoTask(accessToken, uid, this,
-							TYPE_SINA_WEIBO));
 			break;
 		case TYPE_QQ:
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_QQ,
 					accessToken, uid, expireTime);
-			// Step 1:获取用户第三方的昵称
-			this.fecthQQUserInfo();
 			break;
-		case TYPE_TENCENT_WEIBO:// 已有昵称，直接进入第二步
+
+		case TYPE_TENCENT_WEIBO:
 			mUserName = bundle.getString(GlobalConfig.Third.KEY_NICK_NAME);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_WEIBO,
 					accessToken, uid, expireTime);
-			// Step 2:获取ModoerUserGroup
-			LoginActivity.this.fetchUserGroup();
+
 			break;
-		case TYPE_TAOBAO:// 已有昵称，直接进入第二步
+		case TYPE_TAOBAO:
 			mUserName = bundle.getString(GlobalConfig.Third.KEY_NICK_NAME);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TAOBAO,
 					accessToken, uid, expireTime);
-			// Step 2:获取ModoerUserGroup
-			LoginActivity.this.fetchUserGroup();
 			break;
 		}
+		// Step 1:根据条件获取ModoerMemberPassport，有则用之，无则注册
+		this.fetchMemberByThirdInfo(mMemberPassport);
 	}
 
 	@Override

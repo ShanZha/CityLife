@@ -1,35 +1,34 @@
 package com.fourkkm.citylife.control.activity;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.SocketTimeoutException;
-
-import org.apache.http.conn.ConnectTimeoutException;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerMemberPassport;
+import com.andrnes.modoer.ModoerMembers;
+import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.third.BaseQQRequestListener;
+import com.fourkkm.citylife.third.IThirdAuthListener;
+import com.fourkkm.citylife.third.IThirdUserInfoListener;
+import com.fourkkm.citylife.third.QQAuthListener;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
-import com.tencent.open.HttpStatusException;
-import com.tencent.open.NetworkUnavailableException;
 import com.tencent.tauth.Constants;
-import com.tencent.tauth.IRequestListener;
-import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
-import com.tencent.tauth.UiError;
 import com.zj.app.BaseActivity;
 import com.zj.app.utils.AppUtils;
+import com.zj.support.observer.model.Param;
 
 /**
  * 第三方分享界面(新浪自带，主要处理QQ、腾讯微博)
@@ -38,8 +37,14 @@ import com.zj.app.utils.AppUtils;
  * 
  */
 public class ShareActivity extends BaseActivity implements TextWatcher,
-		IUiListener {
+		IThirdAuthListener, IThirdUserInfoListener {
 
+	private static final String TAG = "ShareActivity";
+	private static final int TENCENT_WEIBO_REQ_CODE = 1;
+	private static final int TYPE_SINA_WEIBO = 1;
+	private static final int TYPE_QQ = 2;
+	private static final int TYPE_TENCENT_WEIBO = 3;
+	private static final int TYPE_TAOBAO = 4;
 	private TextView mTvTitle, mTvLimit;
 	private EditText mEtContent;
 
@@ -47,6 +52,9 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	private ProgressDialogProxy mDialogProxy;
 	private int mIndex = -1;
 	private Tencent mTencent;
+	private ModoerMembers mMember;
+	private ModoerMemberPassport mMemberPassport;
+	private int mRetryCount = 0;
 
 	@Override
 	protected void prepareViews() {
@@ -79,6 +87,37 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		mTencent = Tencent.createInstance(GlobalConfig.Third.TENCENT_QQ_APP_ID,
 				this.getApplicationContext());
 
+		this.showWaitting();
+		mMember = ((CoreApp) AppUtils.getBaseApp(this)).getCurrMember();
+		this.fetchMemberByThirdInfo(this.getPsnameByIndex());
+
+	}
+
+	/**
+	 * 根据平台名称
+	 * 
+	 * @param psname
+	 */
+	private void fetchMemberByThirdInfo(String psname) {
+		String selectCode = "from com.andrnes.modoer.ModoerMemberPassport mmp where mmp.psname = :psname and mmp.uid.id = "
+				+ mMember.getId();
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("psname", psname);
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT);
+		this.getStoreOperation().find(selectCode, paramsMap, true,
+				new ModoerMemberPassport(), param);
+	}
+
+	private String getPsnameByIndex() {
+		switch (mIndex) {
+		case GlobalConfig.IntentKey.INDEX_TENCENT_QQ:
+		case GlobalConfig.IntentKey.INDEX_TENCENT_QZONE:
+			return GlobalConfig.Third.PSNAME_TENCENT_QQ;
+		case GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO:
+			return GlobalConfig.Third.PSNAME_TENCENT_WEIBO;
+		}
+		return "";
 	}
 
 	private void showWaitting() {
@@ -91,6 +130,24 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		if (null != mDialogProxy) {
 			mDialogProxy.hideDialog();
 		}
+	}
+
+	/**
+	 * 第三方鉴权完毕时，构建ModoerMemberPassport
+	 * 
+	 * @param psname
+	 * @param accessToken
+	 * @param uid
+	 * @param expireTime
+	 */
+	private void buildMemberPassport(String psname, String accessToken,
+			String uid, long expireTime) {
+		mMemberPassport = new ModoerMemberPassport();
+		mMemberPassport.setPsname(psname);
+		mMemberPassport.setAccessToken(accessToken);
+		mMemberPassport.setExpired(expireTime);
+		mMemberPassport.setPsuid(uid);
+		mMemberPassport.setIsbind(1);
 	}
 
 	public void onClickBack(View view) {
@@ -137,6 +194,48 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		}
 	}
 
+	@Override
+	public void onSuccessFind(Param out) {
+		// TODO Auto-generated method stub
+		super.onSuccessFind(out);
+		int operator = out.getOperator();
+		switch (operator) {
+		case GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT:
+			Object result = out.getResult();
+			this.hideWaitting();
+			if (null == result) {// 还没注册过
+				// Intent intent = new Intent(this, LoginActivity.class);
+				// intent.putExtra("operator", mIndex);
+				// this.startActivityForResult(intent, REQ_LOGIN_CODE_AUTH);
+				if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == mIndex) {
+					mTencent.login(this, GlobalConfig.Third.TENCENT_QQ_SCOPE,
+							new QQAuthListener(TYPE_QQ, this));
+				} else if (GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO == mIndex) {
+					this.startActivityForResult(new Intent(this,
+							TencentAuthActivity.class), TENCENT_WEIBO_REQ_CODE);
+				}
+			} else {
+				mMemberPassport = (ModoerMemberPassport) result;
+			}
+			break;
+		}
+	}
+
+	@Override
+	public void onFails(Param out) {
+		// TODO Auto-generated method stub
+		super.onFails(out);
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT == operator) {
+			if (mRetryCount < 3) {
+				this.fetchMemberByThirdInfo(this.getPsnameByIndex());
+				mRetryCount++;
+			} else {
+				this.hideWaitting();
+			}
+		}
+	}
+
 	private void onShareToQQ() {
 		final Bundle params = new Bundle();
 		params.putInt(Tencent.SHARE_TO_QQ_KEY_TYPE,
@@ -155,8 +254,8 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				mTencent.shareToQQ(ShareActivity.this, params,
-						ShareActivity.this);
+				// mTencent.shareToQQ(ShareActivity.this, params,
+				// ShareActivity.this);
 
 			}
 		});
@@ -174,124 +273,102 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				mTencent.shareToQzone(ShareActivity.this, params,
-						ShareActivity.this);
+				// mTencent.shareToQzone(ShareActivity.this, params,
+				// ShareActivity.this);
 			}
 		});
 
 	}
-	
-	private void onShareTencentWeibo(){
+
+	private void onShareTencentWeibo() {
 		Bundle bundle = new Bundle();
 		bundle.putString("format", "json");// 返回的数据格式
 		bundle.putString("content", "I love Test");
-		mTencent.requestAsync(Constants.GRAPH_ADD_T, bundle,
-				Constants.HTTP_POST, new TencentWeiboListener(), null);
+		// mTencent.requestAsync(Constants.GRAPH_ADD_T, bundle,
+		// Constants.HTTP_POST, new TencentWeiboListener(), null);
 	}
 
 	@Override
-	public void onCancel() {
+	public void onThirdAuthSuccess(int type, Bundle bundle) {
 		// TODO Auto-generated method stub
-		System.out.println(" onCancel ");
-		AppUtils.getHandler(this).post(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		String accessToken = bundle
+				.getString(GlobalConfig.Third.KEY_ACCESS_TOKEN);
+		String uid = bundle.getString(GlobalConfig.Third.KEY_UID);
+		long expireTime = bundle.getLong(GlobalConfig.Third.KEY_EXPIRE_TIME);
+		Log.e(TAG, "shan-->onThirdAuthSuccess: " + accessToken + " ,uid: "
+				+ uid + " ,expireTime: " + expireTime);
+		switch (type) {
+		case TYPE_QQ:
+			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_QQ,
+					accessToken, uid, expireTime);
+			break;
+		case TYPE_TENCENT_WEIBO:
+			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_WEIBO,
+					accessToken, uid, expireTime);
+			break;
+		}
+		// Step 2:保存MemberPassport
 	}
 
 	@Override
-	public void onComplete(JSONObject arg0) {
+	public void onThirdAuthFail(int type, String e) {
 		// TODO Auto-generated method stub
-		System.out.println(" onComplete " + arg0.toString());
-		AppUtils.getHandler(this).post(new Runnable() {
 
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-
-			}
-		});
 	}
 
 	@Override
-	public void onError(UiError arg0) {
+	public void onThirdUserInfoSuccess(int type, String nickname) {
 		// TODO Auto-generated method stub
-		System.out.println(" onError " + arg0.errorMessage + " code = "
-				+ arg0.errorCode);
-		AppUtils.getHandler(this).post(new Runnable() {
 
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-
-			}
-		});
 	}
-	
-	private class TencentWeiboListener implements  IRequestListener{
 
-		@Override
-		public void onComplete(JSONObject arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
+	@Override
+	public void onThirdUserInfoFail(int type, String error) {
+		// TODO Auto-generated method stub
 
-		@Override
-		public void onConnectTimeoutException(ConnectTimeoutException arg0,
-				Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onHttpStatusException(HttpStatusException arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onIOException(IOException arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onJSONException(JSONException arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onMalformedURLException(MalformedURLException arg0,
-				Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onNetworkUnavailableException(
-				NetworkUnavailableException arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onSocketTimeoutException(SocketTimeoutException arg0,
-				Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void onUnknowException(Exception arg0, Object arg1) {
-			// TODO Auto-generated method stub
-			
-		}
-		
 	}
+
+	// @Override
+	// public void onCancel() {
+	// // TODO Auto-generated method stub
+	// System.out.println(" onCancel ");
+	// AppUtils.getHandler(this).post(new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	// });
+	// }
+	//
+	// @Override
+	// public void onComplete(JSONObject arg0) {
+	// // TODO Auto-generated method stub
+	// System.out.println(" onComplete " + arg0.toString());
+	// AppUtils.getHandler(this).post(new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	// });
+	// }
+	//
+	// @Override
+	// public void onError(UiError arg0) {
+	// // TODO Auto-generated method stub
+	// System.out.println(" onError " + arg0.errorMessage + " code = "
+	// + arg0.errorCode);
+	// AppUtils.getHandler(this).post(new Runnable() {
+	//
+	// @Override
+	// public void run() {
+	// // TODO Auto-generated method stub
+	//
+	// }
+	// });
+	// }
 
 }

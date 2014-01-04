@@ -36,8 +36,6 @@ import com.fourkkm.citylife.widget.IAddressListener;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
 import com.fourkkm.citylife.widget.ILocationConnListener;
 import com.fourkkm.citylife.widget.LocationProxy;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationListener;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.adapter.ItemSingleAdapter;
@@ -415,10 +413,11 @@ public class SubjectListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		Location location = mLocation.fetchCurrLocation();
 		mLocation.fetchAddress(this);
-		if(null == location){
-			Log.i(TAG,"shan-->onConnected: location is null "+Thread.currentThread().getName());
-		}else{
-			Log.i(TAG, "shan-->onConnected: "  + " Thread : "
+		if (null == location) {
+			Log.i(TAG, "shan-->onConnected: location is null "
+					+ Thread.currentThread().getName());
+		} else {
+			Log.i(TAG, "shan-->onConnected: " + " Thread : "
 					+ Thread.currentThread().getName());
 		}
 	}
@@ -566,32 +565,32 @@ public class SubjectListActivity extends BaseListActivity implements
 			sb.append(" and ms.mapLat <= " + maxLat);
 		}
 		switch (mCurrSort) {
-		case SUBJECT_SORT_DEFAULT:
-			// Do nothing
+		case SUBJECT_SORT_DEFAULT:// 默认按照添加时间排序
+			sb.append(" order by ms.addtime DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_RECOMMEND:
-			sb.append(" order by ms.finer DESC");
+			sb.append(" order by ms.finer DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_SIGNUP_TIME:
-			sb.append(" order by ms.addtime DESC");
+			sb.append(" order by ms.addtime DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_REVIEW_COUNT:
-			sb.append(" order by ms.reviews DESC");
+			sb.append(" order by ms.reviews DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_LIKE_DEGREE:
-			sb.append(" order by ms.best DESC");
+			sb.append(" order by ms.best DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_VIEWS:
-			sb.append(" order by ms.pageviews DESC");
+			sb.append(" order by ms.pageviews DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_PIC_COUNT:
-			sb.append(" order by ms.pictures DESC");
+			sb.append(" order by ms.pictures DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_COMPOSITE_REVIEW:
-			sb.append(" order by ms.avgsort DESC");
+			sb.append(" order by ms.avgsort DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_COST_PER:
-			sb.append(" order by ms.avgprice DESC");
+			sb.append(" order by ms.avgprice DESC,ms.id DESC");
 			break;
 		}
 		return sb.toString();
