@@ -3,6 +3,7 @@ package com.fourkkm.citylife.third;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,20 @@ public class TencentShareProxy implements Handler.Callback {
 	public TencentShareProxy(Activity ctx, Tencent tencent) {
 		this.mCtx = ctx;
 		this.mTencent = tencent;
+	}
+	
+	public void onLogin(String scope,
+			QQAuthListener authListener){
+		if(null!=mTencent){
+			mTencent.login(mCtx, scope, authListener);
+		}
+	}
+	
+	public boolean isSessionValid(){
+		if(null==mTencent){
+			return false;
+		}
+		return mTencent.isSessionValid();
 	}
 
 	public void onShareToQQ(final Bundle params) {

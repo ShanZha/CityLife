@@ -99,6 +99,7 @@ public interface GlobalConfig {
 		public static final int INDEX_TENCENT_QZONE = 0;
 		public static final int INDEX_TENCENT_WEIBO = 1;
 		public static final int INDEX_TENCENT_QQ = 2;
+		public static final int INDEX_SINA_WEIBO = 3;
 
 		public static final int SUBJECT_SEACH_CITY = 1;
 		public static final int SUBJECT_ME = 2;

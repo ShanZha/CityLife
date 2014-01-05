@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@color/main_bg">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,6 +37,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_10"
             android:onClick="onClickShare"
+            android:background="@drawable/party_right_btn_selector"
             android:text="@string/share"
             android:textColor="@android:color/white"
             android:textSize="16sp" >

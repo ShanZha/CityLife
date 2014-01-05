@@ -150,6 +150,10 @@
     <string name="more_help">新手帮助</string>
     <string name="more_about">关于我们</string>
     <string name="more_exit">退出应用</string>
+    <string name="subject_share_tip">我在四万公里发现一个值得推荐的店铺：</string>
+    <string name="subject_name_detail">店铺名称：</string>
+    <string name="subject_addr_detail">店铺地址：</string>
+    <string name="subject_tel_detail">店铺电话：</string>
     <string name="subject_name">店铺名称</string>
     <string name="subject_subname">子名 称</string>
     <string name="subject_addr">店铺地址</string>

@@ -54,7 +54,7 @@ import com.zj.support.observer.model.Param;
  * 
  */
 public class SubjectDetailActivity extends BaseUploadPicActivity implements
-		IFloatingItemClick, IWeiboHandler.Response {
+		IFloatingItemClick {
 
 	private ModoerSubject mSubject;
 	private RelativeLayout mRlAddress, mRlTel, mRlDesc;
@@ -84,7 +84,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	private List<String> mShareList, mErrorList;
 
 	// private IWeiboAPI mSinaWeiboApi;
-	private SinaWeiboShareProxy mSinaShareProxy;
+
 	private ProgressDialogProxy mDialogProxy;
 	private ModoerAlbum mAlbum;
 
@@ -185,14 +185,17 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			mTvThumbnailCount.setText("" + mSubject.getPictures());
 			mTvAveragePer.setText(this.getString(R.string.average_per)
 					+ mSubject.getAvgprice());
-			this.setTxtValue(mRlAddress, mTvAddress, mSubject.getAddress());
-			this.setTxtValue(mRlTel, mTvTel, mSubject.getTel());
-			this.setTxtValue(mRlDesc, mTvDesc, mSubject.getDescription());
-			if (TextUtils.isEmpty(mSubject.getDescription())) {
+			String addr = mSubject.getAddress();
+			String tel = mSubject.getTel();
+			String desc = mSubject.getDescription();
+			this.setTxtValue(mRlAddress, mTvAddress, addr);
+			this.setTxtValue(mRlTel, mTvTel, tel);
+			this.setTxtValue(mRlDesc, mTvDesc, desc);
+			if (TextUtils.isEmpty(desc)) {
 				mIvDividerDesc.setVisibility(View.GONE);
 			}
-			if (TextUtils.isEmpty(mSubject.getTel())
-					&& TextUtils.isEmpty(mSubject.getAddress())) {
+			if ((TextUtils.isEmpty(tel) || "0".equals(tel))
+					||TextUtils.isEmpty(addr)||"0".equals(addr)) {
 				mIvDividerTel.setVisibility(View.GONE);
 			}
 			ModoerAttList attr1 = mSubject.getCShopatts();
@@ -277,9 +280,6 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		mFloatingShareProxy.setFloatingItemClickListener(this);
 		mFloatingShareProxy.setDatas(mShareList);
 
-		IWeiboAPI mSinaWeiboApi = WeiboSDK.createWeiboAPI(this,
-				GlobalConfig.Third.SINA_WEIBO_APP_KEY);
-		mSinaShareProxy = new SinaWeiboShareProxy(this, mSinaWeiboApi);
 	}
 
 	private void prepareError() {
@@ -294,7 +294,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	}
 
 	private void setTxtValue(View parent, TextView tv, String content) {
-		if (TextUtils.isEmpty(content)) {
+		if (TextUtils.isEmpty(content) || content.equals("0")) {
 			parent.setVisibility(View.GONE);
 		} else {
 			tv.setText(content);
@@ -303,17 +303,20 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 
 	private String buildShareContent() {
 		StringBuffer sb = new StringBuffer();
+		sb.append(this.getString(R.string.subject_share_tip));
+		sb.append("\n");
+		sb.append(this.getString(R.string.subject_name_detail));
 		sb.append(mSubject.getName());
 		sb.append("\n");
 		String address = mSubject.getAddress();
-		if (!TextUtils.isEmpty(address)) {
-			sb.append(this.getString(R.string.subject_addr));
+		if (!TextUtils.isEmpty(address) && !"0".equals(address)) {
+			sb.append(this.getString(R.string.subject_addr_detail));
 			sb.append(address);
 			sb.append("\n");
 		}
 		String tel = mSubject.getTel();
-		if (!TextUtils.isEmpty(tel)) {
-			sb.append(this.getString(R.string.subject_tel));
+		if (!TextUtils.isEmpty(tel) && !"0".equals(tel)) {
+			sb.append(this.getString(R.string.subject_tel_detail));
 			sb.append(tel);
 		}
 		return sb.toString();
@@ -532,27 +535,16 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	private void onShare(int pos) {
 		switch (pos) {
 		case POS_SINA_WEIBO:
-			if (!mSinaShareProxy.isInstall()) {
-				this.showToast(this.getString(R.string.share_sina_uninstall));
-				return;
-			}
-			if (!mSinaShareProxy.isAppSupport()) {
-				this.showToast(this
-						.getString(R.string.share_sina_version_mismatch));
-				return;
-			}
-//			if (mSinaShareProxy.isSessionValid()) {
-//				mSinaShareProxy.share(this.buildShareContent());
-//			}
+			this.share(GlobalConfig.IntentKey.INDEX_SINA_WEIBO);
 			break;
 		case POS_TENCENT_WEIBO:
-			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO);
+			this.share(GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO);
 			break;
 		case POS_TENCENT_QZONE:
-			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_QZONE);
+			this.share(GlobalConfig.IntentKey.INDEX_TENCENT_QZONE);
 			break;
 		case POS_TENCENT_QQ:
-			this.onShareTencent(GlobalConfig.IntentKey.INDEX_TENCENT_QQ);
+			this.share(GlobalConfig.IntentKey.INDEX_TENCENT_QQ);
 			break;
 		case POS_SMS:
 			try {
@@ -578,6 +570,13 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			}
 			break;
 		}
+	}
+
+	private void share(int index) {
+		Intent intent = new Intent(this, ShareActivity.class);
+		intent.putExtra("shareIndex", index);
+		intent.putExtra("shareContent", this.buildShareContent());
+		this.startActivity(intent);
 	}
 
 	private void onError(int pos, String info) {
@@ -611,12 +610,6 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_ERROR);
 		this.getStoreOperation().saveOrUpdate(log, param);
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		mSinaShareProxy.setResponseListener(intent, this);
 	}
 
 	@Override
@@ -805,30 +798,6 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			super.onFloatingItemClick(pos, key, type);
 		}
 
-	}
-
-	@Override
-	public void onResponse(BaseResponse baseResp) {// 新浪微博分享回调
-		// TODO Auto-generated method stub
-		switch (baseResp.errCode) {
-		case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_OK:
-			this.showToast(this.getString(R.string.share_success));
-			break;
-		case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_CANCEL:
-			this.showToast(this.getString(R.string.share_cancel));
-			break;
-		case com.sina.weibo.sdk.constant.Constants.ErrorCode.ERR_FAIL:
-			this.showToast(this.getString(R.string.share_fail)
-					+ baseResp.errMsg);
-			break;
-		}
-	}
-
-	private void onShareTencent(int index) {
-		Intent intent = new Intent(this, ShareActivity.class);
-		intent.putExtra("shareIndex", index);
-		intent.putExtra("shareContent", this.buildShareContent());
-		this.startActivity(intent);
 	}
 
 	/** 收藏 **/

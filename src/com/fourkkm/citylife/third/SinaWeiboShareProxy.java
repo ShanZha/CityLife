@@ -1,6 +1,7 @@
 package com.fourkkm.citylife.third;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.sina.weibo.sdk.api.IWeiboAPI;
@@ -34,10 +35,10 @@ public class SinaWeiboShareProxy {
 			mSinaWeiboApi.responseListener(intent, response);
 		}
 	}
+	
 
-	public boolean isSessionValid() {
-		Oauth2AccessToken mAccessToken = AccessTokenKeeper
-				.readAccessToken(mCtx);
+	public boolean isSessionValid(String accessToken,String expireTime) {
+		Oauth2AccessToken mAccessToken = new Oauth2AccessToken(accessToken, expireTime);
 		return mAccessToken.isSessionValid();
 	}
 
