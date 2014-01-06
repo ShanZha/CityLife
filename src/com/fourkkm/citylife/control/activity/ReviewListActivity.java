@@ -8,6 +8,7 @@ import java.util.Map;
 import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerMembers;
@@ -32,6 +33,7 @@ public class ReviewListActivity extends BaseListActivity {
 
 	private ModoerSubject mSubject;
 	private TextView mTvTitle;
+	private Button mBtnReview;
 	private List<ModoerReview> mReviewLists;
 	private int mOperator = -1;
 
@@ -42,6 +44,7 @@ public class ReviewListActivity extends BaseListActivity {
 		mListView = (PullUpDownListView) this
 				.findViewById(R.id.review_list_listview);
 		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
+		mBtnReview = (Button)this.findViewById(R.id.review_list_btn_review);
 
 		super.prepareViews();
 	}
@@ -57,6 +60,7 @@ public class ReviewListActivity extends BaseListActivity {
 		Intent intent = this.getIntent();
 		mOperator = intent.getIntExtra("operator", -1);
 		if (GlobalConfig.IntentKey.PARTY_ME == mOperator) {
+			mBtnReview.setVisibility(View.GONE);
 			mTvTitle.setText(this.getString(R.string.user_my_review));
 		} else {
 			mTvTitle.setText(this.getString(R.string.review));

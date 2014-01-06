@@ -237,7 +237,7 @@
     <string name="add_fail">提交失败</string>
     <string name="share">分享</string>
     <string name="share_success">分享成功</string>
-    <string name="share_fail">分享失败</string>
+    <string name="share_fail">分享失败：</string>
     <string name="share_cancel">分享取消</string>
     <string name="share_et_limit">还可输入140个字</string>
     <string name="share_sina_uninstall">您还没安装新浪微博客户端，暂不支持分享</string>

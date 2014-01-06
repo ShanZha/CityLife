@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,12 +22,14 @@ import android.widget.TextView;
 import com.andrnes.modoer.ModoerAlbum;
 import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerCategory;
+import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerPictures;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.SubjectCategoryManager;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.widget.SpinnerAdapter;
+import com.zj.app.db.dao.SqliteUtil;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.AsyncImageView;
 
@@ -158,6 +161,10 @@ public class SubjectAddActivity extends BaseAddActivity {
 	private boolean validate() {
 		if (mLat == 0 || mLng == 0) {
 			this.showToast(this.getString(R.string.subject_map_point_null));
+			return false;
+		}
+		if(TextUtils.isEmpty(mThumbPath)){
+			this.showToast(this.getString(R.string.thumb_not_null));
 			return false;
 		}
 		return true;
@@ -313,6 +320,8 @@ public class SubjectAddActivity extends BaseAddActivity {
 		super.onSuccessSaveOrUpdateArray(out);
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_SUBJECT == operator) {
+			SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+					ModoerSubject.class.getName());
 			this.onSaveSuccess();
 		}
 	}

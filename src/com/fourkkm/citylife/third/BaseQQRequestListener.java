@@ -32,7 +32,7 @@ public class BaseQQRequestListener implements IRequestListener {
 	public void onComplete(JSONObject arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		try {
-			String nick = arg0.getString("nick");
+			String nick = arg0.getString("nickname");
 			if (null != mListener) {
 				mListener.onThirdUserInfoSuccess(mType, nick);
 			}

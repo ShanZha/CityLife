@@ -80,7 +80,8 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 		// TODO Auto-generated method stub
 		ModoerFenlei lane = (ModoerFenlei) item;
 		mTvSubject.setText(lane.getSubject());
-		mTvContent.setText(lane.getContent());
+		String content = lane.getContent();
+		mTvContent.setText(CommonUtil.formatHtml2(content));
 		ModoerArea aid = lane.getAid();
 		if (null != aid && aid.getId() != 0) {
 			mTvArea.setText(mCtx.getString(R.string.china_lane_area)
@@ -98,8 +99,9 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 		String thumb = lane.getThumb();
 		if (!TextUtils.isEmpty(thumb)) {
 			String url = GlobalConfig.URL_PIC + lane.getThumb();
-			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvShow);
-		}else {
+			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvShow,
+					mBmDefault);
+		} else {
 			mIvShow.setImageBitmap(mBmDefault);
 		}
 

@@ -130,10 +130,23 @@ public class CommonUtil {
 	}
 
 	public static String formatHtml(String data) {
+		if (TextUtils.isEmpty(data)) {
+			return "";
+		}
 		data = data.replaceAll("&amp;", "");
 		data = data.replaceAll("quot;", "\"");
 		data = data.replaceAll("lt;", "<");
 		data = data.replaceAll("gt;", ">");
+		return data;
+	}
+
+	public static String formatHtml2(String data) {
+		if (TextUtils.isEmpty(data)) {
+			return "";
+		}
+		data = data.replaceAll("<br/>", "\n");
+		data = data.replaceAll("<br>", "\n");
+		data = data.replaceAll("<br />", "\n");
 		return data;
 	}
 }

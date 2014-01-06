@@ -209,6 +209,11 @@
             android:name="com.fourkkm.citylife.control.activity.RegisterActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 腾讯qq助手页 -->
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- 腾讯qq鉴权界面 -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
@@ -228,10 +233,17 @@
             android:name="com.fourkkm.citylife.control.activity.TencentAuthActivity"
             android:screenOrientation="portrait" >
         </activity>
-        <!-- 腾讯微博/QQ分享界面 -->
+        <!-- 新浪微博/腾讯微博/QQ分享界面 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.ShareActivity"
             android:screenOrientation="portrait" >
+
+            <!-- 新浪微博所需 -->
+            <intent-filter>
+                <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

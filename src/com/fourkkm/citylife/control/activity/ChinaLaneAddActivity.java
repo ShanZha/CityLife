@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -162,6 +163,10 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 				.toString().trim());
 		if (0 == expireTime) {
 			this.showToast(this.getString(R.string.time_format_error));
+			return false;
+		}
+		if(TextUtils.isEmpty(mThumbPath)){
+			this.showToast(this.getString(R.string.thumb_not_null));
 			return false;
 		}
 		return true;

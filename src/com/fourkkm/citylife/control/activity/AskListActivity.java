@@ -196,12 +196,12 @@ public class AskListActivity extends BaseListActivity implements
 	 */
 	private String buildSelectCode() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("from com.andrnes.modoer.ModoerAsks");
+		sb.append("from com.andrnes.modoer.ModoerAsks ma");
 		if (GlobalConfig.IntentKey.REVIEW_ME == mOperator) {
 			ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
 					.getCurrMember();
 			if (null != member) {
-				sb.append(" ma where uid.id = " + member.getId());
+				sb.append(" where ma.uid.id = " + member.getId());
 			}
 			sb.append(" order by ma.dateline DESC,ma.id DESC");
 			return sb.toString();
@@ -209,21 +209,21 @@ public class AskListActivity extends BaseListActivity implements
 		if (null == mCurrAskCategory) {// 选择“所有类别”时
 			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
 			if (ASK_STATE_REWARD == mCurrAskState) {
-				sb.append(" order by reward DESC,ma.id DESC");
+				sb.append(" order by ma.reward DESC,ma.id DESC");
 				return sb.toString();
 			} else if (ASK_STATE_ALL == mCurrAskState) {// “所有问题”
 				// do nothing
 			} else {
-				sb.append(" ma where ma.success = " + mCurrAskState);
+				sb.append(" where ma.success = " + mCurrAskState);
 			}
 		} else {
-			sb.append(" ma where ma.catid.id = " + mCurrAskCategory.getId());
+			sb.append(" where ma.catid.id = " + mCurrAskCategory.getId());
 			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
 			if (ASK_STATE_REWARD == mCurrAskState) {
-				sb.append(" order by reward DESC");
+				sb.append(" order by ma.reward DESC");
 				return sb.toString();
 			} else if (ASK_STATE_ALL == mCurrAskState) {// “所有问题”
-				//do nothing
+				// do nothing
 			} else {
 				sb.append(" and ma.success = " + mCurrAskState);
 			}

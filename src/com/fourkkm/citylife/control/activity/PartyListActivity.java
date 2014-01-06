@@ -278,6 +278,8 @@ public class PartyListActivity extends BaseListActivity implements
 
 		if (null != mCurrCategory) {
 			mTvCategory.setText(mCurrCategory.getName());
+		} else {
+			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 		}
 
 	}

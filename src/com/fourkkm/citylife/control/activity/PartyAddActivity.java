@@ -195,6 +195,10 @@ public class PartyAddActivity extends BaseAddActivity {
 			this.showToast(this.getString(R.string.plan_num_not_null));
 			return false;
 		}
+		if(TextUtils.isEmpty(mThumbPath)){
+			this.showToast(this.getString(R.string.thumb_not_null));
+			return false;
+		}
 		return true;
 	}
 

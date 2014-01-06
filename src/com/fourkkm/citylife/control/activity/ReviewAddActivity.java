@@ -421,6 +421,8 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 				ModoerMembers.class.getName());
 		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
 				ModoerReview.class.getName());
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerSubject.class.getName());
 		this.showToast(this.getString(R.string.review_success));
 		this.finish();
 	}

@@ -1,6 +1,8 @@
 package com.fourkkm.citylife.control.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -102,9 +104,11 @@ public class ChineseLaneDetailActivity extends BaseActivity {
 		} else {
 			mTvAddr.setText(addr);
 		}
-		mTvContent.setText(mChinaLane.getContent());
+		mTvContent.setText(CommonUtil.formatHtml2(mChinaLane.getContent()));
 		String url = GlobalConfig.URL_PIC + mChinaLane.getThumb();
-		AsyncImageLoader.getImageLoad(this).showPic(url, mIvThumb);
+		Bitmap mBmDefault = BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.list_thumb);
+		AsyncImageLoader.getImageLoad(this).showPic(url, mIvThumb, mBmDefault);
 	}
 
 	public void onClickBack(View view) {

@@ -104,22 +104,25 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 		String thumb = subject.getThumb();
 		if (!TextUtils.isEmpty(thumb)) {
 			String url = GlobalConfig.URL_PIC + subject.getThumb();
-			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvShow);
+			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvShow,
+					mBmDefault);
 		} else {
 			mIvShow.setImageBitmap(mBmDefault);
 		}
 
 		ModoerAttList attr1 = subject.getCShopatts();
 		if (null != attr1 && attr1.getIcon() != null) {
-			AsyncImageLoader.getImageLoad(mCtx).showPic(
-					GlobalConfig.URL_ATTR_PIC + attr1.getIcon(), mIvAttr1);
+			AsyncImageLoader.getImageLoad(mCtx)
+					.showPic(GlobalConfig.URL_ATTR_PIC + attr1.getIcon(),
+							mIvAttr1, null);
 		} else {
 			mIvAttr1.setImageBitmap(null);
 		}
 		ModoerAttList attr2 = subject.getCShopatts2();
 		if (null != attr2 && attr2.getIcon() != null) {
-			AsyncImageLoader.getImageLoad(mCtx).showPic(
-					GlobalConfig.URL_ATTR_PIC + attr2.getIcon(), mIvAttr2);
+			AsyncImageLoader.getImageLoad(mCtx)
+					.showPic(GlobalConfig.URL_ATTR_PIC + attr2.getIcon(),
+							mIvAttr2, null);
 		} else {
 			mIvAttr2.setImageBitmap(null);
 		}

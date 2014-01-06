@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -24,7 +25,6 @@ import android.widget.TextView;
 import com.andrnes.modoer.ModoerAlbum;
 import com.andrnes.modoer.ModoerAttList;
 import com.andrnes.modoer.ModoerFavorites;
-import com.andrnes.modoer.ModoerMemberPassport;
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerPictures;
 import com.andrnes.modoer.ModoerReview;
@@ -34,15 +34,11 @@ import com.andrnes.modoer.ModoerSubjectlog;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
-import com.fourkkm.citylife.third.SinaWeiboShareProxy;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.FloatingTranslucentProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
-import com.sina.weibo.sdk.WeiboSDK;
-import com.sina.weibo.sdk.api.BaseResponse;
-import com.sina.weibo.sdk.api.IWeiboAPI;
-import com.sina.weibo.sdk.api.IWeiboHandler;
+import com.zj.app.db.dao.SqliteUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.observer.model.Param;
@@ -195,20 +191,22 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 				mIvDividerDesc.setVisibility(View.GONE);
 			}
 			if ((TextUtils.isEmpty(tel) || "0".equals(tel))
-					||TextUtils.isEmpty(addr)||"0".equals(addr)) {
+					|| TextUtils.isEmpty(addr) || "0".equals(addr)) {
 				mIvDividerTel.setVisibility(View.GONE);
 			}
 			ModoerAttList attr1 = mSubject.getCShopatts();
 			if (null != attr1 && attr1.getIcon() != null) {
 				AsyncImageLoader.getImageLoad(this).showPic(
-						GlobalConfig.URL_ATTR_PIC + attr1.getIcon(), mIvAttr1);
+						GlobalConfig.URL_ATTR_PIC + attr1.getIcon(), mIvAttr1,
+						null);
 			} else {
 				mIvAttr1.setVisibility(View.GONE);
 			}
 			ModoerAttList attr2 = mSubject.getCShopatts2();
 			if (null != attr2 && attr2.getIcon() != null) {
 				AsyncImageLoader.getImageLoad(this).showPic(
-						GlobalConfig.URL_ATTR_PIC + attr2.getIcon(), mIvAttr2);
+						GlobalConfig.URL_ATTR_PIC + attr2.getIcon(), mIvAttr2,
+						null);
 			} else {
 				mIvAttr2.setVisibility(View.GONE);
 			}
@@ -219,8 +217,10 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 					+ mSubject.getAvgsort());
 			mRatingBar.setProgress((int) mSubject.getAvgsort());
 			String thumbnailUrl = GlobalConfig.URL_PIC + mSubject.getThumb();
+			Bitmap mBmDefault = BitmapFactory.decodeResource(
+					this.getResources(), R.drawable.list_thumb);
 			AsyncImageLoader.getImageLoad(this).showPic(thumbnailUrl,
-					mIvThumbnail);
+					mIvThumbnail, mBmDefault);
 
 			this.showReviewLoading();
 			this.fetchOneBestReview(mSubject.getId());
@@ -660,6 +660,8 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		super.onSuccessSaveOrUpdate(out);
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SUBJECT_CONNLECTION == operator) {
+			SqliteUtil.getInstance(this.getApplicationContext())
+					.deleteByClassName(ModoerFavorites.class.getName());
 			this.showToast(this.getString(R.string.subject_collection_success));
 			this.hideLoadingCollection();
 		} else if (GlobalConfig.Operator.OPERATION_SAVE_ERROR == operator) {

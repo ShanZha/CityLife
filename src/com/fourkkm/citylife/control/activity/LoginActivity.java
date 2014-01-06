@@ -474,14 +474,16 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	public void onFails(Param out) {
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_MEMBER == operator) {
-			if (mRetryCount < 3) {// 第三方登录，保存失败时，重试三次
-				this.onSaveMemeber();
+			this.showToast(this.getString(R.string.login_fail));
+			mDialogProxy.hideDialog();
+		} else if (GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT == operator) {
+			if (mRetryCount < 3) {// 查询第三方信息失败，则重试三次
+				this.fetchMemberByThirdInfo(mMemberPassport);
 				mRetryCount++;
 				return;
 			}
+			mDialogProxy.hideDialog();
 		}
-		mDialogProxy.hideDialog();
-		this.showToast(this.getString(R.string.login_fail));
 	}
 
 	@Override

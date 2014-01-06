@@ -76,7 +76,8 @@ public class ModoerPartyItemView extends RelativeLayout implements ItemView {
 			mIvThumb.setImageBitmap(mBmDefault);
 		} else {
 			String url = GlobalConfig.URL_PIC + party.getThumb();
-			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvThumb);
+			AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvThumb,
+					mBmDefault);
 
 		}
 		mTvSubject.setText(party.getSubject());
@@ -90,9 +91,11 @@ public class ModoerPartyItemView extends RelativeLayout implements ItemView {
 		// party.getDes());
 		int applyNum = party.getApplynum();
 		if (applyNum > 0) {
+			mTvSignUpCount.setBackgroundResource(R.drawable.party_sign_up_gb);
 			mTvSignUpCount.setText("已报名" + applyNum + "人");
 		} else {
-			mTvSignUpCount.setVisibility(View.GONE);
+			mTvSignUpCount.setText("");
+			mTvSignUpCount.setBackgroundResource(0);
 		}
 
 	}

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
@@ -54,6 +55,7 @@ public class SubjectListActivity extends BaseListActivity implements
 	private LinearLayout mLlTopCheck, mLlTopCheckLoading, mLlLocationLoading;
 	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond,
 			mRlFloatingThird;
+	private ImageButton mBtnAdd;
 	private TextView mTvTitle, mTvNearOrSearch, mTvCategory, mTvSort,
 			mTvLocation;
 	private List<ModoerSubject> mSubjectList;
@@ -94,6 +96,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		this.setContentView(R.layout.subject_list);
 		mTvTitle = (TextView) this
 				.findViewById(R.id.titlebar_back_right_tv_title);
+		mBtnAdd = (ImageButton)this.findViewById(R.id.titlebar_back_right_btn_operator);
 		mLlTopCheckLoading = (LinearLayout) this
 				.findViewById(R.id.subject_list_ll_top_loading);
 		mLlTopCheck = (LinearLayout) this
@@ -153,6 +156,7 @@ public class SubjectListActivity extends BaseListActivity implements
 			this.onLoadMore();
 			break;
 		case GlobalConfig.IntentKey.SUBJECT_FAVORITE:
+			mBtnAdd.setVisibility(View.GONE);
 			mLlTopCheck.setVisibility(View.GONE);
 			mLlTopCheckLoading.setVisibility(View.GONE);
 			mTvTitle.setText(this.getString(R.string.user_my_collection));

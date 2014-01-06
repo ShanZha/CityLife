@@ -35,10 +35,16 @@ public class SinaWeiboShareProxy {
 			mSinaWeiboApi.responseListener(intent, response);
 		}
 	}
-	
 
-	public boolean isSessionValid(String accessToken,String expireTime) {
-		Oauth2AccessToken mAccessToken = new Oauth2AccessToken(accessToken, expireTime);
+	public void registerApp() {
+		if (null != mSinaWeiboApi) {
+			mSinaWeiboApi.registerApp();
+		}
+	}
+
+	public boolean isSessionValid(String accessToken, String expireTime) {
+		Oauth2AccessToken mAccessToken = new Oauth2AccessToken(accessToken,
+				expireTime);
 		return mAccessToken.isSessionValid();
 	}
 

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerParty;
 import com.andrnes.modoer.ModoerPartyApply;
 import com.fourkkm.citylife.R;
@@ -103,7 +104,9 @@ public class PartyDetailActivity extends BaseActivity {
 			return;
 		}
 		String url = GlobalConfig.URL_PIC + mParty.getThumb();
-		AsyncImageLoader.getImageLoad(this).showPic(url, mIvThumb);
+		Bitmap mBmDefault = BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.list_thumb);
+		AsyncImageLoader.getImageLoad(this).showPic(url, mIvThumb, mBmDefault);
 		mTvSubject.setText(mParty.getSubject());
 		mTvInitiator.setText(mParty.getUsername());
 		mTvInitiateTime.setText(CommonUtil.getTimeByPHP(mParty.getDateline(),

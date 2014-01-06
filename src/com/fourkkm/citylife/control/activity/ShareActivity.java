@@ -7,7 +7,6 @@ import java.util.Map;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -60,7 +59,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	private String mContent;
 	private ProgressDialogProxy mDialogProxy;
 	private int mIndex = -1;
-//	private Tencent mTencent;
+	// private Tencent mTencent;
 	private ModoerMembers mMember;
 	private ModoerMemberPassport mMemberPassport;
 	private int mRetryCount = 0;
@@ -103,7 +102,9 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		mSinaWeibo = Weibo.getInstance(GlobalConfig.Third.SINA_WEIBO_APP_KEY,
 				GlobalConfig.Third.SINA_WEIBO_REDIRECT_URL,
 				GlobalConfig.Third.SINA_WEIBO_SCOPE);
-		Tencent tencent = Tencent.createInstance(GlobalConfig.Third.TENCENT_QQ_APP_ID,
+		mSinaShareProxy.registerApp();
+		Tencent tencent = Tencent.createInstance(
+				GlobalConfig.Third.TENCENT_QQ_APP_ID,
 				this.getApplicationContext());
 		mTencentProxy = new TencentShareProxy(this, tencent);
 
@@ -281,7 +282,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			Object result = out.getResult();
 			if (null == result) {// 还没注册过
 				if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == mIndex) {
-					mTencentProxy.onLogin( GlobalConfig.Third.TENCENT_QQ_SCOPE,
+					mTencentProxy.onLogin(GlobalConfig.Third.TENCENT_QQ_SCOPE,
 							new QQAuthListener(TYPE_QQ, this));
 				} else if (GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO == mIndex) {
 					this.startActivityForResult(new Intent(this,
@@ -297,7 +298,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 						this.setShareBtnEnable(true);
 						return;
 					}
-					mTencentProxy.onLogin( GlobalConfig.Third.TENCENT_QQ_SCOPE,
+					mTencentProxy.onLogin(GlobalConfig.Third.TENCENT_QQ_SCOPE,
 							new QQAuthListener(TYPE_QQ, this));
 				} else if (GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO == mIndex) {
 					// this.startActivityForResult(new Intent(this,
@@ -363,6 +364,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 
 	private void onShareSinaWeibo() {
 		if (null != mSinaShareProxy) {
+			mSinaShareProxy.registerApp();
 			mSinaShareProxy.share(mEtContent.getText().toString().trim());
 		}
 	}
@@ -371,16 +373,18 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		final Bundle params = new Bundle();
 		params.putInt(Tencent.SHARE_TO_QQ_KEY_TYPE,
 				Tencent.SHARE_TO_QQ_TYPE_DEFAULT);
-		params.putString(Tencent.SHARE_TO_QQ_TITLE, this.getString(R.string.share));
+		params.putString(Tencent.SHARE_TO_QQ_TITLE,
+				this.getString(R.string.share));
 		params.putString(Tencent.SHARE_TO_QQ_SUMMARY, mContent);
 		params.putString(Tencent.SHARE_TO_QQ_TARGET_URL, GlobalConfig.URL_PIC);
 		// params.putString(Tencent.SHARE_TO_QQ_IMAGE_URL,
 		// "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
-		params.putString(Tencent.SHARE_TO_QQ_APP_NAME, this.getString(R.string.app_name));
+		params.putString(Tencent.SHARE_TO_QQ_APP_NAME,
+				this.getString(R.string.app_name));
 		// 隐藏空间分享（单独）
 		params.putInt(Tencent.SHARE_TO_QQ_EXT_INT,
 				Tencent.SHARE_TO_QQ_FLAG_QZONE_ITEM_HIDE);
-//		 mTencentProxy.onShareToQQ();
+		// mTencentProxy.onShareToQQ();
 	}
 
 	private void onShareQZone() {
@@ -470,6 +474,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 					+ baseResp.errMsg);
 			break;
 		}
+		this.hideWaitting();
 		this.finish();
 	}
 
