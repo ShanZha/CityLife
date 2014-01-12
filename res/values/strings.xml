@@ -12,6 +12,12 @@
     <string name="main_shopping">生活购物</string>
     <string name="main_recreation">休闲娱乐</string>
     <string name="main_title">请选择国家</string>
+    <string name="main_search_city_tip">出国了，吃、喝、玩、乐也能一搜搞定</string>
+    <string name="main_ask_tip">问问去过的他，告诉没去过的她出国是怎样</string>
+    <string name="main_party_tip">海外华人交友、Party的最大聚集地</string>
+    <string name="main_china_lane_tip">租房、电器、家具、二手，总有你要的</string>
+    <string name="main_member_center_tip">积分，优惠劵，我的信息</string>
+    <string name="main_more_tip">新手帮助，了解我们</string>
     <string name="search_city">搜全城</string>
     <string name="ask">微攻略</string>
     <string name="party">聚会</string>
@@ -274,6 +280,8 @@
     <string name="subject_error_success">报错成功</string>
     <string name="subject_error_fail">报错失败</string>
     <string name="subject_error_map">商铺地图报错</string>
+    <string name="more_version_info_tip">四万公里\nv1.0\n版权所有:中盎炬华（北京）科技发展公司\nTEL: 010-85790326</string>
+    <string name="more_about_us_tip">中盎炬华（北京）科技发展公司\nTEL: 010-85790326\nFAX: 010-85725935\n地址：中国 北京市朝阳区科学园南路风林绿洲I乙240号\n邮箱：40000km_adm@sina.com</string>
     <string name="share_sina_weibo">新浪微博</string>
     <string name="share_qq">QQ好友或群组</string>
     <string name="share_qzone">QQ空间</string>

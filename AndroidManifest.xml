@@ -208,6 +208,21 @@
             android:name="com.fourkkm.citylife.control.activity.MoreActivity"
             android:screenOrientation="portrait" >
         </activity>
+        <!-- 关于我们 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.AboutUsActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 新手帮助 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.HelperActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <!-- 版本说明 -->
+        <activity
+            android:name="com.fourkkm.citylife.control.activity.VersionInfoActivity"
+            android:screenOrientation="portrait" >
+        </activity>
         <!-- 店铺添加 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.SubjectAddActivity"

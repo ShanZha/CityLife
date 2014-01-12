@@ -107,7 +107,7 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView,
 		mTvContent.setText(review.getContent());
 
 		long time = review.getPosttime() * 1000L;
-		mTvTime.setText(DateFormatMethod.formatDate(new Date(time)));
+		mTvTime.setText(DateFormatMethod.formatDate(new Date(time),"yyyy-MM-dd HH:mm"));
 		int best = review.getBest();
 		switch (best) {
 		case GOOD:// Ò»°ã
