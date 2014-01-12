@@ -32,8 +32,6 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 	private TextView mTvSubject;
 	private TextView mTvContent;
 	private TextView mTvArea;
-	private TextView mTvAuthor;
-	private TextView mTvTime;
 	private Bitmap mBmDefault;
 
 	public ModoerChinaLaneItemView(Context context) {
@@ -63,10 +61,6 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 				.findViewById(R.id.china_lane_list_item_tv_content);
 		mTvArea = (TextView) this
 				.findViewById(R.id.china_lane_list_item_tv_area);
-		mTvAuthor = (TextView) this
-				.findViewById(R.id.china_lane_list_item_tv_author);
-		mTvTime = (TextView) this
-				.findViewById(R.id.china_lane_list_item_tv_time);
 	}
 
 	@Override
@@ -89,12 +83,6 @@ public class ModoerChinaLaneItemView extends RelativeLayout implements ItemView 
 		} else {
 			mTvArea.setVisibility(View.GONE);
 		}
-
-		mTvAuthor.setText(mCtx.getString(R.string.china_lane_author)
-				+ lane.getUsername());
-		mTvTime.setText(mCtx.getString(R.string.china_lane_time)
-				+ CommonUtil.getTimeByPHP(lane.getDateline(),
-						"yyyy-MM-dd HH:mm"));
 
 		String thumb = lane.getThumb();
 		if (!TextUtils.isEmpty(thumb)) {

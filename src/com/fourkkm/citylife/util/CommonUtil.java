@@ -3,6 +3,8 @@ package com.fourkkm.citylife.util;
 import java.util.Date;
 
 import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.text.TextUtils;
 
 import com.fourkkm.citylife.R;
@@ -149,4 +151,43 @@ public class CommonUtil {
 		data = data.replaceAll("<br />", "\n");
 		return data;
 	}
+
+	/**
+	 * 获取手机ip
+	 * 
+	 * @param context
+	 *            上下文
+	 * @return 可用的ip
+	 * 
+	 */
+	public static String getLocalIPAddress(Context context) {
+		// try {
+		// for (Enumeration<NetworkInterface> mEnumeration = NetworkInterface
+		// .getNetworkInterfaces(); mEnumeration.hasMoreElements();) {
+		// NetworkInterface intf = mEnumeration.nextElement();
+		// for (Enumeration<InetAddress> enumIPAddr = intf
+		// .getInetAddresses(); enumIPAddr.hasMoreElements();) {
+		// InetAddress inetAddress = enumIPAddr.nextElement();
+		// // 如果不是回环地址
+		// if (!inetAddress.isLoopbackAddress()) {
+		// // 直接返回本地IP地址
+		// int i = Integer.parseInt(inetAddress.getHostAddress());
+		// String ipStr=(i & 0xFF)+"."+((i>>8) & 0xFF)+"."+
+		// ((i>>16) & 0xFF)+"."+(i>>24 & 0xFF);
+		// return ipStr;
+		// }
+		// }
+		// }
+		// } catch (SocketException ex) {
+		// Log.e("Error", ex.toString());
+		// }
+		WifiManager wifiManager = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo info = wifiManager.getConnectionInfo();
+		int i = info.getIpAddress();
+		String ipStr = (i & 0xFF) + "." + ((i >> 8) & 0xFF) + "."
+				+ ((i >> 16) & 0xFF) + "." + (i >> 24 & 0xFF);
+		return ipStr;
+	}
+
 }

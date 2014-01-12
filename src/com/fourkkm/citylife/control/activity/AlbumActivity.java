@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,7 +29,7 @@ import com.zj.support.widget.HackyViewPager;
  * @author ShanZha
  * 
  */
-public class SubjectAlbumActivity extends BaseFragmentActivity implements
+public class AlbumActivity extends BaseFragmentActivity implements
 		OnPageChangeListener {
 
 	private TextView mTvTitle, mTvCount;
@@ -38,6 +41,8 @@ public class SubjectAlbumActivity extends BaseFragmentActivity implements
 	private int mSubjectThumbCount = 0;
 	private int mCurrIndex = 1;
 	private String mSubjectName;
+
+	private int mOperator = -1;
 
 	@Override
 	protected void prepareViews() {
@@ -64,15 +69,37 @@ public class SubjectAlbumActivity extends BaseFragmentActivity implements
 		mThumbUrls = new ArrayList<String>();
 
 		Intent intent = this.getIntent();
-		mSubjectId = intent.getIntExtra("subjectId", 0);
-		mSubjectName = intent.getStringExtra("subjectName");
-		mSubjectThumbCount = intent.getIntExtra("subjectThumbnailCount", 0);
+		mOperator = intent.getIntExtra("operator", -1);
+		if (GlobalConfig.IntentKey.ALBUM_SUBJECT == mOperator) {
+			mSubjectId = intent.getIntExtra("subjectId", 0);
+			mSubjectName = intent.getStringExtra("subjectName");
+			mSubjectThumbCount = intent.getIntExtra("subjectThumbnailCount", 0);
 
-		mTvTitle.setText(mSubjectName);
-		mTvCount.setText(mCurrIndex + "/" + mSubjectThumbCount);
+			mTvTitle.setText(mSubjectName + "-œ‡≤·");
+			mTvCount.setText(mCurrIndex + "/" + mSubjectThumbCount);
 
-		this.showLoading();
-		this.fetchPictures(mSubjectId);
+			this.showLoading();
+			this.fetchPictures(mSubjectId);
+		} else if (GlobalConfig.IntentKey.ALBUM_REVIEW == mOperator) {
+			this.hideLoading();
+			String subject = intent.getStringExtra("reviewSubject");
+			mTvTitle.setText(subject + "-µ„∆¿œ‡≤·");
+			String picJson = intent.getStringExtra("reviewPicJson");
+			try {
+				JSONArray array = new JSONArray(picJson);
+				int length = array.length();
+				for (int i = 0; i < length; i++) {
+					String temp = array.getString(i);
+					String url = GlobalConfig.URL_UPLOAD + temp;
+					mThumbUrls.add(url);
+				}
+				mSubjectThumbCount = length;
+				mTvCount.setText(mCurrIndex + "/" + length);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			this.notifyDataChanged();
+		}
 
 	}
 

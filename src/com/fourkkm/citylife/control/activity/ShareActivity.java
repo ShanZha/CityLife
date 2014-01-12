@@ -21,18 +21,24 @@ import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.third.IThirdAuthListener;
+import com.fourkkm.citylife.third.IThirdShareListener;
 import com.fourkkm.citylife.third.IThirdUserInfoListener;
 import com.fourkkm.citylife.third.QQAuthListener;
 import com.fourkkm.citylife.third.SinaWeiboAuthListener;
 import com.fourkkm.citylife.third.SinaWeiboShareProxy;
 import com.fourkkm.citylife.third.TencentShareProxy;
+import com.fourkkm.citylife.third.TencentWeiboShareProxy;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.sina.weibo.sdk.WeiboSDK;
 import com.sina.weibo.sdk.api.BaseResponse;
 import com.sina.weibo.sdk.api.IWeiboAPI;
 import com.sina.weibo.sdk.api.IWeiboHandler;
+import com.tencent.sdkutil.Util;
 import com.tencent.tauth.Tencent;
+import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.Weibo;
+import com.weibo.sdk.android.util.AccessTokenKeeper;
 import com.zj.app.BaseActivity;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
@@ -44,7 +50,8 @@ import com.zj.support.observer.model.Param;
  * 
  */
 public class ShareActivity extends BaseActivity implements TextWatcher,
-		IThirdAuthListener, IThirdUserInfoListener, IWeiboHandler.Response {
+		IThirdAuthListener, IThirdUserInfoListener, IThirdShareListener,
+		IWeiboHandler.Response {
 
 	private static final String TAG = "ShareActivity";
 	private static final int TENCENT_WEIBO_REQ_CODE = 1;
@@ -66,6 +73,8 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	private SinaWeiboShareProxy mSinaShareProxy;
 	private TencentShareProxy mTencentProxy;
 	private Weibo mSinaWeibo;
+
+	private int mMaxLength = 0;
 
 	@Override
 	protected void prepareViews() {
@@ -95,6 +104,14 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		mEtContent.setSelection(mContent.length());
 		mEtContent.setScrollbarFadingEnabled(true);
 		mEtContent.setGravity(Gravity.TOP);
+		// try {
+		// String num = (mContentLength - mContent.getBytes("gbk").length / 2)
+		// + "";
+		// mTvLimit.setText("还可输入" + num + "字");
+		// } catch (UnsupportedEncodingException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 
 		IWeiboAPI mSinaWeiboApi = WeiboSDK.createWeiboAPI(this,
 				GlobalConfig.Third.SINA_WEIBO_APP_KEY);
@@ -102,6 +119,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		mSinaWeibo = Weibo.getInstance(GlobalConfig.Third.SINA_WEIBO_APP_KEY,
 				GlobalConfig.Third.SINA_WEIBO_REDIRECT_URL,
 				GlobalConfig.Third.SINA_WEIBO_SCOPE);
+		mSinaShareProxy.setResponseListener(this.getIntent(), this);
 		mSinaShareProxy.registerApp();
 		Tencent tencent = Tencent.createInstance(
 				GlobalConfig.Third.TENCENT_QQ_APP_ID,
@@ -112,6 +130,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			this.finish();
 			return;
 		}
+
 		this.setShareBtnEnable(false);
 		this.showWaitting();
 		mMember = ((CoreApp) AppUtils.getBaseApp(this)).getCurrMember();
@@ -122,6 +141,8 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	private boolean isShareOK() {
 		switch (mIndex) {
 		case GlobalConfig.IntentKey.INDEX_SINA_WEIBO:
+			mTvTitle.setText(this.getString(R.string.share_sina_weibo));
+			mMaxLength = 140;
 			if (!mSinaShareProxy.isInstall()) {
 				this.showToast(this.getString(R.string.share_sina_uninstall));
 				return false;
@@ -133,11 +154,25 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			}
 			break;
 		case GlobalConfig.IntentKey.INDEX_TENCENT_QQ:
+			if (!com.tencent.sdkutil.Util.checkMobileQQ(this)) {
+				this.showToast(this
+						.getString(R.string.share_qq_uninstall_or_mismatch));
+				return false;
+			}
+			mTvTitle.setText(this.getString(R.string.share_qq));
+			mMaxLength = 40;
+			break;
 		case GlobalConfig.IntentKey.INDEX_TENCENT_QZONE:
-			// mTencent.
+			if (!com.tencent.sdkutil.Util.checkMobileQQ(this)) {
+				this.showToast(this
+						.getString(R.string.share_qq_uninstall_or_mismatch));
+				return false;
+			}
+			mMaxLength = 600;
+			mTvTitle.setText(this.getString(R.string.share_qzone));
 			break;
 		case GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO:
-
+			mTvTitle.setText(this.getString(R.string.share_tencent_weibo));
 			break;
 		}
 		return true;
@@ -235,7 +270,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			this.onShareQZone();
 			break;
 		case GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO:
-
+			this.onShareTencentWeibo();
 			break;
 		}
 	}
@@ -262,14 +297,15 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	@Override
 	public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
-		try {
-			mContent = s.toString();
-			String num = (140 - mContent.getBytes("gbk").length / 2) + "";
-			mTvLimit.setText("还可输入" + num + "字");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// try {
+		// mContent = s.toString();
+		// String num = (mContentLength - mContent.getBytes("gbk").length / 2)
+		// + "";
+		// mTvLimit.setText("还可输入" + num + "字");
+		// } catch (UnsupportedEncodingException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 	}
 
 	@Override
@@ -281,7 +317,8 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		case GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT:
 			Object result = out.getResult();
 			if (null == result) {// 还没注册过
-				if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == mIndex) {
+				if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == mIndex
+						|| GlobalConfig.IntentKey.INDEX_TENCENT_QZONE == mIndex) {
 					mTencentProxy.onLogin(GlobalConfig.Third.TENCENT_QQ_SCOPE,
 							new QQAuthListener(TYPE_QQ, this));
 				} else if (GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO == mIndex) {
@@ -293,7 +330,13 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 				}
 			} else {
 				mMemberPassport = (ModoerMemberPassport) result;
-				if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == mIndex) {
+				this.hideWaitting();
+				if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == mIndex
+						|| GlobalConfig.IntentKey.INDEX_TENCENT_QZONE == mIndex) {
+					long expireTime = mMemberPassport.getExpired() * 1000;
+					mTencentProxy.setAuthInfo(mMemberPassport.getAccessToken(),
+							mMemberPassport.getPsuid(),
+							String.valueOf(expireTime));
 					if (mTencentProxy.isSessionValid()) {
 						this.setShareBtnEnable(true);
 						return;
@@ -301,12 +344,12 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 					mTencentProxy.onLogin(GlobalConfig.Third.TENCENT_QQ_SCOPE,
 							new QQAuthListener(TYPE_QQ, this));
 				} else if (GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO == mIndex) {
-					// this.startActivityForResult(new Intent(this,
-					// TencentAuthActivity.class), TENCENT_WEIBO_REQ_CODE);
+					this.startActivityForResult(new Intent(this,
+							TencentAuthActivity.class), TENCENT_WEIBO_REQ_CODE);
 				} else if (GlobalConfig.IntentKey.INDEX_SINA_WEIBO == mIndex) {
-					if (mSinaShareProxy.isSessionValid(
-							mMemberPassport.getAccessToken(),
-							mMemberPassport.getExpired() + "")) {
+					Oauth2AccessToken mAccessToken = AccessTokenKeeper
+							.readAccessToken(this);
+					if (mAccessToken.isSessionValid()) {
 						this.setShareBtnEnable(true);
 						this.onShareSinaWeibo();
 					} else {
@@ -331,12 +374,19 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			this.hideWaitting();
 			switch (mIndex) {
 			case GlobalConfig.IntentKey.INDEX_SINA_WEIBO:
-				if (mSinaShareProxy.isSessionValid(
-						mMemberPassport.getAccessToken(),
-						mMemberPassport.getExpired() + "")) {
+				Oauth2AccessToken mAccessToken = AccessTokenKeeper
+						.readAccessToken(this);
+				if (mAccessToken.isSessionValid()) {
 					this.setShareBtnEnable(true);
 					this.onShareSinaWeibo();
+				} else {
+					Log.e(TAG, "shan-->session is invalid");
 				}
+				break;
+			case GlobalConfig.IntentKey.INDEX_TENCENT_QQ:
+			case GlobalConfig.IntentKey.INDEX_TENCENT_QZONE:
+			case GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO:
+				this.setShareBtnEnable(true);
 				break;
 			}
 
@@ -362,6 +412,21 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		}
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (RESULT_OK != resultCode) {
+			return;
+		}
+		if (TENCENT_WEIBO_REQ_CODE == requestCode) {// 腾讯微博登录成功
+			if (null != data) {
+				this.onThirdAuthSuccess(TYPE_TENCENT_WEIBO,
+						data.getBundleExtra("values"));
+			}
+		}
+	}
+
 	private void onShareSinaWeibo() {
 		if (null != mSinaShareProxy) {
 			mSinaShareProxy.registerApp();
@@ -370,48 +435,60 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	}
 
 	private void onShareToQQ() {
-		final Bundle params = new Bundle();
-		params.putInt(Tencent.SHARE_TO_QQ_KEY_TYPE,
-				Tencent.SHARE_TO_QQ_TYPE_DEFAULT);
-		params.putString(Tencent.SHARE_TO_QQ_TITLE,
-				this.getString(R.string.share));
-		params.putString(Tencent.SHARE_TO_QQ_SUMMARY, mContent);
-		params.putString(Tencent.SHARE_TO_QQ_TARGET_URL, GlobalConfig.URL_PIC);
-		// params.putString(Tencent.SHARE_TO_QQ_IMAGE_URL,
-		// "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
-		params.putString(Tencent.SHARE_TO_QQ_APP_NAME,
-				this.getString(R.string.app_name));
-		// 隐藏空间分享（单独）
-		params.putInt(Tencent.SHARE_TO_QQ_EXT_INT,
-				Tencent.SHARE_TO_QQ_FLAG_QZONE_ITEM_HIDE);
-		// mTencentProxy.onShareToQQ();
+		if (mTencentProxy.isSessionValid() && mTencentProxy.isReady()) {
+			Bundle params = new Bundle();
+			params.putInt(Tencent.SHARE_TO_QQ_KEY_TYPE,
+					Tencent.SHARE_TO_QQ_TYPE_DEFAULT);
+			params.putString(Tencent.SHARE_TO_QQ_TITLE,
+					this.getString(R.string.share));
+			params.putString(Tencent.SHARE_TO_QQ_SUMMARY, mContent);
+			params.putString(Tencent.SHARE_TO_QQ_TARGET_URL,
+					GlobalConfig.URL_PIC);
+			// params.putString(Tencent.SHARE_TO_QQ_IMAGE_URL,
+			// "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
+			params.putString(Tencent.SHARE_TO_QQ_APP_NAME,
+					this.getString(R.string.app_name));
+			// 隐藏空间分享（单独）
+			params.putInt(Tencent.SHARE_TO_QQ_EXT_INT,
+					Tencent.SHARE_TO_QQ_FLAG_QZONE_ITEM_HIDE);
+			mTencentProxy.onShareToQQ(params, this);
+
+		} else {
+			Log.e(TAG, "shan-->Tencent session invalid or not ready");
+		}
+
 	}
 
 	private void onShareQZone() {
-		final Bundle params = new Bundle();
-		params.putString(Tencent.SHARE_TO_QQ_TITLE, "分享标题");
-		params.putString(Tencent.SHARE_TO_QQ_SUMMARY, mContent);
-		params.putString(Tencent.SHARE_TO_QQ_TARGET_URL, GlobalConfig.URL_PIC);
-		// params.putStringArrayList(Tencent.SHARE_TO_QQ_IMAGE_URL,
-		// "图片链接ArrayList");
-		AppUtils.getExecutors(this).submit(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				// mTencent.shareToQzone(ShareActivity.this, params,
-				// ShareActivity.this);
-			}
-		});
+		if (mTencentProxy.isSessionValid() && mTencentProxy.isReady()) {
+			Bundle params = new Bundle();
+			params.putInt(Tencent.SHARE_TO_QQ_KEY_TYPE,
+					Tencent.SHARE_TO_QQ_TYPE_DEFAULT);
+			params.putString(Tencent.SHARE_TO_QQ_TITLE,
+					this.getString(R.string.share));
+			params.putString(Tencent.SHARE_TO_QQ_SUMMARY, mContent);
+			params.putString(Tencent.SHARE_TO_QQ_TARGET_URL,
+					GlobalConfig.URL_PIC);
+			// 显示空间分享
+			params.putInt(Tencent.SHARE_TO_QQ_EXT_INT,
+					Tencent.SHARE_TO_QQ_FLAG_QZONE_AUTO_OPEN);
+			// params.putStringArrayList(Tencent.SHARE_TO_QQ_IMAGE_URL,
+			// "图片链接ArrayList");
+			mTencentProxy.onShareToQQ(params, this);
+		} else {
+			Log.e(TAG, "shan-->Tencent session invalid or not ready");
+		}
 
 	}
 
 	private void onShareTencentWeibo() {
-		Bundle bundle = new Bundle();
-		bundle.putString("format", "json");// 返回的数据格式
-		bundle.putString("content", "I love Test");
-		// mTencent.requestAsync(Constants.GRAPH_ADD_T, bundle,
-		// Constants.HTTP_POST, new TencentWeiboListener(), null);
+		if (null != mMemberPassport) {
+			this.showWaitting();
+			TencentWeiboShareProxy.getTencentApi().addWeibo(this,
+					mMemberPassport.getAccessToken(),
+					mMemberPassport.getPsuid(), mContent,
+					CommonUtil.getLocalIPAddress(this));
+		}
 	}
 
 	@Override
@@ -425,6 +502,9 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 				+ uid + " ,expireTime: " + expireTime);
 		switch (type) {
 		case TYPE_QQ:
+			expireTime = (System.currentTimeMillis() + expireTime * 1000) / 1000;
+			mTencentProxy.setAuthInfo(accessToken, uid,
+					String.valueOf(expireTime));
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_QQ,
 					accessToken, uid, expireTime);
 			break;
@@ -433,6 +513,9 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 					accessToken, uid, expireTime);
 			break;
 		case TYPE_SINA_WEIBO:
+			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,
+					String.valueOf(expireTime));
+			AccessTokenKeeper.keepAccessToken(ShareActivity.this, token);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_SINA_WEIBO,
 					accessToken, uid, expireTime);
 			break;
@@ -444,7 +527,17 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	@Override
 	public void onThirdAuthFail(int type, String e) {
 		// TODO Auto-generated method stub
+		Log.e(TAG, "shan-->onThirdAuthFail(): " + e);
+		this.hideWaitting();
+		this.finish();
+	}
 
+	@Override
+	public void onThirdAuthCancel(int type) {
+		// TODO Auto-generated method stub
+		Log.e(TAG, "shan-->onThirdAuthCancel()");
+		this.hideWaitting();
+		this.finish();
 	}
 
 	@Override
@@ -457,6 +550,32 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	public void onThirdUserInfoFail(int type, String error) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void onShareSuccess(int type, Bundle bundle) {
+		// TODO Auto-generated method stub
+		this.showToast(this.getString(R.string.share_success));
+		if (GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO == type) {
+			this.hideWaitting();
+		}
+		this.finish();
+	}
+
+	@Override
+	public void onShareFail(int type, String error) {
+		// TODO Auto-generated method stub
+		if (GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO == type) {
+			this.hideWaitting();
+		}
+		this.showToast(this.getString(R.string.share_fail));
+	}
+
+	@Override
+	public void onShareCancel(int type) {
+		// TODO Auto-generated method stub
+		// this.showToast(this.getString(R.string.share_cancel));
+		this.finish();
 	}
 
 	@Override
@@ -477,48 +596,4 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		this.hideWaitting();
 		this.finish();
 	}
-
-	// @Override
-	// public void onCancel() {
-	// // TODO Auto-generated method stub
-	// System.out.println(" onCancel ");
-	// AppUtils.getHandler(this).post(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	// });
-	// }
-	//
-	// @Override
-	// public void onComplete(JSONObject arg0) {
-	// // TODO Auto-generated method stub
-	// System.out.println(" onComplete " + arg0.toString());
-	// AppUtils.getHandler(this).post(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	// });
-	// }
-	//
-	// @Override
-	// public void onError(UiError arg0) {
-	// // TODO Auto-generated method stub
-	// System.out.println(" onError " + arg0.errorMessage + " code = "
-	// + arg0.errorCode);
-	// AppUtils.getHandler(this).post(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// // TODO Auto-generated method stub
-	//
-	// }
-	// });
-	// }
-
 }

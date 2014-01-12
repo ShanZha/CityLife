@@ -46,7 +46,7 @@ public class SinaWeiboAuthListener extends BaseAuthListener implements
 
 	@Override
 	public void onCancel() {
-
+		this.notifyAuthCancel();
 	}
 
 }

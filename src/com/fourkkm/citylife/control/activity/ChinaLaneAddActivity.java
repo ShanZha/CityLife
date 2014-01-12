@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerFenlei;
 import com.andrnes.modoer.ModoerFenleiCategory;
 import com.andrnes.modoer.ModoerMembers;
@@ -23,6 +25,8 @@ import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
+import com.fourkkm.citylife.widget.FloatingTimeProxy;
+import com.fourkkm.citylife.widget.IFloatingTimeListener;
 import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.utils.AppUtils;
 import com.zj.app.utils.DateFormatMethod;
@@ -35,7 +39,8 @@ import com.zj.support.widget.AsyncImageView;
  * @author ShanZha
  * 
  */
-public class ChinaLaneAddActivity extends BaseAddActivity {
+public class ChinaLaneAddActivity extends BaseAddActivity implements
+		IFloatingTimeListener {
 
 	private static final String TAG = "ChinaLaneAddActivity";
 	private LinearLayout mLlCategoryLoading, mLlCategory;
@@ -47,6 +52,7 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 	private List<String> mCategoryListFirst, mCategoryListSecond;
 
 	private ChinaLaneCategoryManager mLaneCategoryMgr;
+	private FloatingTimeProxy mFloatingTimeProxy;
 
 	@Override
 	protected void prepareViews() {
@@ -101,7 +107,7 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 				.getCurrMember();
 		mTvInitiator.setText(member.getUsername());
 		mTvInitiateTime.setText(DateFormatMethod.getCurrentDate());
-
+		mFloatingTimeProxy = new FloatingTimeProxy(this, this);
 		this.fetchFenleiCategory();
 
 	}
@@ -165,7 +171,7 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 			this.showToast(this.getString(R.string.time_format_error));
 			return false;
 		}
-		if(TextUtils.isEmpty(mThumbPath)){
+		if (TextUtils.isEmpty(mThumbPath)) {
 			this.showToast(this.getString(R.string.thumb_not_null));
 			return false;
 		}
@@ -174,6 +180,15 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 
 	public void onClickBack(View view) {
 		this.finish();
+	}
+
+	public void onClickExpireTime(View view) {
+		if (null == mFloatingTimeProxy) {
+			return;
+		}
+		mFloatingTimeProxy
+				.setType(GlobalConfig.FloatingType.TYPE_PARTY_BEGIN_TIME);
+		mFloatingTimeProxy.showLocation(view, Gravity.CENTER, 0, 0);
 	}
 
 	public void onClickAdd(View view) {
@@ -188,7 +203,15 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 			lane.setCityId(((CoreApp) AppUtils.getBaseApp(this)).getCurrArea());
 			int secondPos = mSpAreaSecond.getSelectedItemPosition();
 			String secondAreaName = mAreaSecond.get(secondPos);
-			lane.setAid(mAreaMgr.getSubjectAreaByName(secondAreaName));
+			ModoerArea aid = mAreaMgr.getSubjectAreaByName(secondAreaName);
+			if (null == aid) {// 没有第三级则给第二级
+				int areaFirstPos = mSpAreaFirst.getSelectedItemPosition();
+				ModoerArea cid = mAreaMgr.getSubjectAreaByName(mAreaFirst
+						.get(areaFirstPos));
+				lane.setAid(cid);
+			} else {
+				lane.setAid(aid);
+			}
 			lane.setUid(mCurrMember);
 			lane.setUsername(mCurrMember.getUsername());
 			lane.setSubject(mEtSubject.getText().toString().trim());
@@ -276,4 +299,12 @@ public class ChinaLaneAddActivity extends BaseAddActivity {
 
 		}
 	};
+
+	@Override
+	public void onCurrTime(int type, String time) {
+		// TODO Auto-generated method stub
+		if (null != mEtExpireTime) {
+			mEtExpireTime.setText(time);
+		}
+	}
 }

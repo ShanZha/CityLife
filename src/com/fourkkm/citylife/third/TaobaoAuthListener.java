@@ -29,8 +29,16 @@ public class TaobaoAuthListener extends BaseAuthListener implements
 		// TODO Auto-generated method stub
 		String uid = accessToken.getAdditionalInformation().get(
 				AccessToken.KEY_SUB_TAOBAO_USER_ID);
+		if (null == uid) {
+			uid = accessToken.getAdditionalInformation().get(
+					AccessToken.KEY_TAOBAO_USER_ID);
+		}
 		String nick = accessToken.getAdditionalInformation().get(
 				AccessToken.KEY_SUB_TAOBAO_USER_NICK);
+		if (null == nick) {
+			nick = accessToken.getAdditionalInformation().get(
+					AccessToken.KEY_TAOBAO_USER_NICK);
+		}
 		String r2_expires = accessToken.getAdditionalInformation().get(
 				AccessToken.KEY_R2_EXPIRES_IN);
 		Date start = accessToken.getStartDate();

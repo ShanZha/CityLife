@@ -141,11 +141,11 @@ public class FloatingTranslucentProxy implements OnClickListener,
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		// TODO Auto-generated method stub
+		this.dismiss();
 		if (null != mOnItemClickListener) {
 			mOnItemClickListener.onFloatingItemClick(position,
 					mDatas.get(position), mType);
 		}
-		this.dismiss();
 	}
 
 	@Override

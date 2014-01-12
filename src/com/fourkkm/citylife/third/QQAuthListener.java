@@ -51,7 +51,7 @@ public class QQAuthListener extends BaseAuthListener implements IUiListener {
 	@Override
 	public void onCancel() {
 		// TODO Auto-generated method stub
-
+		this.notifyAuthCancel();
 	}
 
 }

@@ -2,16 +2,29 @@ package com.fourkkm.citylife.itemview;
 
 import java.util.Date;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerReview;
 import com.fourkkm.citylife.R;
-import com.fourkkm.citylife.control.activity.BaseListActivity;
+import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.control.activity.AlbumActivity;
 import com.zj.app.utils.DateFormatMethod;
+import com.zj.support.image.file.AsyncImageLoader;
 import com.zj.support.widget.item.BaseItem;
 import com.zj.support.widget.itemview.ItemView;
 
@@ -21,7 +34,8 @@ import com.zj.support.widget.itemview.ItemView;
  * @author ShanZha
  * 
  */
-public class ModoerReviewItemView extends RelativeLayout implements ItemView {
+public class ModoerReviewItemView extends RelativeLayout implements ItemView,
+		OnClickListener {
 
 	private static final int BEST = 2;
 	private static final int BAD = 0;
@@ -29,6 +43,10 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView {
 	private TextView mTvUsername, mTvAveragePer, mTvContent, mTvOverallRating,
 			mTvTime;
 	private RatingBar mRatingBar;
+	private FrameLayout mFrThumb;
+	private ImageView mIvThumb;
+	private TextView mTvThumbCount;
+	private Bitmap mBmDefault;
 
 	private Context mCtx;
 
@@ -45,6 +63,8 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
 		this.mCtx = context;
+		mBmDefault = BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.list_thumb);
 	}
 
 	@Override
@@ -63,6 +83,12 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView {
 
 		mRatingBar = (RatingBar) this
 				.findViewById(R.id.review_list_item_ratingBar);
+		mFrThumb = (FrameLayout) this
+				.findViewById(R.id.review_list_item_fr_thumb);
+		mIvThumb = (ImageView) this
+				.findViewById(R.id.review_list_item_iv_thumb);
+		mTvThumbCount = (TextView) this
+				.findViewById(R.id.review_list_item_tv_thumbnail_count);
 	}
 
 	@Override
@@ -101,6 +127,41 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView {
 				+ review.getSort3() + review.getSort4()) / 4;
 		mRatingBar.setProgress(averScore);
 
+		String picJson = review.getPicturesJson();
+		if (TextUtils.isEmpty(picJson)) {
+			mFrThumb.setVisibility(View.GONE);
+		} else {
+			mFrThumb.setVisibility(View.VISIBLE);
+			try {
+				JSONArray array = new JSONArray(picJson);
+				int count = array.length();
+				mTvThumbCount.setVisibility(View.VISIBLE);
+				mTvThumbCount.setText(count + "");
+				String path = array.getString(0);
+				String url = GlobalConfig.URL_UPLOAD + path;
+				mFrThumb.setOnClickListener(this);
+				mFrThumb.setTag(review);
+				AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvThumb,
+						mBmDefault);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		ModoerReview review = (ModoerReview) v.getTag();
+		if (null == review) {
+			return;
+		}
+		Intent intent = new Intent(mCtx, AlbumActivity.class);
+		intent.putExtra("operator", GlobalConfig.IntentKey.ALBUM_REVIEW);
+		intent.putExtra("reviewPicJson", review.getPicturesJson());
+		intent.putExtra("reviewSubject", review.getSubject());
+		mCtx.startActivity(intent);
 	}
 
 }

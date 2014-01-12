@@ -42,11 +42,11 @@ public class SinaWeiboShareProxy {
 		}
 	}
 
-	public boolean isSessionValid(String accessToken, String expireTime) {
-		Oauth2AccessToken mAccessToken = new Oauth2AccessToken(accessToken,
-				expireTime);
-		return mAccessToken.isSessionValid();
-	}
+//	public boolean isSessionValid(String accessToken, String expireTime) {
+//		Oauth2AccessToken mAccessToken = new Oauth2AccessToken(accessToken,
+//				expireTime);
+//		return mAccessToken.isSessionValid();
+//	}
 
 	public boolean isInstall() {
 		if (null == mSinaWeiboApi) {

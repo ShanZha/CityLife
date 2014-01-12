@@ -1,6 +1,5 @@
 package com.fourkkm.citylife.control.activity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,17 +22,14 @@ import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerParty;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.AreaManager;
-import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.constant.Config;
 import com.zj.app.db.dao.SqliteUtil;
-import com.zj.app.utils.AppUtils;
 import com.zj.support.image.ScaleImageProcessor;
 import com.zj.support.observer.model.Param;
-import com.zj.support.widget.AsyncImageView;
 
 /**
  * 添加店铺、聚会、唐人巷基类
@@ -153,7 +149,11 @@ public class BaseAddActivity extends BaseUploadPicActivity {
 		ModoerArea parent = mAreaMgr.getSubjectAreaByName(parentName);
 		List<String> secondList = mAreaMgr.getAreaCountyChild(parent.getId());
 		mAreaSecond.clear();
-		mAreaSecond.addAll(secondList);
+		if (null == secondList || secondList.size() < 1) {
+			mAreaSecond.add("无");
+		} else {
+			mAreaSecond.addAll(secondList);
+		}
 		secondList = null;
 		this.notifyDataChanged(mAdapterAreaSecond);
 	}

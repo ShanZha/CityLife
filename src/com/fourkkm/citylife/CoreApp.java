@@ -1,13 +1,19 @@
 package com.fourkkm.citylife;
 
+import android.content.Intent;
+import android.util.Log;
+
 import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerMembers;
+import com.baidu.mobstat.StatService;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.content.SmsPushService;
 import com.taobao.top.android.TopAndroidClient;
 import com.zj.app.BaseApp;
 
 public class CoreApp extends BaseApp {
 
+	private static final String TAG = "CoreApp";
 	private ModoerMembers mCurrMember;
 	/** 当前所处国家 **/
 	private ModoerArea mCurrArea;
@@ -25,6 +31,10 @@ public class CoreApp extends BaseApp {
 				GlobalConfig.Third.TAOBAO_APP_KEY,
 				GlobalConfig.Third.TAOBAO_APP_SECRET,
 				GlobalConfig.Third.TAOBAO_REDIRECT_URL);
+
+		StatService.setDebugOn(true);
+		
+		this.startPushInfoService();
 	}
 
 	public void setCurrMember(ModoerMembers member) {
@@ -50,6 +60,23 @@ public class CoreApp extends BaseApp {
 
 	public ModoerArea getCurrArea() {
 		return this.mCurrArea;
+	}
+
+	/**
+	 * 轮询服务开启
+	 */
+	public void startPushInfoService() {
+		Log.i(TAG, "shan-->pushInfoService started");
+		this.startService(new Intent(this, SmsPushService.class));
+	}
+	
+
+	/**
+	 * 轮询服务停止
+	 */
+	public void stopPushInfoService() {
+		Log.i(TAG, "shan-->pushInfoService stop");
+		this.stopService(new Intent(this, SmsPushService.class));
 	}
 
 	@Override

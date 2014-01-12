@@ -80,7 +80,7 @@ public class SmsListActivity extends BaseListActivity {
 		paramsMap.put("max", GlobalConfig.MAX);
 		paramsMap.put("offset", GlobalConfig.MAX * mPage);
 		this.getStoreOperation().findAll(sb.toString(), paramsMap, true,
-				new ModoerReview(),
+				new ModoerPmsgs(),
 				new Param(this.hashCode(), GlobalConfig.URL_CONN));
 	}
 

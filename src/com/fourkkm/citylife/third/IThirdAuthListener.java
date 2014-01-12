@@ -19,4 +19,11 @@ public interface IThirdAuthListener {
 	 * @param e
 	 */
 	public void onThirdAuthFail(int type, String e);
+
+	/**
+	 * 鉴权取消回调(主线程)
+	 * 
+	 * @param type
+	 */
+	public void onThirdAuthCancel(int type);
 }

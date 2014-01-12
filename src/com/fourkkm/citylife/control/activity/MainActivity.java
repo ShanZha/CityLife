@@ -167,7 +167,7 @@ public class MainActivity extends BaseFragmentActivity implements
 	private void startAautoLooperPic() {
 		if (null == mTimer) {
 			mTimer = new Timer();
-			mTimer.schedule(new GalleryTimerTask(), 30 * 1000, 30 * 1000);
+			mTimer.schedule(new GalleryTimerTask(), 3 * 1000, 3 * 1000);
 		}
 	}
 

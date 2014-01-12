@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -14,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerParty;
 import com.andrnes.modoer.ModoerPartyCategory;
@@ -21,6 +23,8 @@ import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
+import com.fourkkm.citylife.widget.FloatingTimeProxy;
+import com.fourkkm.citylife.widget.IFloatingTimeListener;
 import com.fourkkm.citylife.widget.SpinnerAdapter;
 import com.zj.app.utils.AppUtils;
 import com.zj.app.utils.DateFormatMethod;
@@ -33,7 +37,8 @@ import com.zj.support.widget.AsyncImageView;
  * @author ShanZha
  * 
  */
-public class PartyAddActivity extends BaseAddActivity {
+public class PartyAddActivity extends BaseAddActivity implements
+		IFloatingTimeListener {
 
 	private static final String TAG = "PartyAddActivity";
 	/** 常量定义见ModoerParty实体-sex字段 **/
@@ -57,6 +62,8 @@ public class PartyAddActivity extends BaseAddActivity {
 	private SpinnerAdapter mCategoryAdapter, mIntegrationAdapter;
 	private List<ModoerPartyCategory> mPartyCategoryList;
 	private List<String> mCategoryList, mIntegrationList;
+
+	private FloatingTimeProxy mFloatingTimeProxy;
 
 	@Override
 	protected void prepareViews() {
@@ -115,6 +122,7 @@ public class PartyAddActivity extends BaseAddActivity {
 				.getCurrMember();
 		mTvInitiator.setText(member.getUsername());
 		mTvInitiateTime.setText(DateFormatMethod.getCurrentDate());
+		mFloatingTimeProxy = new FloatingTimeProxy(this, this);
 
 		this.fetchPartyCategory();
 	}
@@ -179,6 +187,33 @@ public class PartyAddActivity extends BaseAddActivity {
 		this.finish();
 	}
 
+	public void onClickSignupEndTime(View view) {
+		if (null == mFloatingTimeProxy) {
+			return;
+		}
+		mFloatingTimeProxy
+				.setType(GlobalConfig.FloatingType.TYPE_PARTY_SIGNUP_END_TIME);
+		mFloatingTimeProxy.showLocation(view, Gravity.CENTER, 0, 0);
+	}
+
+	public void onClickBeginTime(View view) {
+		if (null == mFloatingTimeProxy) {
+			return;
+		}
+		mFloatingTimeProxy
+				.setType(GlobalConfig.FloatingType.TYPE_PARTY_BEGIN_TIME);
+		mFloatingTimeProxy.showLocation(view, Gravity.CENTER, 0, 0);
+	}
+
+	public void onClickEndTime(View view) {
+		if (null == mFloatingTimeProxy) {
+			return;
+		}
+		mFloatingTimeProxy
+				.setType(GlobalConfig.FloatingType.TYPE_PARTY_END_TIME);
+		mFloatingTimeProxy.showLocation(view, Gravity.CENTER, 0, 0);
+	}
+
 	private boolean validate() {
 		long signUpTime = CommonUtil.formatTimeByPHP(mEtSignupEnd.getText()
 				.toString().trim());
@@ -195,7 +230,7 @@ public class PartyAddActivity extends BaseAddActivity {
 			this.showToast(this.getString(R.string.plan_num_not_null));
 			return false;
 		}
-		if(TextUtils.isEmpty(mThumbPath)){
+		if (TextUtils.isEmpty(mThumbPath)) {
 			this.showToast(this.getString(R.string.thumb_not_null));
 			return false;
 		}
@@ -213,7 +248,15 @@ public class PartyAddActivity extends BaseAddActivity {
 			party.setCityId(((CoreApp) AppUtils.getBaseApp(this)).getCurrArea());
 			int secondPos = mSpAreaSecond.getSelectedItemPosition();
 			String secondAreaName = mAreaSecond.get(secondPos);
-			party.setAid(mAreaMgr.getSubjectAreaByName(secondAreaName));
+			ModoerArea aid = mAreaMgr.getSubjectAreaByName(secondAreaName);
+			if (null == aid) {// 没有第三级则给第二级
+				int areaFirstPos = mSpAreaFirst.getSelectedItemPosition();
+				ModoerArea cid = mAreaMgr.getSubjectAreaByName(mAreaFirst
+						.get(areaFirstPos));
+				party.setAid(cid);
+			} else {
+				party.setAid(aid);
+			}
 			party.setUid(mCurrMember);
 			party.setUsername(mCurrMember.getUsername());
 			int checkId = mRgSex.getCheckedRadioButtonId();
@@ -284,6 +327,28 @@ public class PartyAddActivity extends BaseAddActivity {
 
 		}
 
+	}
+
+	@Override
+	public void onCurrTime(int type, String time) {
+		// TODO Auto-generated method stub
+		switch (type) {
+		case GlobalConfig.FloatingType.TYPE_PARTY_SIGNUP_END_TIME:
+			if (null != mEtSignupEnd) {
+				mEtSignupEnd.setText(time);
+			}
+			break;
+		case GlobalConfig.FloatingType.TYPE_PARTY_BEGIN_TIME:
+			if (null != mEtBeginTime) {
+				mEtBeginTime.setText(time);
+			}
+			break;
+		case GlobalConfig.FloatingType.TYPE_PARTY_END_TIME:
+			if (null != mEtEndTime) {
+				mEtEndTime.setText(time);
+			}
+			break;
+		}
 	}
 
 }

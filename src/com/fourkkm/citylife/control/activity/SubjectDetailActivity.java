@@ -409,7 +409,8 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		if (this.isUploading()) {
 			return;
 		}
-		Intent intent = new Intent(this, SubjectAlbumActivity.class);
+		Intent intent = new Intent(this, AlbumActivity.class);
+		intent.putExtra("operator", GlobalConfig.IntentKey.ALBUM_SUBJECT);
 		intent.putExtra("subjectId", mSubject.getId());
 		intent.putExtra("subjectName", mSubject.getName());
 		intent.putExtra("subjectThumbnailCount", mSubject.getPictures());

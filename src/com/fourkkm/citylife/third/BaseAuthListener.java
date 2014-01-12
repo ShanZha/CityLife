@@ -23,4 +23,10 @@ public class BaseAuthListener {
 			mAuthListener.onThirdAuthFail(mType, error);
 		}
 	}
+	
+	protected void notifyAuthCancel() {
+		if (null != mAuthListener) {
+			mAuthListener.onThirdAuthCancel(mType);
+		}
+	}
 }

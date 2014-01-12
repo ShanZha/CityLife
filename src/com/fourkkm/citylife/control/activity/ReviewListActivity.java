@@ -44,7 +44,7 @@ public class ReviewListActivity extends BaseListActivity {
 		mListView = (PullUpDownListView) this
 				.findViewById(R.id.review_list_listview);
 		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
-		mBtnReview = (Button)this.findViewById(R.id.review_list_btn_review);
+		mBtnReview = (Button) this.findViewById(R.id.review_list_btn_review);
 
 		super.prepareViews();
 	}
@@ -56,6 +56,8 @@ public class ReviewListActivity extends BaseListActivity {
 		mReviewLists = new ArrayList<ModoerReview>();
 		mAdapter = new ItemSingleAdapter<ModoerReviewItemView, ModoerReview>(
 				mReviewLists, this);
+		((ItemSingleAdapter<ModoerReviewItemView, ModoerReview>) mAdapter)
+				.setEnable(false);
 		mListView.setAdapter(mAdapter);
 		Intent intent = this.getIntent();
 		mOperator = intent.getIntExtra("operator", -1);

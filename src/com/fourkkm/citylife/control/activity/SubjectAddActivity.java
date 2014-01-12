@@ -163,7 +163,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 			this.showToast(this.getString(R.string.subject_map_point_null));
 			return false;
 		}
-		if(TextUtils.isEmpty(mThumbPath)){
+		if (TextUtils.isEmpty(mThumbPath)) {
 			this.showToast(this.getString(R.string.thumb_not_null));
 			return false;
 		}
@@ -196,14 +196,19 @@ public class SubjectAddActivity extends BaseAddActivity {
 					.getCategoryByName(mCategorySecondList
 							.get(categorSecondPos));
 			mSubject.setCatid(catid);
-			// int areaFirstPos = mSpAreaFirst.getSelectedItemPosition();
-			// ModoerArea cityId = mAreaMgr.getSubjectAreaByName(mAreaFirst
-			// .get(areaFirstPos));
+
 			mSubject.setCityId(mCurrCountry);
 			int areaSecondPos = mSpAreaSecond.getSelectedItemPosition();
 			ModoerArea aid = mAreaMgr.getSubjectAreaByName(mAreaSecond
 					.get(areaSecondPos));
-			mSubject.setAid(aid);
+			if (null == aid) {// 没有第三级则给第二级
+				int areaFirstPos = mSpAreaFirst.getSelectedItemPosition();
+				ModoerArea cid = mAreaMgr.getSubjectAreaByName(mAreaFirst
+						.get(areaFirstPos));
+				mSubject.setAid(cid);
+			} else {
+				mSubject.setAid(aid);
+			}
 			mSubject.setPictures(this.getPicCount());
 			mSubject.setStatus(1);
 			return mSubject;
@@ -218,7 +223,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 
 	public void onClickMapPoint(View view) {// 地图选点
 		Intent intent = new Intent(this, MapMarkerActivity.class);
-		intent.putExtra("operator",GlobalConfig.IntentKey.MAP_POINT_ADD);
+		intent.putExtra("operator", GlobalConfig.IntentKey.MAP_POINT_ADD);
 		this.startActivityForResult(intent, REQ_CODE_MAP_POINT);
 	}
 
@@ -320,8 +325,8 @@ public class SubjectAddActivity extends BaseAddActivity {
 		super.onSuccessSaveOrUpdateArray(out);
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_SUBJECT == operator) {
-			SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
-					ModoerSubject.class.getName());
+			SqliteUtil.getInstance(this.getApplicationContext())
+					.deleteByClassName(ModoerSubject.class.getName());
 			this.onSaveSuccess();
 		}
 	}

@@ -116,7 +116,7 @@ public class PartyDetailActivity extends BaseActivity {
 		String startTime = CommonUtil.getTimeByPHP(mParty.getBegintime(),
 				CommonUtil.FORMAT_MINUTE);
 		String endTime = CommonUtil.getTimeByPHP(mParty.getEndtime(),
-				CommonUtil.FORMAT_MINUTE);
+				"MM-dd hh:mm");
 		mTvTime.setText(startTime + "~" + endTime);
 		mTvAddr.setText(mParty.getAddress());
 		mTvSexLimit.setText(this.getStrBySex(mParty.getSex()));

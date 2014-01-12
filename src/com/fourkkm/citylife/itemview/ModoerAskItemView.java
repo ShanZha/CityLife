@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerAsks;
 import com.fourkkm.citylife.R;
-import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.support.widget.item.BaseItem;
 import com.zj.support.widget.itemview.ItemView;
 
@@ -19,7 +18,7 @@ import com.zj.support.widget.itemview.ItemView;
  */
 public class ModoerAskItemView extends RelativeLayout implements ItemView {
 
-	private TextView mTvCategory, mTvSubject, mTvTime;
+	private TextView mTvCategory, mTvSubject;
 	private Context mCtx;
 
 	public ModoerAskItemView(Context context) {
@@ -43,7 +42,7 @@ public class ModoerAskItemView extends RelativeLayout implements ItemView {
 				.findViewById(R.id.ask_list_item_tv_category);
 		mTvSubject = (TextView) this
 				.findViewById(R.id.ask_list_item_tv_subject);
-		mTvTime = (TextView) this.findViewById(R.id.ask_list_item_tv_time);
+		// mTvTime = (TextView) this.findViewById(R.id.ask_list_item_tv_time);
 	}
 
 	@Override
@@ -56,13 +55,14 @@ public class ModoerAskItemView extends RelativeLayout implements ItemView {
 	public void setItem(BaseItem item, int pos) {
 		// TODO Auto-generated method stub
 		ModoerAsks ask = (ModoerAsks) item;
-//		ModoerAskCategory category = ask.getCatid();
-//		if (null != category && category.getId() != 0) {
-//			mTvCategory.setText("[" + category.getName() + "]");
-//		}
+		// ModoerAskCategory category = ask.getCatid();
+		// if (null != category && category.getId() != 0) {
+		// mTvCategory.setText("[" + category.getName() + "]");
+		// }
 		mTvSubject.setText(ask.getSubject());
 
-		mTvTime.setText(CommonUtil.getTimeByPHP(ask.getDateline(), "yyyy-MM-dd"));
+		// mTvTime.setText(CommonUtil.getTimeByPHP(ask.getDateline(),
+		// "yyyy-MM-dd"));
 
 	}
 

@@ -21,6 +21,7 @@ public class SmsDetailActivity extends BaseActivity {
 	private static final String TAG = "SmsDetailActivity";
 	private TextView mTvTitle, mTvSubject, mTvContent, mTvTime;
 	private ModoerPmsgs mSms;
+	private boolean mIsPush = false;
 
 	@Override
 	protected void prepareViews() {
@@ -42,8 +43,10 @@ public class SmsDetailActivity extends BaseActivity {
 
 		Intent intent = this.getIntent();
 		mSms = (ModoerPmsgs) intent.getSerializableExtra("sms");
+		mIsPush = intent.getBooleanExtra("isPush", false);
 		if (null == mSms) {
 			Log.e(TAG, "shan-->sms is null");
+			return;
 		}
 		mTvSubject.setText(mSms.getSubject());
 		mTvContent.setText(mSms.getContent());
@@ -51,7 +54,24 @@ public class SmsDetailActivity extends BaseActivity {
 	}
 
 	public void onClickBack(View view) {
+		if (mIsPush) {
+			this.redirectMainPage();
+		}
 		this.finish();
 	}
 
+	@Override
+	public void onBackPressed() {
+		if (mIsPush) {
+			this.redirectMainPage();
+		}
+		super.onBackPressed();
+	}
+
+	private void redirectMainPage() {
+		Intent intent = new Intent(this, MainActivity.class);
+		intent.setAction(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_DEFAULT);
+		this.startActivity(intent);
+	}
 }

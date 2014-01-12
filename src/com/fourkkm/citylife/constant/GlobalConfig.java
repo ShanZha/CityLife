@@ -6,7 +6,7 @@ public interface GlobalConfig {
 	public final static String URL_UPLOAD = "http://115.28.167.199/modoer/";
 	public static final String URL_PIC = "http://www.40000km.com.cn/";
 	public static final String URL_ATTR_PIC = "http://www.40000km.com.cn/static/images/att/";
-	
+
 	public static final int MAX = 15;
 	public static final int MAX_ALL = 99999999;
 	public static final int UPLOAD_PIC_MAX = 8;
@@ -21,23 +21,24 @@ public interface GlobalConfig {
 	public static final int STATUS_UPLOAD_START = 0;
 	public static final int STATUS_UPLOAD_SUCCESS = 1;
 	public static final int STATUS_UPLOAD_FAIL = 2;
+	
+	public static final int PUBLIC_MEMBER_ID = 100000;
 
 	public static class FloatingType {
 		public static final int TYPE_SUBJECT_DISTANCE = 0;
 		public static final int TYPE_CATEGORY = 1;
 		public static final int TYPE_SUBJECT_SORT = 2;
 		public static final int TYPE_AREA = 3;
-		// public static final int TYPE_ASK_CATEGORY = 4;
 		public static final int TYPE_ASK_STATE = 4;
-		// public static final int TYPE_PARTY_CATEGORY = 6;
 		public static final int TYPE_PARTY_STATE = 5;
 		public static final int TYPE_PARTY_MOST = 6;
 		public static final int TYPE_PIC_SELECT = 7;
 		public static final int TYPE_SHARE = 8;
 		public static final int TYPE_ERROR = 9;
-		// public static final int TYPE_CHINA_LANE_CATEGORY = 9;
-		// public static final int TYPE_CHINA_LANE_AREA = 10;
-		// public static final int TYPE_SUBJECT_SEARCH_CITY = 11;
+		public static final int TYPE_PARTY_SIGNUP_END_TIME = 10;
+		public static final int TYPE_PARTY_BEGIN_TIME = 11;
+		public static final int TYPE_PARTY_END_TIME = 12;
+		
 	}
 
 	public static class FloatingStr {
@@ -91,8 +92,10 @@ public interface GlobalConfig {
 		public static final String KEY_PSWD = "Pswd";
 		public static final String KEY_IS_REMBER_PSWD = "isRemberPswd";
 		public static final String KEY_IS_AUTO_LOGIN = "isAutoLogin";
+		public static final String KEY_MEMBER_ID = "memberId";
 
 		public static final String KEY_CURR_AREA_ID = "AreaId";
+		public static final String KEY_PUSH_TIME = "pushTime";
 	}
 
 	public static class IntentKey {
@@ -111,9 +114,13 @@ public interface GlobalConfig {
 
 		public static final int ASK_ME = 1;
 		public static final int ASK_ANSWER_ME = 2;
-		
+
 		public static final int MAP_POINT_ADD = 1;
 		public static final int MAP_POINT_ERROR = 2;
+
+		public static final int ALBUM_SUBJECT = 1;
+		public static final int ALBUM_REVIEW = 2;
+		
 	}
 
 	public static class Third {
@@ -150,5 +157,10 @@ public interface GlobalConfig {
 		public static final String KEY_UID = "Uid";
 		public static final String KEY_EXPIRE_TIME = "ExpireTime";
 		public static final String KEY_NICK_NAME = "NickName";
+		
+		/** TencentWeibo Api url **/
+		public static final String TENCENT_URL_API = "https://open.t.qq.com/api";
+		/** 发表一条微博请求url **/
+		public static final String TENCENT_URL_API_ADD = TENCENT_URL_API + "/t/add";//
 	}
 }

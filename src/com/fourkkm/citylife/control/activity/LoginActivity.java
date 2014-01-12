@@ -37,7 +37,9 @@ import com.taobao.top.android.auth.AuthActivity;
 import com.taobao.top.android.auth.AuthorizeListener;
 import com.tencent.tauth.Constants;
 import com.tencent.tauth.Tencent;
+import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.Weibo;
+import com.weibo.sdk.android.util.AccessTokenKeeper;
 import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.http.StoreOperation;
 import com.zj.app.utils.AppUtils;
@@ -370,6 +372,9 @@ public class LoginActivity extends AuthActivity implements ICallback,
 			SharedPreferenceUtil.getSharedPrefercence().put(
 					this.getApplicationContext(),
 					GlobalConfig.SharePre.KEY_IS_REMBER_PSWD, true);
+			SharedPreferenceUtil.getSharedPrefercence().put(
+					this.getApplicationContext(),
+					GlobalConfig.SharePre.KEY_MEMBER_ID, mMember.getId());
 			mDialogProxy.hideDialog();
 			this.showToast(this.getString(R.string.login_success));
 			this.setResult(RESULT_OK);
@@ -424,6 +429,9 @@ public class LoginActivity extends AuthActivity implements ICallback,
 						GlobalConfig.SharePre.KEY_PSWD, mUserPswd);
 				SharedPreferenceUtil.getSharedPrefercence().put(
 						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_MEMBER_ID, mMember.getId());
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
 						GlobalConfig.SharePre.KEY_IS_REMBER_PSWD,
 						mCbPswd.isChecked());
 				SharedPreferenceUtil.getSharedPrefercence().put(
@@ -474,7 +482,6 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	public void onFails(Param out) {
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_MEMBER == operator) {
-			this.showToast(this.getString(R.string.login_fail));
 			mDialogProxy.hideDialog();
 		} else if (GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT == operator) {
 			if (mRetryCount < 3) {// 查询第三方信息失败，则重试三次
@@ -482,6 +489,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 				mRetryCount++;
 				return;
 			}
+			this.showToast(this.getString(R.string.login_fail));
 			mDialogProxy.hideDialog();
 		}
 	}
@@ -538,10 +546,14 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		}
 		switch (type) {
 		case TYPE_SINA_WEIBO:
+			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,
+					String.valueOf(expireTime));
+			AccessTokenKeeper.keepAccessToken(LoginActivity.this, token);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_SINA_WEIBO,
 					accessToken, uid, expireTime);
 			break;
 		case TYPE_QQ:
+			expireTime = (System.currentTimeMillis() + expireTime * 1000) / 1000;
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_QQ,
 					accessToken, uid, expireTime);
 			break;
@@ -553,6 +565,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 
 			break;
 		case TYPE_TAOBAO:
+			mCurrThirdType = TYPE_TAOBAO;
 			mUserName = bundle.getString(GlobalConfig.Third.KEY_NICK_NAME);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TAOBAO,
 					accessToken, uid, expireTime);
@@ -567,6 +580,12 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		// TODO Auto-generated method stub
 		Log.e(TAG, "shan-->onThirdAuthFail: " + e);
 		this.showToast(this.getString(R.string.login_fail) + "：" + e);
+	}
+
+	@Override
+	public void onThirdAuthCancel(int type) {
+		// TODO Auto-generated method stub
+		Log.e(TAG, "shan-->onThirdAuthCancel()");
 	}
 
 }
