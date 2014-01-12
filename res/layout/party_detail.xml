@@ -42,7 +42,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_5"
-            android:background="@drawable/party_right_btn_selector"
+            android:background="@drawable/right_btn_selector"
             android:gravity="center"
             android:onClick="onClickRight"
             android:text="@string/party_sign_up_me"

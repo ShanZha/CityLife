@@ -15,6 +15,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -27,6 +28,7 @@
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
         android:name="com.fourkkm.citylife.CoreApp"
@@ -34,12 +36,35 @@
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar" >
+
+        <!-- google map设置 -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAdn3otPQoJ8915Hy7m2yROcix9aG9eRzs" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <!-- 百度统计设置 -->
+        <meta-data
+            android:name="BaiduMobAd_STAT_ID"
+            android:value="944cb9e0dd" />
+        <!-- 渠道商编号 -->
+        <meta-data
+            android:name="BaiduMobAd_CHANNEL"
+            android:value="Baidu Market" />
+        <!-- 是否开启错误日志统计，默认为false -->
+        <meta-data
+            android:name="BaiduMobAd_EXCEPTION_LOG"
+            android:value="true" />
+        <!-- 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START -->
+        <meta-data
+            android:name="BaiduMobAd_SEND_STRATEGY"
+            android:value="APP_START" />
+        <!-- 日志仅在wifi网络下发送，默认为false -->
+        <meta-data
+            android:name="BaiduMobAd_ONLY_WIFI"
+            android:value="false" />
 
         <activity
             android:name="com.fourkkm.citylife.control.activity.MainActivity"
@@ -85,7 +110,7 @@
         </activity>
         <!-- 相册页面 -->
         <activity
-            android:name="com.fourkkm.citylife.control.activity.SubjectAlbumActivity"
+            android:name="com.fourkkm.citylife.control.activity.AlbumActivity"
             android:screenOrientation="portrait" >
         </activity>
         <!-- 评论列表 -->
@@ -245,6 +270,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <service android:name="com.fourkkm.citylife.content.SmsPushService" >
+        </service>
+
+        <receiver android:name="com.fourkkm.citylife.content.NetworkConnectReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

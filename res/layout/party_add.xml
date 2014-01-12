@@ -57,7 +57,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginTop="@dimen/margin_10"
                         layout="@layout/progress_bar_small" />
 
                     <Spinner
@@ -156,40 +155,13 @@
                             android:layout_height="wrap_content"
                             android:text="2013-12-12 12:18" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/party_add_ll_initiate_time"
-                        android:layout_marginTop="@dimen/margin_5" >
-
-                        <!-- 报名截止-字样 -->
-
-                        <TextView
-                            android:id="@+id/party_add_tv_signup_end_tip"
-                            style="@style/list_second_level_black_style"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/party_sign_up_end_time" />
-
-                        <!-- 报名截止 -->
-
-                        <EditText
-                            android:id="@+id/party_add_et_signup_end"
-                            style="@style/et_add_style"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_5"
-                            android:hint="@string/time_et_hint" />
-                    </LinearLayout>
                 </RelativeLayout>
             </RelativeLayout>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 第三部分 -->
 
@@ -199,11 +171,56 @@
                 android:layout_margin="@dimen/margin_10"
                 android:orientation="vertical" >
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <!-- 报名截止-字样 -->
+
+                    <TextView
+                        android:id="@+id/party_add_tv_signup_end_tip"
+                        style="@style/list_second_level_black_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/party_sign_up_end_time" />
+
+                    <!-- 报名截止 -->
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:background="@drawable/et_time_bg"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical"
+                        android:minWidth="120dp" >
+
+                        <EditText
+                            android:id="@+id/party_add_et_signup_end"
+                            style="@style/et_add_time_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="@dimen/margin_5"
+                            android:layout_marginRight="@dimen/margin_5"
+                            android:background="@drawable/time_icon"
+                            android:onClick="onClickSignupEndTime" />
+                    </LinearLayout>
+                </LinearLayout>
+
                 <!-- 开始时间 -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_10" >
 
                     <TextView
                         style="@style/list_second_level_black_style"
@@ -212,13 +229,31 @@
                         android:layout_gravity="center_vertical"
                         android:text="@string/party_begin_time" />
 
-                    <EditText
-                        android:id="@+id/party_add_et_begin_time"
-                        style="@style/et_add_style"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_5"
-                        android:hint="@string/time_et_hint" />
+                        android:background="@drawable/et_time_bg"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical"
+                        android:minWidth="120dp" >
+
+                        <EditText
+                            android:id="@+id/party_add_et_begin_time"
+                            style="@style/et_add_time_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_5"
+                            android:layout_marginRight="@dimen/margin_5"
+                            android:background="@drawable/time_icon"
+                            android:onClick="onClickBeginTime" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <!-- 结束时间 -->
@@ -235,13 +270,32 @@
                         android:layout_gravity="center_vertical"
                         android:text="@string/party_end_time" />
 
-                    <EditText
-                        android:id="@+id/party_add_et_end_time"
-                        style="@style/et_add_style"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/margin_5"
-                        android:hint="@string/time_et_hint" />
+                        android:background="@drawable/et_time_bg"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center_vertical"
+                        android:minWidth="120dp" >
+
+                        <EditText
+                            android:id="@+id/party_add_et_end_time"
+                            style="@style/et_add_time_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="@dimen/margin_5"
+                            android:layout_marginRight="@dimen/margin_5"
+                            android:background="@drawable/time_icon"
+                            android:onClick="onClickEndTime" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <!-- 联系人 -->
@@ -293,7 +347,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 第四部分 -->
 
@@ -524,7 +578,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/divider" />
+                android:background="@drawable/divider" />
 
             <!-- 第五部分-描述 -->
 

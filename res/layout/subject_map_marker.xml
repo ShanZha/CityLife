@@ -38,7 +38,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_5"
-            android:background="@drawable/party_right_btn_selector"
+            android:background="@drawable/right_btn_selector"
             android:onClick="onClickSure"
             android:text="@string/sure"
             android:textColor="@android:color/white" 

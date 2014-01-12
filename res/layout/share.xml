@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@color/main_bg">
+    android:background="@color/main_bg"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,8 +36,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_10"
+            android:background="@drawable/right_btn_selector"
             android:onClick="onClickShare"
-            android:background="@drawable/party_right_btn_selector"
             android:text="@string/share"
             android:textColor="@android:color/white"
             android:textSize="16sp" >
@@ -46,9 +46,10 @@
 
     <EditText
         android:id="@+id/share_et_content"
+        style="@style/et_multi_lint_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minLines="8" />
+        android:layout_margin="@dimen/margin_10" />
 
     <TextView
         android:id="@+id/share_tv_limit"
@@ -57,7 +58,8 @@
         android:layout_marginLeft="@dimen/margin_10"
         android:paddingBottom="@dimen/margin_5"
         android:paddingTop="@dimen/margin_5"
-        android:text="@string/share_et_limit" >
+        android:text="@string/share_et_limit"
+        android:visibility="gone" >
     </TextView>
 
 </LinearLayout>

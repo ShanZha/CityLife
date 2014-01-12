@@ -37,10 +37,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/margin_10"
-            android:background="@drawable/party_right_btn_selector"
-            android:onClick="onClickReview"
-            android:text="@string/review_tip"
-            android:textColor="@android:color/white" >
+            android:background="@drawable/review_edit_selector"
+            android:onClick="onClickReview" >
         </Button>
     </RelativeLayout>
 

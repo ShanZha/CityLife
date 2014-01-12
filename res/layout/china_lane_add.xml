@@ -127,32 +127,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/china_lane_add_ll_initiate_time"
-                        android:layout_marginTop="@dimen/margin_5" >
-
-                        <!-- 过期时间-字样 -->
-
-                        <TextView
-                            style="@style/list_second_level_black_style"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/china_lane_expire_time_add" />
-
-                        <!-- 过期时间 -->
-
-                        <EditText
-                            android:id="@+id/china_lane_add_et_expire_time"
-                            style="@style/et_add_style"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/margin_5"
-                            android:hint="@string/time_et_hint" />
-                    </LinearLayout>
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -259,6 +233,50 @@
                 </Spinner>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <!-- 过期时间-字样 -->
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/china_lane_expire_time_add" />
+
+                <!-- 报名截止 -->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5"
+                    android:background="@drawable/et_time_bg"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center_vertical"
+                    android:minWidth="120dp" >
+
+                    <EditText
+                        android:id="@+id/china_lane_add_et_expire_time"
+                        style="@style/et_add_time_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_5"
+                        android:layout_marginRight="@dimen/margin_5"
+                        android:background="@drawable/time_icon"
+                        android:onClick="onClickExpireTime" />
+                </LinearLayout>
+            </LinearLayout>
             <!-- 联系人 -->
 
             <LinearLayout

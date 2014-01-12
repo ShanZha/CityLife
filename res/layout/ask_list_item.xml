@@ -24,38 +24,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/ask_list_item_rl_right"
+        android:layout_toLeftOf="@+id/ask_list_item_iv_more"
         android:layout_toRightOf="@+id/ask_list_item_tv_category"
         android:singleLine="true" />
 
-    <RelativeLayout
-        android:id="@+id/ask_list_item_rl_right"
+    <!-- 更多图标 -->
+
+    <ImageView
+        android:id="@+id/ask_list_item_iv_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10" >
-
-        <!-- 时间 -->
-
-        <TextView
-            android:id="@+id/ask_list_item_tv_time"
-            style="@style/list_second_level_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:singleLine="true" />
-
-        <!-- 更多图标 -->
-
-        <ImageView
-            android:id="@+id/ask_list_item_iv_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_5"
-            android:layout_toRightOf="@+id/ask_list_item_tv_time"
-            android:src="@drawable/main_more" />
-    </RelativeLayout>
+        android:layout_marginRight="@dimen/margin_10"
+        android:src="@drawable/main_more" />
 
 </com.fourkkm.citylife.itemview.ModoerAskItemView>

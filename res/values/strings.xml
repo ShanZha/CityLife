@@ -242,6 +242,7 @@
     <string name="share_et_limit">还可输入140个字</string>
     <string name="share_sina_uninstall">您还没安装新浪微博客户端，暂不支持分享</string>
     <string name="share_sina_version_mismatch">您的新浪微博客户端版本太旧，请先升级</string>
+    <string name="share_qq_uninstall_or_mismatch">您没安装QQ客户端或版本太旧，暂不支持分享</string>
     <string name="share_sms_unsupport">您没安装短信客户端，暂不支持短信分享</string>
     <string name="share_email_unsupport">您没安装邮件客户端，暂不支持邮件分享</string>
     <string name="share_tel_unsupport">抱歉，您的设备不支持打电话</string>
@@ -273,6 +274,10 @@
     <string name="subject_error_success">报错成功</string>
     <string name="subject_error_fail">报错失败</string>
     <string name="subject_error_map">商铺地图报错</string>
+    <string name="share_sina_weibo">新浪微博</string>
+    <string name="share_qq">QQ好友或群组</string>
+    <string name="share_qzone">QQ空间</string>
+    <string name="share_tencent_weibo">腾讯微博</string>
 
     <string-array name="share_array">
         <item>分享到新浪微博</item>

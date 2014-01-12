@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/floating_time_ll_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/floating_bg"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/margin_5"
+    android:paddingRight="@dimen/margin_5" >
+
+    <LinearLayout
+        android:id="@+id/floating_time_ll_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/main_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_10" >
+
+        <DatePicker
+            android:id="@+id/floating_time_date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:endYear="2050"
+            android:spinnersShown="true"
+            android:startYear="2014" />
+
+        <TimePicker
+            android:id="@+id/floating_time_time_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_10" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_15" >
+
+            <Button
+                android:id="@+id/floating_time_btn_sure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/commit_btn_selector"
+                android:text="@string/sure"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/floating_time_btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_weight="1"
+                android:background="@drawable/commit_btn_selector"
+                android:text="@string/cancel"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
