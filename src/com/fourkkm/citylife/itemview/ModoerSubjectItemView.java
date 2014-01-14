@@ -20,7 +20,6 @@ import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.image.file.AsyncImageLoader;
-import com.zj.support.widget.AsyncImageView;
 import com.zj.support.widget.item.BaseItem;
 import com.zj.support.widget.itemview.ItemView;
 

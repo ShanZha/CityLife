@@ -137,6 +137,7 @@ public class MainActivity extends BaseFragmentActivity implements
 		sb.append("from com.andrnes.modoer.ModoerBcastr mb where mb.available = 1");
 		if (null != city) {
 			sb.append(" and mb.city.id = " + city.getId());
+			sb.append(" and mb.groupname = 'indexapp'");
 		}
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_BCASTR);

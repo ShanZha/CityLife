@@ -53,13 +53,13 @@
 
     <TextView
         android:id="@+id/share_tv_limit"
+        style="@style/list_second_level_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_10"
         android:paddingBottom="@dimen/margin_5"
         android:paddingTop="@dimen/margin_5"
-        android:text="@string/share_et_limit"
-        android:visibility="gone" >
+        android:text="@string/share_et_limit" >
     </TextView>
 
 </LinearLayout>

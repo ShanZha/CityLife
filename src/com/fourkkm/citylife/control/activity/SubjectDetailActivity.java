@@ -38,6 +38,7 @@ import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.FloatingTranslucentProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
+import com.fourkkm.citylife.wxapi.WXEntryActivity;
 import com.zj.app.db.dao.SqliteUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.image.file.AsyncImageLoader;
@@ -301,12 +302,13 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		}
 	}
 
-	private String buildShareContent() {
+	private String buildShareContent(int index) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getString(R.string.subject_share_tip));
-		sb.append("\n");
-		sb.append(this.getString(R.string.subject_name_detail));
 		sb.append(mSubject.getName());
+		if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == index) {
+			return sb.toString();
+		}
 		sb.append("\n");
 		String address = mSubject.getAddress();
 		if (!TextUtils.isEmpty(address) && !"0".equals(address)) {
@@ -547,11 +549,17 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		case POS_TENCENT_QQ:
 			this.share(GlobalConfig.IntentKey.INDEX_TENCENT_QQ);
 			break;
+		case POS_WEIXIN_FRIENDS:
+			this.shareWeixin(GlobalConfig.IntentKey.INDEX_WEIXIN_FRIENDS);
+			break;
+		case POS_WEIXIN_TIMELINE:
+			this.shareWeixin(GlobalConfig.IntentKey.INDEX_WEIXIN_TIMELINE);
+			break;
 		case POS_SMS:
 			try {
 				Uri smsToUri = Uri.parse("smsto:");
 				Intent sendIntent = new Intent(Intent.ACTION_VIEW, smsToUri);
-				sendIntent.putExtra("sms_body", this.buildShareContent());
+				sendIntent.putExtra("sms_body", this.buildShareContent(-1));
 				sendIntent.setType("vnd.android-dir/mms-sms");
 				this.startActivity(sendIntent);
 			} catch (Exception e) {
@@ -564,7 +572,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 				data.setData(Uri.parse("mailto:"));
 				data.putExtra(Intent.EXTRA_SUBJECT,
 						this.getString(R.string.share_email_subject));
-				data.putExtra(Intent.EXTRA_TEXT, this.buildShareContent());
+				data.putExtra(Intent.EXTRA_TEXT, this.buildShareContent(-1));
 				this.startActivity(data);
 			} catch (Exception e) {
 				this.showToast(this.getString(R.string.share_email_unsupport));
@@ -576,7 +584,14 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	private void share(int index) {
 		Intent intent = new Intent(this, ShareActivity.class);
 		intent.putExtra("shareIndex", index);
-		intent.putExtra("shareContent", this.buildShareContent());
+		intent.putExtra("shareContent", this.buildShareContent(index));
+		this.startActivity(intent);
+	}
+
+	private void shareWeixin(int index) {
+		Intent intent = new Intent(this, WXEntryActivity.class);
+		intent.putExtra("shareIndex", index);
+		intent.putExtra("shareContent", this.buildShareContent(index));
 		this.startActivity(intent);
 	}
 
@@ -650,6 +665,12 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			break;
 		case REQ_LOGIN_CODE_TENCEN_WEIBO:
 			this.onShare(POS_TENCENT_WEIBO);
+			break;
+		case REQ_LOGIN_CODE_WEIXIN_FRIENDS:
+			this.onShare(POS_WEIXIN_FRIENDS);
+			break;
+		case REQ_LOGIN_CODE_WEIXIN_TIMELINE:
+			this.onShare(POS_WEIXIN_TIMELINE);
 			break;
 		}
 
@@ -792,6 +813,14 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 						this.startActivityForResult(intent,
 								REQ_LOGIN_CODE_TENCEN_WEIBO);
 						break;
+					case POS_WEIXIN_FRIENDS:
+						this.startActivityForResult(intent,
+								REQ_LOGIN_CODE_WEIXIN_FRIENDS);
+						break;
+					case POS_WEIXIN_TIMELINE:
+						this.startActivityForResult(intent,
+								REQ_LOGIN_CODE_WEIXIN_TIMELINE);
+						break;
 					}
 				} else {
 					this.onShare(pos);
@@ -819,13 +848,19 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	private static final int REQ_LOGIN_CODE_QZONE = 10;
 	/** Ã⁄—∂Œ¢≤© **/
 	private static final int REQ_LOGIN_CODE_TENCEN_WEIBO = 11;
+	/** Œ¢–≈∫√”— **/
+	private static final int REQ_LOGIN_CODE_WEIXIN_FRIENDS = 12;
+	/** Œ¢–≈≈Û”—»¶ **/
+	private static final int REQ_LOGIN_CODE_WEIXIN_TIMELINE = 13;
 	/** Share POS(Begin) **/
 	private static final int POS_SINA_WEIBO = 0;
 	private static final int POS_TENCENT_WEIBO = 1;
 	private static final int POS_TENCENT_QZONE = 2;
 	private static final int POS_TENCENT_QQ = 3;
-	private static final int POS_SMS = 4;
-	private static final int POS_EMAIL = 5;
+	private static final int POS_WEIXIN_FRIENDS = 4;
+	private static final int POS_WEIXIN_TIMELINE = 5;
+	private static final int POS_SMS = 6;
+	private static final int POS_EMAIL = 7;
 	/** Share POS(End) **/
 	/** Error POS(Begin) **/
 	private static final int POS_SUBJECT_CLOSED = 0;

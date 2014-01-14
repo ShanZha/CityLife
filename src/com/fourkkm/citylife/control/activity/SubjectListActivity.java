@@ -96,7 +96,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		this.setContentView(R.layout.subject_list);
 		mTvTitle = (TextView) this
 				.findViewById(R.id.titlebar_back_right_tv_title);
-		mBtnAdd = (ImageButton)this.findViewById(R.id.titlebar_back_right_btn_operator);
+		mBtnAdd = (ImageButton) this
+				.findViewById(R.id.titlebar_back_right_btn_operator);
 		mLlTopCheckLoading = (LinearLayout) this
 				.findViewById(R.id.subject_list_ll_top_loading);
 		mLlTopCheck = (LinearLayout) this
@@ -423,6 +424,14 @@ public class SubjectListActivity extends BaseListActivity implements
 		} else {
 			Log.i(TAG, "shan-->onConnected: " + " Thread : "
 					+ Thread.currentThread().getName());
+			((CoreApp) AppUtils.getBaseApp(this)).mCurrLat = location
+					.getLatitude();
+			((CoreApp) AppUtils.getBaseApp(this)).mCurrLng = location
+					.getLongitude();
+			Log.i(TAG,
+					"shan-->onConnected: " + " Thread : "
+							+ location.getLatitude() + ","
+							+ location.getLongitude());
 		}
 	}
 

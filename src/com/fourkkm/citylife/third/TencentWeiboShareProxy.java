@@ -9,12 +9,14 @@ import javax.net.ssl.HttpsURLConnection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.fourkkm.citylife.constant.GlobalConfig;
-import com.fourkkm.citylife.third.IThirdShareListener;
+import com.tencent.weibo.sdk.android.api.WeiboAPI;
+import com.tencent.weibo.sdk.android.network.HttpCallback;
 
 /**
  * ÌÚÑ¶Î¢²©·ÖÏí
@@ -44,10 +46,15 @@ public class TencentWeiboShareProxy {
 		sbUrl.append(this.getPublicParam(accessToken, openId, clientIp));
 		sbUrl.append("&");
 		String url = sbUrl.toString();
+		System.out.println(" url = "+url);
 		TencentWeiboTask task = new TencentWeiboTask(listener,
 				GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO);
 		task.execute(url);
 
+	}
+	
+	public void addWeibo(Context ctx, String content, 
+			  HttpCallback listener){
 	}
 
 	private String getPublicParam(String accessToken, String openId,
@@ -170,10 +177,10 @@ public class TencentWeiboShareProxy {
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
 				if (null != mListener) {
 					mListener.onShareFail(mShareType, e.getMessage());
 				}
+				e.printStackTrace();
 			}
 
 		}

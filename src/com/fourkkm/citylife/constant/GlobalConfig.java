@@ -21,7 +21,7 @@ public interface GlobalConfig {
 	public static final int STATUS_UPLOAD_START = 0;
 	public static final int STATUS_UPLOAD_SUCCESS = 1;
 	public static final int STATUS_UPLOAD_FAIL = 2;
-	
+
 	public static final int PUBLIC_MEMBER_ID = 100000;
 
 	public static class FloatingType {
@@ -38,7 +38,7 @@ public interface GlobalConfig {
 		public static final int TYPE_PARTY_SIGNUP_END_TIME = 10;
 		public static final int TYPE_PARTY_BEGIN_TIME = 11;
 		public static final int TYPE_PARTY_END_TIME = 12;
-		
+
 	}
 
 	public static class FloatingStr {
@@ -103,6 +103,8 @@ public interface GlobalConfig {
 		public static final int INDEX_TENCENT_WEIBO = 1;
 		public static final int INDEX_TENCENT_QQ = 2;
 		public static final int INDEX_SINA_WEIBO = 3;
+		public static final int INDEX_WEIXIN_FRIENDS = 4;
+		public static final int INDEX_WEIXIN_TIMELINE = 5;
 
 		public static final int SUBJECT_SEACH_CITY = 1;
 		public static final int SUBJECT_ME = 2;
@@ -120,7 +122,7 @@ public interface GlobalConfig {
 
 		public static final int ALBUM_SUBJECT = 1;
 		public static final int ALBUM_REVIEW = 2;
-		
+
 	}
 
 	public static class Third {
@@ -144,6 +146,9 @@ public interface GlobalConfig {
 		public static final String TENCENT_WEIBO_APP_SECRET = "0e84a41d4f77ba9d14d33e461f9bee17";
 		public static final String TENCENT_WEIBO_REDIRECT_URL = "http://www.baidu.com";
 
+		public static final String WEIXIN_APP_ID = "wx0be56f9c9aae8e96";
+//		public static final String WEIXIN_APP_KEY = "4c53e361f42041e8f1dd82414f633f2b";
+
 		public static final String TAOBAO_APP_KEY = "21701340";
 		public static final String TAOBAO_APP_SECRET = "dae8c1dfba2ce3b25937d21baba801df";
 		public static final String TAOBAO_REDIRECT_URL = "com.fourkkm.citylife://authresult";
@@ -152,15 +157,17 @@ public interface GlobalConfig {
 		public static final String PSNAME_TENCENT_QQ = "qq";
 		public static final String PSNAME_TENCENT_WEIBO = "qqweibo";
 		public static final String PSNAME_TAOBAO = "taobao";
+		public static final String PSNAME_WEIXIN = "weixin";
 
 		public static final String KEY_ACCESS_TOKEN = "AccessToken";
 		public static final String KEY_UID = "Uid";
 		public static final String KEY_EXPIRE_TIME = "ExpireTime";
 		public static final String KEY_NICK_NAME = "NickName";
-		
+
 		/** TencentWeibo Api url **/
 		public static final String TENCENT_URL_API = "https://open.t.qq.com/api";
 		/** 发表一条微博请求url **/
-		public static final String TENCENT_URL_API_ADD = TENCENT_URL_API + "/t/add";//
+		public static final String TENCENT_URL_API_ADD = TENCENT_URL_API
+				+ "/t/add";//
 	}
 }

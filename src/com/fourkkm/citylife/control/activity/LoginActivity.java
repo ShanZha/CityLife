@@ -546,9 +546,9 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		}
 		switch (type) {
 		case TYPE_SINA_WEIBO:
-			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,
-					String.valueOf(expireTime));
-			AccessTokenKeeper.keepAccessToken(LoginActivity.this, token);
+//			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,
+//					String.valueOf(expireTime));
+//			AccessTokenKeeper.keepAccessToken(LoginActivity.this, token);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_SINA_WEIBO,
 					accessToken, uid, expireTime);
 			break;
@@ -559,6 +559,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 			break;
 
 		case TYPE_TENCENT_WEIBO:
+			expireTime = (System.currentTimeMillis() / 1000 + expireTime);
 			mUserName = bundle.getString(GlobalConfig.Third.KEY_NICK_NAME);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TENCENT_WEIBO,
 					accessToken, uid, expireTime);

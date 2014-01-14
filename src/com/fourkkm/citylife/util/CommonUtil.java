@@ -1,6 +1,7 @@
 package com.fourkkm.citylife.util;
 
 import java.util.Date;
+import java.util.StringTokenizer;
 
 import android.content.Context;
 import android.net.wifi.WifiInfo;
@@ -188,6 +189,25 @@ public class CommonUtil {
 		String ipStr = (i & 0xFF) + "." + ((i >> 8) & 0xFF) + "."
 				+ ((i >> 16) & 0xFF) + "." + (i >> 24 & 0xFF);
 		return ipStr;
+	}
+
+	/**
+	 * �滻\nΪ<br/>
+	 * 
+	 * @param content
+	 * @return
+	 */
+	public static String replaceNewLine(String content) {
+		if (TextUtils.isEmpty(content)) {
+			return "";
+		}
+		StringBuilder result = new StringBuilder();
+		StringTokenizer t = new StringTokenizer(content, "\n");
+
+		while (t.hasMoreTokens()) {
+			result.append(t.nextToken().trim()).append("<br/>");
+		}
+		return result.toString();
 	}
 
 }

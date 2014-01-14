@@ -157,9 +157,8 @@
     <string name="more_about">关于我们</string>
     <string name="more_exit">退出应用</string>
     <string name="subject_share_tip">我在四万公里发现一个值得推荐的店铺：</string>
-    <string name="subject_name_detail">店铺名称：</string>
-    <string name="subject_addr_detail">店铺地址：</string>
-    <string name="subject_tel_detail">店铺电话：</string>
+    <string name="subject_addr_detail">地址：</string>
+    <string name="subject_tel_detail">电话：</string>
     <string name="subject_name">店铺名称</string>
     <string name="subject_subname">子名 称</string>
     <string name="subject_addr">店铺地址</string>
@@ -251,6 +250,9 @@
     <string name="share_qq_uninstall_or_mismatch">您没安装QQ客户端或版本太旧，暂不支持分享</string>
     <string name="share_sms_unsupport">您没安装短信客户端，暂不支持短信分享</string>
     <string name="share_email_unsupport">您没安装邮件客户端，暂不支持邮件分享</string>
+    <string name="share_weixin_uninstall">您还没安装微信客户端，暂不支持分享</string>
+    <string name="share_weixin_unsupport">您的微信客户端版本不支持第三方分享</string>
+    <string name="share_weixin_unsupport_timeline">您的微信客户端版本不支持分享到朋友圈</string>
     <string name="share_tel_unsupport">抱歉，您的设备不支持打电话</string>
     <string name="share_email_subject">推荐个商铺给您</string>
     <string name="sex_man">男</string>
@@ -286,12 +288,16 @@
     <string name="share_qq">QQ好友或群组</string>
     <string name="share_qzone">QQ空间</string>
     <string name="share_tencent_weibo">腾讯微博</string>
+    <string name="share_content_null">分享内容不能为空</string>
+    <string name="share_content_140">输入少于140个字的内容</string>
 
     <string-array name="share_array">
         <item>分享到新浪微博</item>
         <item>分享到腾讯微博</item>
         <item>分享到QQ空间</item>
         <item>分享给QQ好友或群组</item>
+        <item>分享给微信好友或群组</item>
+        <item>分享到微信朋友圈</item>
         <item>发送短信</item>
         <item>发送邮件</item>
     </string-array>

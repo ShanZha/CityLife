@@ -184,7 +184,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="按商区搜索，搜遍全城每个角落"
+                        android:text="@string/main_search_city_tip"
                         android:textColor="#666666"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -231,7 +231,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="随您所问，随您所想"
+                        android:text="@string/main_ask_tip"
                         android:textColor="#666666"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -278,7 +278,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="平淡的日子虽甜美，但也需要些许调味品"
+                        android:text="@string/main_party_tip"
                         android:textColor="#666666"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -325,7 +325,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="异地他乡总能找到丝丝家乡气息"
+                        android:text="@string/main_china_lane_tip"
                         android:textColor="#666666"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -372,7 +372,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="您的快乐天堂"
+                        android:text="@string/main_member_center_tip"
                         android:textColor="#666666"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -419,7 +419,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:singleLine="true"
-                        android:text="这里有更多惊喜哦"
+                        android:text="@string/main_more_tip"
                         android:textColor="#666666"
                         android:textSize="12sp" />
                 </LinearLayout>
