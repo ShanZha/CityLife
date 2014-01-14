@@ -419,11 +419,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		Location location = mLocation.fetchCurrLocation();
 		mLocation.fetchAddress(this);
 		if (null == location) {
-			Log.i(TAG, "shan-->onConnected: location is null "
-					+ Thread.currentThread().getName());
+			Log.i(TAG, "shan-->onConnected: location is null");
 		} else {
-			Log.i(TAG, "shan-->onConnected: " + " Thread : "
-					+ Thread.currentThread().getName());
 			((CoreApp) AppUtils.getBaseApp(this)).mCurrLat = location
 					.getLatitude();
 			((CoreApp) AppUtils.getBaseApp(this)).mCurrLng = location
