@@ -437,7 +437,7 @@
                 android:layout_marginTop="@dimen/margin_10"
                 android:background="@drawable/commit_btn_selector"
                 android:onClick="onClickAdd"
-                android:text="@string/party_add"
+                android:text="@string/commit"
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>

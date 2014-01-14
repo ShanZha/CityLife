@@ -5,31 +5,9 @@
     android:background="@color/main_bg"
     android:orientation="vertical" >
 
-    <!-- 顶部标题 -->
-
-    <include
-        android:id="@+id/more_helper_ll_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        layout="@layout/titlebar_back" />
-
     <android.support.v4.view.ViewPager
         android:id="@+id/more_helper_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/more_helper_tv_count"
-        android:layout_below="@+id/more_helper_ll_title"
-        android:layout_centerInParent="true" />
-
-    <TextView
-        android:id="@+id/more_helper_tv_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/margin_10"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
