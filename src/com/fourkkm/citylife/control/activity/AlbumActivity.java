@@ -3,6 +3,7 @@ package com.fourkkm.citylife.control.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -125,10 +126,12 @@ public class AlbumActivity extends BaseFragmentActivity implements
 	private void fetchPictures(int subjectId) {
 		String selectCode = "from com.andrnes.modoer.ModoerPictures mp where mp.sid.id = "
 				+ subjectId;
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("max", GlobalConfig.MAX_ALL);
+		paramsMap.put("offset", 0);
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-		this.getStoreOperation().findAll(selectCode,
-				new HashMap<String, Object>(), true, new ModoerPictures(),
-				param);
+		this.getStoreOperation().findAll(selectCode, paramsMap, true,
+				new ModoerPictures(), param);
 	}
 
 	public void onClickBack(View view) {
