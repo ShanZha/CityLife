@@ -33,8 +33,6 @@ public class CoreApp extends BaseApp {
 				GlobalConfig.Third.TAOBAO_REDIRECT_URL);
 
 		StatService.setDebugOn(true);
-		
-		this.startPushInfoService();
 	}
 
 	public void setCurrMember(ModoerMembers member) {
