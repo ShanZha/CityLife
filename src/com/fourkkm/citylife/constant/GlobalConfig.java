@@ -95,6 +95,7 @@ public interface GlobalConfig {
 		public static final String KEY_MEMBER_ID = "memberId";
 
 		public static final String KEY_CURR_AREA_ID = "AreaId";
+		public static final String KEY_IS_WELCOME = "isWelcome";
 		public static final String KEY_PUSH_TIME = "pushTime";
 	}
 
