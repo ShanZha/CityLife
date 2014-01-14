@@ -19,37 +19,46 @@ import com.zj.app.BaseActivity;
 public class HelperActivity extends BaseActivity implements
 		OnPageChangeListener {
 
-	private TextView mTvTitle, mTvCount;
 	private ViewPager mViewPager;
 	private PagerAdapter mPageAdapter;
 	private static final int[] mResIds = { R.drawable.more_helper_1,
 			R.drawable.more_helper_2, R.drawable.more_helper_3 };
 	private int mTotalCount = mResIds.length;
+	private boolean mIsWelcome = false;
 
 	@Override
 	protected void prepareViews() {
 		// TODO Auto-generated method stub
 		super.prepareViews();
+
 		this.setContentView(R.layout.more_helper);
-		mTvTitle = (TextView) this.findViewById(R.id.titlebar_back_tv_title);
-		mTvCount = (TextView) this.findViewById(R.id.more_helper_tv_count);
 		mViewPager = (ViewPager) this.findViewById(R.id.more_helper_viewpager);
-		mTvTitle.setText(this.getString(R.string.more_help));
+
 	}
 
 	@Override
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		mIsWelcome = this.getIntent().getBooleanExtra("isWelcome", false);
 		mPageAdapter = new HelperPagerAdapter(mResIds);
 		mViewPager.setOnPageChangeListener(this);
 		mViewPager.setAdapter(mPageAdapter);
 
-		mTvCount.setText("1" + "/" + mTotalCount);
 	}
 
 	public void onClickBack(View view) {
 		this.finish();
+	}
+
+	public void onClickHelperIv(int pos) {
+		if (!mIsWelcome) {
+			return;
+		}
+		if (pos == (mTotalCount - 1)) {
+			this.setResult(RESULT_OK);
+			this.finish();
+		}
 	}
 
 	@Override
@@ -67,6 +76,5 @@ public class HelperActivity extends BaseActivity implements
 	@Override
 	public void onPageSelected(int arg0) {
 		// TODO Auto-generated method stub
-		mTvCount.setText((arg0 + 1) + "/" + mTotalCount);
 	}
 }

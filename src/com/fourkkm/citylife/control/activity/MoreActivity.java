@@ -36,18 +36,18 @@ public class MoreActivity extends BaseActivity {
 	}
 
 	public void onClickVersion(View view) {// 版本说明
-
+		Intent intent = new Intent(this, VersionInfoActivity.class);
+		this.startActivity(intent);
 	}
 
 	public void onClickHelp(View view) {// 新手帮助
-
+		Intent intent = new Intent(this, HelperActivity.class);
+		this.startActivity(intent);
 	}
 
 	public void onClickAbout(View view) {// 关于我们
-
+		Intent intent = new Intent(this, AboutUsActivity.class);
+		this.startActivity(intent);
 	}
 
-	public void onClickExit(View view) {// 退出应用
-
-	}
 }

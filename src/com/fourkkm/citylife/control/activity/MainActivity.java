@@ -45,6 +45,7 @@ public class MainActivity extends BaseFragmentActivity implements
 		IFloatingItemClick, OnDismissListener, ViewPager.OnPageChangeListener,
 		IAddressListener, ILocationConnListener {
 
+	private static final int REQ_WELCOME_CODE = 1;
 	private TextView mTvTitle;
 	private List<ModoerArea> mAreaList;
 	private HackyViewPager mViewPager;
@@ -86,6 +87,20 @@ public class MainActivity extends BaseFragmentActivity implements
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
 		super.prepareDatas();
+		boolean mIsWelcome = SharedPreferenceUtil.getSharedPrefercence()
+				.getBoolean(this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_IS_WELCOME);
+		if (!mIsWelcome) {
+			Intent intent = new Intent(this, HelperActivity.class);
+			intent.putExtra("isWelcome", true);
+			this.startActivityForResult(intent, REQ_WELCOME_CODE);
+			return;
+		}
+		this.prepare();
+	}
+
+	private void prepare() {
+		((CoreApp) AppUtils.getBaseApp(this)).startPushInfoService();
 		mTvTitle.setText(this.getString(R.string.main_title));
 		mLocationProxy = new LocationProxy(this,
 				this.getSupportFragmentManager(), this);
@@ -106,14 +121,18 @@ public class MainActivity extends BaseFragmentActivity implements
 	protected void prepareResume() {
 		// TODO Auto-generated method stub
 		super.prepareResume();
-		mLocationProxy.connect();
+		if (null != mLocationProxy) {
+			mLocationProxy.connect();
+		}
 	}
 
 	@Override
 	protected void preparePause() {
 		// TODO Auto-generated method stub
 		super.preparePause();
-		mLocationProxy.disconnect();
+		if (null != mLocationProxy) {
+			mLocationProxy.disconnect();
+		}
 	}
 
 	@Override
@@ -121,6 +140,23 @@ public class MainActivity extends BaseFragmentActivity implements
 		// TODO Auto-generated method stub
 		super.prepareDestroy();
 		this.stopAutoLooperPic();
+	}
+
+	@Override
+	protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(arg0, arg1, arg2);
+		if (REQ_WELCOME_CODE == arg0) {
+			if (RESULT_OK != arg1) {
+				this.finish();
+				return;
+			} else {
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_IS_WELCOME, true);
+				this.prepare();
+			}
+		}
 	}
 
 	private void fetchCountryArea() {
