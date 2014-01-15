@@ -3,6 +3,7 @@ package com.fourkkm.citylife.control.activity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -162,23 +163,31 @@ public class MainActivity extends BaseFragmentActivity implements
 	private void fetchCountryArea() {
 		String selectCode = "from com.andrnes.modoer.ModoerArea ma where ma.enabled = 1 and ma.level = 1";
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("max", GlobalConfig.MAX_ALL);
+		paramsMap.put("offset", 0);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_AREA);
-		this.getStoreOperation().findAll(selectCode,
-				new HashMap<String, Object>(), true, new ModoerArea(), param);
+		this.getStoreOperation().findAll(selectCode, paramsMap, true,
+				new ModoerArea(), param);
 	}
 
 	private void fetchBcastr() {
 		ModoerArea city = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
 		StringBuilder sb = new StringBuilder();
 		sb.append("from com.andrnes.modoer.ModoerBcastr mb where mb.available = 1");
+		Map<String, Object> paramsMap = new HashMap<String, Object>();
+		paramsMap.put("max", GlobalConfig.MAX_ALL);
+		paramsMap.put("offset", 0);
 		if (null != city) {
-			sb.append(" and mb.city.id = " + city.getId());
-			sb.append(" and mb.groupname = 'indexapp'");
+			sb.append(" and mb.city.id = :cityId");
+			sb.append(" and mb.groupname = :groupName");
+			paramsMap.put("cityId", city.getId());
+			paramsMap.put("groupName", "indexapp");
 		}
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_BCASTR);
-		this.getStoreOperation().findAll(sb.toString(),
-				new HashMap<String, Object>(), true, new ModoerBcastr(), param);
+		this.getStoreOperation().findAll(sb.toString(), paramsMap, true,
+				new ModoerBcastr(), param);
 	}
 
 	private void notifyPagerAdapterChanged() {
@@ -371,6 +380,13 @@ public class MainActivity extends BaseFragmentActivity implements
 				mProBarBcastr.setVisibility(View.GONE);
 			}
 		}
+
+	}
+
+	@Override
+	public void onFails(Param out) {
+		// TODO Auto-generated method stub
+		super.onFails(out);
 
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -128,9 +129,8 @@ public class PartyDetailActivity extends BaseActivity {
 		if (TextUtils.isEmpty(desc)) {
 			mWvDesc.setVisibility(View.GONE);
 		} else {
-			System.out.println(" " + CommonUtil.formatHtml(desc));
-			mWvDesc.loadDataWithBaseURL(null, CommonUtil.formatHtml(desc),
-					"text/html", "utf-8", null);
+			// System.out.println(" " + CommonUtil.formatHtml(desc));
+			mWvDesc.loadDataWithBaseURL(null, desc, "text/html", "utf-8", null);
 		}
 		int joinedTime = mParty.getJoinendtime();
 		int currTime = (int) CommonUtil.getCurrTimeByPHP();
@@ -192,11 +192,25 @@ public class PartyDetailActivity extends BaseActivity {
 	}
 
 	public void onClickWonderfulReview(View view) {// 精彩回顾
-		this.showToast("暂无链接");
+		StringBuilder sb = new StringBuilder();
+		sb.append(GlobalConfig.URL_PIC);
+		if (null != mParty) {
+			sb.append("party-detail-id-" + mParty.getId() + ".html");
+		}
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(sb.toString()));
+		this.startActivity(intent);
 	}
 
 	public void onClickEventPhoto(View view) {// 活动图片
-		this.showToast("暂无链接");
+		StringBuilder sb = new StringBuilder();
+		sb.append(GlobalConfig.URL_PIC);
+		if (null != mParty) {
+			sb.append("party-detail-id-" + mParty.getId() + ".html");
+		}
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(sb.toString()));
+		this.startActivity(intent);
 	}
 
 	public void onClickThumbnail(View view) {// 点击缩略图

@@ -685,6 +685,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT == operator) {// Subject
 			for (int i = 0; i < results.size(); i++) {
 				ModoerSubject subject = (ModoerSubject) results.get(i);
+				String title = CommonUtil.transferHtmlToJava(subject.getName());
+				subject.setName(title);
 				mSubjectList.add(subject);
 			}
 			this.pretreatmentResults(results);
@@ -695,6 +697,9 @@ public class SubjectListActivity extends BaseListActivity implements
 				ModoerFavorites favorite = (ModoerFavorites) results.get(i);
 				ModoerSubject subject = favorite.getSid();
 				if (null != subject && subject.getId() != 0) {
+					String title = CommonUtil.transferHtmlToJava(subject
+							.getName());
+					subject.setName(title);
 					mSubjectList.add(subject);
 				}
 			}

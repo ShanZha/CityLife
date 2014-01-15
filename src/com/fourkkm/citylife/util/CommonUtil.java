@@ -22,7 +22,7 @@ public class CommonUtil {
 	private static final double EARTH_RADIUS = 6378137.0;
 
 	/**
-	 * ¸ù¾İµÃ·Ö»ñÈ¡ÆÀ¼Û£¨10·ÖÂú·Ö£©
+	 * æ ¹æ®å¾—åˆ†è·å–è¯„ä»·ï¼ˆ10åˆ†æ»¡åˆ†ï¼‰
 	 * 
 	 * @param ctx
 	 * @param score
@@ -71,19 +71,19 @@ public class CommonUtil {
 	public static boolean isEmail(String email) {
 		String format = "^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
 		if (email.matches(format)) {
-			// ÓÊÏäÃûºÏ·¨,·µ»Øtrue
+			// é‚®ç®±ååˆæ³•,è¿”å›true
 			return true;
 		} else {
-			// ÓÊÏäÃû²»ºÏ·¨,·µ»Øfalse
+			// é‚®ç®±åä¸åˆæ³•,è¿”å›false
 			return false;
 		}
 	}
 
 	/**
-	 * »ñÈ¡Ä³¸ö¾­Î³¶È¶àÉÙÃ×ÒÔÄÚµÄ×î´ó¡¢×îĞ¡Á½¸ö¾­Î³¶È×ø±ê
+	 * è·å–æŸä¸ªç»çº¬åº¦å¤šå°‘ç±³ä»¥å†…çš„æœ€å¤§ã€æœ€å°ä¸¤ä¸ªç»çº¬åº¦åæ ‡
 	 * 
 	 * @param raidus
-	 *            µ¥Î»Ã×
+	 *            å•ä½ç±³
 	 * @return minLat,minLng,maxLat,maxLng
 	 */
 
@@ -106,7 +106,7 @@ public class CommonUtil {
 	}
 
 	/**
-	 * »ñÈ¡Á½µãÖ®¼ä¾àÀë£¨µ¥Î»Îªm£©
+	 * è·å–ä¸¤ç‚¹ä¹‹é—´è·ç¦»ï¼ˆå•ä½ä¸ºmï¼‰
 	 * 
 	 * @param longitude1
 	 * @param latitude1
@@ -132,16 +132,16 @@ public class CommonUtil {
 		return d * Math.PI / 180.0;
 	}
 
-	public static String formatHtml(String data) {
-		if (TextUtils.isEmpty(data)) {
-			return "";
-		}
-		data = data.replaceAll("&amp;", "");
-		data = data.replaceAll("quot;", "\"");
-		data = data.replaceAll("lt;", "<");
-		data = data.replaceAll("gt;", ">");
-		return data;
-	}
+	// public static String formatHtml(String data) {
+	// if (TextUtils.isEmpty(data)) {
+	// return "";
+	// }
+	// data = data.replaceAll("&amp;", "");
+	// data = data.replaceAll("quot;", "\"");
+	// data = data.replaceAll("lt;", "<");
+	// data = data.replaceAll("gt;", ">");
+	// return data;
+	// }
 
 	public static String formatHtml2(String data) {
 		if (TextUtils.isEmpty(data)) {
@@ -154,34 +154,14 @@ public class CommonUtil {
 	}
 
 	/**
-	 * »ñÈ¡ÊÖ»úip
+	 * è·å–æ‰‹æœºip
 	 * 
 	 * @param context
-	 *            ÉÏÏÂÎÄ
-	 * @return ¿ÉÓÃµÄip
+	 *            ä¸Šä¸‹æ–‡
+	 * @return å¯ç”¨çš„ip
 	 * 
 	 */
 	public static String getLocalIPAddress(Context context) {
-		// try {
-		// for (Enumeration<NetworkInterface> mEnumeration = NetworkInterface
-		// .getNetworkInterfaces(); mEnumeration.hasMoreElements();) {
-		// NetworkInterface intf = mEnumeration.nextElement();
-		// for (Enumeration<InetAddress> enumIPAddr = intf
-		// .getInetAddresses(); enumIPAddr.hasMoreElements();) {
-		// InetAddress inetAddress = enumIPAddr.nextElement();
-		// // Èç¹û²»ÊÇ»Ø»·µØÖ·
-		// if (!inetAddress.isLoopbackAddress()) {
-		// // Ö±½Ó·µ»Ø±¾µØIPµØÖ·
-		// int i = Integer.parseInt(inetAddress.getHostAddress());
-		// String ipStr=(i & 0xFF)+"."+((i>>8) & 0xFF)+"."+
-		// ((i>>16) & 0xFF)+"."+(i>>24 & 0xFF);
-		// return ipStr;
-		// }
-		// }
-		// }
-		// } catch (SocketException ex) {
-		// Log.e("Error", ex.toString());
-		// }
 		WifiManager wifiManager = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo info = wifiManager.getConnectionInfo();
@@ -192,7 +172,7 @@ public class CommonUtil {
 	}
 
 	/**
-	 * Ìæ»»\nÎª<br/>
+	 * æ›¿æ¢\nä¸º<br/>
 	 * 
 	 * @param content
 	 * @return
@@ -210,4 +190,24 @@ public class CommonUtil {
 		return result.toString();
 	}
 
+	public static String transferHtmlToJava(String temp) {
+		if (TextUtils.isEmpty(temp)) {
+			return "";
+		}
+		temp = temp.replaceAll("&amp;", "&");
+		temp = temp.replaceAll("&#039;", "'");
+		temp = temp.replaceAll("&quot;", "\"");
+		temp = temp.replaceAll("&lt;", "<");
+		temp = temp.replaceAll("&gt;", ">");
+		temp = temp.replaceAll("&quot;", ";");
+		temp = temp.replaceAll("&reg;", "Â®");
+		temp = temp.replaceAll("&copy", "Â©");
+		temp = temp.replaceAll("&trade;", "â„¢");
+		temp = temp.replaceAll("&bull;", ".");
+		temp = temp.replaceAll("&nbsp;", " ");
+		temp = temp.replaceAll("&laquo;", "<<");
+		temp = temp.replaceAll("&raquo;", ">>");
+		temp = temp.replaceAll("&#8206;", "");
+		return temp;
+	}
 }

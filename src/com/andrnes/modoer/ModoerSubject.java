@@ -44,7 +44,7 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	private ModoerAttList cShopatts2;
 
 	/** 名称 */
-	@Validates(info = "用户名称不能为空,用户名称长度不能超过60个字符", type = "isNull,maxSize60")
+	@Validates(info = "店铺名称不能为空,店铺名称长度不能超过60个字符", type = "isNull,maxSize60")
 	private String name;
 
 	/** 子名称 */

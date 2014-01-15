@@ -122,7 +122,7 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 			listItem.measure(0, 0);
 			totalHeight += listItem.getMeasuredHeight();
 		}
-		totalHeight += 100; // 额外加一些
+		totalHeight += 200; // 额外加一些
 		ViewGroup.LayoutParams params = mListViewFirst.getLayoutParams();
 		params.height = totalHeight + mListViewFirst.getDividerHeight()
 				* (mAdapterFirst.getCount() - 1);
@@ -274,6 +274,8 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 	}
 
 	public void dismiss() {
+		mSelectedPosSecond = -1;
+		mSelectedPosFirst = -1;
 		if (null != mPopWindow) {
 			mPopWindow.dismiss();
 		}

@@ -108,13 +108,13 @@
     <string name="party_contact_tel">联系方式</string>
     <string name="party_contact_tel_detail">联系方式：</string>
     <string name="party_sign_up_members">已报名会员</string>
-    <string name="party_sign_up_me">我要报名</string>
+    <string name="party_sign_up_me">报名</string>
     <string name="party_initiator">发起人：</string>
     <string name="party_initiate_time">发起时间：</string>
     <string name="party_sign_up_end_time">报名截止</string>
     <string name="party_sign_up_end_time_detail">报名截止：</string>
-    <string name="party_sex_limit">性别限制</string>
-    <string name="party_sex_limit_detail">性别限制：</string>
+    <string name="party_sex_limit">性别</string>
+    <string name="party_sex_limit_detail">性别：</string>
     <string name="party_cost">预计费用</string>
     <string name="party_cost_detail">预计费用：</string>
     <string name="party_integration">报名费用</string>
@@ -288,6 +288,8 @@
     <string name="share_qq">QQ好友或群组</string>
     <string name="share_qzone">QQ空间</string>
     <string name="share_tencent_weibo">腾讯微博</string>
+    <string name="share_weixin_friends">微信好友或群组</string>
+    <string name="share_weixin_timeline">微信朋友圈</string>
     <string name="share_content_null">分享内容不能为空</string>
     <string name="share_content_140">输入少于140个字的内容</string>
 

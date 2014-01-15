@@ -18,6 +18,7 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 
 import com.fourkkm.citylife.R;
+import com.zj.app.utils.CommonUtil;
 
 /**
  * 漂浮的一级菜单代理
@@ -77,6 +78,32 @@ public class FloatingOneMenuProxy implements OnItemClickListener,
 	public void setDatas(List<String> datas) {
 		this.mDatas.addAll(datas);
 		this.notifyDataChanged();
+		this.resetViewHeightByFirstLevel();
+	}
+
+	/**
+	 * 调整ListView高度
+	 */
+	private void resetViewHeightByFirstLevel() {
+		if (null == mAdapter) {
+			return;
+		}
+		int totalHeight = 0;
+		for (int i = 0; i < mAdapter.getCount(); i++) {
+			View listItem = mAdapter.getView(i, null, mListView);
+			listItem.measure(0, 0);
+			totalHeight += listItem.getMeasuredHeight();
+		}
+		totalHeight += 50; // 额外加一些
+		ViewGroup.LayoutParams params = mListView.getLayoutParams();
+		params.height = totalHeight + mListView.getDividerHeight()
+				* (mAdapter.getCount() - 1);
+		int screenHeight = CommonUtil.getScreenHeight(mCtx);
+		// 调整大小
+		if (params.height > screenHeight) {
+			params.height = screenHeight - 200;
+		}
+		mListView.setLayoutParams(params);
 	}
 
 	public void setFloatingItemClickListener(IFloatingItemClick listener) {

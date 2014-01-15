@@ -147,7 +147,7 @@ public interface GlobalConfig {
 		public static final String TENCENT_WEIBO_APP_SECRET = "0e84a41d4f77ba9d14d33e461f9bee17";
 		public static final String TENCENT_WEIBO_REDIRECT_URL = "http://www.baidu.com";
 
-		public static final String WEIXIN_APP_ID = "wx0be56f9c9aae8e96";
+		public static final String WEIXIN_APP_ID = "wxf8be95d381cc3b3d";
 //		public static final String WEIXIN_APP_KEY = "4c53e361f42041e8f1dd82414f633f2b";
 
 		public static final String TAOBAO_APP_KEY = "21701340";

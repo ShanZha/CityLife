@@ -131,7 +131,7 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 			listItem.measure(0, 0);
 			totalHeight += listItem.getMeasuredHeight();
 		}
-		totalHeight += 100; // 额外加一些
+		totalHeight += 200; // 额外加一些
 		ViewGroup.LayoutParams params = mListViewParent.getLayoutParams();
 		params.height = totalHeight + mListViewParent.getDividerHeight()
 				* (mParentAdapter.getCount() - 1);
