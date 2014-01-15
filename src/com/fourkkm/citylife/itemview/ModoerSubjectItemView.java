@@ -92,9 +92,9 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 		double lngSubject = subject.getMapLng();
 		double latSubject = subject.getMapLat();
 		if (0 != lngSubject && 0 != latSubject) {
-			int distance = (int) CommonUtil.getDistance(lng, lat, lngSubject,
+			double distance = CommonUtil.getDistance(lng, lat, lngSubject,
 					latSubject);
-			mTvDistance.setText(distance + "m");
+			mTvDistance.setText(CommonUtil.formatUnitM(distance));
 		} else {
 			mTvDistance.setVisibility(View.GONE);
 		}

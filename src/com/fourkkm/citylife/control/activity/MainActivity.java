@@ -8,9 +8,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.ProgressBar;
@@ -24,6 +26,7 @@ import com.andrnes.modoer.ModoerBcastr;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.widget.BasePicPagerAdapter;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.IAddressListener;
@@ -245,6 +248,50 @@ public class MainActivity extends BaseFragmentActivity implements
 		}
 	}
 
+	private void setCurrCountry() {
+		try {
+			Location location = mLocationProxy.fetchCurrLocation();
+			if (null == location) {
+				ModoerArea area = mAreaList.get(0);
+				((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(area);
+				mTvTitle.setText(area.getName());
+			} else {
+				double minDistance = 0.0d;
+				ModoerArea temp = null;
+				for (int i = 0; i < mAreaList.size(); i++) {
+					ModoerArea area = mAreaList.get(i);
+					String mappoint = area.getMappoint();
+					if (TextUtils.isEmpty(mappoint)) {
+						continue;
+					}
+					String[] points = mappoint.split(",");
+					double distance = CommonUtil.getDistance(
+							location.getLongitude(), location.getLatitude(),
+							Double.valueOf(points[0]),
+							Double.valueOf(points[1]));
+					if (i == 0) {
+						minDistance = distance;
+						temp = area;
+					}
+					if (distance < minDistance) {
+						minDistance = distance;
+						temp = area;
+					}
+				}
+				if (null != temp) {
+					SharedPreferenceUtil.getSharedPrefercence().put(
+							this.getApplicationContext(),
+							GlobalConfig.SharePre.KEY_CURR_AREA_ID,
+							temp.getId());
+				}
+				((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(temp);
+				mTvTitle.setText(temp.getName());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void onBcastrItemClick(int position) {
 		if (null != mBcastrList && (position <= mBcastrList.size() - 1)) {
 			ModoerBcastr bacastr = mBcastrList.get(position);
@@ -311,8 +358,6 @@ public class MainActivity extends BaseFragmentActivity implements
 
 	public void onClickMore(View view) {// ¸ü¶à
 		this.startActivity(new Intent(this, MoreActivity.class));
-		// this.startActivity(new Intent(this, LoginActivity.class));
-		// mLocationProxy.fetchAddress(this);
 	}
 
 	@Override
@@ -343,9 +388,7 @@ public class MainActivity extends BaseFragmentActivity implements
 					((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(currArea);
 					mTvTitle.setText(currArea.getName());
 				} else {
-					ModoerArea area = mAreaList.get(0);
-					((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(area);
-					mTvTitle.setText(area.getName());
+					this.setCurrCountry();
 					// this.onClickSwitchCountry(mTvTitle);
 				}
 				this.showBcastrLoading();
@@ -466,7 +509,12 @@ public class MainActivity extends BaseFragmentActivity implements
 	@Override
 	public void onConnected(Bundle data) {
 		// TODO Auto-generated method stub
+		if (null != mLocationProxy) {
+			Location location = mLocationProxy.fetchCurrLocation();
+			if (null == location) {
 
+			}
+		}
 	}
 
 	@Override

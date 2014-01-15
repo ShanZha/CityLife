@@ -1,5 +1,6 @@
 package com.fourkkm.citylife.util;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
 
@@ -132,16 +133,16 @@ public class CommonUtil {
 		return d * Math.PI / 180.0;
 	}
 
-	// public static String formatHtml(String data) {
-	// if (TextUtils.isEmpty(data)) {
-	// return "";
-	// }
-	// data = data.replaceAll("&amp;", "");
-	// data = data.replaceAll("quot;", "\"");
-	// data = data.replaceAll("lt;", "<");
-	// data = data.replaceAll("gt;", ">");
-	// return data;
-	// }
+	public static String formatUnitM(double unitM) {
+		if (unitM > 1000) {
+			double temp = unitM / 1000;
+			DecimalFormat df1 = new DecimalFormat("###.0");
+			return df1.format(temp) + "km";
+		} else {
+			DecimalFormat df2 = new DecimalFormat("###");
+			return df2.format(unitM) + "m";
+		}
+	}
 
 	public static String formatHtml2(String data) {
 		if (TextUtils.isEmpty(data)) {

@@ -38,8 +38,8 @@
 
     <!-- 底部-定位 -->
 
-    <LinearLayout
-        android:id="@+id/subject_list_ll_location"
+    <RelativeLayout
+        android:id="@+id/subject_list_rl_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/location_bg"
@@ -52,6 +52,7 @@
             android:id="@+id/subject_list_ll_location_loading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/margin_10"
             android:orientation="horizontal" >
 
@@ -76,6 +77,8 @@
             style="@style/list_second_level_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginRight="@dimen/margin_10"
@@ -84,6 +87,18 @@
             android:singleLine="true"
             android:text="@string/location_fail"
             android:visibility="gone" />
-    </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/subject_list_ibtn_refresh_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:background="@drawable/main_more"
+            android:onClick="onClickLocationRefresh"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </LinearLayout>

@@ -177,9 +177,15 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			mTvTitle.setText(this.getString(R.string.share_tencent_weibo));
 			break;
 		case GlobalConfig.IntentKey.INDEX_WEIXIN_FRIENDS:
+			IWXAPI wxApi = WXAPIFactory.createWXAPI(this,
+					GlobalConfig.Third.WEIXIN_APP_ID);
+			wxApi.registerApp(GlobalConfig.Third.WEIXIN_APP_ID);
 			mTvTitle.setText(this.getString(R.string.share_weixin_friends));
 			break;
 		case GlobalConfig.IntentKey.INDEX_WEIXIN_TIMELINE:
+			IWXAPI wxApi2 = WXAPIFactory.createWXAPI(this,
+					GlobalConfig.Third.WEIXIN_APP_ID);
+			wxApi2.registerApp(GlobalConfig.Third.WEIXIN_APP_ID);
 			mTvTitle.setText(this.getString(R.string.share_weixin_timeline));
 			break;
 		}

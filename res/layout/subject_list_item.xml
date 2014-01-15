@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_bg"
     android:orientation="vertical"
     android:paddingLeft="@dimen/margin_10"
     android:paddingRight="@dimen/margin_10"
@@ -26,43 +27,21 @@
         android:layout_toRightOf="@+id/subject_list_item_iv_show"
         android:orientation="vertical" >
 
-        <!-- 上边-商铺名称 -->
-
-        <TextView
-            android:id="@+id/subject_list_item_tv_shop_name"
-            style="@style/list_first_level_style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true" />
-
-        <!-- 中间 -->
-
         <LinearLayout
-            android:id="@+id/subject_detail_item_ll_middle"
+            android:id="@+id/subject_detail_item_ll_firstline"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/subject_list_item_tv_shop_name"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="@dimen/margin_5" >
+            android:layout_height="wrap_content" >
 
-            <!-- 消费星级 -->
-
-            <RatingBar
-                android:id="@+id/subject_list_item_rating_bar"
-                style="@style/rating_bar_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
-
-            <!-- 人均消费 -->
+            <!-- 上边-商铺名称 -->
 
             <TextView
-                android:id="@+id/subject_list_item_tv_average_per"
-                style="@style/list_second_level_style"
-                android:layout_width="wrap_content"
+                android:id="@+id/subject_list_item_tv_shop_name"
+                style="@style/list_first_level_style"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_5"
-                android:text="@string/average_per" />
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:text="符合大陆法到数据库廊坊数据库六角恐龙家乐福三闾大夫" />
 
             <!-- 图标属性一 -->
 
@@ -85,13 +64,44 @@
                 android:scaleType="fitXY" />
         </LinearLayout>
 
+        <!-- 中间 -->
+
+        <LinearLayout
+            android:id="@+id/subject_detail_item_ll_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/subject_detail_item_ll_firstline"
+            android:layout_below="@+id/subject_detail_item_ll_firstline"
+            android:layout_marginTop="@dimen/margin_5" >
+
+            <!-- 消费星级 -->
+
+            <RatingBar
+                android:id="@+id/subject_list_item_rating_bar"
+                style="@style/rating_bar_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+            <!-- 人均消费 -->
+
+            <TextView
+                android:id="@+id/subject_list_item_tv_average_per"
+                style="@style/list_second_level_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:text="@string/average_per" />
+        </LinearLayout>
+
         <!-- 底部 -->
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/subject_detail_item_ll_firstline"
             android:layout_below="@+id/subject_detail_item_ll_middle"
-            android:layout_marginTop="@dimen/margin_10" >
+            android:layout_marginTop="@dimen/margin_5" >
 
             <!-- 地区 -->
 
@@ -100,19 +110,9 @@
                 style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:singleLine="true" />
-
-            <!-- 商店类型 -->
-
-            <TextView
-                android:id="@+id/subject_list_item_tv_type"
-                style="@style/list_second_level_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_5"
                 android:layout_toLeftOf="@+id/subject_list_item_tv_distance"
-                android:layout_toRightOf="@+id/subject_list_item_tv_area"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="粉红色库房哈斯卡点击发送开发健康路基类口" />
 
             <TextView
                 android:id="@+id/subject_list_item_tv_distance"
@@ -120,17 +120,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:drawableLeft="@drawable/subject_detail_address"
-                android:gravity="center_vertical" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:drawableLeft="@drawable/subject_detail_address" />
         </RelativeLayout>
     </RelativeLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/margin_5"
-        android:src="@drawable/divider_dash"
-        android:visibility="gone" />
 
 </com.fourkkm.citylife.itemview.ModoerSubjectItemView>

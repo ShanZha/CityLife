@@ -55,7 +55,7 @@ public class SubjectListActivity extends BaseListActivity implements
 	private LinearLayout mLlTopCheck, mLlTopCheckLoading, mLlLocationLoading;
 	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond,
 			mRlFloatingThird;
-	private ImageButton mBtnAdd;
+	private ImageButton mBtnAdd, mBtnLocationRefresh;
 	private TextView mTvTitle, mTvNearOrSearch, mTvCategory, mTvSort,
 			mTvLocation;
 	private List<ModoerSubject> mSubjectList;
@@ -119,6 +119,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		mTvSort = (TextView) this.findViewById(R.id.floating_layout_tv_third);
 		mTvLocation = (TextView) this
 				.findViewById(R.id.subject_list_tv_location);
+		mBtnLocationRefresh = (ImageButton) this
+				.findViewById(R.id.subject_list_ibtn_refresh_location);
 		super.prepareViews();
 	}
 
@@ -416,6 +418,9 @@ public class SubjectListActivity extends BaseListActivity implements
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
+		if (null == mLocation) {
+			return;
+		}
 		Location location = mLocation.fetchCurrLocation();
 		mLocation.fetchAddress(this);
 		if (null == location) {
@@ -425,10 +430,8 @@ public class SubjectListActivity extends BaseListActivity implements
 					.getLatitude();
 			((CoreApp) AppUtils.getBaseApp(this)).mCurrLng = location
 					.getLongitude();
-			Log.i(TAG,
-					"shan-->onConnected: " + " Thread : "
-							+ location.getLatitude() + ","
-							+ location.getLongitude());
+			Log.i(TAG, "shan-->onConnected: " + "(" + location.getLatitude()
+					+ "," + location.getLongitude() + ")");
 		}
 	}
 
@@ -452,6 +455,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		mTvLocation.setVisibility(View.VISIBLE);
 		mLlLocationLoading.setVisibility(View.GONE);
+		mBtnLocationRefresh.setVisibility(View.VISIBLE);
 		mTvLocation.setText(addr);
 	}
 
@@ -460,6 +464,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		mTvLocation.setVisibility(View.VISIBLE);
 		mLlLocationLoading.setVisibility(View.GONE);
+		mBtnLocationRefresh.setVisibility(View.GONE);
 		mTvLocation.setText(error);
 	}
 
@@ -487,6 +492,23 @@ public class SubjectListActivity extends BaseListActivity implements
 	public void onClickRight(View view) {// Ìí¼Ó
 		// mLocation.fetchCurrLocation();
 		this.startActivity(new Intent(this, SubjectAddActivity.class));
+	}
+
+	public void onClickLocationRefresh(View view) {
+		if (null != mLocation) {
+			mTvLocation.setVisibility(View.GONE);
+			mLlLocationLoading.setVisibility(View.VISIBLE);
+			mBtnLocationRefresh.setVisibility(View.GONE);
+			Location location = mLocation.fetchCurrLocation();
+			if (null != location) {
+				((CoreApp) AppUtils.getBaseApp(this)).mCurrLat = location
+						.getLatitude();
+				((CoreApp) AppUtils.getBaseApp(this)).mCurrLng = location
+						.getLongitude();
+				this.notifyDataChanged();
+			}
+			mLocation.fetchAddress(this);
+		}
 	}
 
 	public void onClickFloatingFirst(View view) {// ¾àÀë/µØÇø
