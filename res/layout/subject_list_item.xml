@@ -40,8 +40,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:singleLine="true"
-                android:text="符合大陆法到数据库廊坊数据库六角恐龙家乐福三闾大夫" />
+                android:singleLine="true" />
 
             <!-- 图标属性一 -->
 
@@ -110,9 +109,9 @@
                 style="@style/list_second_level_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_toLeftOf="@+id/subject_list_item_tv_distance"
-                android:singleLine="true"
-                android:text="粉红色库房哈斯卡点击发送开发健康路基类口" />
+                android:singleLine="true" />
 
             <TextView
                 android:id="@+id/subject_list_item_tv_distance"

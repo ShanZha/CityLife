@@ -464,7 +464,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		// TODO Auto-generated method stub
 		mTvLocation.setVisibility(View.VISIBLE);
 		mLlLocationLoading.setVisibility(View.GONE);
-		mBtnLocationRefresh.setVisibility(View.GONE);
+		mBtnLocationRefresh.setVisibility(View.VISIBLE);
 		mTvLocation.setText(error);
 	}
 
