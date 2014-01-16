@@ -127,32 +127,33 @@ public interface GlobalConfig {
 	}
 
 	public static class Third {
-		public static final String SINA_WEIBO_APP_KEY = "3135167460";
-		public static final String SINA_WEIBO_APP_SECRET = "671e00bc3b8ff89efaa74e57733b21a7";
-		public static final String SINA_WEIBO_REDIRECT_URL = "http://www.baidu.com";
+		public static final String SINA_WEIBO_APP_KEY = "821457627";
+		public static final String SINA_WEIBO_APP_SECRET = "95cf4f7d3a871ff91be5ba445b81185f";
+		public static final String SINA_WEIBO_REDIRECT_URL = "http://www.40000km.com.cn/";
 		public static final String SINA_WEIBO_SCOPE = "email,direct_messages_read,direct_messages_write,"
 				+ "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
 				+ "follow_app_official_microblog," + "invitation_write";
 		public static final String SINA_WEIBO_GET_USERINFO_URL = "https://api.weibo.com/2/users/show.json";
 
 		/** QQ互联平台 **/
-		public static final String TENCENT_QQ_APP_ID = "101001015";
+		public static final String TENCENT_QQ_APP_ID = "101007340";
 		// public static final String TENCENT_QQ_APP_KEY =
 		// "3e36173d11d89aa7f7bb6d98466c4edc";
 		public static final String TENCENT_QQ_SCOPE = "all";
 		// public static final String TENCENT_QQ_SCOPE =
 		// "get_user_info;upload_pic;get_info;add_t;add_pic_t;add_one_blog";
 		/** 腾讯开放平台 **/
-		public static final String TENCENT_WEIBO_APP_KEY = "801455412";
-		public static final String TENCENT_WEIBO_APP_SECRET = "0e84a41d4f77ba9d14d33e461f9bee17";
-		public static final String TENCENT_WEIBO_REDIRECT_URL = "http://www.baidu.com";
+		public static final String TENCENT_WEIBO_APP_KEY = "801470184";
+		public static final String TENCENT_WEIBO_APP_SECRET = "1c6f4ff400b8f20e73ad5573200464b7";
+		public static final String TENCENT_WEIBO_REDIRECT_URL = "http://www.40000km.com.cn/";
 
-//		public static final String WEIXIN_APP_ID = "wxf8be95d381cc3b3d";
-		public static final String WEIXIN_APP_ID = "wx0be56f9c9aae8e96";
-//		public static final String WEIXIN_APP_KEY = "4c53e361f42041e8f1dd82414f633f2b";
+		public static final String WEIXIN_APP_ID = "wxf8be95d381cc3b3d";
+		// public static final String WEIXIN_APP_ID = "wx0be56f9c9aae8e96";
+		// public static final String WEIXIN_APP_KEY =
+		// "4c53e361f42041e8f1dd82414f633f2b";
 
-		public static final String TAOBAO_APP_KEY = "21701340";
-		public static final String TAOBAO_APP_SECRET = "dae8c1dfba2ce3b25937d21baba801df";
+		public static final String TAOBAO_APP_KEY = "21724339";
+		public static final String TAOBAO_APP_SECRET = "4dfa1b6312cddc83d2a811c4251bdc18";
 		public static final String TAOBAO_REDIRECT_URL = "com.fourkkm.citylife://authresult";
 
 		public static final String PSNAME_SINA_WEIBO = "weibo";

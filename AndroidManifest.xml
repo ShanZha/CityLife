@@ -40,7 +40,7 @@
         <!-- google map设置 -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAdn3otPQoJ8915Hy7m2yROcix9aG9eRzs" />
+            android:value="AIzaSyCZVxX3Ue79ORxnm8ObLk8NcikYJg7plEE" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -48,7 +48,7 @@
         <!-- 百度统计设置 -->
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
-            android:value="944cb9e0dd" />
+            android:value="2bb7082192" />
         <!-- 渠道商编号 -->
         <meta-data
             android:name="BaiduMobAd_CHANNEL"
@@ -265,7 +265,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- tencent加QQ_APP_ID -->
-                <data android:scheme="tencent101001015" />
+                <data android:scheme="tencent101007340" />
             </intent-filter>
         </activity>
         <!-- 腾讯微博鉴权界面 -->

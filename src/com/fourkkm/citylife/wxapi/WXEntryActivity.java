@@ -61,6 +61,9 @@ public class WXEntryActivity extends BaseActivity implements IWXAPIEventHandler 
 		mWxApi.registerApp(GlobalConfig.Third.WEIXIN_APP_ID);
 		mWxApi.handleIntent(getIntent(), this);
 
+		if (mIndex == -1) {
+			return;
+		}
 		Intent temp = new Intent(this, ShareActivity.class);
 		temp.putExtra("shareIndex", mIndex);
 		temp.putExtra("shareContent", intent.getStringExtra("shareContent"));
