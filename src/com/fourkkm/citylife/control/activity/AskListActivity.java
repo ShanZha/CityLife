@@ -14,6 +14,7 @@ import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerAskAnswer;
 import com.andrnes.modoer.ModoerAskCategory;
 import com.andrnes.modoer.ModoerAsks;
@@ -206,27 +207,39 @@ public class AskListActivity extends BaseListActivity implements
 			sb.append(" order by ma.dateline DESC,ma.id DESC");
 			return sb.toString();
 		}
+		ModoerArea city = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
 		if (null == mCurrAskCategory) {// 选择“所有类别”时
 			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
 			if (ASK_STATE_REWARD == mCurrAskState) {
+				if (null != city) {
+					sb.append(" where ma.cityId.id = " + city.getId());
+				}
 				sb.append(" order by ma.reward DESC,ma.id DESC");
 				return sb.toString();
 			} else if (ASK_STATE_ALL == mCurrAskState) {// “所有问题”
-				// do nothing
+				sb.append(" where ");
 			} else {
 				sb.append(" where ma.success = " + mCurrAskState);
+				sb.append(" and");
 			}
 		} else {
 			sb.append(" where ma.catid.id = " + mCurrAskCategory.getId());
 			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
 			if (ASK_STATE_REWARD == mCurrAskState) {
+				if (null != city) {
+					sb.append(" and ma.cityId.id = " + city.getId());
+				}
 				sb.append(" order by ma.reward DESC");
 				return sb.toString();
 			} else if (ASK_STATE_ALL == mCurrAskState) {// “所有问题”
-				// do nothing
+				sb.append(" and");
 			} else {
 				sb.append(" and ma.success = " + mCurrAskState);
+				sb.append(" and");
 			}
+		}
+		if (null != city) {
+			sb.append(" ma.cityId.id = " + city.getId());
 		}
 		sb.append(" order by ma.dateline DESC,ma.id DESC");
 		return sb.toString();

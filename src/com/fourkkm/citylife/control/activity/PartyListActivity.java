@@ -14,6 +14,7 @@ import android.widget.PopupWindow.OnDismissListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerParty;
 import com.andrnes.modoer.ModoerPartyCategory;
@@ -240,6 +241,10 @@ public class PartyListActivity extends BaseListActivity implements
 			long currTime3 = System.currentTimeMillis() / 1000;
 			sb.append(" and mp.endtime < " + currTime3);
 			break;
+		}
+		ModoerArea city = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
+		if (null != city) {
+			sb.append(" and mp.cityId.id = " + city.getId());
 		}
 		// Step 3:最之限制
 		if (PARTY_MOST_NEW == mCurrMost) {
