@@ -37,11 +37,11 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	@Lazy(isLazy = true)
 	private ModoerCategory catid;
 
-	@Lazy(isLazy = true)
-	private ModoerAttList cShopatts;
+	/** 图标属性一，（每张图以逗号（,）分割） **/
+	private String cShopattsReplace;
 
-	@Lazy(isLazy = true)
-	private ModoerAttList cShopatts2;
+	/** 图标属性二，（每张图以逗号（,）分割） **/
+	private String cShopatts2Replace;
 
 	/** 名称 */
 	@Validates(info = "店铺名称不能为空,店铺名称长度不能超过60个字符", type = "isNull,maxSize60")
@@ -435,20 +435,20 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 		this.errors = errors;
 	}
 
-	public ModoerAttList getCShopatts() {
-		return cShopatts;
+	public String getCShopattsReplace() {
+		return cShopattsReplace;
 	}
 
-	public void setCShopatts(ModoerAttList cShopatts) {
-		this.cShopatts = cShopatts;
+	public void setCShopattsReplace(String cShopattsReplace) {
+		this.cShopattsReplace = cShopattsReplace;
 	}
 
-	public ModoerAttList getCShopatts2() {
-		return cShopatts2;
+	public String getCShopatts2Replace() {
+		return cShopatts2Replace;
 	}
 
-	public void setCShopatts2(ModoerAttList cShopatts2) {
-		this.cShopatts2 = cShopatts2;
+	public void setCShopatts2Replace(String cShopatts2Replace) {
+		this.cShopatts2Replace = cShopatts2Replace;
 	}
 
 	@Override

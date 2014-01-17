@@ -50,9 +50,10 @@
                 android:layout_height="@dimen/subject_attr_height"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/margin_5"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:visibility="gone" />
 
-            <!-- 图标属性一二 -->
+            <!-- 图标属性二 -->
 
             <ImageView
                 android:id="@+id/subject_list_item_iv_attr2"
@@ -60,7 +61,41 @@
                 android:layout_height="@dimen/subject_attr_height"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/margin_5"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:visibility="gone" />
+
+            <!-- 图标属性三 -->
+
+            <ImageView
+                android:id="@+id/subject_list_item_iv_attr3"
+                android:layout_width="@dimen/subject_attr_width"
+                android:layout_height="@dimen/subject_attr_height"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:scaleType="fitXY"
+                android:visibility="gone" />
+
+            <!-- 图标属性四 -->
+
+            <ImageView
+                android:id="@+id/subject_list_item_iv_attr4"
+                android:layout_width="@dimen/subject_attr_width"
+                android:layout_height="@dimen/subject_attr_height"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:scaleType="fitXY"
+                android:visibility="gone" />
+
+            <!-- 图标属性五 -->
+
+            <ImageView
+                android:id="@+id/subject_list_item_iv_attr5"
+                android:layout_width="@dimen/subject_attr_width"
+                android:layout_height="@dimen/subject_attr_height"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:scaleType="fitXY"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- 中间 -->

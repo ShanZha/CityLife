@@ -1,7 +1,9 @@
 package com.fourkkm.citylife.util;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import android.content.Context;
@@ -210,5 +212,22 @@ public class CommonUtil {
 		temp = temp.replaceAll("&raquo;", ">>");
 		temp = temp.replaceAll("&#8206;", "");
 		return temp;
+	}
+
+	public static List<String> getSubjectAttrIconList(String attr1, String attr2) {
+		List<String> tempList = new ArrayList<String>();
+		if (!TextUtils.isEmpty(attr1)) {
+			String[] temp1 = attr1.split(",");
+			for (String str : temp1) {
+				tempList.add(str);
+			}
+		}
+		if (!TextUtils.isEmpty(attr2)) {
+			String[] temp = attr2.split(",");
+			for (String str : temp) {
+				tempList.add(str);
+			}
+		}
+		return tempList;
 	}
 }

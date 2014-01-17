@@ -61,8 +61,8 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			mTvCompositeScore;
 	/** 4项评分 **/
 	private TextView mTvSort1, mTvSort2, mTvSort3, mTvSort4;
-	private ImageView mIvThumbnail, mIvAttr1, mIvAttr2, mIvDividerTel,
-			mIvDividerDesc;
+	private ImageView mIvThumbnail, mIvDividerTel, mIvDividerDesc, mIvAttr1,
+			mIvAttr2, mIvAttr3, mIvAttr4, mIvAttr5;
 	private RatingBar mRatingBar;
 	private RatingBar mRatingBarReview;
 
@@ -130,6 +130,12 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 				.findViewById(R.id.subject_detail_item_iv_attr1);
 		mIvAttr2 = (ImageView) this
 				.findViewById(R.id.subject_detail_item_iv_attr2);
+		mIvAttr3 = (ImageView) this
+				.findViewById(R.id.subject_detail_item_iv_attr3);
+		mIvAttr4 = (ImageView) this
+				.findViewById(R.id.subject_detail_item_iv_attr4);
+		mIvAttr5 = (ImageView) this
+				.findViewById(R.id.subject_detail_item_iv_attr5);
 		mIvDividerTel = (ImageView) this
 				.findViewById(R.id.subject_detail_iv_divider_tel);
 		mIvDividerDesc = (ImageView) this
@@ -195,22 +201,11 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 					|| TextUtils.isEmpty(addr) || "0".equals(addr)) {
 				mIvDividerTel.setVisibility(View.GONE);
 			}
-			ModoerAttList attr1 = mSubject.getCShopatts();
-			if (null != attr1 && attr1.getIcon() != null) {
-				AsyncImageLoader.getImageLoad(this).showPic(
-						GlobalConfig.URL_ATTR_PIC + attr1.getIcon(), mIvAttr1,
-						null);
-			} else {
-				mIvAttr1.setVisibility(View.GONE);
-			}
-			ModoerAttList attr2 = mSubject.getCShopatts2();
-			if (null != attr2 && attr2.getIcon() != null) {
-				AsyncImageLoader.getImageLoad(this).showPic(
-						GlobalConfig.URL_ATTR_PIC + attr2.getIcon(), mIvAttr2,
-						null);
-			} else {
-				mIvAttr2.setVisibility(View.GONE);
-			}
+
+			List<String> attrList = CommonUtil.getSubjectAttrIconList(
+					mSubject.getCShopattsReplace(),
+					mSubject.getCShopatts2Replace());
+			this.setAttrIcons(attrList);
 
 			mTvReviewCount.setText(this.getString(R.string.review) + "("
 					+ mSubject.getReviews() + ")");
@@ -236,11 +231,15 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	 * 获取各类评分
 	 */
 	private void fetchReviewOpt() {
-		String selectCode = "from com.andrnes.modoer.ModoerReviewOpt mro where mro.enable = 1 and mro.gid.id = "
-				+ mSubject.getPid().getReviewOptGid().getId();
-		this.getStoreOperation().findAll(selectCode,
-				new HashMap<String, Object>(), true, new ModoerReviewOpt(),
-				new Param(this.hashCode(), GlobalConfig.URL_CONN));
+		try {
+			String selectCode = "from com.andrnes.modoer.ModoerReviewOpt mro where mro.enable = 1 and mro.gid.id = "
+					+ mSubject.getPid().getReviewOptGid().getId();
+			this.getStoreOperation().findAll(selectCode,
+					new HashMap<String, Object>(), true, new ModoerReviewOpt(),
+					new Param(this.hashCode(), GlobalConfig.URL_CONN));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -299,6 +298,48 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			parent.setVisibility(View.GONE);
 		} else {
 			tv.setText(content);
+		}
+	}
+
+	private void setAttrIcons(List<String> attrList) {
+		if (null == attrList || attrList.size() == 0) {
+			mIvAttr1.setVisibility(View.GONE);
+			mIvAttr2.setVisibility(View.GONE);
+			mIvAttr3.setVisibility(View.GONE);
+			mIvAttr4.setVisibility(View.GONE);
+			mIvAttr5.setVisibility(View.GONE);
+			return;
+		}
+		for (int i = 0; i < attrList.size(); i++) {
+			String icon = attrList.get(i);
+			String url = GlobalConfig.URL_ATTR_PIC + icon;
+			switch (i) {
+			case 0:
+				mIvAttr1.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(this)
+						.showPic(url, mIvAttr1, null);
+				break;
+			case 1:
+				mIvAttr2.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(this)
+						.showPic(url, mIvAttr2, null);
+				break;
+			case 2:
+				mIvAttr3.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(this)
+						.showPic(url, mIvAttr3, null);
+				break;
+			case 3:
+				mIvAttr4.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(this)
+						.showPic(url, mIvAttr4, null);
+				break;
+			case 4:
+				mIvAttr5.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(this)
+						.showPic(url, mIvAttr5, null);
+				break;
+			}
 		}
 	}
 
@@ -728,8 +769,11 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 				int average = (review.getSort1() + review.getSort2()
 						+ review.getSort3() + review.getSort4()) / 4;
 				mRatingBarReview.setProgress(average);
+				this.hideReviewLoading();
+			} else {
+				mRlReview.setVisibility(View.GONE);
+				mProBarReview.setVisibility(View.GONE);
 			}
-			this.hideReviewLoading();
 		}
 
 	}

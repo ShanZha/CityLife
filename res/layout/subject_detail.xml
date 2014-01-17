@@ -98,9 +98,10 @@
                                 android:layout_height="@dimen/subject_attr_height"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/margin_5"
-                                android:scaleType="fitXY" />
+                                android:scaleType="fitXY"
+                                android:visibility="gone" />
 
-                            <!-- 图标属性一二 -->
+                            <!-- 图标属性二 -->
 
                             <ImageView
                                 android:id="@+id/subject_detail_item_iv_attr2"
@@ -108,7 +109,41 @@
                                 android:layout_height="@dimen/subject_attr_height"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/margin_5"
-                                android:scaleType="fitXY" />
+                                android:scaleType="fitXY"
+                                android:visibility="gone" />
+
+                            <!-- 图标属性三 -->
+
+                            <ImageView
+                                android:id="@+id/subject_detail_item_iv_attr3"
+                                android:layout_width="@dimen/subject_attr_width"
+                                android:layout_height="@dimen/subject_attr_height"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/margin_5"
+                                android:scaleType="fitXY"
+                                android:visibility="gone" />
+
+                            <!-- 图标属性四 -->
+
+                            <ImageView
+                                android:id="@+id/subject_detail_item_iv_attr4"
+                                android:layout_width="@dimen/subject_attr_width"
+                                android:layout_height="@dimen/subject_attr_height"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/margin_5"
+                                android:scaleType="fitXY"
+                                android:visibility="gone" />
+
+                            <!-- 图标属性五 -->
+
+                            <ImageView
+                                android:id="@+id/subject_detail_item_iv_attr5"
+                                android:layout_width="@dimen/subject_attr_width"
+                                android:layout_height="@dimen/subject_attr_height"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/margin_5"
+                                android:scaleType="fitXY"
+                                android:visibility="gone" />
 
                             <!-- 人均 -->
 
@@ -207,7 +242,6 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/margin_5"
-                        android:layout_marginTop="@dimen/margin_15"
                         android:layout_toLeftOf="@+id/subject_detail_iv_address_more"
                         android:layout_toRightOf="@+id/subject_detail_iv_address_icon"
                         android:singleLine="true" />
@@ -218,8 +252,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/margin_10"
-                        android:layout_marginTop="@dimen/margin_5"
                         android:src="@drawable/main_more" />
                 </RelativeLayout>
 
@@ -240,6 +272,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_10"
                     android:layout_marginRight="@dimen/margin_10"
+                    android:layout_marginTop="@dimen/margin_10"
                     android:onClick="onClickTel" >
 
                     <ImageView
@@ -248,7 +281,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginTop="@dimen/margin_5"
                         android:src="@drawable/subject_detail_tel" />
 
                     <TextView
@@ -258,7 +290,6 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/margin_5"
-                        android:layout_marginTop="@dimen/margin_15"
                         android:layout_toLeftOf="@+id/subject_detail_iv_tel_more"
                         android:layout_toRightOf="@+id/subject_detail_iv_tel_icon"
                         android:singleLine="true" />
@@ -269,8 +300,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/margin_10"
-                        android:layout_marginTop="@dimen/margin_5"
                         android:src="@drawable/main_more" />
                 </RelativeLayout>
 
@@ -312,6 +341,7 @@
 
                     <TextView
                         android:id="@+id/subject_detail_tv_impression"
+                        style="@style/list_second_level_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@+id/subject_detail_tv_impression_tip"

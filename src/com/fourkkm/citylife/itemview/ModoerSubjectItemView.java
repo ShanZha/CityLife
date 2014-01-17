@@ -1,5 +1,7 @@
 package com.fourkkm.citylife.itemview;
 
+import java.util.List;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerArea;
-import com.andrnes.modoer.ModoerAttList;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
@@ -26,7 +27,8 @@ import com.zj.support.widget.itemview.ItemView;
 public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 
 	private Context mCtx;
-	private ImageView mIvShow, mIvAttr1, mIvAttr2;
+	private ImageView mIvShow, mIvAttr1, mIvAttr2, mIvAttr3, mIvAttr4,
+			mIvAttr5;
 	private TextView mTvShopName;
 	private TextView mTvArea;
 	private TextView mTvAveragePer;
@@ -67,6 +69,12 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 				.findViewById(R.id.subject_list_item_iv_attr1);
 		mIvAttr2 = (ImageView) this
 				.findViewById(R.id.subject_list_item_iv_attr2);
+		mIvAttr3 = (ImageView) this
+				.findViewById(R.id.subject_list_item_iv_attr3);
+		mIvAttr4 = (ImageView) this
+				.findViewById(R.id.subject_list_item_iv_attr4);
+		mIvAttr5 = (ImageView) this
+				.findViewById(R.id.subject_list_item_iv_attr5);
 
 	}
 
@@ -109,23 +117,52 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 			mIvShow.setImageBitmap(mBmDefault);
 		}
 
-		ModoerAttList attr1 = subject.getCShopatts();
-		if (null != attr1 && attr1.getIcon() != null) {
-			AsyncImageLoader.getImageLoad(mCtx)
-					.showPic(GlobalConfig.URL_ATTR_PIC + attr1.getIcon(),
-							mIvAttr1, null);
-		} else {
-			mIvAttr1.setImageBitmap(null);
-		}
-		ModoerAttList attr2 = subject.getCShopatts2();
-		if (null != attr2 && attr2.getIcon() != null) {
-			AsyncImageLoader.getImageLoad(mCtx)
-					.showPic(GlobalConfig.URL_ATTR_PIC + attr2.getIcon(),
-							mIvAttr2, null);
-		} else {
-			mIvAttr2.setImageBitmap(null);
-		}
+		List<String> attrList = CommonUtil.getSubjectAttrIconList(
+				subject.getCShopattsReplace(), subject.getCShopatts2Replace());
+		this.setAttrIcons(attrList);
 
+	}
+
+	private void setAttrIcons(List<String> attrList) {
+		if (null == attrList || attrList.size() == 0) {
+			mIvAttr1.setVisibility(View.GONE);
+			mIvAttr2.setVisibility(View.GONE);
+			mIvAttr3.setVisibility(View.GONE);
+			mIvAttr4.setVisibility(View.GONE);
+			mIvAttr5.setVisibility(View.GONE);
+			return;
+		}
+		for (int i = 0; i < attrList.size(); i++) {
+			String icon = attrList.get(i);
+			String url = GlobalConfig.URL_ATTR_PIC + icon;
+			switch (i) {
+			case 0:
+				mIvAttr1.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(mCtx)
+						.showPic(url, mIvAttr1, null);
+				break;
+			case 1:
+				mIvAttr2.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(mCtx)
+						.showPic(url, mIvAttr2, null);
+				break;
+			case 2:
+				mIvAttr3.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(mCtx)
+						.showPic(url, mIvAttr3, null);
+				break;
+			case 3:
+				mIvAttr4.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(mCtx)
+						.showPic(url, mIvAttr4, null);
+				break;
+			case 4:
+				mIvAttr5.setVisibility(View.VISIBLE);
+				AsyncImageLoader.getImageLoad(mCtx)
+						.showPic(url, mIvAttr5, null);
+				break;
+			}
+		}
 	}
 
 }

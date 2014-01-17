@@ -43,7 +43,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/location_bg"
-        android:gravity="center_vertical"
         android:orientation="horizontal" >
 
         <!-- 正在定位 -->
@@ -53,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_10"
             android:orientation="horizontal" >
 
@@ -83,6 +83,7 @@
             android:layout_marginRight="@dimen/margin_10"
             android:drawableLeft="@drawable/location_icon"
             android:drawablePadding="@dimen/margin_10"
+            android:gravity="center_vertical"
             android:singleLine="true"
             android:text="@string/location_fail"
             android:visibility="gone" />
@@ -95,7 +96,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginRight="@dimen/margin_10"
-            android:background="@drawable/main_more"
+            android:background="@drawable/subject_location_refresh"
             android:onClick="onClickLocationRefresh"
             android:visibility="gone" />
     </RelativeLayout>

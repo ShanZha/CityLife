@@ -137,6 +137,7 @@ public interface GlobalConfig {
 
 		/** QQ»¥ÁªÆ½Ì¨ **/
 		public static final String TENCENT_QQ_APP_ID = "101007340";
+//		public static final String TENCENT_QQ_APP_ID = "101001015";
 		// public static final String TENCENT_QQ_APP_KEY =
 		// "3e36173d11d89aa7f7bb6d98466c4edc";
 		public static final String TENCENT_QQ_SCOPE = "all";
