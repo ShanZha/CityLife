@@ -427,14 +427,27 @@
                 android:layout_margin="@dimen/margin_10"
                 android:hint="@string/china_lane_desc" />
 
+            <com.fourkkm.citylife.view.AlbumGridView
+                android:id="@+id/china_lane_add_gv_pics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_5"
+                android:layout_marginRight="@dimen/margin_5"
+                android:horizontalSpacing="@dimen/margin_10"
+                android:numColumns="3"
+                android:scrollbars="none"
+                android:verticalSpacing="@dimen/margin_10" >
+            </com.fourkkm.citylife.view.AlbumGridView>
+
             <!-- 添加 -->
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/margin_10"
-                android:layout_marginTop="@dimen/margin_10"
+                android:layout_marginBottom="@dimen/margin_15"
+                android:layout_marginTop="@dimen/margin_15"
                 android:background="@drawable/commit_btn_selector"
                 android:onClick="onClickAdd"
                 android:text="@string/commit"
