@@ -368,7 +368,23 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		if (!TextUtils.isEmpty(tel) && !"0".equals(tel)) {
 			sb.append(this.getString(R.string.subject_tel_detail));
 			sb.append(tel);
+			sb.append("\n");
 		}
+		sb.append(GlobalConfig.URL_PIC);
+		sb.append("item-");
+		sb.append(mSubject.getId());
+		sb.append(".html");
+		return sb.toString();
+	}
+
+	/**
+	 * –Œ»Áhttp://www.40000km.com.cn/item-subject.id.html
+	 * 
+	 * @param subjectId
+	 */
+	private String buildSubjectUrlById(int subjectId) {
+		StringBuilder sb = new StringBuilder();
+
 		return sb.toString();
 	}
 
@@ -407,7 +423,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	 */
 	private void onCollection() {
 		this.showLoadingCollection();
-//		this.showToast(this.getString(R.string.subject_collection_start));
+		// this.showToast(this.getString(R.string.subject_collection_start));
 		ModoerFavorites favorite = new ModoerFavorites();
 		favorite.setAddtime((int) CommonUtil.getCurrTimeByPHP());
 		favorite.setSid(mSubject);
@@ -636,6 +652,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	private void share(int index) {
 		Intent intent = new Intent(this, ShareActivity.class);
 		intent.putExtra("shareIndex", index);
+		intent.putExtra("subjectId", (null == mSubject ? 0 : mSubject.getId()));
 		intent.putExtra("shareContent", this.buildShareContent(index));
 		this.startActivity(intent);
 	}
@@ -824,7 +841,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		// this.hideReviewLoading();
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SUBJECT_CONNLECTION == operator) {
-//			this.showToast(this.getString(R.string.subject_collection_fail));
+			// this.showToast(this.getString(R.string.subject_collection_fail));
 			this.hideLoadingCollection();
 		} else if (GlobalConfig.Operator.OPERATION_FIND_ALBUM_BY_SUBJECT == operator) {
 			if (null != mDialogProxy) {

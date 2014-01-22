@@ -12,6 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:clickable="true"
+        android:onClick="onClickSwitchCountry"
         android:text="@string/hello_world" />
 
     <!-- 切换国家 -->

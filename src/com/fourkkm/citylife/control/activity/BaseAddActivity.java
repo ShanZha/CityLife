@@ -264,7 +264,7 @@ public class BaseAddActivity extends BaseUploadPicActivity {
 				|| GlobalConfig.Operator.OPERATION_SAVE_CHINA_LANE == operator
 				|| GlobalConfig.Operator.OPERATION_SAVE_SUBJECT == operator) {
 			this.hideWaiting();
-			this.showToast(this.getString(R.string.commit_fail));
+//			this.showToast(this.getString(R.string.commit_fail));
 		}
 
 	}

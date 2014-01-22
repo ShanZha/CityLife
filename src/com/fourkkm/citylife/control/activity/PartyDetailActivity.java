@@ -44,12 +44,14 @@ public class PartyDetailActivity extends BaseActivity {
 	private static final int SEX_LIMIT_NONE = 0;
 	private static final int SEX_LIMIT_WOMAN = 1;
 	private static final int SEX_LIMIT_MAN = 2;
+	private static final String APPLY_TYPE_INTEGRATION = "point1";
+	private static final String APPLY_TYPE_RMB = "rmb";
 	private Button mBtnSignUp;
 	private ImageView mIvThumb;
 	private WebView mWvDesc;
 	private TextView mTvTitle, mTvSubject, mTvInitiator, mTvInitiateTime,
 			mTvSignUpEndTime, mTvTime, mTvAddr, mTvSexLimit, mTvCost,
-			mTvPlanNum, mTvSignUpNum, mTvSignUpMemberNames;
+			mTvPlanNum, mTvSignUpNum, mTvSignUpMemberNames, mTvIntegration;
 	private LinearLayout mLlSignUpMembers;
 	private ProgressBar mProBarSignUpMembers;
 
@@ -81,6 +83,8 @@ public class PartyDetailActivity extends BaseActivity {
 				.findViewById(R.id.party_detail_tv_plan_person_num);
 		mTvSignUpNum = (TextView) this
 				.findViewById(R.id.party_detail_tv_sign_up_num);
+		mTvIntegration = (TextView) this
+				.findViewById(R.id.party_detail_tv_integration);
 		mWvDesc = (WebView) this.findViewById(R.id.party_detail_wv_desc);
 		mTvSignUpMemberNames = (TextView) this
 				.findViewById(R.id.party_detail_tv_sign_up_members_name);
@@ -122,6 +126,8 @@ public class PartyDetailActivity extends BaseActivity {
 		mTvAddr.setText(mParty.getAddress());
 		mTvSexLimit.setText(this.getStrBySex(mParty.getSex()));
 		mTvCost.setText(mParty.getPrice() + "/»À");
+		mTvIntegration.setText((int)mParty.getApplyprice()
+				+ this.getApplyPriceType(mParty.getApplypriceType()));
 		mTvPlanNum.setText(mParty.getPlannum() + "");
 		mTvSignUpNum.setText(mParty.getApplynum() + "");
 		// mTvDesc.setText(mParty.getDes());
@@ -147,6 +153,19 @@ public class PartyDetailActivity extends BaseActivity {
 		mWvDesc.getBackground().setAlpha(0);
 		WebSettings wb = mWvDesc.getSettings();
 		wb.setTextSize(FONT_SIZES[1]);
+	}
+
+	private String getApplyPriceType(String applyType) {
+		if (TextUtils.isEmpty(applyType)) {
+			return "";
+		}
+		if (APPLY_TYPE_INTEGRATION.equals(applyType)) {
+			return this.getString(R.string.party_apply_type_integration);
+		} else if (APPLY_TYPE_RMB.equals(applyType)) {
+			return this.getString(R.string.party_apply_type_rmb);
+		} else {
+			return "";
+		}
 	}
 
 	private String getStrBySex(int sex) {

@@ -85,6 +85,7 @@
     <string name="ask_answer">回答问题</string>
     <string name="ask_answer_success">回答成功</string>
     <string name="ask_update_title">结束问题</string>
+    <string name="ask_close_best_answer_none">请先选择最佳答案</string>
     <string name="ask_update_best_review_hint">您对最佳评论有什么说的呢（选填）</string>
     <string name="party_state_all">全部活动</string>
     <string name="party_state_signning">报名中</string>
@@ -117,9 +118,12 @@
     <string name="party_sex_limit_detail">性别：</string>
     <string name="party_cost">预计费用</string>
     <string name="party_cost_detail">预计费用：</string>
+    <string name="party_integration_detail">报名费用：</string>
     <string name="party_integration">报名费用</string>
     <string name="party_cost_per_tip">元/人</string>
     <string name="party_integration_tip">积分</string>
+    <string name="party_apply_type_integration">积分</string>
+    <string name="party_apply_type_rmb">人民币</string>
     <string name="party_plan_per_num_tip">人</string>
     <string name="party_plan_person_num">计划人数</string>
     <string name="party_plan_person_num_detail">计划人数：</string>
@@ -176,6 +180,8 @@
     <string name="subject_review">店铺评价</string>
     <string name="subject_map_point_null">请先地图选点</string>
     <string name="subject_upload_pic_unfinish">图片上传还未完毕</string>
+    <string name="subject_favorite_delete">取消收藏</string>
+    <string name="subject_favorite_delete_success">取消收藏成功</string>
     <string name="listview_header_hint_normal">下拉刷新</string>
     <string name="listview_header_hint_ready">松开刷新数据</string>
     <string name="listview_header_hint_loading">正在加载...</string>

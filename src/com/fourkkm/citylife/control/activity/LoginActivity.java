@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -134,11 +135,16 @@ public class LoginActivity extends AuthActivity implements ICallback,
 			mEtPswd.setText(pswd);
 		}
 
+		if (isAutoLogin) {
+			this.onLogin();
+		}
+
 		mSinaWeibo = Weibo.getInstance(GlobalConfig.Third.SINA_WEIBO_APP_KEY,
 				GlobalConfig.Third.SINA_WEIBO_REDIRECT_URL,
 				GlobalConfig.Third.SINA_WEIBO_SCOPE);
 		mTencent = Tencent.createInstance(GlobalConfig.Third.TENCENT_QQ_APP_ID,
 				this.getApplicationContext());
+
 	}
 
 	private void showToast(String msg) {
@@ -247,17 +253,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		}
 	}
 
-	public void onClickBack(View view) {
-		this.setResult(RESULT_CANCELED);
-		this.finish();
-	}
-
-	public void onClickRegister(View view) {// ×¢²á
-		this.startActivityForResult(new Intent(this, RegisterActivity.class),
-				REGISTER_REQ_CODE);
-	}
-
-	public void onClickLogin(View view) {// µÇÂ¼
+	private void onLogin() {
 		String username = mEtUsername.getText().toString().trim();
 		String pswd = mEtPswd.getText().toString().trim();
 		if (TextUtils.isEmpty(username)) {
@@ -274,6 +270,26 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		mUserName = username;
 		mUserPswd = pswd;
 		this.fecthMember(mMember);
+	}
+
+	public void onClickBack(View view) {
+		this.setResult(RESULT_CANCELED);
+		this.finish();
+	}
+
+	public void onClickRegister(View view) {// ×¢²á
+		this.startActivityForResult(new Intent(this, RegisterActivity.class),
+				REGISTER_REQ_CODE);
+	}
+
+	public void onClickForgetPswd(View view) {// Íü¼ÇÃÜÂë
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(GlobalConfig.URL_FORGET_PSWD));
+		this.startActivity(intent);
+	}
+
+	public void onClickLogin(View view) {// µÇÂ¼
+		this.onLogin();
 	}
 
 	public void onClickQQ(View view) {// qqµÇÂ¼
@@ -546,9 +562,9 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		}
 		switch (type) {
 		case TYPE_SINA_WEIBO:
-//			Oauth2AccessToken token = new Oauth2AccessToken(accessToken,
-//					String.valueOf(expireTime));
-//			AccessTokenKeeper.keepAccessToken(LoginActivity.this, token);
+			// Oauth2AccessToken token = new Oauth2AccessToken(accessToken,
+			// String.valueOf(expireTime));
+			// AccessTokenKeeper.keepAccessToken(LoginActivity.this, token);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_SINA_WEIBO,
 					accessToken, uid, expireTime);
 			break;

@@ -253,6 +253,31 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true" />
             </LinearLayout>
+            
+             <!-- 报名费用 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10" >
+
+                <TextView
+                    style="@style/list_second_level_black_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/party_integration_detail" />
+
+                <TextView
+                    android:id="@+id/party_detail_tv_integration"
+                    style="@style/list_second_level_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
+            </LinearLayout>
+            
 
             <!-- 计划人数 -->
 

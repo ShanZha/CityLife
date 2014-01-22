@@ -434,7 +434,7 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_REVIEW == operator) {
 			this.hideWaitting();
-			this.showToast(this.getString(R.string.review_fail));
+//			this.showToast(this.getString(R.string.review_fail));
 		} else {
 			this.hideSortLoading();
 		}

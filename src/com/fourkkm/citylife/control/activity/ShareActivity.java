@@ -82,6 +82,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	private int mMaxLength = 140;
 	private int mEditStart = 0;
 	private int mEditEnd = 0;
+	private String mSubjectUrl = "";
 
 	@Override
 	protected void prepareViews() {
@@ -103,6 +104,8 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 		mDialogProxy = new ProgressDialogProxy(this);
 		Intent intent = this.getIntent();
 		mIndex = intent.getIntExtra("shareIndex", -1);
+		int subjectId = intent.getIntExtra("subjectId", 0);
+		mSubjectUrl = this.buildSubjectUrlById(subjectId);
 		this.setLimitForET();
 		mEtContent.addTextChangedListener(this);
 		mContent = intent.getStringExtra("shareContent");
@@ -141,6 +144,23 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 			this.fetchMemberByThirdInfo(this.getPsnameByIndex());
 		}
 
+	}
+
+	/**
+	 * –Œ»Áhttp://www.40000km.com.cn/item-subject.id.html
+	 * 
+	 * @param subjectId
+	 */
+	private String buildSubjectUrlById(int subjectId) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(GlobalConfig.URL_PIC);
+		if (0 == subjectId) {
+			return sb.toString();
+		}
+		sb.append("item-");
+		sb.append(subjectId);
+		sb.append(".html");
+		return sb.toString();
 	}
 
 	private boolean isShareOK() {
@@ -505,7 +525,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 					this.getString(R.string.share));
 			params.putString(Tencent.SHARE_TO_QQ_SUMMARY, mContent);
 			params.putString(Tencent.SHARE_TO_QQ_TARGET_URL,
-					GlobalConfig.URL_PIC);
+					mSubjectUrl);
 			// params.putString(Tencent.SHARE_TO_QQ_IMAGE_URL,
 			// "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
 			params.putString(Tencent.SHARE_TO_QQ_APP_NAME,

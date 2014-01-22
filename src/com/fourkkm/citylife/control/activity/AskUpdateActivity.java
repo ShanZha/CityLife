@@ -140,14 +140,20 @@ public class AskUpdateActivity extends BaseActivity {
 						.toString().trim();
 				bestAnswer.setFeel(bestAnswerReview);
 				mCurrAsk.setBestanswer(bestAnswer);
-			}
-			mCurrAsk.setSuccess(1);
-			mCurrAsk.setSolvetime((int) CommonUtil.getCurrTimeByPHP());
+				mCurrAsk.setSuccess(1);
+				mCurrAsk.setSolvetime((int) CommonUtil.getCurrTimeByPHP());
 
-			mDialog.showDialog();
-			Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-			param.setOperator(GlobalConfig.Operator.OPERATION_CLOSE_ASK);
-			this.getStoreOperation().saveOrUpdate(mCurrAsk, param);
+				mDialog.showDialog();
+				Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+				param.setOperator(GlobalConfig.Operator.OPERATION_CLOSE_ASK);
+				List<Object> objs = new ArrayList<Object>();
+				objs.add(bestAnswer);
+				objs.add(mCurrAsk);
+				this.getStoreOperation().saveOrUpdateArray(objs, param);
+			} else {
+				this.showToast(this
+						.getString(R.string.ask_close_best_answer_none));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -180,9 +186,6 @@ public class AskUpdateActivity extends BaseActivity {
 		case GlobalConfig.Operator.OPERATION_SAVE_ASK:
 			this.showToast(this.getString(R.string.update_success));
 			break;
-		case GlobalConfig.Operator.OPERATION_CLOSE_ASK:
-			this.showToast(this.getString(R.string.commit_success));
-			break;
 		}
 		Intent intent = new Intent();
 		intent.putExtra("modoerAsk", mCurrAsk);
@@ -190,6 +193,20 @@ public class AskUpdateActivity extends BaseActivity {
 		mDialog.hideDialog();
 		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
 				ModoerAsks.class.getName());
+		this.finish();
+	}
+
+	@Override
+	public void onSuccessSaveOrUpdateArray(Param out) {
+		// TODO Auto-generated method stub
+		super.onSuccessSaveOrUpdateArray(out);
+		this.showToast(this.getString(R.string.commit_success));
+		Intent intent = new Intent();
+		intent.putExtra("modoerAsk", mCurrAsk);
+		this.setResult(RESULT_OK, intent);
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerAsks.class.getName());
+		mDialog.hideDialog();
 		this.finish();
 	}
 

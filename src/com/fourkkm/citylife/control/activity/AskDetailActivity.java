@@ -113,6 +113,14 @@ public class AskDetailActivity extends BaseActivity {
 		this.setUserNameAndGroup(member, mTvLevelAndUsername);
 		ModoerAskAnswer bestAnswer = mCurrAsk.getBestanswer();
 		if (null != bestAnswer && bestAnswer.getId() != 0) {
+			mTvBestTips.setVisibility(View.VISIBLE);
+			mTvBestTime.setVisibility(View.VISIBLE);
+			mTvBestContent.setVisibility(View.VISIBLE);
+			mTvBestLevelAndUsername.setVisibility(View.VISIBLE);
+			mTvBestComment.setVisibility(View.VISIBLE);
+			mTvBestCommentTips.setVisibility(View.VISIBLE);
+			mIvDividerBestAnswer.setVisibility(View.VISIBLE);
+			mIvDividerBestAnswerComment.setVisibility(View.VISIBLE);
 			mTvBestContent.setText(bestAnswer.getContent());
 			mTvBestTime.setText(CommonUtil.getTimeByPHP(
 					bestAnswer.getDateline(), "yyyy-MM-dd HH:mm"));

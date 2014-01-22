@@ -5,7 +5,9 @@ public interface GlobalConfig {
 	public final static String URL_CONN = "http://115.28.167.199/modoer/androidInterFace/";
 	public final static String URL_UPLOAD = "http://115.28.167.199/modoer/";
 	public static final String URL_PIC = "http://www.40000km.com.cn/";
-	public static final String URL_ATTR_PIC = "http://www.40000km.com.cn/static/images/att/";
+	public static final String URL_ATTR_PIC = URL_PIC + "static/images/att/";
+	public static final String URL_FORGET_PSWD = URL_PIC
+			+ "member-login-op-forget.html";
 
 	public static final int MAX = 15;
 	public static final int MAX_ALL = 99999999;
@@ -85,6 +87,7 @@ public interface GlobalConfig {
 		public static final int OPERATION_FIND_MEMBER = 32;
 		public static final int OPERATION_FIND_MEMBERPASSPORT = 33;
 		public static final int OPERATION_SAVE_ERROR = 34;
+		public static final int OPERATION_DELETE_FAVORITE = 35;
 	}
 
 	public static class SharePre {
@@ -138,7 +141,7 @@ public interface GlobalConfig {
 
 		/** QQ»¥ÁªÆ½Ì¨ **/
 		public static final String TENCENT_QQ_APP_ID = "101007340";
-//		public static final String TENCENT_QQ_APP_ID = "101001015";
+		// public static final String TENCENT_QQ_APP_ID = "101001015";
 		// public static final String TENCENT_QQ_APP_KEY =
 		// "3e36173d11d89aa7f7bb6d98466c4edc";
 		public static final String TENCENT_QQ_SCOPE = "all";

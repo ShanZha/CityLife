@@ -342,7 +342,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 			break;
 		case GlobalConfig.Operator.OPERATION_SAVE_SUBJECT:
 			this.hideWaiting();
-			this.showToast(this.getString(R.string.commit_fail));
+//			this.showToast(this.getString(R.string.commit_fail));
 			break;
 		}
 

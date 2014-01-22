@@ -9,7 +9,11 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -37,6 +41,7 @@ import com.fourkkm.citylife.widget.IAddressListener;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
 import com.fourkkm.citylife.widget.ILocationConnListener;
 import com.fourkkm.citylife.widget.LocationProxy;
+import com.zj.app.db.dao.SqliteUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 import com.zj.support.widget.adapter.ItemSingleAdapter;
@@ -49,9 +54,11 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
  */
 public class SubjectListActivity extends BaseListActivity implements
 		IFloatingItemClick, OnDismissListener, ILocationConnListener,
-		IAddressListener {
+		IAddressListener, OnCreateContextMenuListener {
 
 	private static final String TAG = "SubjectListActivity";
+	private static final int MENU_ITEM_DELETE_ID = 0;
+	private static final int MENU_ITEM_CANCEL_ID = 1;
 	private LinearLayout mLlTopCheck, mLlTopCheckLoading, mLlLocationLoading;
 	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond,
 			mRlFloatingThird;
@@ -84,6 +91,8 @@ public class SubjectListActivity extends BaseListActivity implements
 
 	private AreaManager mAreaMgr;
 	private SubjectCategoryManager mCategoryMgr;
+	private List<ModoerFavorites> mFavorites;
+	private ModoerSubject mCurrSubject;
 
 	/** 当前漂浮view类型 **/
 	private int mCurrFloatingType = -1;
@@ -155,14 +164,17 @@ public class SubjectListActivity extends BaseListActivity implements
 			mLlTopCheck.setVisibility(View.GONE);
 			mLlTopCheckLoading.setVisibility(View.GONE);
 			mTvTitle.setText(this.getString(R.string.user_my_shop));
+			mListView.setAdapter(mAdapter);
 			this.onFirstLoadSetting();
 			this.onLoadMore();
 			break;
 		case GlobalConfig.IntentKey.SUBJECT_FAVORITE:
+			mFavorites = new ArrayList<ModoerFavorites>();
 			mBtnAdd.setVisibility(View.GONE);
 			mLlTopCheck.setVisibility(View.GONE);
 			mLlTopCheckLoading.setVisibility(View.GONE);
 			mTvTitle.setText(this.getString(R.string.user_my_collection));
+			mListView.setOnCreateContextMenuListener(this);
 			mListView.setAdapter(mAdapter);
 			this.onFirstLoadSetting();
 			this.onLoadMore();
@@ -350,6 +362,42 @@ public class SubjectListActivity extends BaseListActivity implements
 				position);
 		intent.putExtra("ModoerSubject", subject);
 		this.startActivity(intent);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		// TODO Auto-generated method stub
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(0, MENU_ITEM_DELETE_ID, 0,
+				getString(R.string.subject_favorite_delete));
+		menu.add(0, MENU_ITEM_CANCEL_ID, 0, getString(R.string.cancel));
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+				.getMenuInfo();
+		if (MENU_ITEM_DELETE_ID == item.getItemId()) {
+			try {
+				int pos = (info.position - 1);
+				ModoerSubject subject = mSubjectList.get(pos);
+				mCurrSubject = subject;
+				ModoerFavorites favorite = mFavorites.get(pos);
+				List<Object> objs = new ArrayList<Object>();
+				objs.add(favorite);
+				Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+				param.setOperator(GlobalConfig.Operator.OPERATION_DELETE_FAVORITE);
+				this.getStoreOperation().deleteArray(objs.toArray(), param);
+				mSubjectList.remove(pos);
+				this.notifyDataChanged();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+		return super.onContextItemSelected(item);
 	}
 
 	@Override
@@ -722,12 +770,22 @@ public class SubjectListActivity extends BaseListActivity implements
 					String title = CommonUtil.transferHtmlToJava(subject
 							.getName());
 					subject.setName(title);
+					mFavorites.add(favorite);
 					mSubjectList.add(subject);
 				}
 			}
 			this.pretreatmentResults(results);
 			this.notifyLoadOver();
 		}
+	}
+
+	@Override
+	public void onSuccessDelete(Param out) {
+		// TODO Auto-generated method stub
+		super.onSuccessDelete(out);
+		this.showToast(this.getString(R.string.subject_favorite_delete_success));
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerFavorites.class.getName());
 	}
 
 	@Override
@@ -743,6 +801,12 @@ public class SubjectListActivity extends BaseListActivity implements
 		case GlobalConfig.Operator.OPERATION_FINDALL_SUJECT_CATEGORY:
 		case GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT_AREA:
 			this.hideLoadingCategory();
+			break;
+		case GlobalConfig.Operator.OPERATION_DELETE_FAVORITE:
+			if (null != mCurrSubject && null != mSubjectList) {
+				mSubjectList.add(mCurrSubject);
+				this.notifyDataChanged();
+			}
 			break;
 		default:
 			break;

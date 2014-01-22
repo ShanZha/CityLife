@@ -132,6 +132,7 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	private String description;
 
 	/** 地址 */
+	@Validates(info = "地址不能为空", type = "isNull")
 	private String address;
 
 	/** 电话 */
