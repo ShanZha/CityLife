@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.andrnes.modoer.ModoerAlbum;
 import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerCategory;
-import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerPictures;
 import com.andrnes.modoer.ModoerSubject;
 import com.fourkkm.citylife.R;
@@ -262,6 +261,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 					pic.setUrl("");
 					objs.add(pic);
 				}
+				mSubject.setPictures(this.getPicCount());
 			}
 
 			this.showWaiting();

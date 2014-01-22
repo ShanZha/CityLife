@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -23,7 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerAlbum;
-import com.andrnes.modoer.ModoerAttList;
 import com.andrnes.modoer.ModoerFavorites;
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerPictures;
@@ -53,12 +53,12 @@ import com.zj.support.observer.model.Param;
 public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		IFloatingItemClick {
 
+	private static final String TAG = "SubjectDetailActivity";
 	private ModoerSubject mSubject;
 	private RelativeLayout mRlAddress, mRlTel, mRlDesc;
 	private TextView mTvTitle, mTvShopName, mTvThumbnailCount, mTvAveragePer,
-			mTvTaste, mTvAddress, mTvTel, mTvDesc, mTvReviewCount,
-			mTvReviewUserName, mTvReviewAveragePer, mTvReviewContent,
-			mTvCompositeScore;
+			mTvAddress, mTvTel, mTvDesc, mTvReviewCount, mTvReviewUserName,
+			mTvReviewAveragePer, mTvReviewContent, mTvCompositeScore;
 	/** 4œÓ∆¿∑÷ **/
 	private TextView mTvSort1, mTvSort2, mTvSort3, mTvSort4;
 	private ImageView mIvThumbnail, mIvDividerTel, mIvDividerDesc, mIvAttr1,
@@ -166,7 +166,6 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 				.findViewById(R.id.subject_detail_ll_upload);
 		mGvPics = (GridView) this.findViewById(R.id.floating_upload_gv_pics);
 
-		mTvThumbnailCount.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -183,47 +182,55 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		mDialogProxy = new ProgressDialogProxy(this);
 		mSubject = (ModoerSubject) this.getIntent().getSerializableExtra(
 				"ModoerSubject");
-		if (null != mSubject) {
-			mTvShopName.setText(mSubject.getName());
-			mTvThumbnailCount.setText("" + mSubject.getPictures());
-			mTvAveragePer.setText(this.getString(R.string.average_per)
-					+ mSubject.getAvgprice());
-			String addr = mSubject.getAddress();
-			String tel = mSubject.getTel();
-			String desc = mSubject.getDescription();
-			this.setTxtValue(mRlAddress, mTvAddress, addr);
-			this.setTxtValue(mRlTel, mTvTel, tel);
-			this.setTxtValue(mRlDesc, mTvDesc, desc);
-			if (TextUtils.isEmpty(desc)) {
-				mIvDividerDesc.setVisibility(View.GONE);
-			}
-			if ((TextUtils.isEmpty(tel) || "0".equals(tel))
-					|| TextUtils.isEmpty(addr) || "0".equals(addr)) {
-				mIvDividerTel.setVisibility(View.GONE);
-			}
-
-			List<String> attrList = CommonUtil.getSubjectAttrIconList(
-					mSubject.getCShopattsReplace(),
-					mSubject.getCShopatts2Replace());
-			this.setAttrIcons(attrList);
-
-			mTvReviewCount.setText(this.getString(R.string.review) + "("
-					+ mSubject.getReviews() + ")");
-			mTvCompositeScore.setText(this.getString(R.string.composite_score)
-					+ mSubject.getAvgsort());
-			mRatingBar.setProgress((int) mSubject.getAvgsort());
-			String thumbnailUrl = GlobalConfig.URL_PIC + mSubject.getThumb();
-			Bitmap mBmDefault = BitmapFactory.decodeResource(
-					this.getResources(), R.drawable.list_thumb);
-			AsyncImageLoader.getImageLoad(this).showPic(thumbnailUrl,
-					mIvThumbnail, mBmDefault);
-
-			this.showReviewLoading();
-			this.fetchOneBestReview(mSubject.getId());
-
-			this.showReviewOptLoading();
-			this.fetchReviewOpt();
+		if (null == mSubject) {
+			Log.e(TAG, "shan-->mSubject is null");
+			return;
 		}
+
+		mTvShopName.setText(mSubject.getName());
+		mTvAveragePer.setText(this.getString(R.string.average_per)
+				+ mSubject.getAvgprice());
+		String addr = mSubject.getAddress();
+		String tel = mSubject.getTel();
+		String desc = mSubject.getDescription();
+		this.setTxtValue(mRlAddress, mTvAddress, addr);
+		this.setTxtValue(mRlTel, mTvTel, tel);
+		this.setTxtValue(mRlDesc, mTvDesc, desc);
+		if (TextUtils.isEmpty(desc)) {
+			mIvDividerDesc.setVisibility(View.GONE);
+		}
+		if ((TextUtils.isEmpty(tel) || "0".equals(tel))
+				|| TextUtils.isEmpty(addr) || "0".equals(addr)) {
+			mIvDividerTel.setVisibility(View.GONE);
+		}
+
+		List<String> attrList = CommonUtil
+				.getSubjectAttrIconList(mSubject.getCShopattsReplace(),
+						mSubject.getCShopatts2Replace());
+		this.setAttrIcons(attrList);
+
+		mTvReviewCount.setText(this.getString(R.string.review) + "("
+				+ mSubject.getReviews() + ")");
+		mTvCompositeScore.setText(this.getString(R.string.composite_score)
+				+ mSubject.getAvgsort());
+		mRatingBar.setProgress((int) mSubject.getAvgsort());
+		String thumbnailUrl = GlobalConfig.URL_PIC + mSubject.getThumb();
+		Bitmap mBmDefault = BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.list_thumb);
+		AsyncImageLoader.getImageLoad(this).showPic(thumbnailUrl, mIvThumbnail,
+				mBmDefault);
+		int picNum = mSubject.getPictures();
+		if (picNum > 0) {
+			mTvThumbnailCount.setText(picNum + "");
+			mTvThumbnailCount.setVisibility(View.VISIBLE);
+		} else {
+			mTvThumbnailCount.setVisibility(View.GONE);
+		}
+		this.showReviewLoading();
+		this.fetchOneBestReview(mSubject.getId());
+
+		this.showReviewOptLoading();
+		this.fetchReviewOpt();
 
 	}
 
@@ -400,7 +407,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	 */
 	private void onCollection() {
 		this.showLoadingCollection();
-		this.showToast(this.getString(R.string.subject_collection_start));
+//		this.showToast(this.getString(R.string.subject_collection_start));
 		ModoerFavorites favorite = new ModoerFavorites();
 		favorite.setAddtime((int) CommonUtil.getCurrTimeByPHP());
 		favorite.setSid(mSubject);
@@ -450,6 +457,10 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 
 	public void onClickThumbnail(View view) {// Àı¬‘Õº
 		if (this.isUploading()) {
+			return;
+		}
+		int picNum = mSubject.getPictures();
+		if (picNum < 1) {
 			return;
 		}
 		Intent intent = new Intent(this, AlbumActivity.class);
@@ -813,7 +824,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		// this.hideReviewLoading();
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SUBJECT_CONNLECTION == operator) {
-			this.showToast(this.getString(R.string.subject_collection_fail));
+//			this.showToast(this.getString(R.string.subject_collection_fail));
 			this.hideLoadingCollection();
 		} else if (GlobalConfig.Operator.OPERATION_FIND_ALBUM_BY_SUBJECT == operator) {
 			if (null != mDialogProxy) {

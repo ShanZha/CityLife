@@ -217,6 +217,25 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 		return sb.toString();
 	}
 
+	/**
+	 * 构建图片Json
+	 * 
+	 * @return
+	 */
+	protected String buildUploadPic() {
+		if (this.getPicCount() > 0) {
+			// 排除第一项,仅保存大图路径
+			JSONArray array = new JSONArray();
+			for (int i = 1; i < mPicList.size(); i++) {
+				ModoerPictures pic = mPicList.get(i);
+				String big = pic.getFilename();
+				array.put(big);
+			}
+			return array.toString();
+		}
+		return "";
+	}
+
 	private boolean validate() {
 		int sort1 = mRatingBarSort1.getProgress();
 		int sort2 = mRatingBarSort2.getProgress();
@@ -343,25 +362,6 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 			e.printStackTrace();
 		}
 
-		return "";
-	}
-
-	/**
-	 * 构建图片Json
-	 * 
-	 * @return
-	 */
-	public String buildUploadPic() {
-		if (this.getPicCount() > 0) {
-			// 排除第一项,仅保存大图路径
-			JSONArray array = new JSONArray();
-			for (int i = 1; i < mPicList.size(); i++) {
-				ModoerPictures pic = mPicList.get(i);
-				String big = pic.getFilename();
-				array.put(big);
-			}
-			return array.toString();
-		}
 		return "";
 	}
 

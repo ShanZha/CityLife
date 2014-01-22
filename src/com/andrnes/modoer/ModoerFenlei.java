@@ -98,6 +98,15 @@ public class ModoerFenlei extends ItemSingle implements Serializable {
 	/** 置顶结束时间 */
 	private int topEndtime;
 
+	/** 图片集合 */
+	private String pictures;
+
+	/** 图片集合json */
+	private String picturesJson;
+
+	/** 图片数量 */
+	private int picNum;
+
 	private Map errors;
 
 	public int getId() {
@@ -298,6 +307,30 @@ public class ModoerFenlei extends ItemSingle implements Serializable {
 
 	public void setErrors(Map errors) {
 		this.errors = errors;
+	}
+
+	public String getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(String pictures) {
+		this.pictures = pictures;
+	}
+
+	public String getPicturesJson() {
+		return picturesJson;
+	}
+
+	public void setPicturesJson(String picturesJson) {
+		this.picturesJson = picturesJson;
+	}
+
+	public int getPicNum() {
+		return picNum;
+	}
+
+	public void setPicNum(int picNum) {
+		this.picNum = picNum;
 	}
 
 	@Override

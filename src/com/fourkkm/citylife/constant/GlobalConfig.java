@@ -123,6 +123,7 @@ public interface GlobalConfig {
 
 		public static final int ALBUM_SUBJECT = 1;
 		public static final int ALBUM_REVIEW = 2;
+		public static final int ALBUM_CHINA_LANE = 3;
 
 	}
 

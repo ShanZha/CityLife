@@ -28,7 +28,7 @@ public class ChineseLaneDetailActivity extends BaseActivity {
 	private static final String TAG = "ChineseLaneDetailActivity";
 	private TextView mTvTitle, mTvSubject, mTvUsername, mTvInitiateTime,
 			mTvExpireTime, mTvContact, mTvContactTel, mTvIM, mTvEmail, mTvAddr,
-			mTvContent;
+			mTvContent, mTvThumbnailCount;
 	private ImageView mIvThumb;
 	private LinearLayout mLlEmail, mLlIM, mLlAddr;
 
@@ -58,6 +58,8 @@ public class ChineseLaneDetailActivity extends BaseActivity {
 		mTvAddr = (TextView) this.findViewById(R.id.china_lane_detail_tv_addr);
 		mTvContent = (TextView) this
 				.findViewById(R.id.china_lane_detail_tv_desc);
+		mTvThumbnailCount = (TextView) this
+				.findViewById(R.id.thumb_detail_tv_thumbnail_count);
 
 		mIvThumb = (ImageView) this.findViewById(R.id.thumb_detail_iv_thumb);
 		mLlEmail = (LinearLayout) this
@@ -109,6 +111,14 @@ public class ChineseLaneDetailActivity extends BaseActivity {
 		Bitmap mBmDefault = BitmapFactory.decodeResource(this.getResources(),
 				R.drawable.list_thumb);
 		AsyncImageLoader.getImageLoad(this).showPic(url, mIvThumb, mBmDefault);
+
+		int picCount = mChinaLane.getPicNum();
+		if (picCount > 0) {
+			mTvThumbnailCount.setVisibility(View.VISIBLE);
+			mTvThumbnailCount.setText(picCount + "");
+		} else {
+			mTvThumbnailCount.setVisibility(View.GONE);
+		}
 	}
 
 	public void onClickBack(View view) {
@@ -116,7 +126,17 @@ public class ChineseLaneDetailActivity extends BaseActivity {
 	}
 
 	public void onClickThumbnail(View view) {// Àı¬‘Õº
-		// Do nothing
+		String picJson = mChinaLane.getPicturesJson();
+		if (TextUtils.isEmpty(picJson)) {
+			return;
+		}
+		Intent intent = new Intent(this, AlbumActivity.class);
+		intent.putExtra("operator", GlobalConfig.IntentKey.ALBUM_CHINA_LANE);
+		if (null != mChinaLane) {
+			intent.putExtra("chinalaneSubject", mChinaLane.getSubject());
+			intent.putExtra("picJson", picJson);
+		}
+		this.startActivity(intent);
 	}
 
 }

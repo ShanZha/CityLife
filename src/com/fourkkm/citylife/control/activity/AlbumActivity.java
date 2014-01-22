@@ -2,11 +2,13 @@ package com.fourkkm.citylife.control.activity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -86,19 +88,14 @@ public class AlbumActivity extends BaseFragmentActivity implements
 			String subject = intent.getStringExtra("reviewSubject");
 			mTvTitle.setText(subject + "-µ„∆¿œ‡≤·");
 			String picJson = intent.getStringExtra("reviewPicJson");
-			try {
-				JSONArray array = new JSONArray(picJson);
-				int length = array.length();
-				for (int i = 0; i < length; i++) {
-					String temp = array.getString(i);
-					String url = GlobalConfig.URL_UPLOAD + temp;
-					mThumbUrls.add(url);
-				}
-				mSubjectThumbCount = length;
-				mTvCount.setText(mCurrIndex + "/" + length);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
+			this.prepareReviewPicsByJson(picJson);
+			this.notifyDataChanged();
+		} else if (GlobalConfig.IntentKey.ALBUM_CHINA_LANE == mOperator) {
+			this.hideLoading();
+			String subject = intent.getStringExtra("chinalaneSubject");
+			mTvTitle.setText(subject + "-œ‡≤·");
+			String picJson = intent.getStringExtra("picJson");
+			this.prepareChinaLanePicsByJson(picJson);
 			this.notifyDataChanged();
 		}
 
@@ -120,6 +117,39 @@ public class AlbumActivity extends BaseFragmentActivity implements
 			mViewPager.setAdapter(mPagerAdapter);
 		} else {
 			mPagerAdapter.notifyDataSetChanged();
+		}
+	}
+
+	private void prepareReviewPicsByJson(String picJson) {
+		try {
+			JSONArray array = new JSONArray(picJson);
+			int length = array.length();
+			for (int i = 0; i < length; i++) {
+				String temp = array.getString(i);
+				String url = GlobalConfig.URL_UPLOAD + temp;
+				mThumbUrls.add(url);
+			}
+			mSubjectThumbCount = length;
+			mTvCount.setText(mCurrIndex + "/" + length);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void prepareChinaLanePicsByJson(String picJson) {
+		try {
+			JSONObject json = new JSONObject(picJson);
+			@SuppressWarnings("unchecked")
+			Iterator<String> it = json.keys();
+			while (it.hasNext()) {
+				String value = json.getString(it.next());
+				String url = GlobalConfig.URL_UPLOAD + value;
+				mThumbUrls.add(url);
+			}
+			mSubjectThumbCount = mThumbUrls.size();
+			mTvCount.setText(mCurrIndex + "/" + mSubjectThumbCount);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

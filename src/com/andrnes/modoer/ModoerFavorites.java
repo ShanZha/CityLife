@@ -1,5 +1,7 @@
 package com.andrnes.modoer;
 
+import java.util.Map;
+
 import com.zj.app.annotation.Lazy;
 
 /** 收藏表 **/
@@ -19,6 +21,8 @@ public class ModoerFavorites {
 
 	/** 收藏时间 */
 	private int addtime;
+
+	private Map errors;
 
 	public int getId() {
 		return id;
@@ -58,5 +62,13 @@ public class ModoerFavorites {
 
 	public void setAddtime(int addtime) {
 		this.addtime = addtime;
+	}
+
+	public Map getErrors() {
+		return errors;
+	}
+
+	public void setErrors(Map errors) {
+		this.errors = errors;
 	}
 }

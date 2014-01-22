@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.json.JSONArray;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;

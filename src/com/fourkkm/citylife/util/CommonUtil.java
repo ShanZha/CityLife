@@ -25,7 +25,7 @@ public class CommonUtil {
 	private static final double EARTH_RADIUS = 6378137.0;
 
 	/**
-	 * 根据得分获取评价（10分满分）
+	 * 鏍规嵁寰楀垎鑾峰彇璇勪环锛�0鍒嗘弧鍒嗭級
 	 * 
 	 * @param ctx
 	 * @param score
@@ -74,19 +74,19 @@ public class CommonUtil {
 	public static boolean isEmail(String email) {
 		String format = "^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
 		if (email.matches(format)) {
-			// 邮箱名合法,返回true
+			// 閭鍚嶅悎娉�杩斿洖true
 			return true;
 		} else {
-			// 邮箱名不合法,返回false
+			// 閭鍚嶄笉鍚堟硶,杩斿洖false
 			return false;
 		}
 	}
 
 	/**
-	 * 获取某个经纬度多少米以内的最大、最小两个经纬度坐标
+	 * 鑾峰彇鏌愪釜缁忕含搴﹀灏戠背浠ュ唴鐨勬渶澶с�鏈�皬涓や釜缁忕含搴﹀潗鏍�
 	 * 
 	 * @param raidus
-	 *            单位米
+	 *            鍗曚綅绫�
 	 * @return minLat,minLng,maxLat,maxLng
 	 */
 
@@ -109,7 +109,7 @@ public class CommonUtil {
 	}
 
 	/**
-	 * 获取两点之间距离（单位为m）
+	 * 鑾峰彇涓ょ偣涔嬮棿璺濈锛堝崟浣嶄负m锛�
 	 * 
 	 * @param longitude1
 	 * @param latitude1
@@ -157,11 +157,11 @@ public class CommonUtil {
 	}
 
 	/**
-	 * 获取手机ip
+	 * 鑾峰彇鎵嬫満ip
 	 * 
 	 * @param context
-	 *            上下文
-	 * @return 可用的ip
+	 *            涓婁笅鏂�
+	 * @return 鍙敤鐨刬p
 	 * 
 	 */
 	public static String getLocalIPAddress(Context context) {
@@ -175,7 +175,7 @@ public class CommonUtil {
 	}
 
 	/**
-	 * 替换\n为<br/>
+	 * 鏇挎崲\n涓�br/>
 	 * 
 	 * @param content
 	 * @return

@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -12,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,6 +25,7 @@ import com.andrnes.modoer.ModoerArea;
 import com.andrnes.modoer.ModoerFenlei;
 import com.andrnes.modoer.ModoerFenleiCategory;
 import com.andrnes.modoer.ModoerMembers;
+import com.andrnes.modoer.ModoerPictures;
 import com.fourkkm.citylife.ChinaLaneCategoryManager;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
@@ -96,10 +102,12 @@ public class ChinaLaneAddActivity extends BaseAddActivity implements
 				.findViewById(R.id.china_lane_add_spinner_area_first);
 		mSpAreaSecond = (Spinner) this
 				.findViewById(R.id.china_lane_add_spinner_area_second);
+		mGvPics = (GridView) this.findViewById(R.id.china_lane_add_gv_pics);
 	}
 
 	@Override
 	protected void prepare() {
+		mIsNeedUploadPics = true;
 		super.prepare();
 		mLaneCategoryMgr = new ChinaLaneCategoryManager();
 		mTvTitle.setText(this.getString(R.string.china_lane_add));
@@ -164,6 +172,31 @@ public class ChinaLaneAddActivity extends BaseAddActivity implements
 		}
 	}
 
+	/**
+	 * 构建图片Json
+	 * 
+	 * @return
+	 */
+	protected String buildUploadPic() {
+		if (this.getPicCount() > 0) {
+			// 排除第一项,仅保存大图路径
+			JSONObject json = new JSONObject();
+			for (int i = 1; i < mPicList.size(); i++) {
+				ModoerPictures pic = mPicList.get(i);
+				String big = pic.getFilename();
+				String title = pic.getTitle();
+				try {
+					json.put(title, big);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return json.toString();
+		}
+		return "";
+	}
+
 	private boolean validate() {
 		long expireTime = CommonUtil.formatTimeByPHP(mEtExpireTime.getText()
 				.toString().trim());
@@ -193,6 +226,10 @@ public class ChinaLaneAddActivity extends BaseAddActivity implements
 
 	public void onClickAdd(View view) {
 		if (!this.validate()) {
+			return;
+		}
+		if (!this.isUploadFinished()) {
+			this.showToast(this.getString(R.string.subject_upload_pic_unfinish));
 			return;
 		}
 		try {
@@ -227,6 +264,13 @@ public class ChinaLaneAddActivity extends BaseAddActivity implements
 			lane.setThumb(mThumbPath);
 			lane.setStatus(1);
 			lane.setDateline((int) CommonUtil.getCurrTimeByPHP());
+
+			String picJson = this.buildUploadPic();
+			if (!TextUtils.isEmpty(picJson)) {
+				lane.setPictures(picJson);
+				lane.setPicturesJson(picJson);
+				lane.setPicNum(this.getPicCount());
+			}
 
 			this.showWaiting();
 			Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
