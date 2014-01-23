@@ -281,7 +281,7 @@
     <string name="commit_tip">请确保所有信息完整无误</string>
     <string name="location_ing">正在定位...</string>
     <string name="location_fail">无法定位</string>
-    <string name="location_conn_fail">无法定位，需安装Google服务和Goodle play</string>
+    <string name="location_conn_fail">无法定位，需安装Google服务和Google play</string>
     <string name="sms_send_time_tip">发送时间：</string>
     <string name="sms_send_content_tip">短信内容：</string>
     <string name="sms_detail">短信详情</string>
