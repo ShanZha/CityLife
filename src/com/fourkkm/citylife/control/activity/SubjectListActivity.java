@@ -10,9 +10,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -380,6 +380,12 @@ public class SubjectListActivity extends BaseListActivity implements
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
 		if (MENU_ITEM_DELETE_ID == item.getItemId()) {
+			boolean isNet = ((CoreApp) AppUtils.getBaseApp(this))
+					.isNetworkConnected();
+			if (!isNet) {
+				this.showToast(this.getString(R.string.network_connect_none));
+				return super.onContextItemSelected(item);
+			}
 			try {
 				int pos = (info.position - 1);
 				ModoerSubject subject = mSubjectList.get(pos);

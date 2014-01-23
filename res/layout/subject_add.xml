@@ -181,6 +181,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_5" >
                 </Spinner>
+                
+                <!-- 三级分类 -->
+
+                <Spinner
+                    android:id="@+id/subject_add_spinner_category_third"
+                    style="@style/spinner_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_5" >
+                </Spinner>
             </LinearLayout>
 
             <!-- 地区加载中 -->

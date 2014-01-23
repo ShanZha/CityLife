@@ -355,6 +355,11 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		sb.append(this.getString(R.string.subject_share_tip));
 		sb.append(mSubject.getName());
 		if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == index) {
+			sb.append("\n");
+			sb.append(GlobalConfig.URL_PIC);
+			sb.append("item-");
+			sb.append(mSubject.getId());
+			sb.append(".html");
 			return sb.toString();
 		}
 		sb.append("\n");

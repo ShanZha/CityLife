@@ -298,6 +298,7 @@
     <string name="share_weixin_timeline">微信朋友圈</string>
     <string name="share_content_null">分享内容不能为空</string>
     <string name="share_content_140">输入少于140个字的内容</string>
+    <string name="network_connect_none">没有网络连接</string>
 
     <string-array name="share_array">
         <item>分享到新浪微博</item>

@@ -46,9 +46,11 @@ public class SubjectAddActivity extends BaseAddActivity {
 	private LinearLayout mLlCategory, mLlCategoryLoading;
 	private EditText mEtName, mEtSubname, mEtTel, mEtDesc, mEtAddr;
 
-	private Spinner mSpCategoryFirst, mSpCategorySecond;
-	private ArrayAdapter<String> mAdapterCategoryFirst, mAdapterCategorySecond;
-	private List<String> mCategoryFirstList, mCategorySecondList;
+	private Spinner mSpCategoryFirst, mSpCategorySecond, mSpCategoryThird;
+	private ArrayAdapter<String> mAdapterCategoryFirst, mAdapterCategorySecond,
+			mAdapterCategoryThird;
+	private List<String> mCategoryFirstList, mCategorySecondList,
+			mCategoryThirdList;
 
 	private SubjectCategoryManager mCategoryMgr;
 	/** 地图选点坐标 **/
@@ -82,6 +84,8 @@ public class SubjectAddActivity extends BaseAddActivity {
 				.findViewById(R.id.subject_add_spinner_category_first);
 		mSpCategorySecond = (Spinner) this
 				.findViewById(R.id.subject_add_spinner_category_second);
+		mSpCategoryThird = (Spinner) this
+				.findViewById(R.id.subject_add_spinner_category_third);
 		mSpAreaFirst = (Spinner) this
 				.findViewById(R.id.subject_add_spinner_area_first);
 		mSpAreaSecond = (Spinner) this
@@ -107,39 +111,70 @@ public class SubjectAddActivity extends BaseAddActivity {
 		super.setSpAdapter();
 		mCategoryFirstList = new ArrayList<String>();
 		mCategorySecondList = new ArrayList<String>();
+		mCategoryThirdList = new ArrayList<String>();
 		mAdapterCategoryFirst = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mCategoryFirstList);
 		mSpCategoryFirst.setAdapter(mAdapterCategoryFirst);
 		mAdapterCategoryFirst
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mSpCategoryFirst
-				.setOnItemSelectedListener(mCategoryItemSelectedListener);
+				.setOnItemSelectedListener(mCategoryItemSelectedFirstListener);
 
-		// mAdapterCategorySecond = new ArrayAdapter<String>(this,
-		// android.R.layout.simple_spinner_item, mCategorySecondList);
 		mAdapterCategorySecond = new SpinnerAdapter(this,
 				android.R.layout.simple_spinner_item, mCategorySecondList);
 		mSpCategorySecond.setAdapter(mAdapterCategorySecond);
+		mSpCategorySecond
+				.setOnItemSelectedListener(mCategoryItemSelectedSecondListener);
 		mAdapterCategorySecond
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mAdapterCategoryThird = new SpinnerAdapter(this,
+				android.R.layout.simple_spinner_item, mCategoryThirdList);
+		mSpCategoryThird.setAdapter(mAdapterCategoryThird);
+		mAdapterCategoryThird
 				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	}
 
 	/**
-	 * 根据类别的父类姓名重置子类列表
+	 * 选中第一/二级时，重置第二/三级数据
 	 * 
 	 * @param parentName
+	 * @param parentLevel
 	 */
-	private void resetCategoryChildList(String parentName) {
-		try {
-			ModoerCategory parent = mCategoryMgr.getCategoryByName(parentName);
-			List<String> secondList = mCategoryMgr.getNamesByParentId(parent
+	private void resetDataByName(String parentName, int parentLevel) {
+		ModoerCategory category = mCategoryMgr.getCategoryByName(parentName);
+		if (null == category) {
+			return;
+		}
+		switch (parentLevel) {
+		case SubjectCategoryManager.LEVEL_FIRST:
+			List<String> secondNames = mCategoryMgr.getNamesByParentId(category
 					.getId());
 			mCategorySecondList.clear();
-			mCategorySecondList.addAll(secondList);
-			secondList = null;
+			mCategorySecondList.addAll(secondNames);
 			this.notifyDataChanged(mAdapterCategorySecond);
-		} catch (Exception e) {
-			e.printStackTrace();
+			break;
+		case SubjectCategoryManager.LEVEL_SECOND:
+			List<String> thirdNames = mCategoryMgr.getNamesByParentId(category
+					.getId());
+			mCategoryThirdList.clear();
+			mCategoryThirdList.addAll(thirdNames);
+			this.notifyDataChanged(mAdapterCategoryThird);
+			break;
+		case SubjectCategoryManager.LEVEL_THIRD:
+			// Do nothing
+			break;
+		}
+	}
+
+	private void handleThirdCategoryView() {
+		if (null == mCategoryThirdList) {
+			return;
+		}
+		if (mCategoryThirdList.size() == 0) {
+			mSpCategoryThird.setSelection(-1);
+			mSpCategoryThird.setVisibility(View.GONE);
+		} else {
+			mSpCategoryThird.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -190,11 +225,21 @@ public class SubjectAddActivity extends BaseAddActivity {
 			ModoerCategory pid = mCategoryMgr
 					.getCategoryByName(mCategoryFirstList.get(categorFirstPos));
 			mSubject.setPid(pid);
-			int categorSecondPos = mSpCategorySecond.getSelectedItemPosition();
-			ModoerCategory catid = mCategoryMgr
-					.getCategoryByName(mCategorySecondList
-							.get(categorSecondPos));
-			mSubject.setCatid(catid);
+
+			int categoryThirdPos = mSpCategoryThird.getSelectedItemPosition();
+			if (-1 != categoryThirdPos) {
+				ModoerCategory catid = mCategoryMgr
+						.getCategoryByName(mCategoryThirdList
+								.get(categoryThirdPos));
+				mSubject.setCatid(catid);
+			} else {
+				int categorSecondPos = mSpCategorySecond
+						.getSelectedItemPosition();
+				ModoerCategory catid = mCategoryMgr
+						.getCategoryByName(mCategorySecondList
+								.get(categorSecondPos));
+				mSubject.setCatid(catid);
+			}
 
 			mSubject.setCityId(mCurrCountry);
 			int areaSecondPos = mSpAreaSecond.getSelectedItemPosition();
@@ -263,7 +308,6 @@ public class SubjectAddActivity extends BaseAddActivity {
 				}
 				mSubject.setPictures(this.getPicCount());
 			}
-
 			this.showWaiting();
 			Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 			param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_SUBJECT);
@@ -310,7 +354,12 @@ public class SubjectAddActivity extends BaseAddActivity {
 				firstList = null;
 				this.notifyDataChanged(mAdapterCategoryFirst);
 				// Step 2：设置类别二级列表(默认显示第一级的第一个类别的所有子类别)
-				this.resetCategoryChildList(mCategoryFirstList.get(0));
+				this.resetDataByName(mCategoryFirstList.get(0),
+						SubjectCategoryManager.LEVEL_FIRST);
+				// Step 3：设置类别三级列表(默认显示第二级的第一个类别的所有子类别)
+				this.resetDataByName(mCategorySecondList.get(0),
+						SubjectCategoryManager.LEVEL_SECOND);
+				this.handleThirdCategoryView();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -342,7 +391,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 			break;
 		case GlobalConfig.Operator.OPERATION_SAVE_SUBJECT:
 			this.hideWaiting();
-//			this.showToast(this.getString(R.string.commit_fail));
+			// this.showToast(this.getString(R.string.commit_fail));
 			break;
 		}
 
@@ -351,13 +400,41 @@ public class SubjectAddActivity extends BaseAddActivity {
 	/**
 	 * 类别一级列表监听
 	 */
-	private OnItemSelectedListener mCategoryItemSelectedListener = new OnItemSelectedListener() {
+	private OnItemSelectedListener mCategoryItemSelectedFirstListener = new OnItemSelectedListener() {
 
 		@Override
 		public void onItemSelected(AdapterView<?> parent, View view,
 				int position, long id) {
 			// TODO Auto-generated method stub
-			resetCategoryChildList(mCategoryFirstList.get(position));
+			mSpCategorySecond.setSelection(-1);
+			SubjectAddActivity.this.resetDataByName(
+					mCategoryFirstList.get(position),
+					SubjectCategoryManager.LEVEL_FIRST);
+			SubjectAddActivity.this.resetDataByName(mCategorySecondList.get(0),
+					SubjectCategoryManager.LEVEL_SECOND);
+			SubjectAddActivity.this.handleThirdCategoryView();
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// TODO Auto-generated method stub
+
+		}
+	};
+
+	/**
+	 * 类别二级列表监听
+	 */
+	private OnItemSelectedListener mCategoryItemSelectedSecondListener = new OnItemSelectedListener() {
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view,
+				int position, long id) {
+			// TODO Auto-generated method stub
+			SubjectAddActivity.this.resetDataByName(
+					mCategorySecondList.get(position),
+					SubjectCategoryManager.LEVEL_SECOND);
+			SubjectAddActivity.this.handleThirdCategoryView();
 		}
 
 		@Override

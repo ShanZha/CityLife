@@ -296,7 +296,11 @@ public class BaseUploadThumbActivity extends BaseActivity implements
 						(int) this.getResources().getDimension(
 								R.dimen.subject_add_thumbnail_height));
 				mIvThumb.setImageProcessor(scale);
-				mIvThumb.setUrl(filepath);
+				if (UPLOAD_MEMBER_THUBM == mUploadType) {
+					mIvThumb.reload(true);
+				} else {
+					mIvThumb.setUrl(filepath);
+				}
 			}
 			mIsUploadingThumb = false;
 			this.hideLoading(mLlThumbLoading);
