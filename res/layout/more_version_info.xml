@@ -12,11 +12,16 @@
         android:layout_height="wrap_content"
         layout="@layout/titlebar_back" />
 
-    <TextView
-        style="@style/list_second_level_style"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_10"
-        android:text="@string/more_version_info_tip" />
+        android:layout_margin="@dimen/margin_10" >
+
+        <TextView
+            style="@style/list_second_level_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/more_version_info_tip" />
+    </ScrollView>
 
 </LinearLayout>

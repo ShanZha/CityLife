@@ -2,10 +2,12 @@ package com.fourkkm.citylife.constant;
 
 public interface GlobalConfig {
 
-	public final static String URL_CONN = "http://115.28.167.199/modoer/androidInterFace/";
-	public final static String URL_UPLOAD = "http://115.28.167.199/modoer/";
+//	public final static String URL_CONN = "http://115.28.167.199/modoer/androidInterFace/";
+	public final static String URL_CONN = "http://www.40000km.com.cn:8080/modoer/androidInterFace/";
+//	public final static String URL_UPLOAD = "http://115.28.167.199/modoer/";
+	public final static String URL_UPLOAD = "http://www.40000km.com.cn:8080/modoer/";
 	public static final String URL_PIC = "http://www.40000km.com.cn/";
-	public static final String URL_ATTR_PIC = URL_PIC + "static/images/att/";
+	public static final String URL_ATTR_PIC = URL_PIC + "static/images/att/app/";
 	public static final String URL_FORGET_PSWD = URL_PIC
 			+ "member-login-op-forget.html";
 
