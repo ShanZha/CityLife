@@ -69,6 +69,12 @@ public class ModoerPictures extends ItemSingle {
 	/** 状态 */
 	private int status;
 
+	/** 原始缩略图-暂无用 **/
+	private String oldThumb;
+
+	/** 原始大图-暂无用 **/
+	private String oldfilename;
+
 	public int getId() {
 		return id;
 	}
@@ -211,6 +217,22 @@ public class ModoerPictures extends ItemSingle {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public String getOldThumb() {
+		return oldThumb;
+	}
+
+	public void setOldThumb(String oldThumb) {
+		this.oldThumb = oldThumb;
+	}
+
+	public String getOldfilename() {
+		return oldfilename;
+	}
+
+	public void setOldfilename(String oldfilename) {
+		this.oldfilename = oldfilename;
 	}
 
 	@Override

@@ -138,6 +138,9 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 	/** 电话 */
 	private String tel;
 
+	/** 原始缩略图-暂无用 **/
+	private String oldThumb;
+
 	private Map errors;
 
 	public int getId() {
@@ -450,6 +453,14 @@ public class ModoerSubject extends ItemSingle implements java.io.Serializable {
 
 	public void setCShopatts2Replace(String cShopatts2Replace) {
 		this.cShopatts2Replace = cShopatts2Replace;
+	}
+
+	public String getOldThumb() {
+		return oldThumb;
+	}
+
+	public void setOldThumb(String oldThumb) {
+		this.oldThumb = oldThumb;
 	}
 
 	@Override
