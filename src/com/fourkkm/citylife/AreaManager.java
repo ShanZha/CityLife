@@ -41,9 +41,9 @@ public class AreaManager implements IModoerManager<ModoerArea> {
 			return map;
 		}
 		// 加上“所有地区”项
-		List<String> all = new ArrayList<String>();
-		all.add(GlobalConfig.FloatingStr.STR_ALL_AREA);
-		map.put(GlobalConfig.FloatingStr.STR_ALL_AREA, all);
+//		List<String> all = new ArrayList<String>();
+//		all.add(GlobalConfig.FloatingStr.STR_ALL_AREA);
+//		map.put(GlobalConfig.FloatingStr.STR_ALL_CHILD, all);
 		for (int i = 0; i < mAreaList.size(); i++) {
 			ModoerArea area = mAreaList.get(i);
 			if (AREA_LEVEL_CITY == area.getLevel()) {
@@ -116,6 +116,14 @@ public class AreaManager implements IModoerManager<ModoerArea> {
 			}
 		}
 		return null;
+	}
+	
+	public boolean isSecondLevel(int level){
+		return AREA_LEVEL_CITY == level;
+	}
+	
+	public boolean isThirdLevel(int level){
+		return AREA_LEVEL_COUNTY == level;
 	}
 
 	@Override

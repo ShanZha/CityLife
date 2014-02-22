@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
@@ -137,8 +138,10 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView,
 				int count = array.length();
 				mTvThumbCount.setVisibility(View.VISIBLE);
 				mTvThumbCount.setText(count + "");
-				String path = array.getString(0);
-				String url = GlobalConfig.URL_UPLOAD + path;
+//				String path = array.getString(0);
+				JSONObject jsonObj = (JSONObject) array.get(0);
+				String temp = jsonObj.getString("thumb");
+				String url = GlobalConfig.URL_PIC + temp;
 				mFrThumb.setOnClickListener(this);
 				mFrThumb.setTag(review);
 				AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvThumb,

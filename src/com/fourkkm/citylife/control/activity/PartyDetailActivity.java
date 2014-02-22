@@ -126,7 +126,7 @@ public class PartyDetailActivity extends BaseActivity {
 		mTvAddr.setText(mParty.getAddress());
 		mTvSexLimit.setText(this.getStrBySex(mParty.getSex()));
 		mTvCost.setText(mParty.getPrice() + "/»À");
-		mTvIntegration.setText((int)mParty.getApplyprice()
+		mTvIntegration.setText((int) mParty.getApplyprice()
 				+ this.getApplyPriceType(mParty.getApplypriceType()));
 		mTvPlanNum.setText(mParty.getPlannum() + "");
 		mTvSignUpNum.setText(mParty.getApplynum() + "");
@@ -192,7 +192,7 @@ public class PartyDetailActivity extends BaseActivity {
 	}
 
 	private void fetchSignUpMember() {
-		String selectCode = "from com.andrnes.modoer.ModoerPartyApply mpa where mpa.status = 1 and mpa.partyid.id = "
+		String selectCode = "from com.andrnes.modoer.ModoerPartyApply mpa where mpa.status = 0 and  mpa.partyid.id = "
 				+ mParty.getId();
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		this.getStoreOperation().findAll(selectCode,
@@ -214,7 +214,7 @@ public class PartyDetailActivity extends BaseActivity {
 		StringBuilder sb = new StringBuilder();
 		sb.append(GlobalConfig.URL_PIC);
 		if (null != mParty) {
-			sb.append("party-detail-id-" + mParty.getId() + ".html");
+			sb.append("party-detail-id-" + mParty.getId() + ".html#jincai");
 		}
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(sb.toString()));
@@ -225,7 +225,7 @@ public class PartyDetailActivity extends BaseActivity {
 		StringBuilder sb = new StringBuilder();
 		sb.append(GlobalConfig.URL_PIC);
 		if (null != mParty) {
-			sb.append("party-detail-id-" + mParty.getId() + ".html");
+			sb.append("party-detail-id-" + mParty.getId() + ".html#pic");
 		}
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(sb.toString()));

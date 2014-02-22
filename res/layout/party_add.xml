@@ -38,36 +38,33 @@
                 <EditText
                     android:id="@+id/party_add_et_title"
                     style="@style/et_add_style"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_5"
-                    android:layout_toLeftOf="@+id/party_add_ll_category"
                     android:layout_toRightOf="@+id/party_add_tv_title_tip" />
+            </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/party_add_ll_category"
+            <LinearLayout
+                android:id="@+id/party_add_ll_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10" >
+
+                <include
+                    android:id="@+id/party_add_ll_category_loading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/margin_5" >
+                    android:layout_gravity="center_vertical"
+                    layout="@layout/progress_bar_small" />
 
-                    <include
-                        android:id="@+id/party_add_ll_category_loading"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        layout="@layout/progress_bar_small" />
-
-                    <Spinner
-                        android:id="@+id/party_add_spinner_category"
-                        style="@style/spinner_add_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone" >
-                    </Spinner>
-                </LinearLayout>
-            </RelativeLayout>
+                <Spinner
+                    android:id="@+id/party_add_spinner_category"
+                    style="@style/spinner_add_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" >
+                </Spinner>
+            </LinearLayout>
 
             <!-- 第二部分 -->
 

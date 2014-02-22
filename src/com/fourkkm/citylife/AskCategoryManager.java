@@ -112,6 +112,10 @@ public class AskCategoryManager implements IModoerManager<ModoerAskCategory> {
 		return names;
 	}
 
+	public boolean isFirstLevelCategory(int level) {
+		return ASK_CATEGORY_LEVEL_PARENT == level;
+	}
+
 	@Override
 	public void add(ModoerAskCategory e) {
 		// TODO Auto-generated method stub

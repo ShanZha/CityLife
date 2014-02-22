@@ -139,6 +139,12 @@ public class AskDetailActivity extends BaseActivity {
 		}
 		if (mCurrAsk.getSuccess() == 1) {// 如果已经解决，则不提供回答/管理
 			mBtnAnswer.setVisibility(View.GONE);
+		} else {
+			if (null != mCurrAsk) {
+				int reward = mCurrAsk.getReward();
+				mBtnAnswer.setText(this.getString(R.string.ask_me_answer) + "("
+						+ reward + "积分)");
+			}
 		}
 	}
 

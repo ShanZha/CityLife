@@ -9,6 +9,7 @@ import java.util.Set;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.view.ViewPager.LayoutParams;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -47,6 +48,7 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 	private int mType = -1;
 
 	private String mStrAll = "";
+	private String mCurrParent = "";
 
 	public FloatingTwoMenuProxy(Context context, int type) {
 		this.mCtx = context;
@@ -70,6 +72,7 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 					int position, long id) {
 				// TODO Auto-generated method stub
 				String parentKey = getParentKey(position);
+				mCurrParent = parentKey;
 				resetChildDatas(parentKey);
 				((FloatingAdapter) mParentAdapter).mCurrName = parentKey;
 				((FloatingAdapter) mChildAdapter).mCurrName = FloatingAdapter.INVALIDA_NAME;
@@ -98,12 +101,15 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 			mStrAll = GlobalConfig.FloatingStr.STR_ALL_AREA;
 			break;
 		case GlobalConfig.FloatingType.TYPE_CATEGORY:
+		case GlobalConfig.FloatingType.TYPE_ASK_CATEGORY:
 			mStrAll = GlobalConfig.FloatingStr.STR_ALL_CATEGOTY;
 			break;
 		case GlobalConfig.FloatingType.TYPE_ASK_STATE:
 			mStrAll = GlobalConfig.FloatingStr.STR_ALL_ASK;
 			break;
 		}
+		mCurrParent = mStrAll;
+
 	}
 
 	/**
@@ -113,9 +119,21 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 	 */
 	public void setDatas(Map<String, List<String>> datas) {
 		this.mDatas = datas;
+		this.addDefaultAll();
 		this.setParentDatas();
 		this.notifyParentDataChanged();
+		this.resetChildDatas(mStrAll);
+		this.notifyChildDataChanged();
 		this.resetViewHeightByFirstLevel();
+	}
+
+	private void addDefaultAll() {
+		if (null == mDatas) {
+			return;
+		}
+		List<String> all = new ArrayList<String>();
+		all.add(GlobalConfig.FloatingStr.STR_ALL_CHILD);
+		mDatas.put(mStrAll, all);
 	}
 
 	/**
@@ -160,9 +178,18 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 	 * @param key
 	 */
 	public void resetDataByKey(String childKey) {
-		String parentKey = this.getParentKeyByChildKey(childKey);
-		this.resetChildDatas(parentKey);
-		((FloatingAdapter) mParentAdapter).mCurrName = parentKey;
+		if (GlobalConfig.FloatingStr.STR_ALL_CHILD.equals(childKey)) {
+			mCurrParent = mStrAll;
+		} else {
+			String parentKey = this.getParentKeyByChildKey(childKey);
+			if (TextUtils.isEmpty(parentKey)) {
+				parentKey = this.getParentKey(childKey);
+				childKey = GlobalConfig.FloatingStr.STR_ALL_CHILD;
+			}
+			mCurrParent = parentKey;
+		}
+		this.resetChildDatas(mCurrParent);
+		((FloatingAdapter) mParentAdapter).mCurrName = mCurrParent;
 		((FloatingAdapter) mChildAdapter).mCurrName = childKey;
 		this.notifyParentDataChanged();
 		this.notifyChildDataChanged();
@@ -211,14 +238,32 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 	}
 
 	private void resetChildDatas(String parentKey) {
-		if (null == mDatas) {
+		if (null == mDatas || null == mChildDatas) {
 			return;
 		}
 		List<String> tempDatas = mDatas.get(parentKey);
-		if (null != tempDatas && null != mChildDatas) {
+		if (null != tempDatas) {
 			mChildDatas.clear();
+			if (this.isNeedAddStrAll()) {
+				mChildDatas.add(GlobalConfig.FloatingStr.STR_ALL_CHILD);
+			}
 			mChildDatas.addAll(tempDatas);
 		}
+	}
+
+	private String getParentKey(String parentKey) {
+		if (null == mDatas) {
+			return "";
+		}
+		Set<String> set = mDatas.keySet();
+		Iterator<String> it = set.iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			if (parentKey.equals(key)) {
+				return key;
+			}
+		}
+		return "";
 	}
 
 	private String getParentKeyByChildKey(String childKey) {
@@ -242,6 +287,16 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 		return "";
 	}
 
+	private boolean isNeedAddStrAll() {
+//		if (GlobalConfig.FloatingType.TYPE_ASK_CATEGORY == mType) {
+//			return false;
+//		}
+		if (mCurrParent.equals(mStrAll)) {
+			return false;
+		}
+		return true;
+	}
+
 	private String getStrAll() {
 		if (null != mDatas) {
 			Set<String> set = mDatas.keySet();
@@ -262,7 +317,7 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 			Set<String> set = mDatas.keySet();
 			Iterator<String> it = set.iterator();
 
-			mParentDatas.add(this.getStrAll());
+			mParentDatas.add(mStrAll);
 			while (it.hasNext()) {
 				String temp = it.next();
 				if (!mStrAll.equals(temp)) {
@@ -287,8 +342,14 @@ public class FloatingTwoMenuProxy implements OnItemClickListener,
 			long id) {
 		// TODO Auto-generated method stub
 		if (null != mOnItemClickListener) {
-			mOnItemClickListener.onFloatingItemClick(position,
-					mChildDatas.get(position), mType);
+			String child = mChildDatas.get(position);
+			if (GlobalConfig.FloatingStr.STR_ALL_CHILD.equals(child)) {
+				mOnItemClickListener
+						.onFloatingItemClick(-1, mCurrParent, mType);
+			} else {
+				mOnItemClickListener
+						.onFloatingItemClick(position, child, mType);
+			}
 		}
 		this.dismiss();
 	}

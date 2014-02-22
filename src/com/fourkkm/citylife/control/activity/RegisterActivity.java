@@ -17,6 +17,7 @@ import com.andrnes.modoer.ModoerUsergroups;
 import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.util.MD5;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.zj.app.BaseActivity;
@@ -121,6 +122,10 @@ public class RegisterActivity extends BaseActivity {
 					.getString(R.string.register_use_protocal_unchecked));
 			return false;
 		}
+		if (!CommonUtil.isEmail(mEtEmail.getText().toString().trim())) {
+			this.showToast(this.getString(R.string.register_email_invalide));
+			return false;
+		}
 		String pswd = mEtPswd.getText().toString().trim();
 		String pswdSure = mEtPswdSure.getText().toString().trim();
 		if (TextUtils.isEmpty(pswd) || TextUtils.isEmpty(pswdSure)
@@ -129,6 +134,17 @@ public class RegisterActivity extends BaseActivity {
 			return false;
 		}
 		return true;
+	}
+
+	private void saveLoginInfo(ModoerMembers member) {
+		if (null == member) {
+			return;
+		}
+		member.setLoginip(CommonUtil.getLocalIPAddress(this
+				.getApplicationContext()));
+		member.setLogintime((int) CommonUtil.getCurrTimeByPHP());
+		this.getStoreOperation().saveOrUpdate(member,
+				new Param(this.hashCode(), GlobalConfig.URL_CONN));
 	}
 
 	@Override
@@ -156,6 +172,7 @@ public class RegisterActivity extends BaseActivity {
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
+		this.saveLoginInfo(mMember);
 		((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
 		SharedPreferenceUtil.getSharedPrefercence().put(
 				this.getApplicationContext(),

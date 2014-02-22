@@ -38,6 +38,12 @@ public class ModoerMembers implements Serializable {
 	/** 注册时间 */
 	private int regdate;
 
+	/** 登录ip */
+	private String loginip;
+
+	/** 登录时间 */
+	private int logintime;
+
 	/** 等级主题数量 */
 	private int subjects;
 
@@ -253,6 +259,22 @@ public class ModoerMembers implements Serializable {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public String getLoginip() {
+		return loginip;
+	}
+
+	public void setLoginip(String loginip) {
+		this.loginip = loginip;
+	}
+
+	public int getLogintime() {
+		return logintime;
+	}
+
+	public void setLogintime(int logintime) {
+		this.logintime = logintime;
 	}
 
 }

@@ -120,7 +120,7 @@ public class AskListActivity extends BaseListActivity implements
 			mAskStateList = new ArrayList<String>();
 
 			mFloatingCategory = new FloatingTwoMenuProxy(this,
-					GlobalConfig.FloatingType.TYPE_CATEGORY);
+					GlobalConfig.FloatingType.TYPE_ASK_CATEGORY);
 			mFloatingState = new FloatingOneMenuProxy(this,
 					GlobalConfig.FloatingType.TYPE_ASK_STATE);
 			mFloatingCategory.setFloatingItemClickListener(this);
@@ -223,7 +223,11 @@ public class AskListActivity extends BaseListActivity implements
 				sb.append(" and");
 			}
 		} else {
-			sb.append(" where ma.catid.id = " + mCurrAskCategory.getId());
+			if(mAskCategoryMgr.isFirstLevelCategory(mCurrAskCategory.getUse_area())){
+				sb.append(" where ma.catid.pid.id = " + mCurrAskCategory.getId());
+			}else{
+				sb.append(" where ma.catid.id = " + mCurrAskCategory.getId());
+			}
 			// 按照悬赏积分查询比较特殊，所以特殊处理，此时暂不区别是否解决
 			if (ASK_STATE_REWARD == mCurrAskState) {
 				if (null != city) {
@@ -428,7 +432,7 @@ public class AskListActivity extends BaseListActivity implements
 	@Override
 	public void onFloatingItemClick(int pos, String key, int type) {
 		// TODO Auto-generated method stub
-		if (GlobalConfig.FloatingType.TYPE_CATEGORY == type) {// 问题类别改变
+		if (GlobalConfig.FloatingType.TYPE_ASK_CATEGORY == type) {// 问题类别改变
 			if (this.isCurrCategory(key)) {
 				return;
 			}

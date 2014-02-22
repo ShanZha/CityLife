@@ -1,6 +1,7 @@
 package com.fourkkm.citylife.control.activity;
 
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -61,13 +62,21 @@ public class MapMarkerActivity extends BaseFragmentActivity implements
 		LatLng latlng = null;
 		if (GlobalConfig.IntentKey.MAP_POINT_ADD == mOperator) {
 			mTvTitle.setText(this.getString(R.string.map_point));
-			// 虚拟当前位置，初始时在当前位置
-			latlng = new LatLng(((CoreApp) AppUtils.getBaseApp(this)).mCurrLat,
-					((CoreApp) AppUtils.getBaseApp(this)).mCurrLng);
+			mMap.setMyLocationEnabled(true);
+			Location location = mMap.getMyLocation();
+			if (null != location) {
+				latlng = new LatLng(location.getLatitude(),
+						location.getLongitude());
+			} else {
+				latlng = new LatLng(
+						((CoreApp) AppUtils.getBaseApp(this)).mCurrLat,
+						((CoreApp) AppUtils.getBaseApp(this)).mCurrLng);
+			}
+			System.out.println("shan--> lat = "+latlng.latitude+" long = "+latlng.longitude);
 		} else if (GlobalConfig.IntentKey.MAP_POINT_ERROR == mOperator) {
 			mTvTitle.setText(this.getString(R.string.subject_error_map));
 			double[] locArray = intent.getDoubleArrayExtra("latlng");
-			latlng = new LatLng(locArray[0],locArray[1]);
+			latlng = new LatLng(locArray[0], locArray[1]);
 		}
 		mBtnSure.setVisibility(View.VISIBLE);
 

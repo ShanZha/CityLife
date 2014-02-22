@@ -79,7 +79,7 @@ public class UserUpdateActivity extends BaseUploadThumbActivity {
 						thumbHeight);
 				mIvThumb.setDefaultImageBitmap(bm);
 			} else {
-				mIvThumb.setUrl(GlobalConfig.URL_UPLOAD + filePath);
+				mIvThumb.setUrl(GlobalConfig.URL_PIC + filePath);
 			}
 		}
 	}

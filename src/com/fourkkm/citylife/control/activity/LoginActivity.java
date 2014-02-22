@@ -227,6 +227,17 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		this.getStoreOperation().saveOrUpdateArray(objs, param);
 	}
 
+	private void saveLoginInfo(ModoerMembers member) {
+		if (null == member) {
+			return;
+		}
+		member.setLoginip(CommonUtil.getLocalIPAddress(this
+				.getApplicationContext()));
+		member.setLogintime((int) CommonUtil.getCurrTimeByPHP());
+		this.getStoreOperation().saveOrUpdate(member,
+				new Param(this.hashCode(), GlobalConfig.URL_CONN));
+	}
+
 	/**
 	 * 第三方鉴权完毕时，构建ModoerMemberPassport
 	 * 
@@ -378,6 +389,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		// TODO Auto-generated method stub
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_MEMBER == operator) {
+			this.saveLoginInfo(mMember);
 			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
 			SharedPreferenceUtil.getSharedPrefercence().put(
 					this.getApplicationContext(),
@@ -435,6 +447,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 			}
 			mMember = (ModoerMembers) result;
 			if (this.isPswdCorrect(mUserPswd, mMember.getPassword())) {
+				this.saveLoginInfo(mMember);
 				((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
 				SharedPreferenceUtil.getSharedPrefercence().put(
 						this.getApplicationContext(),

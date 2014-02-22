@@ -108,7 +108,7 @@ public class PartyApplyActivity extends BaseActivity {
 			apply.setComment(mEtRemark.getText().toString().trim());
 			apply.setDateline((int) CommonUtil.getCurrTimeByPHP());
 			apply.setSex(this.getSexByCheckId(mRgSex.getCheckedRadioButtonId()));
-			apply.setStatus(1);
+			apply.setStatus(0);
 
 			mDialogProxy.showDialog();
 			this.getStoreOperation().saveOrUpdate(apply,

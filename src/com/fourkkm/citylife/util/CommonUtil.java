@@ -57,7 +57,7 @@ public class CommonUtil {
 	}
 
 	public static long getCurrTimeByPHP() {
-		return (int) (System.currentTimeMillis() / 1000);
+		return (System.currentTimeMillis() / 1000);
 	}
 
 	public static long formatTimeByPHP(String time) {
@@ -72,6 +72,9 @@ public class CommonUtil {
 	}
 
 	public static boolean isEmail(String email) {
+		if (TextUtils.isEmpty(email)) {
+			return false;
+		}
 		String format = "^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
 		if (email.matches(format)) {
 			// 閭鍚嶅悎娉�杩斿洖true
@@ -211,6 +214,17 @@ public class CommonUtil {
 		temp = temp.replaceAll("&laquo;", "<<");
 		temp = temp.replaceAll("&raquo;", ">>");
 		temp = temp.replaceAll("&#8206;", "");
+		return temp;
+	}
+
+	public static String transferHtml(String temp) {
+		if (TextUtils.isEmpty(temp)) {
+			return "";
+		}
+		temp = temp.replaceAll("<.+?>", "");
+		temp = temp.replaceAll("&.+?;", "");
+		temp = temp.replaceAll("/n", "");
+		temp = temp.replaceAll("/r", "");
 		return temp;
 	}
 

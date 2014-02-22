@@ -23,6 +23,7 @@ import com.fourkkm.citylife.CoreApp;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.itemview.ModoerPartyItemView;
+import com.fourkkm.citylife.util.CommonUtil;
 import com.fourkkm.citylife.view.PullUpDownListView;
 import com.fourkkm.citylife.widget.FloatingOneMenuProxy;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
@@ -229,16 +230,16 @@ public class PartyListActivity extends BaseListActivity implements
 		case PARTY_STATE_ALL:
 			break;
 		case PARTY_STATE_SIGNNING:
-			long currTime = System.currentTimeMillis() / 1000;
+			long currTime = CommonUtil.getCurrTimeByPHP();
 			sb.append(" and mp.joinendtime > " + currTime);
 			break;
 		case PARTY_STATE_ONGOING:
-			long currTime2 = System.currentTimeMillis() / 1000;
+			long currTime2 = CommonUtil.getCurrTimeByPHP();
 			sb.append(" and mp.begintime < " + currTime2);
 			sb.append(" and mp.endtime > " + currTime2);
 			break;
 		case PARTY_STATE_OVER:
-			long currTime3 = System.currentTimeMillis() / 1000;
+			long currTime3 = CommonUtil.getCurrTimeByPHP();
 			sb.append(" and mp.endtime < " + currTime3);
 			break;
 		}
@@ -248,9 +249,9 @@ public class PartyListActivity extends BaseListActivity implements
 		}
 		// Step 3:最之限制
 		if (PARTY_MOST_NEW == mCurrMost) {
-			sb.append(" order by dateline DESC,mp.id DESC");
+			sb.append(" order by mp.dateline DESC,mp.id DESC");
 		} else if (PARTY_MOST_POPULAR == mCurrMost) {
-			sb.append(" order by pageview DESC,mp.id DESC");
+			sb.append(" order by mp.pageview DESC,mp.id DESC");
 		}
 
 		return sb.toString();

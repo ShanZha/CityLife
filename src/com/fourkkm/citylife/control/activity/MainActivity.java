@@ -313,24 +313,28 @@ public class MainActivity extends BaseFragmentActivity implements
 	public void onClickFood(View view) {// 美食
 		Intent intent = new Intent(this, SubjectListActivity.class);
 		intent.putExtra("category", GlobalConfig.CATEGORY_FOOD);
+		intent.putExtra("operator", GlobalConfig.IntentKey.SUBJECT_NEAR);
 		this.startActivity(intent);
 	}
 
 	public void onClickTravel(View view) {// 出行
 		Intent intent = new Intent(this, SubjectListActivity.class);
 		intent.putExtra("category", GlobalConfig.CATEGORY_TRAVEL);
+		intent.putExtra("operator", GlobalConfig.IntentKey.SUBJECT_NEAR);
 		this.startActivity(intent);
 	}
 
 	public void onClickRecreation(View view) {// 休闲
 		Intent intent = new Intent(this, SubjectListActivity.class);
 		intent.putExtra("category", GlobalConfig.CATEGORY_RECREATION);
+		intent.putExtra("operator", GlobalConfig.IntentKey.SUBJECT_NEAR);
 		this.startActivity(intent);
 	}
 
 	public void onClickShopping(View view) {// 购物
 		Intent intent = new Intent(this, SubjectListActivity.class);
 		intent.putExtra("category", GlobalConfig.CATEGORY_SHOPPING);
+		intent.putExtra("operator", GlobalConfig.IntentKey.SUBJECT_NEAR);
 		this.startActivity(intent);
 	}
 

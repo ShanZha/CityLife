@@ -1,121 +1,126 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_bg"
-    android:orientation="vertical" >
+    android:background="@color/main_bg" >
 
-    <include
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/titlebar_back" />
+        android:orientation="vertical" >
 
-    <!-- 用户名 -->
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/titlebar_back" />
 
-    <EditText
-        android:id="@+id/register_et_username"
-        style="@style/et_add_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_20"
-        android:hint="@string/username" />
+        <!-- 用户名 -->
 
-    <!-- 邮箱 -->
+        <EditText
+            android:id="@+id/register_et_username"
+            style="@style/et_add_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_20"
+            android:hint="@string/username" />
 
-    <EditText
-        android:id="@+id/register_et_email"
-        style="@style/et_add_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress" />
+        <!-- 邮箱 -->
 
-    <!-- 密码 -->
+        <EditText
+            android:id="@+id/register_et_email"
+            style="@style/et_add_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
 
-    <EditText
-        android:id="@+id/register_et_pswd"
-        style="@style/et_add_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
-        android:hint="@string/pswd"
-        android:inputType="textPassword" />
+        <!-- 密码 -->
 
-    <!-- 密码确认 -->
+        <EditText
+            android:id="@+id/register_et_pswd"
+            style="@style/et_add_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:hint="@string/pswd"
+            android:inputType="textPassword" />
 
-    <EditText
-        android:id="@+id/register_et_pswd_sure"
-        style="@style/et_add_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
-        android:hint="@string/pswd_sure"
-        android:inputType="textPassword" />
+        <!-- 密码确认 -->
 
-    <!-- 使用协议 -->
+        <EditText
+            android:id="@+id/register_et_pswd_sure"
+            style="@style/et_add_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:hint="@string/pswd_sure"
+            android:inputType="textPassword" />
 
-    <CheckBox
-        android:id="@+id/register_check_box_protocal"
-        style="@style/cb_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
-        android:checked="true"
-        android:text="@string/register_use_protocal" />
+        <!-- 使用协议 -->
 
-    <!-- 注册 -->
+        <CheckBox
+            android:id="@+id/register_check_box_protocal"
+            style="@style/cb_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:checked="true"
+            android:text="@string/register_use_protocal" />
 
-    <Button
-        android:id="@+id/login_btn_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
-        android:background="@drawable/commit_btn_selector"
-        android:onClick="onClickRegister"
-        android:text="@string/register"
-        android:textColor="@android:color/white" />
+        <!-- 注册 -->
 
-    <!-- 分割线 -->
+        <Button
+            android:id="@+id/login_btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@drawable/commit_btn_selector"
+            android:onClick="onClickRegister"
+            android:text="@string/register"
+            android:textColor="@android:color/white" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_10"
-        android:background="@drawable/divider" />
+        <!-- 分割线 -->
 
-    <!-- 用户使用协议 -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@drawable/divider" />
 
-    <TextView
-        style="@style/list_second_level_black_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
-        android:singleLine="true"
-        android:text="@string/register_use_protocal" />
+        <!-- 用户使用协议 -->
 
-    <TextView
-        style="@style/list_second_level_style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_10"
-        android:layout_marginRight="@dimen/margin_10"
-        android:layout_marginTop="@dimen/margin_10"
-        android:text="@string/register_disclaimer" />
+        <TextView
+            style="@style/list_second_level_black_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:singleLine="true"
+            android:text="@string/register_use_protocal" />
 
-</LinearLayout>
+        <TextView
+            style="@style/list_second_level_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_10"
+            android:layout_marginRight="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_10"
+            android:text="@string/register_disclaimer" />
+    </LinearLayout>
+
+</ScrollView>

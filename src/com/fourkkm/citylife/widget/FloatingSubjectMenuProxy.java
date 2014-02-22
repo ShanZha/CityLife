@@ -46,6 +46,7 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 	private int mSelectedPosFirst = -1, mSelectedPosSecond = -1;
 	/** 当前选中的主题分类 -全部时为空 **/
 	private ModoerCategory mCurrCategory;
+	private String mCurrParent = "";
 
 	public FloatingSubjectMenuProxy(Context context,
 			SubjectCategoryManager categoryMgr, int type) {
@@ -79,6 +80,10 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 		mFirstList = new ArrayList<String>();
 		mSecondList = new ArrayList<String>();
 		mThirdList = new ArrayList<String>();
+
+		this.notifyFirstDataChanged();
+		this.notifySecondDataChanged();
+		this.notifyThirdDataChanged();
 	}
 
 	public void setFloatingtItemListener(IFloatingItemClick listener) {
@@ -97,7 +102,7 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 	public void prepareDatas() {
 		// 默认一级、二级都添加一个“全部类型”
 		mFirstList.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
-		mSecondList.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
+		mSecondList.add(GlobalConfig.FloatingStr.STR_ALL_CHILD);
 		// mThirdList.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 		List<String> firstNames = mCategoryMgr.getFirstLevelNames();
 		mFirstList.addAll(firstNames);
@@ -177,13 +182,17 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 			case SubjectCategoryManager.LEVEL_SECOND:
 				ModoerCategory parent = mCurrCategory.getPid();
 				if (null != parent) {
-					this.resetDataByName(parent.getName(), parent.getLevel());
+					String name = parent.getName();
+					mCurrParent = name;
+					this.resetDataByName(name, parent.getLevel());
 				}
 				break;
 			case SubjectCategoryManager.LEVEL_THIRD:
 				ModoerCategory parent2 = mCurrCategory.getPid();
 				if (null != parent2) {
-					this.resetDataByName(parent2.getName(), parent2.getLevel());
+					String name = parent2.getName();
+					mCurrParent = name;
+					this.resetDataByName(name, parent2.getLevel());
 					ModoerCategory grandfather = parent2.getPid();
 					if (null != grandfather) {
 						this.resetDataByName(grandfather.getName(),
@@ -204,7 +213,8 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 			((FloatingAdapter) mAdapterFirst).mCurrName = GlobalConfig.FloatingStr.STR_ALL_CATEGOTY;
 			this.notifyFirstDataChanged();
 			mSecondList.clear();
-			mSecondList.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
+			mCurrParent = GlobalConfig.FloatingStr.STR_ALL_CATEGOTY;
+			mSecondList.add(GlobalConfig.FloatingStr.STR_ALL_CHILD);
 			notifySecondDataChanged();
 		} else {
 			int level = mCurrCategory.getLevel();
@@ -327,6 +337,7 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 			List<String> secondNames = mCategoryMgr.getNamesByParentId(category
 					.getId());
 			mSecondList.clear();
+			mSecondList.add(GlobalConfig.FloatingStr.STR_ALL_CHILD);
 			mSecondList.addAll(secondNames);
 			notifySecondDataChanged();
 			break;
@@ -334,6 +345,7 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 			List<String> thirdNames = mCategoryMgr.getNamesByParentId(category
 					.getId());
 			mThirdList.clear();
+			mThirdList.add(GlobalConfig.FloatingStr.STR_ALL_CHILD);
 			mThirdList.addAll(thirdNames);
 			notifyThirdDataChanged();
 			break;
@@ -363,9 +375,10 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 			notifyFirstDataChanged();
 
 			mSelectedPosFirst = position;
+			mCurrParent = name;
 			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(name)) {
 				mSecondList.clear();
-				mSecondList.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
+				mSecondList.add(GlobalConfig.FloatingStr.STR_ALL_CHILD);
 				notifySecondDataChanged();
 				// // 第二级连动第三级
 				mThirdList.clear();
@@ -373,6 +386,14 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 				notifyThirdDataChanged();
 				return;
 			}
+			// if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(name)) {
+			// if (null != mFloatingItemClick) {
+			// mFloatingItemClick.onFloatingItemClick(position, name,
+			// mType);
+			// }
+			// dismiss();
+			// return;
+			// }
 			resetDataByName(name, SubjectCategoryManager.LEVEL_FIRST);
 			// // 第二级连动第三级(第三级默认显示第二级的第一项)
 			// if (mSecondList.size() > 0) {
@@ -405,14 +426,26 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 			notifyThirdDataChanged();
 			mSelectedPosSecond = position;
 			String name = mSecondList.get(position);
-			if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY.equals(name)) {
+
+			if (GlobalConfig.FloatingStr.STR_ALL_CHILD.equals(name)) {
 				if (null != mFloatingItemClick) {
+					if (GlobalConfig.FloatingStr.STR_ALL_CATEGOTY
+							.equals(mCurrParent)) {
+						name = mCurrParent;
+					} else {
+						ModoerCategory category = mCategoryMgr
+								.getCategoryByName(mCurrParent);
+						if (null != category) {
+							name = category.getName();
+						}
+					}
 					mFloatingItemClick.onFloatingItemClick(position, name,
 							mType);
 				}
 				dismiss();
 				return;
 			}
+			mCurrParent = name;
 			ModoerCategory category = mCategoryMgr.getCategoryByName(name);
 			List<String> thirdNames = mCategoryMgr.getNamesByParentId(category
 					.getId());
@@ -442,6 +475,19 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 					.get(position);
 			notifyThirdDataChanged();
 			String name = mThirdList.get(position);
+			if (GlobalConfig.FloatingStr.STR_ALL_CHILD.equals(name)) {
+				if (null != mFloatingItemClick) {
+					ModoerCategory category = mCategoryMgr
+							.getCategoryByName(mCurrParent);
+					if (null != category) {
+						name = category.getName();
+					}
+					mFloatingItemClick.onFloatingItemClick(position, name,
+							mType);
+				}
+				dismiss();
+				return;
+			}
 			if (null != mFloatingItemClick) {
 				mFloatingItemClick.onFloatingItemClick(position, name, mType);
 			}

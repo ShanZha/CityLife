@@ -2,12 +2,14 @@ package com.fourkkm.citylife.constant;
 
 public interface GlobalConfig {
 
-//	public final static String URL_CONN = "http://115.28.167.199/modoer/androidInterFace/";
+	// public final static String URL_CONN =
+	// "http://115.28.167.199/modoer/androidInterFace/";
 	public final static String URL_CONN = "http://www.40000km.com.cn:8080/modoer/androidInterFace/";
-//	public final static String URL_UPLOAD = "http://115.28.167.199/modoer/";
+	// public final static String URL_UPLOAD = "http://115.28.167.199/modoer/";
 	public final static String URL_UPLOAD = "http://www.40000km.com.cn:8080/modoer/";
 	public static final String URL_PIC = "http://www.40000km.com.cn/";
-	public static final String URL_ATTR_PIC = URL_PIC + "static/images/att/app/";
+	public static final String URL_ATTR_PIC = URL_PIC
+			+ "static/images/att/att/";
 	public static final String URL_FORGET_PSWD = URL_PIC
 			+ "member-login-op-forget.html";
 
@@ -26,7 +28,7 @@ public interface GlobalConfig {
 	public static final int STATUS_UPLOAD_SUCCESS = 1;
 	public static final int STATUS_UPLOAD_FAIL = 2;
 
-	public static final int PUBLIC_MEMBER_ID = 100000;
+	public static final int PUBLIC_MEMBER_ID = 50;
 
 	public static class FloatingType {
 		public static final int TYPE_SUBJECT_DISTANCE = 0;
@@ -34,14 +36,15 @@ public interface GlobalConfig {
 		public static final int TYPE_SUBJECT_SORT = 2;
 		public static final int TYPE_AREA = 3;
 		public static final int TYPE_ASK_STATE = 4;
-		public static final int TYPE_PARTY_STATE = 5;
-		public static final int TYPE_PARTY_MOST = 6;
-		public static final int TYPE_PIC_SELECT = 7;
-		public static final int TYPE_SHARE = 8;
-		public static final int TYPE_ERROR = 9;
-		public static final int TYPE_PARTY_SIGNUP_END_TIME = 10;
-		public static final int TYPE_PARTY_BEGIN_TIME = 11;
-		public static final int TYPE_PARTY_END_TIME = 12;
+		public static final int TYPE_ASK_CATEGORY = 5;
+		public static final int TYPE_PARTY_STATE = 6;
+		public static final int TYPE_PARTY_MOST = 7;
+		public static final int TYPE_PIC_SELECT = 8;
+		public static final int TYPE_SHARE = 9;
+		public static final int TYPE_ERROR = 10;
+		public static final int TYPE_PARTY_SIGNUP_END_TIME = 11;
+		public static final int TYPE_PARTY_BEGIN_TIME = 12;
+		public static final int TYPE_PARTY_END_TIME = 13;
 
 	}
 
@@ -50,6 +53,7 @@ public interface GlobalConfig {
 		public static final String STR_ALL_ASK = "全部问题";
 		public static final String STR_ALL_CATEGOTY = "全部类别";
 		public static final String STR_DEFAULT_SORT = "默认排序";
+		public static final String STR_ALL_CHILD = "全部";
 
 	}
 
@@ -115,6 +119,7 @@ public interface GlobalConfig {
 		public static final int SUBJECT_SEACH_CITY = 1;
 		public static final int SUBJECT_ME = 2;
 		public static final int SUBJECT_FAVORITE = 3;
+		public static final int SUBJECT_NEAR = 4;
 
 		public static final int REVIEW_ME = 1;
 		public static final int PARTY_ME = 1;

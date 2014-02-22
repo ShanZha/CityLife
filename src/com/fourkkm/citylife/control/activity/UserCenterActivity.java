@@ -124,7 +124,7 @@ public class UserCenterActivity extends BaseActivity {
 			bm = ThumbnailUtils.extractThumbnail(bm, thumbWidth, thumbHeight);
 			mIvAvator.setDefaultImageBitmap(bm);
 		} else {
-			mIvAvator.setUrl(GlobalConfig.URL_UPLOAD + filePath);
+			mIvAvator.setUrl(GlobalConfig.URL_PIC + filePath);
 		}
 
 	}

@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -21,7 +22,9 @@ import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.image.file.AsyncImageLoader;
+import com.zj.support.widget.adapter.ItemSingleAdapter;
 import com.zj.support.widget.item.BaseItem;
+import com.zj.support.widget.item.ItemSingle;
 import com.zj.support.widget.itemview.ItemView;
 
 public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
@@ -35,6 +38,8 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 	private RatingBar mRatingBar;
 	private TextView mTvDistance;
 	private Bitmap mBmDefault;
+	private ItemSingleAdapter<ItemView, ItemSingle> mAdapter;
+	private boolean mIsNear = false;
 
 	public ModoerSubjectItemView(Context context) {
 		this(context, null);
@@ -78,10 +83,15 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void prepareItemProperty(Object obj) {
 		// TODO Auto-generated method stub
-
+		mAdapter = (ItemSingleAdapter<ItemView, ItemSingle>) obj;
+		try {
+			mIsNear = (Boolean) mAdapter.getParams("isNear");
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
@@ -95,14 +105,18 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 		}
 		mTvAveragePer.setText(mCtx.getString(R.string.average_per)
 				+ subject.getAvgprice());
-		double lng = ((CoreApp) AppUtils.getBaseApp(mCtx)).mCurrLng;
-		double lat = ((CoreApp) AppUtils.getBaseApp(mCtx)).mCurrLat;
-		double lngSubject = subject.getMapLng();
-		double latSubject = subject.getMapLat();
-		if (0 != lngSubject && 0 != latSubject) {
-			double distance = CommonUtil.getDistance(lng, lat, lngSubject,
-					latSubject);
-			mTvDistance.setText(CommonUtil.formatUnitM(distance));
+		if (mIsNear) {
+			double lng = ((CoreApp) AppUtils.getBaseApp(mCtx)).mCurrLng;
+			double lat = ((CoreApp) AppUtils.getBaseApp(mCtx)).mCurrLat;
+			double lngSubject = subject.getMapLng();
+			double latSubject = subject.getMapLat();
+			if (0 != lngSubject && 0 != latSubject) {
+				double distance = CommonUtil.getDistance(lng, lat, lngSubject,
+						latSubject);
+				mTvDistance.setText(CommonUtil.formatUnitM(distance));
+			} else {
+				mTvDistance.setVisibility(View.GONE);
+			}
 		} else {
 			mTvDistance.setVisibility(View.GONE);
 		}

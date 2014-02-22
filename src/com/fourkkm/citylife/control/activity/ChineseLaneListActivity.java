@@ -195,10 +195,18 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 			return sb.toString();
 		}
 		if (null != mCurrCategory) {
-			sb.append(" and mf.catid.id = " + mCurrCategory.getId());
+			if (mLaneCategoryMgr.hasParent(mCurrCategory)) {
+				sb.append(" and mf.catid.id = " + mCurrCategory.getId());
+			} else {
+				sb.append(" and mf.catid.pid.id = " + mCurrCategory.getId());
+			}
 		}
 		if (null != mCurrArea) {
-			sb.append(" and mf.aid.id = " + mCurrArea.getId());
+			if (mAreaMgr.isSecondLevel(mCurrArea.getLevel())) {
+				sb.append(" mf.aid.pid.id = " + mCurrArea.getId());
+			} else if (mAreaMgr.isThirdLevel(mCurrArea.getLevel())) {
+				sb.append(" mf.aid.id = " + mCurrArea.getId());
+			}
 		} else {// 限制“国家级”
 			sb.append(" and mf.cityId.id = " + mCurrCountry.getId());
 		}

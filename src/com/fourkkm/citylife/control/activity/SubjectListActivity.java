@@ -61,7 +61,7 @@ public class SubjectListActivity extends BaseListActivity implements
 	private static final int MENU_ITEM_CANCEL_ID = 1;
 	private LinearLayout mLlTopCheck, mLlTopCheckLoading, mLlLocationLoading;
 	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond,
-			mRlFloatingThird;
+			mRlFloatingThird, mRlBottomLocation;
 	private ImageButton mBtnAdd, mBtnLocationRefresh;
 	private TextView mTvTitle, mTvNearOrSearch, mTvCategory, mTvSort,
 			mTvLocation;
@@ -98,6 +98,7 @@ public class SubjectListActivity extends BaseListActivity implements
 	private int mCurrFloatingType = -1;
 
 	private LocationProxy mLocation;
+	private boolean mIsLocationOk = false;
 
 	@Override
 	protected void prepareViews() {
@@ -130,9 +131,12 @@ public class SubjectListActivity extends BaseListActivity implements
 				.findViewById(R.id.subject_list_tv_location);
 		mBtnLocationRefresh = (ImageButton) this
 				.findViewById(R.id.subject_list_ibtn_refresh_location);
+		mRlBottomLocation = (RelativeLayout) this
+				.findViewById(R.id.subject_list_rl_location);
 		super.prepareViews();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void prepareDatas() {
 		// TODO Auto-generated method stub
@@ -146,6 +150,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		mSubjectList = new ArrayList<ModoerSubject>();
 		mAdapter = new ItemSingleAdapter<ModoerSubjectItemView, ModoerSubject>(
 				mSubjectList, this);
+		((ItemSingleAdapter<ModoerSubjectItemView, ModoerSubject>) mAdapter)
+				.addParams("isNear", false);
 
 		Intent intent = this.getIntent();
 		mOperator = intent.getIntExtra("operator", -1);
@@ -180,6 +186,9 @@ public class SubjectListActivity extends BaseListActivity implements
 			this.onLoadMore();
 			break;
 		default:
+			mRlBottomLocation.setVisibility(View.VISIBLE);
+			((ItemSingleAdapter<ModoerSubjectItemView, ModoerSubject>) mAdapter)
+					.addParams("isNear", true);
 			mCategoryId = intent.getIntExtra("category", 0);
 			this.prepareFloating();
 			mFloatingNearProxy = new FloatingOneMenuProxy(this,
@@ -190,7 +199,7 @@ public class SubjectListActivity extends BaseListActivity implements
 
 			mTvTitle.setText(this.getString(R.string.nearby));
 			this.showLoadingCategory();
-			this.fetchCategory();
+
 			break;
 		}
 
@@ -212,6 +221,10 @@ public class SubjectListActivity extends BaseListActivity implements
 		if (null != mLocation) {
 			mLocation.disconnect();
 		}
+	}
+
+	private boolean isNear() {
+		return GlobalConfig.IntentKey.SUBJECT_NEAR == mOperator;
 	}
 
 	private void prepareFloating() {
@@ -265,7 +278,7 @@ public class SubjectListActivity extends BaseListActivity implements
 	 * 获取所有Category
 	 */
 	private void fetchCategory() {
-		String selectCode = "from com.andrnes.modoer.ModoerCategory mc where mc.enabled = 1";
+		String selectCode = "from com.andrnes.modoer.ModoerCategory mc where mc.enabled = 1 order by mc.listorder";
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("max", GlobalConfig.MAX_ALL);
@@ -308,6 +321,8 @@ public class SubjectListActivity extends BaseListActivity implements
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		paramsMap.put("max", GlobalConfig.MAX);
 		paramsMap.put("offset", GlobalConfig.MAX * mPage);
+		paramsMap.put("lat", ((CoreApp) AppUtils.getBaseApp(this)).mCurrLat);
+		paramsMap.put("lon", ((CoreApp) AppUtils.getBaseApp(this)).mCurrLng);
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT);
 		this.getStoreOperation().findAll(selectCode, paramsMap, true,
@@ -464,6 +479,9 @@ public class SubjectListActivity extends BaseListActivity implements
 		}
 		this.reset();
 		this.notifyDataChanged();
+		if (this.isNear() && !mIsLocationOk) {
+			return;
+		}
 		this.onFirstLoadSetting();
 		// 重新加载数据
 		this.onLoadMore();
@@ -476,8 +494,8 @@ public class SubjectListActivity extends BaseListActivity implements
 			return;
 		}
 		Location location = mLocation.fetchCurrLocation();
-		mLocation.fetchAddress(this);
 		if (null == location) {
+			mIsLocationOk = false;
 			Log.i(TAG, "shan-->onConnected: location is null");
 		} else {
 			((CoreApp) AppUtils.getBaseApp(this)).mCurrLat = location
@@ -486,6 +504,11 @@ public class SubjectListActivity extends BaseListActivity implements
 					.getLongitude();
 			Log.i(TAG, "shan-->onConnected: " + "(" + location.getLatitude()
 					+ "," + location.getLongitude() + ")");
+			mIsLocationOk = true;
+		}
+		if (this.isNear()) {
+			mLocation.fetchAddress(this);
+			this.fetchCategory();
 		}
 	}
 
@@ -571,7 +594,7 @@ public class SubjectListActivity extends BaseListActivity implements
 				mFloatingSearchCityProxy.showAsDropDown(view);
 				if (null == mCurrArea) {
 					mFloatingSearchCityProxy
-							.resetDataByKey(GlobalConfig.FloatingStr.STR_ALL_AREA);
+							.resetDataByKey(GlobalConfig.FloatingStr.STR_ALL_CHILD);
 				} else {
 					mFloatingSearchCityProxy
 							.resetDataByKey(mCurrArea.getName());
@@ -624,19 +647,27 @@ public class SubjectListActivity extends BaseListActivity implements
 			return sb.toString();
 		}
 		if (null != mCurrCategory) {
-			sb.append(" where ms.status = 1 and ms.pid.enabled = 1 and ms.catid.id = "
-					+ mCurrCategory.getId());
+			sb.append(" where ms.status = 1 ");
+			if (mCategoryMgr.isFirstLevel(mCurrCategory)) {
+				sb.append(" and ms.pid.id = " + mCurrCategory.getId());
+			} else {
+				sb.append(" and ms.catid.id = " + mCurrCategory.getId());
+			}
 			sb.append(" and");
 		} else {
 			sb.append(" where");
 		}
 		if (null != mCurrArea) {
-			sb.append(" ms.aid.id = " + mCurrArea.getId());
+			if (mAreaMgr.isSecondLevel(mCurrArea.getLevel())) {
+				sb.append(" ms.aid.pid.id = " + mCurrArea.getId());
+			} else if (mAreaMgr.isThirdLevel(mCurrArea.getLevel())) {
+				sb.append(" ms.aid.id = " + mCurrArea.getId());
+			}
 		} else {// 限制“国家级”
 			sb.append(" ms.cityId.id = " + mCurrCountry.getId());
 		}
 
-		if (GlobalConfig.IntentKey.SUBJECT_SEACH_CITY != mOperator) {
+		if (this.isNear()) {
 			double[] rounds = CommonUtil.getAround(
 					((CoreApp) AppUtils.getBaseApp(this)).mCurrLat,
 					((CoreApp) AppUtils.getBaseApp(this)).mCurrLng,
@@ -652,7 +683,11 @@ public class SubjectListActivity extends BaseListActivity implements
 		}
 		switch (mCurrSort) {
 		case SUBJECT_SORT_DEFAULT:// 默认按照添加时间排序
-			sb.append(" order by ms.addtime DESC,ms.id DESC");
+			if (this.isNear()) {
+				sb.append(" order by round(((2 * asin(sqrt(pow(sin((PI() / 180*ms.mapLat - PI() / 180.0* :lat)/ 2), 2)+ cos(PI() / 180.0*ms.mapLat) * cos(PI() / 180.0* :lat)* pow(sin((PI() / 180.0*ms.mapLng  - PI() / 180.0*:lon) / 2), 2))))*6378137.0) * 10000) / 10000");
+			} else {
+				sb.append(" order by ms.id DESC");
+			}
 			break;
 		case SUBJECT_SORT_RECOMMEND:
 			sb.append(" order by ms.finer DESC,ms.id DESC");
@@ -676,9 +711,10 @@ public class SubjectListActivity extends BaseListActivity implements
 			sb.append(" order by ms.avgsort DESC,ms.id DESC");
 			break;
 		case SUBJECT_SORT_COST_PER:
-			sb.append(" order by ms.avgprice DESC,ms.id DESC");
+			sb.append(" order by ms.avgprice,ms.id DESC");
 			break;
 		}
+		System.out.println("subject: "+sb.toString());
 		return sb.toString();
 	}
 
@@ -747,8 +783,11 @@ public class SubjectListActivity extends BaseListActivity implements
 				mCategoryMgr.add(category);
 			}
 			mFloatingCategoryProxy.prepareDatas();
-			mListView.setAdapter(mAdapter);
 			this.hideLoadingCategory();
+			if (this.isNear() && !mIsLocationOk) {
+				return;
+			}
+			mListView.setAdapter(mAdapter);
 			this.onFirstLoadSetting();
 			this.onLoadMore();
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT_AREA == operator) {// Subject地区

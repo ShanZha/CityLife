@@ -67,7 +67,6 @@ public class CoreApp extends BaseApp {
 		Log.i(TAG, "shan-->pushInfoService started");
 		this.startService(new Intent(this, SmsPushService.class));
 	}
-	
 
 	/**
 	 * ÂÖÑ¯·şÎñÍ£Ö¹

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.text.TextUtils;
@@ -229,7 +230,16 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 			for (int i = 1; i < mPicList.size(); i++) {
 				ModoerPictures pic = mPicList.get(i);
 				String big = pic.getFilename();
-				array.put(big);
+				String thumb = pic.getThumb();
+				JSONObject jObj1 = new JSONObject();
+				try {
+					jObj1.put("thumb", thumb);
+					jObj1.put("picture", big);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				array.put(jObj1);
 			}
 			return array.toString();
 		}
@@ -398,6 +408,9 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 			for (int i = 0; i < results.size(); i++) {
 				ModoerTaggroup group = (ModoerTaggroup) results.get(i);
 				String options = group.getOptions();
+				if (null == options) {
+					continue;
+				}
 				String[] tags = options.split(",");
 				for (String tag : tags) {
 					ModoerTag mTag = new ModoerTag();
@@ -434,7 +447,7 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_REVIEW == operator) {
 			this.hideWaitting();
-//			this.showToast(this.getString(R.string.review_fail));
+			// this.showToast(this.getString(R.string.review_fail));
 		} else {
 			this.hideSortLoading();
 		}

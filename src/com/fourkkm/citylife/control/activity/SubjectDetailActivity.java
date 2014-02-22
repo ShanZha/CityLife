@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -61,8 +62,8 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			mTvReviewAveragePer, mTvReviewContent, mTvCompositeScore;
 	/** 4项评分 **/
 	private TextView mTvSort1, mTvSort2, mTvSort3, mTvSort4;
-	private ImageView mIvThumbnail, mIvDividerTel, mIvDividerDesc, mIvAttr1,
-			mIvAttr2, mIvAttr3, mIvAttr4, mIvAttr5;
+	private ImageView mIvThumbnail, mIvDividerAddr, mIvDividerTel,
+			mIvDividerDesc, mIvAttr1, mIvAttr2, mIvAttr3, mIvAttr4, mIvAttr5;
 	private RatingBar mRatingBar;
 	private RatingBar mRatingBarReview;
 
@@ -140,6 +141,8 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 				.findViewById(R.id.subject_detail_iv_divider_tel);
 		mIvDividerDesc = (ImageView) this
 				.findViewById(R.id.subject_detail_iv_divider_desc);
+		mIvDividerAddr = (ImageView) this
+				.findViewById(R.id.subject_detail_iv_divider_addr);
 
 		mRlAddress = (RelativeLayout) this
 				.findViewById(R.id.subject_detail_rl_address);
@@ -195,7 +198,13 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		String desc = mSubject.getDescription();
 		this.setTxtValue(mRlAddress, mTvAddress, addr);
 		this.setTxtValue(mRlTel, mTvTel, tel);
+		if (!TextUtils.isEmpty(desc)) {
+			desc = CommonUtil.transferHtml(desc);
+		}
 		this.setTxtValue(mRlDesc, mTvDesc, desc);
+		if (TextUtils.isEmpty(addr) || "0".equals(addr)) {
+			mIvDividerAddr.setVisibility(View.GONE);
+		}
 		if (TextUtils.isEmpty(desc)) {
 			mIvDividerDesc.setVisibility(View.GONE);
 		}
@@ -250,17 +259,19 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	}
 
 	/**
-	 * 获取一条此主题的好评论
+	 * 获取一条此主题的评论
 	 * 
 	 * @param subjectId
 	 */
 	private void fetchOneBestReview(int subjectId) {
 		String selectCode = "from com.andrnes.modoer.ModoerReview mr where mr.sid.id = "
-				+ subjectId + " and mr.status = 1 and mr.best = 2";
+				+ subjectId + " and mr.status = 1 ";
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FIND_REVIEW_BY_SUBJECT);
-		this.getStoreOperation().find(selectCode,
-				new HashMap<String, Object>(), true, new ModoerReview(), param);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("max", "1");
+		this.getStoreOperation().find(selectCode, params, true,
+				new ModoerReview(), param);
 	}
 
 	/**
@@ -772,6 +783,10 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		super.onSuccessSaveOrUpdateArray(out);
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_PICS == operator) {
+			SqliteUtil.getInstance(this.getApplicationContext())
+					.deleteByClassName(ModoerSubject.class.getName());
+			SqliteUtil.getInstance(this.getApplicationContext())
+					.deleteByClassName(ModoerMembers.class.getName());
 			if (null != mDialogProxy) {
 				mDialogProxy.hideDialog();
 			}

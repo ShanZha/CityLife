@@ -16,7 +16,7 @@ public class ChinaLaneCategoryManager implements
 	public ChinaLaneCategoryManager() {
 		mChinaLaneCategoryList = new ArrayList<ModoerFenleiCategory>();
 	}
-	
+
 	/**
 	 * 是否有父级类别
 	 * 
@@ -29,7 +29,7 @@ public class ChinaLaneCategoryManager implements
 		}
 		return category.getPid() != null && category.getPid().getId() != 0;
 	}
-	
+
 	/**
 	 * 建立唐人巷类别父子名称关系
 	 * 
@@ -96,7 +96,6 @@ public class ChinaLaneCategoryManager implements
 		}
 		return null;
 	}
-
 
 	@Override
 	public void add(ModoerFenleiCategory e) {

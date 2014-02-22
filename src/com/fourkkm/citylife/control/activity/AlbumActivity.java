@@ -125,8 +125,12 @@ public class AlbumActivity extends BaseFragmentActivity implements
 			JSONArray array = new JSONArray(picJson);
 			int length = array.length();
 			for (int i = 0; i < length; i++) {
-				String temp = array.getString(i);
-				String url = GlobalConfig.URL_UPLOAD + temp;
+				// String temp = array.getString(i);
+				// String url = GlobalConfig.URL_UPLOAD + temp;
+				// mThumbUrls.add(url);
+				JSONObject jsonObj = (JSONObject) array.get(i);
+				String temp = jsonObj.getString("picture");
+				String url = GlobalConfig.URL_PIC + temp;
 				mThumbUrls.add(url);
 			}
 			mSubjectThumbCount = length;
@@ -143,7 +147,7 @@ public class AlbumActivity extends BaseFragmentActivity implements
 			Iterator<String> it = json.keys();
 			while (it.hasNext()) {
 				String value = json.getString(it.next());
-				String url = GlobalConfig.URL_UPLOAD + value;
+				String url = GlobalConfig.URL_PIC + value;
 				mThumbUrls.add(url);
 			}
 			mSubjectThumbCount = mThumbUrls.size();

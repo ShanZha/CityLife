@@ -59,6 +59,18 @@ public class SubjectCategoryManager implements IModoerManager<ModoerCategory> {
 		return null;
 	}
 
+	public boolean isFirstLevel(ModoerCategory category) {
+		return LEVEL_FIRST == category.getLevel();
+	}
+
+	public boolean isSecondLevel(ModoerCategory category) {
+		return LEVEL_SECOND == category.getLevel();
+	}
+
+	public boolean isThirdLevel(ModoerCategory category) {
+		return LEVEL_THIRD == category.getLevel();
+	}
+
 	@Override
 	public void add(ModoerCategory e) {
 		// TODO Auto-generated method stub
