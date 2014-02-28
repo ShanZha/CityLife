@@ -202,10 +202,17 @@ public class ChineseLaneListActivity extends BaseListActivity implements
 			}
 		}
 		if (null != mCurrArea) {
+			int areaId = mCurrArea.getId();
 			if (mAreaMgr.isSecondLevel(mCurrArea.getLevel())) {
-				sb.append(" mf.aid.pid.id = " + mCurrArea.getId());
+				// sb.append(" and mf.aid.pid.id = " + mCurrArea.getId());
+				List<String> childNames = mAreaMgr.getAreaCityChild(areaId);
+				if (null != childNames && childNames.size() > 0) {
+					sb.append(" ms.aid.pid.id = " + areaId);
+				} else {
+					sb.append(" ms.aid.id = " + areaId);
+				}
 			} else if (mAreaMgr.isThirdLevel(mCurrArea.getLevel())) {
-				sb.append(" mf.aid.id = " + mCurrArea.getId());
+				sb.append(" and mf.aid.id = " + areaId);
 			}
 		} else {// 限制“国家级”
 			sb.append(" and mf.cityId.id = " + mCurrCountry.getId());

@@ -251,6 +251,7 @@ public class MainActivity extends BaseFragmentActivity implements
 	private void setCurrCountry() {
 		try {
 			Location location = mLocationProxy.fetchCurrLocation();
+			System.out.println(" shan--> location: "+location);
 			if (null == location) {
 				ModoerArea area = mAreaList.get(0);
 				((CoreApp) AppUtils.getBaseApp(this)).setCurrArea(area);
@@ -513,12 +514,12 @@ public class MainActivity extends BaseFragmentActivity implements
 	@Override
 	public void onConnected(Bundle data) {
 		// TODO Auto-generated method stub
-		if (null != mLocationProxy) {
-			Location location = mLocationProxy.fetchCurrLocation();
-			if (null == location) {
-
-			}
-		}
+//		if (null != mLocationProxy) {
+//			Location location = mLocationProxy.fetchCurrLocation();
+//			if (null == location) {
+//
+//			}
+//		}
 	}
 
 	@Override

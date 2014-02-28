@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -30,7 +31,7 @@ import com.zj.app.utils.AppUtils;
  * 
  */
 public class MapMarkerActivity extends BaseFragmentActivity implements
-		OnMarkerClickListener, OnMarkerDragListener {
+		OnMarkerClickListener, OnMarkerDragListener,OnMyLocationButtonClickListener {
 
 	private static final String TAG = "MapMarkerActivity";
 	private GoogleMap mMap;
@@ -63,6 +64,7 @@ public class MapMarkerActivity extends BaseFragmentActivity implements
 		if (GlobalConfig.IntentKey.MAP_POINT_ADD == mOperator) {
 			mTvTitle.setText(this.getString(R.string.map_point));
 			mMap.setMyLocationEnabled(true);
+			mMap.setOnMyLocationButtonClickListener(this);
 			Location location = mMap.getMyLocation();
 			if (null != location) {
 				latlng = new LatLng(location.getLatitude(),
@@ -154,5 +156,11 @@ public class MapMarkerActivity extends BaseFragmentActivity implements
 		LatLng position = marker.getPosition();
 		Log.i(TAG, "shan-->onMarkerDragStart(): (" + position.latitude + ","
 				+ position.longitude + ")");
+	}
+
+	@Override
+	public boolean onMyLocationButtonClick() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }

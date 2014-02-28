@@ -52,6 +52,7 @@ public interface GlobalConfig {
 		public static final String STR_ALL_AREA = "全部地区";
 		public static final String STR_ALL_ASK = "全部问题";
 		public static final String STR_ALL_CATEGOTY = "全部类别";
+		public static final String STR_SORT_NEAR = "按距离排序";
 		public static final String STR_DEFAULT_SORT = "默认排序";
 		public static final String STR_ALL_CHILD = "全部";
 
@@ -94,6 +95,7 @@ public interface GlobalConfig {
 		public static final int OPERATION_FIND_MEMBERPASSPORT = 33;
 		public static final int OPERATION_SAVE_ERROR = 34;
 		public static final int OPERATION_DELETE_FAVORITE = 35;
+		public static final int OPERATION_FIND_ALBUM = 36;
 	}
 
 	public static class SharePre {

@@ -172,9 +172,11 @@ public class SubjectAddActivity extends BaseAddActivity {
 		}
 		if (mCategoryThirdList.size() == 0) {
 			mSpCategoryThird.setSelection(-1);
-			mSpCategoryThird.setVisibility(View.GONE);
+			// mSpCategoryThird.setVisibility(View.GONE);
+			mCategoryThirdList.add("ÎÞ");
+			this.notifyDataChanged(mAdapterCategoryThird);
 		} else {
-			mSpCategoryThird.setVisibility(View.VISIBLE);
+			// mSpCategoryThird.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -253,7 +255,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 			} else {
 				mSubject.setAid(aid);
 			}
-			mSubject.setPictures(this.getPicCount());
+			// mSubject.setPictures(this.getPicCount());
 			mSubject.setStatus(1);
 			return mSubject;
 		} catch (Exception e) {
@@ -292,7 +294,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 			mAlbum.setLastupdate((int) com.fourkkm.citylife.util.CommonUtil
 					.getCurrTimeByPHP());
 			mAlbum.setName(mSubject.getName() + "Ä¬ÈÏÏà²á");
-			mAlbum.setNum(this.getPicCount());
+			// mAlbum.setNum(this.getPicCount());
 
 			objs.add(mSubject);
 			objs.add(mAlbum);
@@ -306,7 +308,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 					pic.setUrl("");
 					objs.add(pic);
 				}
-				mSubject.setPictures(this.getPicCount());
+				// mSubject.setPictures(this.getPicCount());
 			}
 			this.showWaiting();
 			Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);

@@ -18,11 +18,11 @@ public class AreaManager implements IModoerManager<ModoerArea> {
 
 	/** 常量定义，见ModoerArea实体level **/
 	/** 国家级 **/
-	private static final int AREA_LEVEL_COUNTRY = 1;
+	public static final int AREA_LEVEL_COUNTRY = 1;
 	/** 省/州 **/
-	private static final int AREA_LEVEL_CITY = 2;
+	public static final int AREA_LEVEL_CITY = 2;
 	/** 地区/县 **/
-	private static final int AREA_LEVEL_COUNTY = 3;
+	public static final int AREA_LEVEL_COUNTY = 3;
 
 	private List<ModoerArea> mAreaList;
 

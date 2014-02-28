@@ -22,6 +22,7 @@ import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.TextView;
 
+import com.andrnes.modoer.ModoerAlbum;
 import com.andrnes.modoer.ModoerMembers;
 import com.andrnes.modoer.ModoerPictures;
 import com.andrnes.modoer.ModoerReview;
@@ -69,6 +70,8 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 	private ProgressDialogProxy mDialogProxy;
 
 	private ModoerSubject mSubject;
+	private ModoerAlbum mAlbum;
+	private List<ModoerPictures> mPics;
 
 	@Override
 	protected void prepareViews() {
@@ -115,6 +118,8 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 		mRatingBarSort2.setOnRatingBarChangeListener(this);
 		mRatingBarSort3.setOnRatingBarChangeListener(this);
 		mRatingBarSort4.setOnRatingBarChangeListener(this);
+
+		mPics = new ArrayList<ModoerPictures>();
 
 	}
 
@@ -229,6 +234,9 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 			JSONArray array = new JSONArray();
 			for (int i = 1; i < mPicList.size(); i++) {
 				ModoerPictures pic = mPicList.get(i);
+				pic.setSid(mSubject);
+				pic.setAlbumid(mAlbum);
+				mPics.add(pic);
 				String big = pic.getFilename();
 				String thumb = pic.getThumb();
 				JSONObject jObj1 = new JSONObject();
@@ -276,6 +284,7 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 			this.showToast(this.getString(R.string.subject_upload_pic_unfinish));
 			return;
 		}
+		List<Object> objs = new ArrayList<Object>();
 		ModoerReview review = new ModoerReview();
 		review.setIdtype("item_subject");
 		review.setContent(mEtContent.getText().toString().trim());
@@ -297,6 +306,9 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 		if (!TextUtils.isEmpty(picJson)) {
 			review.setPictures(picJson);
 			review.setPicturesJson(picJson);
+			if (null != mPics) {
+				objs.addAll(mPics);
+			}
 		}
 
 		int sort1 = mRatingBarSort1.getProgress();
@@ -319,10 +331,21 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 		review.setPosttime((int) (System.currentTimeMillis() / 1000));
 
 		this.showWaitting();
+		objs.add(review);
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_REVIEW);
-		this.getStoreOperation().saveOrUpdate(review, param);
+		// this.getStoreOperation().saveOrUpdate(review, param);
+		this.getStoreOperation().saveOrUpdateArray(objs, param);
 
+	}
+
+	private void fetchAlbumBySubjectId() {
+		String sql = "from com.andrnes.modoer.ModoerAlbum ma where ma.sid.id = "
+				+ mSubject.getId();
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_FIND_ALBUM);
+		this.getStoreOperation().find(sql, new HashMap<String, Object>(), true,
+				new ModoerAlbum(), param);
 	}
 
 	/**
@@ -376,6 +399,17 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 	}
 
 	@Override
+	public void onSuccessFind(Param out) {
+		// TODO Auto-generated method stub
+		super.onSuccessFind(out);
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_FIND_ALBUM == operator) {
+			mAlbum = (ModoerAlbum) out.getResult();
+			this.hideSortLoading();
+		}
+	}
+
+	@Override
 	public void onSuccessFindAll(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessFindAll(out);
@@ -403,7 +437,8 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 					mTvSort4.setText(name);
 				}
 			}
-			this.hideSortLoading();
+			this.fetchAlbumBySubjectId();
+			// this.hideSortLoading();
 		} else if (GlobalConfig.Operator.OPERATION_FINDALL_REVIEW_TAGS == operator) {
 			for (int i = 0; i < results.size(); i++) {
 				ModoerTaggroup group = (ModoerTaggroup) results.get(i);
@@ -426,7 +461,7 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 	}
 
 	@Override
-	public void onSuccessSaveOrUpdate(Param out) {
+	public void onSuccessSaveOrUpdateArray(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
 		this.hideWaitting();

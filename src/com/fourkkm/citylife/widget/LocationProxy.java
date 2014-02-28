@@ -219,15 +219,16 @@ public class LocationProxy implements
 	public void fetchAddress(IAddressListener listener) {
 		// In Gingerbread and later, use Geocoder.isPresent() to see if a
 		// geocoder is available.
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD
-				&& !Geocoder.isPresent()) {
-			// No geocoder is present. Issue an error message
-			this.showToast(mCtx.getString(R.string.no_geocoder_available));
-			if (null != listener) {
-				listener.onAddressError(mCtx.getString(R.string.location_fail));
-			}
-			return;
-		}
+		System.out.println(" fetchAddress = "+Geocoder.isPresent());
+//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD
+//				/*&& !Geocoder.isPresent()*/) {
+//			// No geocoder is present. Issue an error message
+//			this.showToast(mCtx.getString(R.string.no_geocoder_available));
+//			if (null != listener) {
+//				listener.onAddressError(mCtx.getString(R.string.location_fail));
+//			}
+//			return;
+//		}
 		if (this.servicesConnected()) {
 			Location location = mLocationClient.getLastLocation();
 			if (null == location) {

@@ -71,6 +71,31 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
+                            android:text="@string/subject_category" />
+
+                        <!-- 一级分类 -->
+
+                        <Spinner
+                            android:id="@+id/subject_add_spinner_category_first"
+                            style="@style/spinner_add_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_5" >
+                        </Spinner>
+                    </TableRow>
+
+                    <!-- 商铺名称 -->
+
+                    <TableRow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_5" >
+
+                        <TextView
+                            style="@style/list_second_level_black_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
                             android:text="@string/subject_name" />
 
                         <EditText
@@ -162,16 +187,6 @@
                     android:gravity="center_vertical"
                     android:text="@string/subject_category" />
 
-                <!-- 一级分类 -->
-
-                <Spinner
-                    android:id="@+id/subject_add_spinner_category_first"
-                    style="@style/spinner_add_style"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_5" >
-                </Spinner>
-
                 <!-- 二级分类 -->
 
                 <Spinner
@@ -181,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/margin_5" >
                 </Spinner>
-                
+
                 <!-- 三级分类 -->
 
                 <Spinner

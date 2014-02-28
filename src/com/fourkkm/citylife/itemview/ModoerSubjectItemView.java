@@ -37,6 +37,7 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 	private TextView mTvAveragePer;
 	private RatingBar mRatingBar;
 	private TextView mTvDistance;
+	private TextView mTvCatidName;
 	private Bitmap mBmDefault;
 	private ItemSingleAdapter<ItemView, ItemSingle> mAdapter;
 	private boolean mIsNear = false;
@@ -80,6 +81,8 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 				.findViewById(R.id.subject_list_item_iv_attr4);
 		mIvAttr5 = (ImageView) this
 				.findViewById(R.id.subject_list_item_iv_attr5);
+		mTvCatidName = (TextView) this
+				.findViewById(R.id.subject_list_item_tv_catid_name);
 
 	}
 
@@ -105,6 +108,9 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 		}
 		mTvAveragePer.setText(mCtx.getString(R.string.average_per)
 				+ subject.getAvgprice());
+		if (null != subject.getCatid()) {
+			mTvCatidName.setText(subject.getCatid().getName());
+		}
 		if (mIsNear) {
 			double lng = ((CoreApp) AppUtils.getBaseApp(mCtx)).mCurrLng;
 			double lat = ((CoreApp) AppUtils.getBaseApp(mCtx)).mCurrLat;

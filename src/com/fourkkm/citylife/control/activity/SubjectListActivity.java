@@ -41,6 +41,7 @@ import com.fourkkm.citylife.widget.IAddressListener;
 import com.fourkkm.citylife.widget.IFloatingItemClick;
 import com.fourkkm.citylife.widget.ILocationConnListener;
 import com.fourkkm.citylife.widget.LocationProxy;
+import com.google.android.gms.location.LocationListener;
 import com.zj.app.db.dao.SqliteUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
@@ -54,7 +55,7 @@ import com.zj.support.widget.adapter.ItemSingleAdapter;
  */
 public class SubjectListActivity extends BaseListActivity implements
 		IFloatingItemClick, OnDismissListener, ILocationConnListener,
-		IAddressListener, OnCreateContextMenuListener {
+		IAddressListener, OnCreateContextMenuListener, LocationListener {
 
 	private static final String TAG = "SubjectListActivity";
 	private static final int MENU_ITEM_DELETE_ID = 0;
@@ -304,6 +305,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		sb.append(" (ma.pid.pid.id = ");
 		sb.append(countryId);
 		sb.append(" and ma.pid.enabled = 1)");
+		// sb.append(" order by ma.pid.id");
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT_AREA);
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
@@ -493,7 +495,9 @@ public class SubjectListActivity extends BaseListActivity implements
 		if (null == mLocation) {
 			return;
 		}
+		mLocation.registerLocationChangedListener(this);
 		Location location = mLocation.fetchCurrLocation();
+		System.out.println(" onConnected() location = " + location);
 		if (null == location) {
 			mIsLocationOk = false;
 			Log.i(TAG, "shan-->onConnected: location is null");
@@ -516,6 +520,9 @@ public class SubjectListActivity extends BaseListActivity implements
 	public void onDisconnect() {
 		// TODO Auto-generated method stub
 		Log.i(TAG, "shan-->onDisconnect");
+		if (null != mLocation) {
+			mLocation.removeLocationChangedListener(this);
+		}
 	}
 
 	@Override
@@ -567,7 +574,6 @@ public class SubjectListActivity extends BaseListActivity implements
 	}
 
 	public void onClickRight(View view) {// 添加
-		// mLocation.fetchCurrLocation();
 		this.startActivity(new Intent(this, SubjectAddActivity.class));
 	}
 
@@ -658,8 +664,14 @@ public class SubjectListActivity extends BaseListActivity implements
 			sb.append(" where");
 		}
 		if (null != mCurrArea) {
+			int areaId = mCurrArea.getId();
 			if (mAreaMgr.isSecondLevel(mCurrArea.getLevel())) {
-				sb.append(" ms.aid.pid.id = " + mCurrArea.getId());
+				List<String> childNames = mAreaMgr.getAreaCityChild(areaId);
+				if (null != childNames && childNames.size() > 0) {
+					sb.append(" ms.aid.pid.id = " + areaId);
+				} else {
+					sb.append(" ms.aid.id = " + areaId);
+				}
 			} else if (mAreaMgr.isThirdLevel(mCurrArea.getLevel())) {
 				sb.append(" ms.aid.id = " + mCurrArea.getId());
 			}
@@ -714,13 +726,17 @@ public class SubjectListActivity extends BaseListActivity implements
 			sb.append(" order by ms.avgprice,ms.id DESC");
 			break;
 		}
-		System.out.println("subject: "+sb.toString());
+		System.out.println("subject: " + sb.toString());
 		return sb.toString();
 	}
 
 	private void addSortData() {
 		mSortDatas = new ArrayList<String>();
-		mSortDatas.add(GlobalConfig.FloatingStr.STR_DEFAULT_SORT);
+		if (GlobalConfig.IntentKey.SUBJECT_NEAR == mOperator) {
+			mSortDatas.add(GlobalConfig.FloatingStr.STR_SORT_NEAR);
+		} else {
+			mSortDatas.add(GlobalConfig.FloatingStr.STR_DEFAULT_SORT);
+		}
 		mSortDatas.add(this.getString(R.string.subject_sort_recommend));
 		mSortDatas.add(this.getString(R.string.subject_sort_signup_time));
 		mSortDatas.add(this.getString(R.string.subject_sort_review_count));
@@ -876,5 +892,11 @@ public class SubjectListActivity extends BaseListActivity implements
 	private static final int SUBJECT_SORT_COMPOSITE_REVIEW = 7;
 	/** 排序-人均消费 **/
 	private static final int SUBJECT_SORT_COST_PER = 8;
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		System.out.println("onLocationChanged() location = " + location);
+	}
 
 }

@@ -270,7 +270,7 @@ public class ChinaLaneAddActivity extends BaseAddActivity implements
 			if (!TextUtils.isEmpty(picJson)) {
 				lane.setPictures(picJson);
 				lane.setPicturesJson(picJson);
-				lane.setPicNum(this.getPicCount());
+//				lane.setPicNum(this.getPicCount());
 			}
 
 			this.showWaiting();

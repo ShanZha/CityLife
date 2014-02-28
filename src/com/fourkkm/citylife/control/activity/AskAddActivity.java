@@ -167,6 +167,7 @@ public class AskAddActivity extends BaseActivity implements
 		ModoerAskCategory childCategory = mAskCategoryMgr
 				.getAskCategoryByName(childName);
 		ask.setCatid(childCategory);
+		ask.setStatus(1);
 
 		mDialogProxy.showDialog();
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);

@@ -101,6 +101,10 @@ public class PartyApplyActivity extends BaseActivity {
 			apply.setPartyid(mParty);
 			ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
 					.getCurrMember();
+			if(mParty.getUid().getId() == member.getId()){
+				this.showToast(this.getString(R.string.party_apply_fail_for_self));
+				return;
+			}
 			apply.setUid(member);
 			apply.setUsername(member.getUsername());
 			apply.setLinkman(mEtContact.getText().toString().trim());
