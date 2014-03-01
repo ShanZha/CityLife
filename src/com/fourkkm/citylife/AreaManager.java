@@ -2,6 +2,7 @@ package com.fourkkm.citylife;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public class AreaManager implements IModoerManager<ModoerArea> {
 	 * @return
 	 */
 	public Map<String, List<String>> buildAreaRelation() {
-		Map<String, List<String>> map = new HashMap<String, List<String>>();
+		Map<String, List<String>> map = new LinkedHashMap<String, List<String>>();
 		if (null == mAreaList) {
 			return map;
 		}

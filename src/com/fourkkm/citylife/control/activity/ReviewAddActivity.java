@@ -71,7 +71,7 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 
 	private ModoerSubject mSubject;
 	private ModoerAlbum mAlbum;
-	private List<ModoerPictures> mPics;
+	private List<Object> mPics;
 
 	@Override
 	protected void prepareViews() {
@@ -119,7 +119,7 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 		mRatingBarSort3.setOnRatingBarChangeListener(this);
 		mRatingBarSort4.setOnRatingBarChangeListener(this);
 
-		mPics = new ArrayList<ModoerPictures>();
+		mPics = new ArrayList<Object>();
 
 	}
 
@@ -228,28 +228,49 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 	 * 
 	 * @return
 	 */
-	protected String buildUploadPic() {
-		if (this.getPicCount() > 0) {
-			// 排除第一项,仅保存大图路径
-			JSONArray array = new JSONArray();
-			for (int i = 1; i < mPicList.size(); i++) {
-				ModoerPictures pic = mPicList.get(i);
-				pic.setSid(mSubject);
-				pic.setAlbumid(mAlbum);
-				mPics.add(pic);
+	// protected String buildUploadPic() {
+	// if (this.getPicCount() > 0) {
+	// // 排除第一项,仅保存大图路径
+	// JSONArray array = new JSONArray();
+	// for (int i = 1; i < mPicList.size(); i++) {
+	// ModoerPictures pic = mPicList.get(i);
+	// pic.setSid(mSubject);
+	// pic.setAlbumid(mAlbum);
+	// mPics.add(pic);
+	// String big = pic.getFilename();
+	// String thumb = pic.getThumb();
+	// JSONObject jObj1 = new JSONObject();
+	// try {
+	// jObj1.put("thumb", thumb);
+	// jObj1.put("picture", big);
+	// } catch (JSONException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// array.put(jObj1);
+	// }
+	// return array.toString();
+	// }
+	// return "";
+	// }
+
+	protected String buildUploadPic(List<String> ids) {
+		try {
+			Map<String, JSONObject> copyFrom = new HashMap<String, JSONObject>();
+			for (int i = 0; i < mPics.size(); i++) {
+				ModoerPictures pic = (ModoerPictures) mPics.get(i);
 				String big = pic.getFilename();
 				String thumb = pic.getThumb();
-				JSONObject jObj1 = new JSONObject();
-				try {
-					jObj1.put("thumb", thumb);
-					jObj1.put("picture", big);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				array.put(jObj1);
+				String id = ids.get(i);
+				JSONObject json = new JSONObject();
+				json.put("thumb", thumb);
+				json.put("picture", big);
+				copyFrom.put(id, json);
 			}
-			return array.toString();
+			JSONObject root = new JSONObject(copyFrom);
+			return root.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return "";
 	}
@@ -284,7 +305,30 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 			this.showToast(this.getString(R.string.subject_upload_pic_unfinish));
 			return;
 		}
-		List<Object> objs = new ArrayList<Object>();
+		this.showWaitting();
+		if (this.getPicCount() > 0) {
+			this.savePics();
+		} else {
+			this.saveReview("");
+		}
+
+	}
+
+	private void savePics() {
+		for (int i = 1; i < mPicList.size(); i++) {
+			ModoerPictures pic = mPicList.get(i);
+			pic.setSid(mSubject);
+			pic.setAlbumid(mAlbum);
+			mPics.add(pic);
+
+		}
+		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
+		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_PICS);
+		this.getStoreOperation().saveOrUpdateArray(mPics, param);
+	}
+
+	private void saveReview(String picJson) {
+		// List<Object> objs = new ArrayList<Object>();
 		ModoerReview review = new ModoerReview();
 		review.setIdtype("item_subject");
 		review.setContent(mEtContent.getText().toString().trim());
@@ -302,14 +346,16 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 			review.setTaggroup(tagJson);
 			review.setTaggroupJson(tagJson);
 		}
-		String picJson = this.buildUploadPic();
-		if (!TextUtils.isEmpty(picJson)) {
-			review.setPictures(picJson);
-			review.setPicturesJson(picJson);
-			if (null != mPics) {
-				objs.addAll(mPics);
-			}
-		}
+		review.setPictures(picJson);
+		review.setPicturesJson(picJson);
+		// String picJson = this.buildUploadPic();
+		// if (!TextUtils.isEmpty(picJson)) {
+		// review.setPictures(picJson);
+		// review.setPicturesJson(picJson);
+		// if (null != mPics) {
+		// objs.addAll(mPics);
+		// }
+		// }
 
 		int sort1 = mRatingBarSort1.getProgress();
 		int sort2 = mRatingBarSort2.getProgress();
@@ -330,13 +376,11 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 		}
 		review.setPosttime((int) (System.currentTimeMillis() / 1000));
 
-		this.showWaitting();
-		objs.add(review);
+		// objs.add(review);
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_REVIEW);
-		// this.getStoreOperation().saveOrUpdate(review, param);
-		this.getStoreOperation().saveOrUpdateArray(objs, param);
-
+		this.getStoreOperation().saveOrUpdate(review, param);
+		// this.getStoreOperation().saveOrUpdateArray(objs, param);
 	}
 
 	private void fetchAlbumBySubjectId() {
@@ -461,9 +505,7 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 	}
 
 	@Override
-	public void onSuccessSaveOrUpdateArray(Param out) {
-		// TODO Auto-generated method stub
-		super.onSuccessSaveOrUpdate(out);
+	public void onSuccessSaveOrUpdate(Param out) {
 		this.hideWaitting();
 		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
 				ModoerMembers.class.getName());
@@ -476,11 +518,23 @@ public class ReviewAddActivity extends BaseUploadPicActivity implements
 	}
 
 	@Override
+	public void onSuccessSaveOrUpdateArray(Param out) {
+		// TODO Auto-generated method stub
+		super.onSuccessSaveOrUpdate(out);
+		int operator = out.getOperator();
+		if (GlobalConfig.Operator.OPERATION_SAVE_PICS == operator) {
+			List<String> ids = (List<String>) out.getResult();
+			this.saveReview(this.buildUploadPic(ids));
+		}
+	}
+
+	@Override
 	public void onFails(Param out) {
 		// TODO Auto-generated method stub
 		super.onFails(out);
 		int operator = out.getOperator();
-		if (GlobalConfig.Operator.OPERATION_SAVE_REVIEW == operator) {
+		if (GlobalConfig.Operator.OPERATION_SAVE_REVIEW == operator
+				|| GlobalConfig.Operator.OPERATION_SAVE_PICS == operator) {
 			this.hideWaitting();
 			// this.showToast(this.getString(R.string.review_fail));
 		} else {

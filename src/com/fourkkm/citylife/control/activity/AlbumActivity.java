@@ -122,17 +122,27 @@ public class AlbumActivity extends BaseFragmentActivity implements
 
 	private void prepareReviewPicsByJson(String picJson) {
 		try {
-			JSONArray array = new JSONArray(picJson);
-			int length = array.length();
-			for (int i = 0; i < length; i++) {
-				// String temp = array.getString(i);
-				// String url = GlobalConfig.URL_UPLOAD + temp;
-				// mThumbUrls.add(url);
-				JSONObject jsonObj = (JSONObject) array.get(i);
-				String temp = jsonObj.getString("picture");
+//			JSONArray array = new JSONArray(picJson);
+//			int length = array.length();
+//			for (int i = 0; i < length; i++) {
+//				// String temp = array.getString(i);
+//				// String url = GlobalConfig.URL_UPLOAD + temp;
+//				// mThumbUrls.add(url);
+//				JSONObject jsonObj = (JSONObject) array.get(i);
+//				String temp = jsonObj.getString("picture");
+//				String url = GlobalConfig.URL_PIC + temp;
+//				mThumbUrls.add(url);
+//			}
+			JSONObject pJson = new JSONObject(picJson);
+			Iterator<String> it = pJson.keys();
+			while(it.hasNext()){
+				String key = it.next();
+				JSONObject jObj = pJson.getJSONObject(key);
+				String temp = jObj.getString("picture");
 				String url = GlobalConfig.URL_PIC + temp;
 				mThumbUrls.add(url);
 			}
+			int length = pJson.length();
 			mSubjectThumbCount = length;
 			mTvCount.setText(mCurrIndex + "/" + length);
 		} catch (Exception e) {

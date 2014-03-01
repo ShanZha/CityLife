@@ -108,7 +108,7 @@ public class ChinaLaneAddActivity extends BaseAddActivity implements
 	@Override
 	protected void prepare() {
 		mIsNeedUploadPics = true;
-		mIsBT = true;
+		mUploadStrType = "fenlei";
 		super.prepare();
 		mLaneCategoryMgr = new ChinaLaneCategoryManager();
 		mTvTitle.setText(this.getString(R.string.china_lane_add));

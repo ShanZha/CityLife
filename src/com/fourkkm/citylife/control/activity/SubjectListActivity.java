@@ -64,7 +64,7 @@ public class SubjectListActivity extends BaseListActivity implements
 	private RelativeLayout mRlFloatingFirst, mRlFloatingSecond,
 			mRlFloatingThird, mRlBottomLocation;
 	private ImageButton mBtnAdd, mBtnLocationRefresh;
-	private TextView mTvTitle, mTvNearOrSearch, mTvCategory, mTvSort,
+	private TextView mTvTitle, mTvNearOrSearch, mTvSort, mTvCategory,
 			mTvLocation;
 	private List<ModoerSubject> mSubjectList;
 	private List<String> mSortDatas, mNearDatas;
@@ -240,12 +240,13 @@ public class SubjectListActivity extends BaseListActivity implements
 		mFloatingSortProxy.setFloatingDismissListener(this);
 		this.addSortData();
 
-		mTvSort.setText(GlobalConfig.FloatingStr.STR_DEFAULT_SORT);
 		if (GlobalConfig.IntentKey.SUBJECT_SEACH_CITY == mOperator) {
+			mTvSort.setText(GlobalConfig.FloatingStr.STR_DEFAULT_SORT);
 			mTvNearOrSearch.setText(GlobalConfig.FloatingStr.STR_ALL_AREA);
 			mTvCategory.setText(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 			return;
 		} else {
+			mTvSort.setText(GlobalConfig.FloatingStr.STR_SORT_NEAR);
 			mTvNearOrSearch.setText(this
 					.getString(R.string.subject_distance_1000));
 		}

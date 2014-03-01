@@ -72,7 +72,9 @@ public class BaseUploadThumbActivity extends BaseActivity implements
 	protected boolean mIsUploadingThumb = false;
 	/** 是否需要自动登录，默认需要 **/
 	protected boolean mIsAutoLogin = true;
-	protected boolean mIsBT = false;
+//	protected boolean mIsBT = false;
+	/** 上传类型，主要用于上传缩略图时，唐人巷、聚会两个特殊情况，默认为空 **/
+	protected String mUploadStrType = "";
 	protected ModoerMembers mCurrMember;
 
 	@Override
@@ -151,7 +153,7 @@ public class BaseUploadThumbActivity extends BaseActivity implements
 	protected void uploadPicWithThumb(String filePath) {
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_UPLOAD_PIC_WITH_THUMB);
-		this.getStoreOperation().uploadPicWithThumb(new File(filePath), param,mIsBT);
+		this.getStoreOperation().uploadPicWithThumb(new File(filePath), param,mUploadStrType);
 	}
 
 	/**

@@ -115,6 +115,7 @@ public class PartyAddActivity extends BaseAddActivity implements
 
 	@Override
 	protected void prepare() {
+		mUploadStrType = "party";
 		super.prepare();
 		mTvTitle.setText(this.getString(R.string.party_add));
 		mPartyCategoryList = new ArrayList<ModoerPartyCategory>();

@@ -64,7 +64,7 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 		mIvShow = (ImageView) this.findViewById(R.id.subject_list_item_iv_show);
 		mTvShopName = (TextView) this
 				.findViewById(R.id.subject_list_item_tv_shop_name);
-		mTvArea = (TextView) this.findViewById(R.id.subject_list_item_tv_area);
+		mTvArea = (TextView) this.findViewById(R.id.subject_list_item_tv_area1);
 		mTvAveragePer = (TextView) this
 				.findViewById(R.id.subject_list_item_tv_average_per);
 		mTvDistance = (TextView) this
@@ -105,11 +105,15 @@ public class ModoerSubjectItemView extends RelativeLayout implements ItemView {
 		ModoerArea area = subject.getAid();
 		if (null != area && !TextUtils.isEmpty(area.getName())) {
 			mTvArea.setText(area.getName());
+		}else{
+			mTvArea.setVisibility(View.GONE);
 		}
 		mTvAveragePer.setText(mCtx.getString(R.string.average_per)
 				+ subject.getAvgprice());
 		if (null != subject.getCatid()) {
 			mTvCatidName.setText(subject.getCatid().getName());
+		}else{
+			mTvCatidName.setVisibility(View.GONE);
 		}
 		if (mIsNear) {
 			double lng = ((CoreApp) AppUtils.getBaseApp(mCtx)).mCurrLng;

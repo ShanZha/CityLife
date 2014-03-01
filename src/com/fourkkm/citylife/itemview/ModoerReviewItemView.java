@@ -1,6 +1,7 @@
 package com.fourkkm.citylife.itemview;
 
 import java.util.Date;
+import java.util.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -108,7 +109,8 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView,
 		mTvContent.setText(review.getContent());
 
 		long time = review.getPosttime() * 1000L;
-		mTvTime.setText(DateFormatMethod.formatDate(new Date(time),"yyyy-MM-dd HH:mm"));
+		mTvTime.setText(DateFormatMethod.formatDate(new Date(time),
+				"yyyy-MM-dd HH:mm"));
 		int best = review.getBest();
 		switch (best) {
 		case GOOD:// Ò»°ã
@@ -134,14 +136,34 @@ public class ModoerReviewItemView extends RelativeLayout implements ItemView,
 		} else {
 			mFrThumb.setVisibility(View.VISIBLE);
 			try {
-				JSONArray array = new JSONArray(picJson);
-				int count = array.length();
+				JSONObject pJson = new JSONObject(picJson);
+				Iterator<String> it = pJson.keys();
+				String url = "";
+				if(it.hasNext()){
+					String key = it.next();
+					JSONObject jObj = pJson.getJSONObject(key);
+					String thumb = jObj.getString("thumb");
+					url = GlobalConfig.URL_PIC+thumb;
+					System.out.println(" thumb = "+jObj.getString("thumb")
+							+" pic = "+jObj.getString("picture"));
+				}
+				
+//				JSONArray array = new JSONArray(picJson);
+				int count = pJson.length();
 				mTvThumbCount.setVisibility(View.VISIBLE);
 				mTvThumbCount.setText(count + "");
-//				String path = array.getString(0);
-				JSONObject jsonObj = (JSONObject) array.get(0);
-				String temp = jsonObj.getString("thumb");
-				String url = GlobalConfig.URL_PIC + temp;
+				// String path = array.getString(0);
+//				JSONObject jsonObj = (JSONObject) array.get(0);
+//				@SuppressWarnings("unchecked")
+//				Iterator<String> it = jsonObj.keys();
+//				String url = "";
+//				if (it.hasNext()) {
+//					String key = it.next();
+//					JSONObject jObj = jsonObj.getJSONObject(key);
+//					String thumb = jObj.getString("thumb");
+//					url = GlobalConfig.URL_PIC + thumb;
+//				}
+				System.out.println(" url = "+url);
 				mFrThumb.setOnClickListener(this);
 				mFrThumb.setTag(review);
 				AsyncImageLoader.getImageLoad(mCtx).showPic(url, mIvThumb,
