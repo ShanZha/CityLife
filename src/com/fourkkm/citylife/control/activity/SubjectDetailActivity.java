@@ -787,6 +787,8 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 					.deleteByClassName(ModoerSubject.class.getName());
 			SqliteUtil.getInstance(this.getApplicationContext())
 					.deleteByClassName(ModoerMembers.class.getName());
+			SqliteUtil.getInstance(this.getApplicationContext())
+					.deleteByClassName(ModoerPictures.class.getName());
 			if (null != mDialogProxy) {
 				mDialogProxy.hideDialog();
 			}

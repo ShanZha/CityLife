@@ -72,7 +72,7 @@ public class BaseUploadThumbActivity extends BaseActivity implements
 	protected boolean mIsUploadingThumb = false;
 	/** 是否需要自动登录，默认需要 **/
 	protected boolean mIsAutoLogin = true;
-//	protected boolean mIsBT = false;
+	// protected boolean mIsBT = false;
 	/** 上传类型，主要用于上传缩略图时，唐人巷、聚会两个特殊情况，默认为空 **/
 	protected String mUploadStrType = "";
 	protected ModoerMembers mCurrMember;
@@ -153,7 +153,8 @@ public class BaseUploadThumbActivity extends BaseActivity implements
 	protected void uploadPicWithThumb(String filePath) {
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_UPLOAD_PIC_WITH_THUMB);
-		this.getStoreOperation().uploadPicWithThumb(new File(filePath), param,mUploadStrType);
+		this.getStoreOperation().uploadPicWithThumb(new File(filePath), param,
+				mUploadStrType);
 	}
 
 	/**
@@ -194,13 +195,30 @@ public class BaseUploadThumbActivity extends BaseActivity implements
 	 * @return filePath
 	 */
 	private void onActivityResultAlbumPic(Intent data) {
-		Uri uri = data.getData();
-		String filePath = FileHelper.getAbsoluteImagePath(this, uri);// 得到文件的绝对路径
-		String[] fileNameStrs = filePath.split(GlobalConfig.SEPERATOR);
-		int size = fileNameStrs.length;
-		String mFileName = fileNameStrs[size - 1].toString();
-		this.showToast(this.getString(R.string.upload_ing));
-		this.doUpload(filePath);
+		try {
+			Uri uri = data.getData();
+			String filePath = FileHelper.getAbsoluteImagePath(this, uri);// 得到文件的绝对路径
+			if (TextUtils.isEmpty(filePath)) {
+				this.showToast(this
+						.getString(R.string.upload_file_select_error));
+				return;
+			}
+			File file = new File(filePath);
+			if ((!file.exists()) || (!file.canRead())) {
+				this.showToast(this
+						.getString(R.string.upload_file_select_error));
+				file = null;
+				return;
+			}
+			String[] fileNameStrs = filePath.split(GlobalConfig.SEPERATOR);
+			int size = fileNameStrs.length;
+			String mFileName = fileNameStrs[size - 1].toString();
+			this.showToast(this.getString(R.string.upload_ing));
+			this.doUpload(filePath);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.showToast(this.getString(R.string.upload_file_select_error));
+		}
 	}
 
 	private void onActivityResultTakePhoto(Intent data) {

@@ -119,11 +119,17 @@ public class AskUpdateActivity extends BaseActivity {
 		String inputReward = mEtRewardPoint.getText().toString().trim();
 		if (askTitle.equals(inputTitle) && askContent.equals(inputContent)
 				&& reward == Integer.parseInt(inputReward)) {
+			this.showToast(this.getString(R.string.ask_update_reward_unchanged));
+			return;
+		}
+		int newReward = Integer.parseInt(inputReward);
+		if (newReward < reward) {
+			this.showToast(this.getString(R.string.ask_update_reward_desc));
 			return;
 		}
 		mCurrAsk.setSubject(inputTitle);
 		mCurrAsk.setContent(inputContent);
-		mCurrAsk.setReward(Integer.valueOf(inputReward));
+		mCurrAsk.setReward(newReward);
 		mDialog.showDialog();
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_SAVE_ASK);

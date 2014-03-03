@@ -100,6 +100,7 @@ public class SubjectListActivity extends BaseListActivity implements
 
 	private LocationProxy mLocation;
 	private boolean mIsLocationOk = false;
+	private boolean mIsFirst = false;
 
 	@Override
 	protected void prepareViews() {
@@ -154,6 +155,7 @@ public class SubjectListActivity extends BaseListActivity implements
 		((ItemSingleAdapter<ModoerSubjectItemView, ModoerSubject>) mAdapter)
 				.addParams("isNear", false);
 
+		mIsFirst = true;
 		Intent intent = this.getIntent();
 		mOperator = intent.getIntExtra("operator", -1);
 		switch (mOperator) {
@@ -513,7 +515,9 @@ public class SubjectListActivity extends BaseListActivity implements
 		}
 		if (this.isNear()) {
 			mLocation.fetchAddress(this);
-			this.fetchCategory();
+			if (mIsFirst) {
+				this.fetchCategory();
+			}
 		}
 	}
 
@@ -799,6 +803,7 @@ public class SubjectListActivity extends BaseListActivity implements
 				}
 				mCategoryMgr.add(category);
 			}
+			mIsFirst = false;
 			mFloatingCategoryProxy.prepareDatas();
 			this.hideLoadingCategory();
 			if (this.isNear() && !mIsLocationOk) {
@@ -862,6 +867,7 @@ public class SubjectListActivity extends BaseListActivity implements
 			break;
 		case GlobalConfig.Operator.OPERATION_FINDALL_SUJECT_CATEGORY:
 		case GlobalConfig.Operator.OPERATION_FINDALL_SUBJECT_AREA:
+			mIsFirst = false;
 			this.hideLoadingCategory();
 			break;
 		case GlobalConfig.Operator.OPERATION_DELETE_FAVORITE:

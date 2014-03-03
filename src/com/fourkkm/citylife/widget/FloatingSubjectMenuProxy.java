@@ -100,6 +100,9 @@ public class FloatingSubjectMenuProxy implements OnClickListener {
 	 * 初始数据
 	 */
 	public void prepareDatas() {
+		if (null != mFirstList && mFirstList.size() > 0) {
+			mFirstList.clear();
+		}
 		// 默认一级、二级都添加一个“全部类型”
 		mFirstList.add(GlobalConfig.FloatingStr.STR_ALL_CATEGOTY);
 		mSecondList.add(GlobalConfig.FloatingStr.STR_ALL_CHILD);

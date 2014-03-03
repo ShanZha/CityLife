@@ -87,6 +87,8 @@
     <string name="ask_update_title">结束问题</string>
     <string name="ask_close_best_answer_none">请先选择最佳答案</string>
     <string name="ask_update_best_review_hint">您对最佳评论有什么说的呢（选填）</string>
+    <string name="ask_update_reward_desc">悬赏积分只能增加不能减少</string>
+    <string name="ask_update_reward_unchanged">问题没变化</string>
     <string name="party_state_all">全部活动</string>
     <string name="party_state_signning">报名中</string>
     <string name="party_state_ongoing">进行中</string>
@@ -299,6 +301,7 @@
     <string name="share_content_null">分享内容不能为空</string>
     <string name="share_content_140">输入少于140个字的内容</string>
     <string name="network_connect_none">没有网络连接</string>
+    <string name="upload_file_select_error">文件路径无效或文件不可读</string>
 
     <string-array name="share_array">
         <item>分享到新浪微博</item>
