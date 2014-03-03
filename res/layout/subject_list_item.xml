@@ -112,7 +112,7 @@
 
             <RatingBar
                 android:id="@+id/subject_list_item_rating_bar"
-                style="@style/rating_bar_style"
+                style="@style/rating_bar_style_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical" />

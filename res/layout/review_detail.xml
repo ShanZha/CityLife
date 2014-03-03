@@ -41,7 +41,7 @@
 
             <RatingBar
                 android:id="@+id/review_detail_rating_bar_composite"
-                style="@style/rating_bar_style"
+                style="@style/rating_bar_style_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_15"
@@ -70,7 +70,7 @@
 
             <RatingBar
                 android:id="@+id/review_detail_rating_bar_sort1"
-                style="@style/rating_bar_style"
+                style="@style/rating_bar_style_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_15"
@@ -100,7 +100,7 @@
 
             <RatingBar
                 android:id="@+id/review_detail_rating_bar_sort2"
-                style="@style/rating_bar_style"
+                style="@style/rating_bar_style_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_15"
@@ -130,7 +130,7 @@
 
             <RatingBar
                 android:id="@+id/review_detail_rating_bar_sort3"
-                style="@style/rating_bar_style"
+                style="@style/rating_bar_style_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_15"
@@ -160,7 +160,7 @@
 
             <RatingBar
                 android:id="@+id/review_detail_rating_bar_sort4"
-                style="@style/rating_bar_style"
+                style="@style/rating_bar_style_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_15"

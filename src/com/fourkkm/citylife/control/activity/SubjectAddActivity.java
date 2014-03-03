@@ -228,20 +228,9 @@ public class SubjectAddActivity extends BaseAddActivity {
 					.getCategoryByName(mCategoryFirstList.get(categorFirstPos));
 			mSubject.setPid(pid);
 
-			int categoryThirdPos = mSpCategoryThird.getSelectedItemPosition();
-			if (-1 != categoryThirdPos) {
-				ModoerCategory catid = mCategoryMgr
-						.getCategoryByName(mCategoryThirdList
-								.get(categoryThirdPos));
-				mSubject.setCatid(catid);
-			} else {
-				int categorSecondPos = mSpCategorySecond
-						.getSelectedItemPosition();
-				ModoerCategory catid = mCategoryMgr
-						.getCategoryByName(mCategorySecondList
-								.get(categorSecondPos));
-				mSubject.setCatid(catid);
-			}
+			
+			ModoerCategory catid = this.getCategoryBySelected();
+			mSubject.setCatid(catid);
 
 			mSubject.setCityId(mCurrCountry);
 			int areaSecondPos = mSpAreaSecond.getSelectedItemPosition();
@@ -261,6 +250,29 @@ public class SubjectAddActivity extends BaseAddActivity {
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
+	}
+	
+	private ModoerCategory getCategoryBySelected(){
+		try{
+			int categoryThirdPos = mSpCategoryThird.getSelectedItemPosition();
+			String thirdName = mCategoryThirdList
+					.get(categoryThirdPos);
+			if(TextUtils.isEmpty(thirdName)||"Œﬁ".equals(thirdName)){
+				int categorSecondPos = mSpCategorySecond
+						.getSelectedItemPosition();
+				ModoerCategory catid = mCategoryMgr
+						.getCategoryByName(mCategorySecondList
+								.get(categorSecondPos));
+				return catid;
+			}else{
+				ModoerCategory catid = mCategoryMgr
+						.getCategoryByName(thirdName);
+				return catid;
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void onClickBack(View view) {
@@ -284,6 +296,7 @@ public class SubjectAddActivity extends BaseAddActivity {
 		try {
 			List<Object> objs = new ArrayList<Object>();
 
+			 
 			// Step 1£∫±£¥ÊModoerSubject
 			ModoerSubject mSubject = this.buildSubject();
 			// Step 2£∫±£¥ÊModoerAlbum

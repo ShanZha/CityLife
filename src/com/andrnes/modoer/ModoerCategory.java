@@ -47,6 +47,8 @@ public class ModoerCategory implements Serializable {
 	/** ÆÀÂÛ±êÇ©×é **/
 	private String configJson;
 
+	private int attid;
+
 	public int getId() {
 		return id;
 	}
@@ -149,5 +151,13 @@ public class ModoerCategory implements Serializable {
 
 	public void setConfigJson(String configJson) {
 		this.configJson = configJson;
+	}
+
+	public int getAttid() {
+		return attid;
+	}
+
+	public void setAttid(int attid) {
+		this.attid = attid;
 	}
 }

@@ -68,6 +68,8 @@ public class ModoerAsks extends ItemSingle implements Serializable {
 	/** Œ Ã‚¿©’π */
 	private String extra;
 
+	private int oldreward;
+
 	private Map errors;
 
 	public int getId() {
@@ -220,6 +222,14 @@ public class ModoerAsks extends ItemSingle implements Serializable {
 
 	public void setExtra(String extra) {
 		this.extra = extra;
+	}
+
+	public int getOldreward() {
+		return oldreward;
+	}
+
+	public void setOldreward(int oldreward) {
+		this.oldreward = oldreward;
 	}
 
 	public Map getErrors() {

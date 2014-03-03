@@ -30,6 +30,7 @@ public class ModoerArea implements Serializable {
 	private int enabled = 1;
 	/** ≈‰÷√–≈œ¢ */
 	private String config;
+	private int attid;
 
 	public int getId() {
 		return id;
@@ -117,6 +118,14 @@ public class ModoerArea implements Serializable {
 
 	public void setConfig(String config) {
 		this.config = config;
+	}
+
+	public int getAttid() {
+		return attid;
+	}
+
+	public void setAttid(int attid) {
+		this.attid = attid;
 	}
 
 	@Override

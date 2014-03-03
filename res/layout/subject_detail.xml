@@ -66,7 +66,7 @@
 
                         <RatingBar
                             android:id="@+id/subject_detail_ratingBar"
-                            style="@style/rating_bar_style"
+                            style="@style/rating_bar_style_subject"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
@@ -411,7 +411,7 @@
 
                     <RatingBar
                         android:id="@+id/subject_detail_review_ratingBar"
-                        style="@style/rating_bar_style"
+                        style="@style/rating_bar_style_review"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@+id/subject_detail_tv_review_counts"
