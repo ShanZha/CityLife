@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.andrnes.modoer.ModoerAskAnswer;
 import com.andrnes.modoer.ModoerAsks;
+import com.andrnes.modoer.ModoerMembers;
 import com.fourkkm.citylife.R;
 import com.fourkkm.citylife.constant.GlobalConfig;
 import com.fourkkm.citylife.util.CommonUtil;
@@ -193,12 +194,15 @@ public class AskUpdateActivity extends BaseActivity {
 			this.showToast(this.getString(R.string.update_success));
 			break;
 		}
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerAsks.class.getName());
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerMembers.class.getName());
 		Intent intent = new Intent();
 		intent.putExtra("modoerAsk", mCurrAsk);
 		this.setResult(RESULT_OK, intent);
 		mDialog.hideDialog();
-		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
-				ModoerAsks.class.getName());
+
 		this.finish();
 	}
 
@@ -212,6 +216,8 @@ public class AskUpdateActivity extends BaseActivity {
 		this.setResult(RESULT_OK, intent);
 		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
 				ModoerAsks.class.getName());
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerMembers.class.getName());
 		mDialog.hideDialog();
 		this.finish();
 	}
