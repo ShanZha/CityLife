@@ -149,10 +149,13 @@ public interface GlobalConfig {
 		public static final String SINA_WEIBO_GET_USERINFO_URL = "https://api.weibo.com/2/users/show.json";
 
 		/** QQ互联平台 **/
-		public static final String TENCENT_QQ_APP_ID = "101007340";
+		public static final String TENCENT_QQ_APP_ID = "100455976";
+//		public static final String TENCENT_QQ_APP_ID = "101007340";
 		// public static final String TENCENT_QQ_APP_ID = "101001015";
 		// public static final String TENCENT_QQ_APP_KEY =
 		// "3e36173d11d89aa7f7bb6d98466c4edc";
+		//新：100455976
+		//新：9ffa10a79ec68f314b07aa5c48e92cf2
 		public static final String TENCENT_QQ_SCOPE = "all";
 		// public static final String TENCENT_QQ_SCOPE =
 		// "get_user_info;upload_pic;get_info;add_t;add_pic_t;add_one_blog";

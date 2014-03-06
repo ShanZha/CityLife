@@ -352,10 +352,10 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 	@Override
 	public void afterTextChanged(Editable s) {
 		// TODO Auto-generated method stub
-		if (mIndex == GlobalConfig.IntentKey.INDEX_TENCENT_QQ) {
-			mTvLimit.setText("还可输入" + 0 + "字");
-			return;
-		}
+//		if (mIndex == GlobalConfig.IntentKey.INDEX_TENCENT_QQ) {
+//			mTvLimit.setText("还可输入" + 0 + "字");
+//			return;
+//		}
 		try {
 			mEditStart = mEtContent.getSelectionStart();
 			mEditEnd = mEtContent.getSelectionEnd();
@@ -407,9 +407,9 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 							String.valueOf(expireTime));
 					if (mTencentProxy.isSessionValid()) {
 						this.setShareBtnEnable(true);
-						if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == mIndex) {
-							this.onShareToQQ();
-						}
+//						if (GlobalConfig.IntentKey.INDEX_TENCENT_QQ == mIndex) {
+//							this.onShareToQQ();
+//						}
 						return;
 					}
 					mTencentProxy.onLogin(GlobalConfig.Third.TENCENT_QQ_SCOPE,
@@ -464,7 +464,7 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 				break;
 			case GlobalConfig.IntentKey.INDEX_TENCENT_QQ:
 				this.setShareBtnEnable(true);
-				this.onShareToQQ();
+//				this.onShareToQQ();
 				break;
 			case GlobalConfig.IntentKey.INDEX_TENCENT_QZONE:
 			case GlobalConfig.IntentKey.INDEX_TENCENT_WEIBO:
@@ -523,9 +523,9 @@ public class ShareActivity extends BaseActivity implements TextWatcher,
 					Tencent.SHARE_TO_QQ_TYPE_DEFAULT);
 			params.putString(Tencent.SHARE_TO_QQ_TITLE,
 					this.getString(R.string.share));
+			// params.putString(Tencent.SHARE_TO_QQ_EXT_STR, mContent);
 			params.putString(Tencent.SHARE_TO_QQ_SUMMARY, mContent);
-			params.putString(Tencent.SHARE_TO_QQ_TARGET_URL,
-					mSubjectUrl);
+			params.putString(Tencent.SHARE_TO_QQ_TARGET_URL, mSubjectUrl);
 			// params.putString(Tencent.SHARE_TO_QQ_IMAGE_URL,
 			// "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif");
 			params.putString(Tencent.SHARE_TO_QQ_APP_NAME,

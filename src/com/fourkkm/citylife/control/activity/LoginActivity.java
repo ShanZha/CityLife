@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -38,9 +42,7 @@ import com.taobao.top.android.auth.AuthActivity;
 import com.taobao.top.android.auth.AuthorizeListener;
 import com.tencent.tauth.Constants;
 import com.tencent.tauth.Tencent;
-import com.weibo.sdk.android.Oauth2AccessToken;
 import com.weibo.sdk.android.Weibo;
-import com.weibo.sdk.android.util.AccessTokenKeeper;
 import com.zj.app.db.dao.SharedPreferenceUtil;
 import com.zj.app.http.StoreOperation;
 import com.zj.app.utils.AppUtils;
@@ -55,7 +57,7 @@ import com.zj.support.observer.model.Param;
  * 
  */
 public class LoginActivity extends AuthActivity implements ICallback,
-		IThirdAuthListener, IThirdUserInfoListener {
+		IThirdAuthListener, IThirdUserInfoListener, OnClickListener {
 
 	private static final String TAG = "LoginActivity";
 	private static final int TYPE_SINA_WEIBO = 1;
@@ -82,6 +84,9 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	private int mRetryCount = 0;
 	private int mCurrThirdType = -1;
 
+	private AlertDialog mAlertDialog;
+	private EditText mEtNickname;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -90,6 +95,13 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		AppUtils.getBaseApp(this).addActivity(this);
 		this.prepareViews();
 		this.prepareDatas();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		this.hideAlertDialog();
 	}
 
 	@Override
@@ -109,6 +121,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		mCbPswd = (CheckBox) this.findViewById(R.id.login_check_box_pswd);
 		mCbAutoLogin = (CheckBox) this
 				.findViewById(R.id.login_check_box_auto_login);
+		this.buildAlertDialog();
 	}
 
 	protected void prepareDatas() {
@@ -145,6 +158,36 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		mTencent = Tencent.createInstance(GlobalConfig.Third.TENCENT_QQ_APP_ID,
 				this.getApplicationContext());
 
+	}
+
+	private void buildAlertDialog() {
+		// 动态加载布局生成View对象
+		LayoutInflater layoutInflater = LayoutInflater.from(this);
+		View longinDialogView = layoutInflater.inflate(
+				R.layout.login_dialog_input, null);
+		// 获取布局中的控件
+		mEtNickname = (EditText) longinDialogView
+				.findViewById(R.id.login_dialog_input_et_username);
+		// 创建一个AlertDialog对话框
+		mAlertDialog = new AlertDialog.Builder(this)
+				.setTitle(this.getString(R.string.login_username_input_title))
+				.setView(longinDialogView)
+				// 加载自定义的对话框式样
+				.setPositiveButton(this.getString(R.string.sure), this)
+				.setNeutralButton(this.getString(R.string.cancel), this)
+				.create();
+	}
+
+	private void showAlertDialog() {
+		if (null != mAlertDialog) {
+			mAlertDialog.show();
+		}
+	}
+
+	private void hideAlertDialog() {
+		if (null != mAlertDialog) {
+			mAlertDialog.hide();
+		}
 	}
 
 	private void showToast(String msg) {
@@ -195,7 +238,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		// paramsMap.put("accessToken", passport.getAccessToken());
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
 		param.setOperator(GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT);
-		this.getStoreOperation().find(selectCode, paramsMap, true,
+		this.getStoreOperation().find(selectCode, paramsMap, false,
 				mMemberPassport, param);
 	}
 
@@ -203,9 +246,14 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		if (null == mMember) {
 			mMember = new ModoerMembers();
 		}
+		if (!TextUtils.isEmpty(mUserName) && mUserName.toString().length() > 16) {
+			this.showToast(this.getString(R.string.login_username_limit));
+			this.showAlertDialog();
+			return;
+		}
 		mMember.setUsername(mUserName);
 		mMember.setEmail(mEmail);
-		mMember.setPassword(MD5.encryptMd5(mUserPswd));
+		mMember.setPassword(mUserPswd);
 		mMember.setRegdate((int) CommonUtil.getCurrTimeByPHP());
 		mMember.setRmb(new BigDecimal(0));
 		mMember.setNewmsg("0");
@@ -329,6 +377,23 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	}
 
 	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		// TODO Auto-generated method stub
+		switch (which) {
+		case DialogInterface.BUTTON_POSITIVE:
+			mUserName = mEtNickname.getText().toString().trim();
+			if (TextUtils.isEmpty(mUserName)
+					|| mUserName.toString().length() > 16) {
+				this.showToast(this.getString(R.string.login_username_limit));
+				return;
+			}
+			this.onSaveMemeber();
+			this.showToast(mUserName);
+			break;
+		}
+	}
+
+	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
@@ -389,7 +454,18 @@ public class LoginActivity extends AuthActivity implements ICallback,
 		// TODO Auto-generated method stub
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_MEMBER == operator) {
-			this.saveLoginInfo(mMember);
+			try {
+				List<String> ids = (List<String>) out.getResult();
+				for (String id : ids) {
+					if (!TextUtils.isEmpty(id)) {
+						mMember.setId(Integer.valueOf(id));
+						break;
+					}
+				}
+				this.saveLoginInfo(mMember);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
 			SharedPreferenceUtil.getSharedPrefercence().put(
 					this.getApplicationContext(),
@@ -434,6 +510,29 @@ public class LoginActivity extends AuthActivity implements ICallback,
 
 	}
 
+	private void onSuccessLogin() {
+		this.saveLoginInfo(mMember);
+		((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
+		SharedPreferenceUtil.getSharedPrefercence().put(
+				this.getApplicationContext(),
+				GlobalConfig.SharePre.KEY_USERNAME, mMember.getUsername());
+		SharedPreferenceUtil.getSharedPrefercence().put(
+				this.getApplicationContext(), GlobalConfig.SharePre.KEY_PSWD,
+				mUserPswd);
+		SharedPreferenceUtil.getSharedPrefercence().put(
+				this.getApplicationContext(),
+				GlobalConfig.SharePre.KEY_MEMBER_ID, mMember.getId());
+		SharedPreferenceUtil.getSharedPrefercence().put(
+				this.getApplicationContext(),
+				GlobalConfig.SharePre.KEY_IS_REMBER_PSWD, mCbPswd.isChecked());
+		SharedPreferenceUtil.getSharedPrefercence().put(
+				this.getApplicationContext(),
+				GlobalConfig.SharePre.KEY_IS_AUTO_LOGIN,
+				mCbAutoLogin.isChecked());
+		this.setResult(RESULT_OK);
+		this.finish();
+	}
+
 	@Override
 	public void onSuccessFind(Param out) {
 		// TODO Auto-generated method stub
@@ -447,28 +546,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 			}
 			mMember = (ModoerMembers) result;
 			if (this.isPswdCorrect(mUserPswd, mMember.getPassword())) {
-				this.saveLoginInfo(mMember);
-				((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
-				SharedPreferenceUtil.getSharedPrefercence().put(
-						this.getApplicationContext(),
-						GlobalConfig.SharePre.KEY_USERNAME,
-						mMember.getUsername());
-				SharedPreferenceUtil.getSharedPrefercence().put(
-						this.getApplicationContext(),
-						GlobalConfig.SharePre.KEY_PSWD, mUserPswd);
-				SharedPreferenceUtil.getSharedPrefercence().put(
-						this.getApplicationContext(),
-						GlobalConfig.SharePre.KEY_MEMBER_ID, mMember.getId());
-				SharedPreferenceUtil.getSharedPrefercence().put(
-						this.getApplicationContext(),
-						GlobalConfig.SharePre.KEY_IS_REMBER_PSWD,
-						mCbPswd.isChecked());
-				SharedPreferenceUtil.getSharedPrefercence().put(
-						this.getApplicationContext(),
-						GlobalConfig.SharePre.KEY_IS_AUTO_LOGIN,
-						mCbAutoLogin.isChecked());
-				this.setResult(RESULT_OK);
-				this.finish();
+				this.onSuccessLogin();
 			} else {
 				this.showToast(this.getString(R.string.login_info_incorrect));
 			}
@@ -497,10 +575,16 @@ public class LoginActivity extends AuthActivity implements ICallback,
 					LoginActivity.this.fetchUserGroup();
 					break;
 				}
-			} else {// 第三方账号之前已经登录过，则直接登录
+			} else {// 第三方账号之前已经登录过，则登录成功
 				mMemberPassport = (ModoerMemberPassport) result;
 				mMember = mMemberPassport.getUid();
-				this.fecthMember(mMember);
+				((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
+				// this.fecthMember(mMember);
+				mDialogProxy.hideDialog();
+				// this.onSuccessLogin();
+				this.saveLoginInfo(mMember);
+				this.setResult(RESULT_OK);
+				this.finish();
 			}
 
 		}
@@ -511,7 +595,29 @@ public class LoginActivity extends AuthActivity implements ICallback,
 	public void onFails(Param out) {
 		int operator = out.getOperator();
 		if (GlobalConfig.Operator.OPERATION_SAVE_MEMBER == operator) {
+			// {com.andrnes.modoer.ModoerMembers.username=用户名已经被注册，请更换后重试,
+			// flag=false}
 			mDialogProxy.hideDialog();
+			if (mCurrThirdType != -1) {
+				try {
+					Object result = out.getResult();
+					if (result instanceof Map) {
+						Map<String, Object> map = (Map<String, Object>) result;
+						String key = "com.andrnes.modoer.ModoerMembers.username";
+						if (map.containsKey(key)) {
+							String username = map.get(key).toString();
+							if ("用户名已经被注册，请更换后重试".equals(username)) {
+								this.showAlertDialog();
+							}
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				System.out.println(" result = " + out.getResult()
+						+ " mCurrThirdType = " + mCurrThirdType);
+			}
+
 		} else if (GlobalConfig.Operator.OPERATION_FIND_MEMBERPASSPORT == operator) {
 			if (mRetryCount < 3) {// 查询第三方信息失败，则重试三次
 				this.fetchMemberByThirdInfo(mMemberPassport);
