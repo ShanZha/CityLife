@@ -169,9 +169,12 @@ public interface GlobalConfig {
 		// public static final String WEIXIN_APP_KEY =
 		// "4c53e361f42041e8f1dd82414f633f2b";
 
-		public static final String TAOBAO_APP_KEY = "21724339";
-		public static final String TAOBAO_APP_SECRET = "4dfa1b6312cddc83d2a811c4251bdc18";
-		public static final String TAOBAO_REDIRECT_URL = "com.fourkkm.citylife://authresult";
+//		public static final String TAOBAO_APP_KEY = "21724339";
+//		public static final String TAOBAO_APP_SECRET = "4dfa1b6312cddc83d2a811c4251bdc18";
+//		public static final String TAOBAO_REDIRECT_URL = "com.fourkkm.citylife://authresult";
+		public static final String TAOBAO_APP_KEY = "21725410";
+		public static final String TAOBAO_APP_SECRET = "422e8878626e5b08616230f0139fa916";
+		public static final String TAOBAO_REDIRECT_URL = "taobao21725410://";
 
 		public static final String PSNAME_SINA_WEIBO = "weibo";
 		public static final String PSNAME_TENCENT_QQ = "qq";
