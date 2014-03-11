@@ -241,7 +241,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- 注册应用中回调URL的前半部分 -->
-                <data android:scheme="com.fourkkm.citylife" />
+                <data android:scheme="taobao21725410" />
             </intent-filter>
         </activity>
         <!-- 注册界面 -->
