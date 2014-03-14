@@ -205,6 +205,10 @@ public class ChinaLaneAddActivity extends BaseAddActivity implements
 			this.showToast(this.getString(R.string.time_format_error));
 			return false;
 		}
+		if (!CommonUtil.isEmail(mEtEmail.getText().toString().trim())) {
+			this.showToast(this.getString(R.string.register_email_invalide));
+			return false;
+		}
 		if (TextUtils.isEmpty(mThumbPath)) {
 			this.showToast(this.getString(R.string.thumb_not_null));
 			return false;

@@ -232,8 +232,7 @@
         <!-- 登录界面 -->
         <activity
             android:name="com.fourkkm.citylife.control.activity.LoginActivity"
-            android:screenOrientation="portrait" 
-            android:launchMode="singleTask">
+            android:screenOrientation="portrait" >
 
             <!-- 淘宝 -->
             <intent-filter>

@@ -22,6 +22,7 @@ import com.fourkkm.citylife.util.MD5;
 import com.fourkkm.citylife.widget.ProgressDialogProxy;
 import com.zj.app.BaseActivity;
 import com.zj.app.db.dao.SharedPreferenceUtil;
+import com.zj.app.db.dao.SqliteUtil;
 import com.zj.app.utils.AppUtils;
 import com.zj.support.observer.model.Param;
 
@@ -173,6 +174,8 @@ public class RegisterActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
 		this.saveLoginInfo(mMember);
+		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
+				ModoerMembers.class.getName());
 		((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
 		SharedPreferenceUtil.getSharedPrefercence().put(
 				this.getApplicationContext(),

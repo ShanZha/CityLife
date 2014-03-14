@@ -94,7 +94,7 @@ public class UserCenterActivity extends BaseActivity {
 				+ memberId;
 		Map<String, Object> paramsMap = new HashMap<String, Object>();
 		Param param = new Param(this.hashCode(), GlobalConfig.URL_CONN);
-		this.getStoreOperation().find(selectCode, paramsMap, true,
+		this.getStoreOperation().find(selectCode, paramsMap, false,
 				new ModoerMembers(), param);
 	}
 
