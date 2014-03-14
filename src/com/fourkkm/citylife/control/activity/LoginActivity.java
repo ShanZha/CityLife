@@ -467,18 +467,21 @@ public class LoginActivity extends AuthActivity implements ICallback,
 				e.printStackTrace();
 			}
 			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
-			SharedPreferenceUtil.getSharedPrefercence().put(
-					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_USERNAME, mMember.getUsername());
-			SharedPreferenceUtil.getSharedPrefercence().put(
-					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_PSWD, mUserPswd);
-			SharedPreferenceUtil.getSharedPrefercence().put(
-					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_IS_REMBER_PSWD, true);
-			SharedPreferenceUtil.getSharedPrefercence().put(
-					this.getApplicationContext(),
-					GlobalConfig.SharePre.KEY_MEMBER_ID, mMember.getId());
+			if (mCurrThirdType == -1) {
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_USERNAME,
+						mMember.getUsername());
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_PSWD, mUserPswd);
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_IS_REMBER_PSWD, true);
+				SharedPreferenceUtil.getSharedPrefercence().put(
+						this.getApplicationContext(),
+						GlobalConfig.SharePre.KEY_MEMBER_ID, mMember.getId());
+			}
 			mDialogProxy.hideDialog();
 			this.showToast(this.getString(R.string.login_success));
 			this.setResult(RESULT_OK);
@@ -702,6 +705,7 @@ public class LoginActivity extends AuthActivity implements ICallback,
 			break;
 		case TYPE_TAOBAO:
 			mCurrThirdType = TYPE_TAOBAO;
+			expireTime = expireTime / 1000;
 			mUserName = bundle.getString(GlobalConfig.Third.KEY_NICK_NAME);
 			this.buildMemberPassport(GlobalConfig.Third.PSNAME_TAOBAO,
 					accessToken, uid, expireTime);
