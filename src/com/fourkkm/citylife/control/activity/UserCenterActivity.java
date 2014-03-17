@@ -223,6 +223,9 @@ public class UserCenterActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onSuccessFind(out);
 		mMember = (ModoerMembers) out.getResult();
+		if (null != mMember) {
+			((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
+		}
 		this.prepareMember();
 		this.hideLoadingInfo();
 	}
