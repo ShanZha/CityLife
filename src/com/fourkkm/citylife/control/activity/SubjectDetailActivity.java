@@ -504,6 +504,31 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 		this.startActivity(intent);
 	}
 
+	public void onClickNavigation(View view) {
+		if (this.isUploading()) {
+			return;
+		}
+		try {
+			StringBuilder sb = new StringBuilder();
+			sb.append("http://ditu.google.cn/maps?f=d&source=s_d");
+			sb.append("&saddr=");
+			sb.append(((CoreApp) AppUtils.getBaseApp(this)).mCurrLat);
+			sb.append(",");
+			sb.append(((CoreApp) AppUtils.getBaseApp(this)).mCurrLng);
+			sb.append("&daddr=");
+			sb.append(mSubject.getMapLat());
+			sb.append(",");
+			sb.append(mSubject.getMapLng());
+			sb.append("&hl=zh&t=m&dirflg=r");// 乘车&dirflg = w/d(步行，驾车)
+			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(sb.toString()));
+			this.startActivity(i);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.showToast(this
+					.getString(R.string.subject_detail_navigation_error));
+		}
+	}
+
 	public void onClickTel(View view) {// 电话
 		if (this.isUploading()) {
 			return;

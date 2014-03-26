@@ -184,6 +184,8 @@
     <string name="subject_map_point_null">请先地图选点</string>
     <string name="subject_upload_pic_unfinish">图片上传还未完毕</string>
     <string name="subject_favorite_delete">取消收藏</string>
+    <string name="subject_detail_navigation">导航过去</string>
+    <string name="subject_detail_navigation_error">导航出错</string>
     <string name="subject_favorite_delete_success">取消收藏成功</string>
     <string name="listview_header_hint_normal">下拉刷新</string>
     <string name="listview_header_hint_ready">松开刷新数据</string>
