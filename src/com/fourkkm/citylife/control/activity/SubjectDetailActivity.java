@@ -519,7 +519,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 			sb.append(mSubject.getMapLat());
 			sb.append(",");
 			sb.append(mSubject.getMapLng());
-			sb.append("&hl=zh&t=m&dirflg=r");// 乘车&dirflg = w/d(步行，驾车)
+			sb.append("&hl=zh&t=m&dirflg=d");// 乘车&dirflg = w/d(步行，驾车)
 			Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(sb.toString()));
 			this.startActivity(i);
 		} catch (Exception e) {
