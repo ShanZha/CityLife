@@ -59,6 +59,10 @@ public class CommonUtil {
 	public static long getCurrTimeByPHP() {
 		return (System.currentTimeMillis() / 1000);
 	}
+	
+	public static long getAskExpireTimeByPHP() {
+		return (System.currentTimeMillis() / 1000)+7*24*60*60;
+	}
 
 	public static long formatTimeByPHP(String time) {
 		if (TextUtils.isEmpty(time)) {

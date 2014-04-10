@@ -194,13 +194,9 @@ public class MainActivity extends BaseFragmentActivity implements
 	}
 
 	private void notifyPagerAdapterChanged() {
-		if (null == mPagerAdapter) {
-			mPagerAdapter = new BasePicPagerAdapter(mBcastrUrlList, this);
-			mViewPager.setAdapter(mPagerAdapter);
-			this.onPageSelected(0);
-		} else {
-			mPagerAdapter.notifyDataSetChanged();
-		}
+		mPagerAdapter = new BasePicPagerAdapter(mBcastrUrlList, this);
+		mViewPager.setAdapter(mPagerAdapter);
+		this.onPageSelected(0);
 	}
 
 	private void showBcastrLoading() {

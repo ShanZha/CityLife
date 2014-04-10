@@ -157,6 +157,7 @@ public class AskAddActivity extends BaseActivity implements
 		ask.setReward(Integer.valueOf(rewardPoint));
 		ask.setKeywords(keywords);
 		ask.setDateline((int) CommonUtil.getCurrTimeByPHP());
+		ask.setExpiredtime((int) CommonUtil.getAskExpireTimeByPHP());
 
 		ModoerMembers member = ((CoreApp) AppUtils.getBaseApp(this))
 				.getCurrMember();

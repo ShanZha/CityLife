@@ -48,7 +48,7 @@
         <!-- 百度统计设置 -->
         <meta-data
             android:name="BaiduMobAd_STAT_ID"
-            android:value="2bb7082192" />
+            android:value="ebd1c1e9ed" />  <!--2bb7082192 -->
         <!-- 渠道商编号 -->
         <meta-data
             android:name="BaiduMobAd_CHANNEL"
