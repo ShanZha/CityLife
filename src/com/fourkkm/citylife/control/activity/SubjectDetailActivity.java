@@ -364,6 +364,7 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 	private String buildShareContent(int index) {
 		StringBuffer sb = new StringBuffer();
 		sb.append(this.getString(R.string.subject_share_tip_first));
+		mCurrCountry = ((CoreApp) AppUtils.getBaseApp(this)).getCurrArea();
 		if (null != mCurrCountry) {
 			sb.append(mCurrCountry.getName());
 		}
