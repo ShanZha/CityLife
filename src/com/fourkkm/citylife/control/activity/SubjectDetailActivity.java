@@ -363,7 +363,11 @@ public class SubjectDetailActivity extends BaseUploadPicActivity implements
 
 	private String buildShareContent(int index) {
 		StringBuffer sb = new StringBuffer();
-		sb.append(this.getString(R.string.subject_share_tip));
+		sb.append(this.getString(R.string.subject_share_tip_first));
+		if (null != mCurrCountry) {
+			sb.append(mCurrCountry.getName());
+		}
+		sb.append(this.getString(R.string.subject_share_tip_last));
 		sb.append(mSubject.getName());
 		sb.append("\n");
 		String address = mSubject.getAddress();

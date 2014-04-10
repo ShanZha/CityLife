@@ -163,7 +163,8 @@
     <string name="more_help">新手帮助</string>
     <string name="more_about">关于我们</string>
     <string name="more_exit">退出应用</string>
-    <string name="subject_share_tip">我在四万公里发现一个值得推荐的店铺：</string>
+    <string name="subject_share_tip_first">我在四万公里发现一个</string>
+    <string name="subject_share_tip_last">值得推荐的地方：</string>
     <string name="subject_addr_detail">地址：</string>
     <string name="subject_tel_detail">电话：</string>
     <string name="subject_name">店铺名称</string>
