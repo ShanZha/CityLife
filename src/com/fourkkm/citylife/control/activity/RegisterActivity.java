@@ -8,6 +8,7 @@ import java.util.Map;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -114,6 +115,9 @@ public class RegisterActivity extends BaseActivity {
 		mMember.setPoint5(0);
 		mMember.setPoint6(0);
 		mMember.setGroupid(mUserGroup);
+		mMember.setLoginip(CommonUtil.getLocalIPAddress(this
+				.getApplicationContext()));
+		mMember.setLogintime((int) CommonUtil.getCurrTimeByPHP());
 		this.getStoreOperation().saveOrUpdate(mMember, param);
 	}
 
@@ -137,16 +141,16 @@ public class RegisterActivity extends BaseActivity {
 		return true;
 	}
 
-	private void saveLoginInfo(ModoerMembers member) {
-		if (null == member) {
-			return;
-		}
-		member.setLoginip(CommonUtil.getLocalIPAddress(this
-				.getApplicationContext()));
-		member.setLogintime((int) CommonUtil.getCurrTimeByPHP());
-		this.getStoreOperation().saveOrUpdate(member,
-				new Param(this.hashCode(), GlobalConfig.URL_CONN));
-	}
+//	private void saveLoginInfo(ModoerMembers member) {
+//		if (null == member) {
+//			return;
+//		}
+//		member.setLoginip(CommonUtil.getLocalIPAddress(this
+//				.getApplicationContext()));
+//		member.setLogintime((int) CommonUtil.getCurrTimeByPHP());
+//		this.getStoreOperation().saveOrUpdate(member,
+//				new Param(this.hashCode(), GlobalConfig.URL_CONN));
+//	}
 
 	@Override
 	public void onSuccessFindAll(Param out) {
@@ -173,7 +177,8 @@ public class RegisterActivity extends BaseActivity {
 	public void onSuccessSaveOrUpdate(Param out) {
 		// TODO Auto-generated method stub
 		super.onSuccessSaveOrUpdate(out);
-		this.saveLoginInfo(mMember);
+		mMember = (ModoerMembers) out.getResult();
+//		this.saveLoginInfo(mMember);
 		SqliteUtil.getInstance(this.getApplicationContext()).deleteByClassName(
 				ModoerMembers.class.getName());
 		((CoreApp) AppUtils.getBaseApp(this)).setCurrMember(mMember);
